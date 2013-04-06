@@ -6,7 +6,6 @@
     "number" : "0.10",
     "date" : "2013-04-07"
   },
-  "category": "PHPMANUFAKTUR",
   "type": "core",
   "description": {
     "en": {
@@ -19,5 +18,13 @@
     "framework": {
       "release": "0.17"
     },
-  }
+  },
+  "license":"MIT License",
+  "download": {
+    "availability":"public",
+    "github":{
+      "organization":"phpManufaktur",
+      "repository":"kfBasic"
+    },
+  },
 }

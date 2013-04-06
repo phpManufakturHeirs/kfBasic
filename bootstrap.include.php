@@ -260,7 +260,7 @@ try {
 if (FRAMEWORK_SETUP) {
     // create the user table for the service provider
     try {
-        $Users = new frameworkUsers();
+        $Users = new frameworkUsers($app);
         $Users->createTable();
     } catch (\Exception $e) {
         throw new \Exception($e->getMessage());
@@ -425,6 +425,28 @@ $app->match('/welcome/cms/{cms}', function ($cms) use ($app) {
     return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
 });
 
+$app->match('/command/test/{params}', function(Request $request, $params) use ($app) {
+    /*
+    $param = json_decode(base64_decode($params), true);
+    ob_start();
+    echo "<pre>";
+    print_r($param);
+    echo "</pre>";
+    $param = ob_get_clean();
+    return $param;
+    */
+    // get all routing objects
+    $patterns = $app['routes']->getIterator()->current()->all();
+    // walk through the routing objects
+    foreach ($patterns as $pattern) {
+        $match = $pattern->getPattern();
+        echo "$match<br />";
+        if (null !== ($opt = $pattern->getOption('info')))
+            echo "Info: $opt<br>";
+    }
+    return 'ok';
+})
+->setOption('info', MANUFAKTUR_PATH.'/winCalc/command.wincalc.json');
 
 if (FRAMEWORK_SETUP) {
     // the setup flag was set to TRUE, now we assume that we can set it to FALSE
