@@ -3,7 +3,7 @@
   "title": "Basic functions and configuration of the kitFramework",
   "namespace": "phpManufaktur\Basic",
   "release": {
-    "number" : "0.11",
+    "number" : "0.12",
     "date" : "2013-04-07"
   },
   "type": "core",
