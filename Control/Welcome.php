@@ -11,20 +11,33 @@
 
 namespace phpManufaktur\Basic\Control;
 
-class Welcome {
+use Silex\Application;
 
-	protected $app;
+class Welcome
+{
 
-	public function __construct() {
-		global $app;
-		$this->app = $app;
-	} // __construct()
+    protected $app;
 
-	public function exec() {
-	    $cms = $this->app['request']->get('usage');
-	    $usage = is_null($cms) ? 'framework' : $cms;
-		  return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'welcome.twig'),
-		      array('usage' => $usage));
-	} // showDialog()
+    /**
+     * Constructor
+     *
+     * @param Application $app
+     */
+    public function __construct (Application $app)
+    {
+        $this->app = $app;
+    } // __construct()
+
+    /**
+     * Execute the welcome dialog
+     */
+    public function exec ()
+    {
+        $cms = $this->app['request']->get('usage');
+        $usage = is_null($cms) ? 'framework' : $cms;
+        return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'welcome.twig'), array(
+            'usage' => $usage
+        ));
+    }
 
 } // class Account

@@ -11,6 +11,8 @@
 
 namespace phpManufaktur\Basic\Control;
 
+use Silex\Application;
+
 class Utils
 {
 
@@ -19,9 +21,8 @@ class Utils
     /**
      * Constructor for the Utils
      */
-    public function __construct ()
+    public function __construct (Application $app)
     {
-        global $app;
         $this->app = $app;
     } // __construct()
 
@@ -194,9 +195,14 @@ class Utils
     } // passwordStrength()
 
 
-    public function templateFile ($template_namespace, $template_file)
+    public static function templateFile ($template_namespace, $template_file)
     {
-        global $TEMPLATE_NAMESPACES;
+        $TEMPLATE_NAMESPACES = array(
+            'phpManufaktur' => MANUFAKTUR_PATH,
+            'thirdParty' => THIRDPARTY_PATH,
+            'framework' => FRAMEWORK_TEMPLATE_PATH,
+            'cms' => CMS_TEMPLATE_PATH
+        );
 
         if ($template_namespace[0] != '@') {
             throw new \Exception('Namespace expected in variable $template_namespace but path found!');
@@ -311,5 +317,86 @@ class Utils
         $pos = strrpos($str = strtr(trim(strval($str)), ',', '.'), '.');
         return ($pos === false ? floatval($str) : floatval(str_replace('.', '', substr($str, 0, $pos)) . substr($str, $pos)));
     }
+
+    /**
+     * Read the specified configuration file in JSON format and return array
+     *
+     * @param string $file
+     * @throws \Exception
+     * @return array configuration items
+     */
+    function readConfiguration ($file)
+    {
+        if (file_exists($file)) {
+            if (null == ($config = json_decode(file_get_contents($file), true))) {
+                $code = json_last_error();
+                // get JSON error message from last error code
+                switch ($code) :
+                case JSON_ERROR_NONE:
+                    $error = 'No errors';
+                break;
+                case JSON_ERROR_DEPTH:
+                    $error = 'Maximum stack depth exceeded';
+                    break;
+                case JSON_ERROR_STATE_MISMATCH:
+                    $error = 'Underflow or the modes mismatch';
+                    break;
+                case JSON_ERROR_CTRL_CHAR:
+                    $error = 'Unexpected control character found';
+                    break;
+                case JSON_ERROR_SYNTAX:
+                    $error = 'Syntax error, malformed JSON';
+                    break;
+                case JSON_ERROR_UTF8:
+                    $error = 'Malformed UTF-8 characters, possibly incorrectly encoded';
+                    break;
+                default:
+                    $error = 'Unknown error';
+                    break;
+                    endswitch;
+                    // throw Exception
+                    throw new \Exception(sprintf('Error decoding JSON file %s, returned error code: %d - %s', $file, $code, $error));
+            }
+        } else {
+            throw new \Exception(sprintf('Missing the configuration file: %s!', $file));
+        }
+        // return the configuration array
+        return $config;
+    } // readConfiguration()
+
+    /**
+     * Scan the given $locale_path for language files and add them to the global
+     * translator resource
+     *
+     * @param string $locale_path
+     * @throws \Exception
+     */
+    function addLanguageFiles($locale_path)
+    {
+        // scan the /Locale directory and add all available languages
+        try {
+            if (false === ($lang_files = scandir($locale_path)))
+                throw new \Exception(sprintf("Can't read the /Locale directory %s!", $locale_path));
+            $ignore = array('.', '..', 'index.php');
+            foreach ($lang_files as $lang_file) {
+                if (!is_file($locale_path.'/'.$lang_file)) continue;
+                if (in_array($lang_file, $ignore)) continue;
+                $lang_name = pathinfo($locale_path.'/'.$lang_file, PATHINFO_FILENAME);
+                // get the array from the desired file
+                $lang_array = include_once $locale_path.'/'.$lang_file;
+                // add the locale resource file
+                $this->app['translator'] = $this->app->share($this->app->extend('translator', function ($translator) use ($lang_array, $lang_name) {
+                    $translator->addResource('array', $lang_array, $lang_name);
+                    return $translator;
+                }));
+                $this->app['monolog']->addInfo('Added language file: '.substr($locale_path, strlen(FRAMEWORK_PATH)).'/'.$lang_file);
+            }
+        }
+        catch (\Exception $e) {
+            throw new \Exception(sprintf('Error scanning the /Locale directory %s.', $locale_path));
+        }
+    } // addLanguageFiles()
+
+
 
 } // class Utils

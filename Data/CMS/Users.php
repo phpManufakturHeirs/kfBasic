@@ -10,15 +10,15 @@
  */
 namespace phpManufaktur\Basic\Data\CMS;
 
+use Silex\Application;
 
 class Users
 {
 
     protected $app = null;
 
-    public function __construct ()
+    public function __construct (Application $app)
     {
-        global $app;
         $this->app = $app;
     } // __construct()
 

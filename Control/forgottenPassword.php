@@ -12,6 +12,7 @@ namespace phpManufaktur\Basic\Control;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use phpManufaktur\Basic\Data\Security\Users;
+use Silex\Application;
 
 class forgottenPassword
 {
@@ -21,9 +22,8 @@ class forgottenPassword
     /**
      * Constructor
      */
-    public function __construct ()
+    public function __construct (Application $app)
     {
-        global $app;
         $this->app = $app;
     } // __construct()
 

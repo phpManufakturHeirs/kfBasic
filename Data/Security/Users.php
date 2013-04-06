@@ -11,8 +11,8 @@
 
 namespace phpManufaktur\Basic\Data\Security;
 
-
 use phpManufaktur\Basic\Control\manufakturPasswordEncoder;
+use Silex\Application;
 
 class Users
 {
@@ -21,9 +21,8 @@ class Users
 
     private static $guid_wait_hours_between_resets = 24;
 
-    public function __construct ()
+    public function __construct (Application $app)
     {
-        global $app;
         $this->app = $app;
     } // __construct()
 

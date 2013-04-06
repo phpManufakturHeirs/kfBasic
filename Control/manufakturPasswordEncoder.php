@@ -14,6 +14,7 @@ namespace phpManufaktur\Basic\Control;
 use Symfony\Component\Security\Core\Encoder\BasePasswordEncoder;
 use phpManufaktur\Basic\Data\CMS\Users as cmsUsers;
 use phpManufaktur\Basic\Data\Security\Users as frameworkUsers;
+use Silex\Application;
 
 /**
  * manufakturPasswordEncoder is based on the origin MessageDigestPasswordEncoder
@@ -36,9 +37,8 @@ class manufakturPasswordEncoder extends BasePasswordEncoder
      * @param Boolean $encodeHashAsBase64 Whether to base64 encode the password hash
      * @param integer $iterations The number of iterations to use to stretch the password hash
      */
-    public function __construct ($algorithm = 'sha512', $encodeHashAsBase64 = true, $iterations = 5000)
+    public function __construct (Application $app, $algorithm = 'sha512', $encodeHashAsBase64 = true, $iterations = 5000)
     {
-        global $app;
         $this->algorithm = $algorithm;
         $this->encodeHashAsBase64 = $encodeHashAsBase64;
         $this->iterations = $iterations;

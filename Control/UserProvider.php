@@ -18,6 +18,7 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Doctrine\DBAL\Connection;
 use phpManufaktur\Basic\Data;
+use Silex\Application;
 
 /**
  * Class UserProvider implements UserProviderInterface
@@ -33,9 +34,8 @@ class UserProvider implements UserProviderInterface
      *
      * @param Connection $db
      */
-    public function __construct ()
+    public function __construct (Application $app)
     {
-        global $app;
         $this->app = $app;
     }
 
