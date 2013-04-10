@@ -18,10 +18,60 @@
 {% block title %}{{ 'kitFramework - Welcome'|trans }}{% endblock %}
 {% block head %}
   {{ parent() }}
-  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Basic/Template/default/css/account.css" media="screen, projection" />
+  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Basic/Template/default/css/welcome.css" media="screen, projection" />
 {% endblock %}
 {% block content %}
-  <div class="admin_container">
-    {{ 'The welcome dialog is not implemented yet!'|trans }}
+  <a name="top"></a>
+  <div id="welcome_container">
+    <h1>Herzlich Willkommen beim kitFramework!</h1>
+    {% if message|length > 0 %}
+      <div class="message">{{ message|trans }}</div>
+    {% else %}
+      <div class="message"><p>Dieser Übersichtsdialog befindet sich noch im Experimentierstadium, Vorschläge und Ideen sind herzlich willkommen!</p></div>
+    {% endif %}    
+    <h2>Installierte Erweiterungen</h2>
+    <p>Diese Erweiterungen sind bereits in kitFramework installiert und können verwendet werden.</p>
+    {% for item in register_items %}
+      <div class="extension_container">
+        <div class="extension_image">
+          {% if item.start_url|length > 0 %}<a href="{{ FRAMEWORK_URL }}{{ item.start_url }}?usage={{ usage }}">{% endif %}
+            <img src="{% if item.logo_blob|length > 0 %}data:image/{{ item.logo_type }};charset=utf-8;base64,{{ item.logo_blob }}{% else %}{{ item.logo_url }}{% endif %}" width="{{ item.logo_width }}" height="{{ item.logo_height }}" alt="{{ item.description.title }}" />
+          {% if item.start_url|length > 0 %}</a>{% endif %}
+        </div>
+        {% if item.update_available %}
+          <div class="extension_update">
+            <strong>{{ 'Update available!'|trans }}</strong><br />
+            Release {{ item.release_available }}
+          </div>
+        {% endif %}
+        {% if item.start_url|length > 0 %}
+          <div class="extension_start">
+            <a href="{{ FRAMEWORK_URL }}{{ item.start_url }}?usage={{ usage }}">{{ 'Execute'|trans }}</a>
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+    <div class="clear"></div>
+    <h2>Verfügbare Erweiterungen für das kitFramework</h2>
+    <p>Diese Liste wird automatisch aktualisiert, falls über Github ein neuer <a href="https://github.com/phpManufaktur/kitFramework_Catalog" target="blank">kitFramework Katalog</a> verfügbar ist.</p>
+    {% for item in catalog_items %}
+      <div class="extension_container">
+        <div class="extension_image">
+          <img src="data:image/{{ item.logo_type }};charset=utf-8;base64,{{ item.logo_blob }}" width="{{ item.logo_width }}" height="{{ item.logo_height }}" alt="{{ item.description.title }}" />
+        </div>
+        <div class="extension_title">{{ item.description.title }}</div>
+        <div class="extension_description">{{ item.description.short }}</div>
+        <div class="extension_release">Release {{ item.release }} <em>({{ item.date|date('d.m.Y') }})</em></div>
+        <p><a href="{{ FRAMEWORK_URL }}/admin/updater/get/github/{{ item.info.download.github.organization }}/{{ item.info.download.github.repository }}/{{ usage }}">Install</a></p>
+      </div>
+    {% endfor %}  
+    <div class="clear"></div>  
+    <div class="extension_scan_directories">
+      <a href="{{ scan_extensions }}#top">{{ 'Scan for installed extensions'|trans }}</a>
+    </div>
+    <div class="extension_scan_catalog">
+      <a href="{{ scan_catalog }}#top">{{ 'Scan the online catalog for available extensions'|trans }}</a>
+    </div>
+    
   </div>
 {% endblock %}

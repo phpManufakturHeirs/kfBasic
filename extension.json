@@ -1,30 +1,43 @@
 {
-  "name": "Basic",
-  "title": "Basic functions and configuration of the kitFramework",
-  "namespace": "phpManufaktur\Basic",
+  "name":"Basic",
+  "guid":"B021A24B-F763-4E25-AB78-5EE15D98C897",
+  "category":"extension",
+  "group":"phpManufaktur",
+  "vendor":"phpManufaktur",
+  "type":"framework",
+  "path":"\\extension\\phpmanufaktur\\phpManufaktur\\Basic",
+  "namespace": "phpManufaktur\\Basic",
   "release": {
     "number" : "0.12",
     "date" : "2013-04-07"
   },
-  "type": "core",
   "description": {
     "en": {
+      "title":"Basic functions and configuration of the kitFramework",
       "short": "Basic function and configuration for the kitFramework",
       "long": "Basic function and configuration for the kitFramework",
-      "url": "https://kit2.phpmanufaktur.de"
+      "url": "https:\/\/kit2.phpmanufaktur.de"
     },
+    "de":{
+      "title":"Basis Funktionen und Einstellungen für das kitFramework",
+      "short":"Essentielle Basis Funktionen und Einstellungen für das kitFramework - fester Bestandteil des Framework, muss installiert sein.",
+      "long":"(lang) Essentielle Basis Funktionen und Einstellungen für das kitFramework - fester Bestandteil des Framework, muss installiert sein.",
+      "url":"https:\/\/kit2.phpmanufaktur.de"
+    }
   },
   "require": {
     "framework": {
       "release": "0.17"
-    },
+    }
   },
   "license":"MIT License",
   "download": {
     "availability":"public",
+    "agreement":"free",
     "github":{
       "organization":"phpManufaktur",
       "repository":"kfBasic"
     },
-  },
+    "url":"https:\/\/github.com\/phpManufaktur\/kitFramework"
+  }
 }

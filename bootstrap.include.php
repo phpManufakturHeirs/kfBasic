@@ -20,13 +20,16 @@ use phpManufaktur\Basic\Control\UserProvider;
 use phpManufaktur\Basic\Control\manufakturPasswordEncoder;
 use phpManufaktur\Basic\Control\twigExtension;
 use phpManufaktur\Basic\Control\Account;
-use phpManufaktur\Basic\Data\Security\Users as frameworkUsers;
 use phpManufaktur\Basic\Control\forgottenPassword;
 use phpManufaktur\Basic\Control\Utils;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use phpManufaktur\Basic\Control\Welcome;
 use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use phpManufaktur\Basic\Data\Setup\Setup;
+use phpManufaktur\Basic\Control\ExtensionRegister;
+use phpManufaktur\Basic\Control\ExtensionCatalog;
+use phpManufaktur\Updater\Updater;
 
 
 // set the error handling
@@ -99,6 +102,7 @@ if ($app['filesystem']->exists($log_file) && (filesize($log_file) > $max_log_siz
     $app['filesystem']->rename($log_file, FRAMEWORK_PATH . '/logfile/kit2.log.bak');
 }
 
+date_default_timezone_set('Europe/Berlin');
 // register monolog
 $app->register(new Silex\Provider\MonologServiceProvider(), array(
     'monolog.logfile' => $log_file
@@ -258,13 +262,9 @@ try {
 
 
 if (FRAMEWORK_SETUP) {
-    // create the user table for the service provider
-    try {
-        $Users = new frameworkUsers($app);
-        $Users->createTable();
-    } catch (\Exception $e) {
-        throw new \Exception($e->getMessage());
-    }
+    // execute the setup routine for kitFramework::Basic
+    $Setup = new Setup($app);
+    $Setup->exec();
 }
 
 $app->register(new Silex\Provider\SecurityServiceProvider(), array(
@@ -423,6 +423,37 @@ $app->match('/welcome/cms/{cms}', function ($cms) use ($app) {
     // sub request to the welcome dialog
     $subRequest = Request::create('/admin/welcome', 'GET', array('usage' => $usage));
     return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+});
+
+$app->get('/admin/scan/extensions', function () use ($app) {
+    $register = new ExtensionRegister($app);
+    $register->scanDirectories(ExtensionRegister::GROUP_PHPMANUFAKTUR);
+    $register->scanDirectories(ExtensionRegister::GROUP_THIRDPARTY);
+    $Welcome = new Welcome($app);
+    $Welcome->setMessage($app['translator']->trans('<p>Successfull scanned the kitFramework for installed extensions.</p>'));
+    return $Welcome->exec();
+});
+
+$app->get('/admin/scan/catalog', function() use($app) {
+    $catalog = new ExtensionCatalog($app);
+    $catalog->getOnlineCatalog();
+    $Welcome = new Welcome($app);
+    $Welcome->setMessage($app['translator']->trans('<p>Successfull scanned the kitFramework online catalog for available extensions.</p>'));
+    return $Welcome->exec();
+});
+
+$app->get('/admin/updater/get/github/{organization}/{repository}/{usage}', function (Request $request, $organization, $repository, $usage) use ($app) {
+    $message = '';
+    if (file_exists(MANUFAKTUR_PATH.'/Updater/Updater.php')) {
+        unlink(MANUFAKTUR_PATH.'/Updater/Updater.php');
+        rmdir(MANUFAKTUR_PATH.'/Updater');
+    }
+    if (!file_exists(MANUFAKTUR_PATH.'/Updater/Updater.php')) {
+        mkdir(MANUFAKTUR_PATH.'/Updater');
+        copy(MANUFAKTUR_PATH.'/Basic/Control/Updater/Updater.php', MANUFAKTUR_PATH.'/Updater/Updater.php');
+    }
+    $updater = new Updater($app);
+    return $updater->getLastGithubRepository($organization, $repository);
 });
 
 $app->match('/command/test/{params}', function(Request $request, $params) use ($app) {

@@ -189,6 +189,21 @@ class unZip
         self::$file_list = $file_list;
     } // createZipArchiveFileList()
 
+    protected function createZipArchiveFileListFromPclZipList($list)
+    {
+        $file_list = array();
+        foreach ($list as $file) {
+            if (is_file($file['filename'])) {
+                $file_list[] = array(
+                    'file_path' => $file['filename'],
+                    'file_name' => $file['stored_filename'],
+                    'file_size' => $file['size']
+                );
+            }
+        }
+        self::$file_list = $file_list;
+    }
+
     /**
      * Unzip the desired $zip_file and return a list with the extracted files
      *
@@ -215,8 +230,8 @@ class unZip
                 if (! is_array($list)) {
                     throw unZipException::error(sprintf('PclZip Error - Code: %d - Message: %s', $this->pclzip->error_code, $this->pclzip->error_string));
                 }
+                $this->createZipArchiveFileListFromPclZipList($list);
                 return true;
-                $this->createPclZipFileList($list);
             } catch (\Exception $e) {
                 throw unZipException::error($e->getMessage());
             }
@@ -237,7 +252,6 @@ class unZip
         } catch (\Exception $e) {
             throw unZipException::error($e->getMessage());
         }
-
         return false;
     } // extract()
 

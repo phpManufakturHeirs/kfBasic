@@ -16,16 +16,24 @@
       <meta name="robots" content="noindex,nofollow" />
       <meta name="description" content="{% block description %}{% endblock %}" />
       <meta name="keywords" content="{% block keywords %}{% endblock %}" />
-      <script async src="{{ MANUFAKTUR_URL}}/Basic/Template/default/jquery/jquery.min.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     {% endblock head %}
   </head>
   <body>
-    <div id="kf_body">
+    <div id="content">
       {% block content %}
       {% endblock content %}
     </div>
     {% block footer %}
-      <script async src="{{ MANUFAKTUR_URL}}/Basic/Template/default/jquery/iframe.resize.js"></script>
+      <script type="text/javascript">
+        if (typeof 'jQuery' !== 'undefined') {
+          $(document).ready(function() {
+            {# setting the iFrame height dynamically by the height of the inbounded document #}
+            var content_height = $('#content').height() + {{ iframe_add_height|default(30) }} + "px";
+            parent.document.getElementById("kitframework_iframe").style.height = content_height;
+          });
+        }
+      </script>
     {% endblock footer %}
   </body>
 </html>      

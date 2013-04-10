@@ -15,10 +15,20 @@ if ('á' != "\xc3\xa1") {
 }
 
 return array(
+    '<p>Add the extension <b>%name%</b> to the catalog.</p>'
+        => '<p>Die Erweiterung <b>%name%</b> wurde dem Katalog hinzugefügt.</p>',
     'Bad credentials' =>
         'Die Angaben sind unvollständig oder ungültig!',
+    '<p>Can not read the extension.json for %name%!</p><p>Error message: %error%</p>'
+        => '<p>Kann die Beschreibungsdatei extension.json für die Erweiterung <b>%name%</b> nicht lesen!</p><p>Fehlermeldung: %error%</p>',
+    '<p>Can not read the information file for the kitFramework!</p>'
+        => '<p>Kann die Beschreibungsdatei für das kitFramework nicht lesen!</p>',
     '<p>Can\'t create a new GUID as long the last GUID is not expired. You must wait 24 hours between the creation of new passwords.</p>' =>
         '<p>Es kann keine neue GUID erzeugt werden, solange die letzte noch gültig ist. Sie können das Anlegen eines neuen Passwort nur einmal innerhalb von 24 Stunden anfordern!</p>',
+    "<p>Can't open the file <b>%file%</b>!</p>"
+        => '<p>Kann die Datei <b>%file%</b> nicht öffnen!</p>',
+    "<p>Can't read the the %repository% from %organization% at Github!</p>"
+        => '<p>Kann das Repository <b>%repository%</b> von der Organisation <b>%organization%</b> auf Github nicht lesen!</p>',
     'Create a new password' =>
         'Ein neues Password anlegen',
     'Email' =>
@@ -47,6 +57,8 @@ return array(
         'Anmelden',
     'Logout' =>
         'Abmelden',
+    '<p>New kitFramework release available!</p>'
+        => '<p>Es ist eine neue kitFramework Release verfügbar!</p>',
     'Password' =>
         'Passwort',
     '<p>Please login to the kitFramework with your username or email address and the assigned password.</p><p>Your can also use your username and password for the CMS.</p>' =>
@@ -63,16 +75,22 @@ return array(
        'Übermitteln',
     '<p>The both passwords you have typed in does not match, please try again!</p>' =>
         '<p>Die beiden Passwörter die Sie eingegeben haben stimmen nicht überein, bitte versuchen Sie es noch einmal!</p>',
+    '<p>The extension.json of <b>%name%</b> does not contain all definitions, check GUID, Group and Release!</p>'
+        => '<p>Die Beschreibungsdatei extension.json für die Erweiterung <b>%name%</b> enthält nicht alle Definitionen, prüfen Sie <i>GUID</i>, <i>Group</i> und <i>Release</i>!</p>',
     '<p>The password for the kitFramework was successfull changed.</p><p>You can now <a href="%login%">login using the new password</a>.</p>' =>
         '<p>Ihr Passwort für das kitFramework wurde erfolgreich geändert.</p><p>Sie können sich jetzt <a href="%login%">mit Ihrem neuen Passwort anmeldend</a>.</p>',
     '<p>The password you have typed in is not strength enough.</p><p>Please choose a password at minimun 8 characters long, containing lower and uppercase characters, numbers and special chars. Spaces are not allowed.</p>' =>
         '<p>Das übermittelte Passwort ist nicht stark genug.</p><p>Bitte wählen Sie ein Passwort mit mindestens 8 Zeichen Länge, mit einem Mix aus Groß- und Kleinbuchstaben, Zahlen und Sonderzeichen. Leerzeichen sind nicht gestattet.</p>',
+    '<p>The received repository has an unexpected directory structure!</p>'
+        => '<p>Das empfangene Repository hat eine unterwartete Verzeichnisstruktur und kann nicht eingelesen werden.</p>',
     '<p>The submitted GUID was already used and is no longer valid.</p><p>Please <a href="%password_forgotten%">order a new link</a>.</p>' =>
         '<p>Die übermittelte GUID wurde bereits verwendet und ist nicht mehr gültig.</p><p>Bitte <a href="%password_forgotten%">fordern Sie einen neuen Link an</a>.</p>',
     "This link enable you to change your password once within 24 hours." =>
         "Dieser Link ermöglicht es Ihnen, ihr Passwort einmal innerhalb von 24 Stunden zu ändern.",
     '<p>This value is not a valid email address.</p>' =>
         '<p>Es wurde keine gültige E-Mail Adresse übergeben!</p>',
+    '<p>Updated the catalog data for <b>%name%</b>.</p>'
+        => '<p>Die Katalogdaten für die Erweiterung <b>%name%</b> wurden aktualisiert.</p>',
     'Username' =>
         'Benutzername',
     'Username or email address' =>

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * kitFramework
+ * kitFramework::Basic
  *
  * @author Team phpManufaktur <team@phpmanufaktur.de>
  * @link https://addons.phpmanufaktur.de/extendedWYSIWYG
@@ -18,12 +18,13 @@ class Users
 {
 
     protected $app = null;
-
     private static $guid_wait_hours_between_resets = 24;
+    protected static $table_name = null;
 
     public function __construct (Application $app)
     {
         $this->app = $app;
+        self::$table_name = FRAMEWORK_TABLE_PREFIX.'basic_users';
     } // __construct()
 
     /**
@@ -51,7 +52,7 @@ class Users
      */
     public function createTable ()
     {
-        $table = FRAMEWORK_TABLE_PREFIX . 'users';
+        $table = self::$table_name;
         $SQL = <<<EOD
     CREATE TABLE IF NOT EXISTS `$table` (
       `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -94,7 +95,7 @@ EOD;
     {
         try {
             $login = strtolower(trim($name));
-            $SQL = "SELECT * FROM `" . FRAMEWORK_TABLE_PREFIX . "users` WHERE `username`='$login' OR `email`='$login'";
+            $SQL = "SELECT * FROM `" .self::$table_name. "` WHERE `username`='$login' OR `email`='$login'";
             $result = $this->app['db']->fetchAssoc($SQL);
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e->getMessage(), 0, $e);
@@ -135,7 +136,7 @@ EOD;
                 $data['roles'] = implode(',', $data['roles']);
             $data['email'] = strtolower($data['email']);
             // insert a new record
-            $this->app['db']->insert(FRAMEWORK_TABLE_PREFIX . 'users', $data);
+            $this->app['db']->insert(self::$table_name, $data);
             $archive_id = $this->app['db']->lastInsertId();
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e->getMessage(), 0, $e);
@@ -177,7 +178,7 @@ EOD;
             $where = array(
                 'email' => $email
             );
-            $this->app['db']->update(FRAMEWORK_TABLE_PREFIX.'users', $data, $where);
+            $this->app['db']->update(self::$table_name, $data, $where);
             $this->app['monolog']->addDebug(sprintf('Created a new GUID for user %s.', $email));
             // return the GUID data array
             return $data;
@@ -195,7 +196,7 @@ EOD;
      */
     public function selectUserByGUID($guid) {
         try {
-            $SQL = "SELECT * FROM `".FRAMEWORK_TABLE_PREFIX."users` WHERE `guid`='$guid'";
+            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `guid`='$guid'";
             $result = $this->app['db']->fetchAssoc($SQL);
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e->getMessage());
@@ -225,16 +226,24 @@ EOD;
             $where = array('username' => $username);
             $update = array();
             foreach ($data as $key => $value)
-                $update[$key] = (is_string($value)) ? $this->app['utils']->sanitizeText($value) : $value;
-            $this->app['db']->update(FRAMEWORK_TABLE_PREFIX.'users', $update, $where);
+                // quote keys!
+                $update[$this->app['db']->quoteIdentifier($key)] = (is_string($value)) ? $this->app['utils']->sanitizeText($value) : $value;
+            $this->app['db']->update(self::$table_name, $update, $where);
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e->getMessage(), 0, $e);
         }
     } // updateUser()
 
+    /**
+     * Check if the user with the given username or email exists
+     *
+     * @param string $username username or email
+     * @throws \Exception
+     * @return boolean
+     */
     public function existsUser($username) {
         try {
-            $SQL = "SELECT `id` FROM `".FRAMEWORK_TABLE_PREFIX."users` WHERE `username`='$username' OR `email`='$username'";
+            $SQL = "SELECT `id` FROM `".self::$table_name."` WHERE `username`='$username' OR `email`='$username'";
             $result = $this->app['db']->fetchAssoc($SQL);
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e->getMessage(), 0, $e);
@@ -242,12 +251,21 @@ EOD;
         return (!is_array($result) || !isset($result['id'])) ? false : true;
     } // existsUser()
 
+    /**
+     * Check if the login is valid
+     *
+     * @param string $username
+     * @param string $password
+     * @param array $roles
+     * @throws \Exception
+     * @return boolean
+     */
     public function checkLogin($username, $password, $roles=array())
     {
         try {
-            $passwordEncoder = new manufakturPasswordEncoder();
+            $passwordEncoder = new manufakturPasswordEncoder($this->app);
             $pass = $passwordEncoder->encodePassword($password, '');
-            $SQL = "SELECT `roles` FROM `".FRAMEWORK_TABLE_PREFIX."users` WHERE (`username`='$username' OR `email`='$username') AND `password`='$pass'";
+            $SQL = "SELECT `roles` FROM `".self::$table_name."` WHERE (`username`='$username' OR `email`='$username') AND `password`='$pass'";
             $result = $this->app['db']->fetchAssoc($SQL);
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e->getMessage(), 0, $e);
