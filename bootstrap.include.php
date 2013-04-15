@@ -340,10 +340,10 @@ $scan_paths = array(
 // loop through /phpManufaktur and /thirdParty to include bootstrap extensions
 foreach ($scan_paths as $scan_path) {
     $entries = scandir($scan_path);
-    foreach ($entries as $entry) {
+    foreach ($entries as $entry) {   	
         if (is_dir($scan_path . '/' . $entry)) {
-            if (file_exists($scan_path . '/' . $entry . '/bootstrap.include.php')) {
-                // don't load the Basic bootstrap again
+        	  if (file_exists($scan_path . '/' . $entry . '/bootstrap.include.php')) {
+                // don't load the Basic bootstrap again               
                 if ($entry == 'Basic') continue;
                 // include the bootstrap extension
                 include_once $scan_path . '/' . $entry . '/bootstrap.include.php';
@@ -360,7 +360,8 @@ $app->match('/kit_command/{command}/{params}', function (Request $request, $comm
         $result = $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST, false);
     } catch (\Exception $e) {
         $parameters = json_decode(base64_decode($params), true);
-        if (isset($parameters['params']['debug']) && $parameters['params']['debug']) {
+        if (isset($parameters['params']['debug']) && ((strtolower($parameters['params']['debug']) == 'true') || 
+            ($parameters['params']['debug'] == 1) || ($parameters['params']['debug'] == ''))) {
             // the debug parameter isset, so return the error information
             $file = substr($e->getFile(), strlen(FRAMEWORK_PATH));
             $result = <<<EOD
