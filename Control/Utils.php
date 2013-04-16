@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Toolbox
+ * kitFramework:Basic
  *
  * @author Team phpManufaktur <team@phpmanufaktur.de>
  * @link https://addons.phpmanufaktur.de/extendedWYSIWYG
@@ -195,7 +195,17 @@ class Utils
     } // passwordStrength()
 
 
-    public static function templateFile ($template_namespace, $template_file)
+    /**
+     * Return a valid path to the desired template, depending on the namespace,
+     * the preconfigured Framework template names and/or the preferred template
+     *
+     * @param string $template_namespace
+     * @param string $template_file
+     * @param string $preferred_template
+     * @throws \Exception
+     * @return string
+     */
+    public static function templateFile ($template_namespace, $template_file, $preferred_template='')
     {
         $TEMPLATE_NAMESPACES = array(
             'phpManufaktur' => MANUFAKTUR_PATH,
@@ -225,6 +235,9 @@ class Utils
             $template_file = substr($template_file, 1);
             // explode the template names
         $template_names = explode(',', FRAMEWORK_TEMPLATES);
+        if (!empty($preferred_template)) {
+            array_unshift($template_names, $preferred_template);
+        }
         // walk through the template names
         foreach ($template_names as $name) {
             $file = $TEMPLATE_NAMESPACES[$namespace] . $directory . '/' . $name . '/' . $template_file;
@@ -268,8 +281,7 @@ class Utils
      * fixes a path by removing //, /../ and other things
      *
      * @access public
-     * @param string $path
-     *            - path to fix
+     * @param string $path to fix
      * @return string
      *
      */
