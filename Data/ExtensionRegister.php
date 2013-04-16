@@ -130,4 +130,19 @@ EOD;
         return $result;
     }
 
+    /**
+     * Delete the record with ID from the table
+     *
+     * @param integer $id
+     * @throws \Exception
+     */
+    public function delete($id)
+    {
+        try {
+            $this->app['db']->delete(self::$table_name, array('id' => $id));
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
 }

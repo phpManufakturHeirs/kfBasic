@@ -23,6 +23,7 @@ use phpManufaktur\Basic\Control\cURL\cURL;
 use phpManufaktur\Basic\Control\unZip\unZip;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\Request;
+use phpManufaktur\Basic\Control\Welcome;
 
 class Updater
 {
@@ -91,6 +92,7 @@ class Updater
 
     public function getLastGithubRepository($organization, $repository)
     {
+        /*
         // init GitHub
         $github = new gitHub();
         $release = null;
@@ -109,22 +111,37 @@ class Updater
             throw new \Exception($this->app['translator']->trans("<p>Can't open the file <b>%file%</b>!</p>",
                 array('%file%' => substr($target_path, strlen(FRAMEWORK_PATH)))));
         }
+        */
         // init unZip
         $unZip = new unZip();
         $unZip->setUnZipPath(FRAMEWORK_TEMP_PATH.'/repository');
-        $unZip->checkDirectory($unZip->getUnZipPath());
-        $unZip->extract($target_path);
-        $files = $unZip->getFileList();
+       // $unZip->checkDirectory($unZip->getUnZipPath());
+       // $unZip->extract($target_path);
+       // $files = $unZip->getFileList();
         if (null === ($subdirectory = $this->getFirstSubdirectory($unZip->getUnZipPath()))) {
             throw new \Exception($this->app['translator']->trans('<p>The received repository has an unexpected directory structure!</p>'));
         }
-        $this->setMessage('Success!');
+        $source_directory = $unZip->getUnZipPath().'/'.$subdirectory;
+        $extension = $this->app['utils']->readConfiguration($source_directory.'/extension.json');
+        if (!isset($extension['path'])) {
+            throw new \Exception($this->app['translator']->trans('<p>The received extension.json does not specifiy the path of the extension!</p>'));
+        }
+        $target_directory = FRAMEWORK_PATH.'/'.trim('/\\', $extension['path']);
+        if (!file_exists($target_directory)) {
+            if (!mkdir($target_directory)) {
+                throw new \Exception($this->app['translator']->trans('<p>Can\'t create the target directory for the extension!</p>'));
+            }
+        }
+        if (!rename($source_directory, $target_directory)) {
+            throw new \Exception($this->app['translator']->trans('<p>Could not move the unzipped files to the target directory.</p>'));
+        }
+        print_r($extension);
+        $this->setMessage('Success!'.$source_directory);
 
-        // sub request to the welcome dialog
-        $cms = $this->app['request']->get('usage');
-        $usage = is_null($cms) ? 'framework' : $cms;
-        $subRequest = Request::create('/admin/welcome', 'GET', array('usage' => $usage));
-        return $this->app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+        // return to the welcome dialog
+        $Welcome = new Welcome($this->app);
+        $Welcome->setMessage($this->getMessage());
+        return $Welcome->exec();
     }
 
     public function exec($github_organization, $github_repository)

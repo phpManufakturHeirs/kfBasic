@@ -136,8 +136,19 @@ class ExtensionRegister
                 }
             }
         }
-        // check for widows in the table
-//        print_r($checkedExtensions);
+
+        if (!empty($checkedExtensions)) {
+            // check for widows in the table
+            $Register = new Register($this->app);
+            $registered = $Register->selectAll();
+            foreach ($registered as $reg) {
+                if (!in_array($reg['name'], $checkedExtensions)) {
+                    // delete from database
+                    $Register->delete($reg['id']);
+                    unset($checkedExtensions[$reg['name']]);
+                }
+            }
+        }
     }
 
     public function getInstalledExtensions()
