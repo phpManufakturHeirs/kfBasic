@@ -140,7 +140,7 @@ class ExtensionRegister
         if (!empty($checkedExtensions)) {
             // check for widows in the table
             $Register = new Register($this->app);
-            $registered = $Register->selectAll();
+            $registered = $Register->selectAllByGroup($group);
             foreach ($registered as $reg) {
                 if (!in_array($reg['name'], $checkedExtensions)) {
                     // delete from database

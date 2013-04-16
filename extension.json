@@ -5,10 +5,10 @@
   "group":"phpManufaktur",
   "vendor":"phpManufaktur",
   "type":"framework",
-  "path":"\\extension\\phpmanufaktur\\phpManufaktur\\Basic",
+  "path":"\/extension\/phpmanufaktur\/phpManufaktur\/Basic",
   "namespace": "phpManufaktur\\Basic",
   "release": {
-    "number" : "0.14",
+    "number" : "0.15",
     "date" : "2013-04-16"
   },
   "description": {

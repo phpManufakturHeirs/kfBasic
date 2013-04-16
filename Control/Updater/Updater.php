@@ -92,7 +92,7 @@ class Updater
 
     public function getLastGithubRepository($organization, $repository)
     {
-        /*
+
         // init GitHub
         $github = new gitHub();
         $release = null;
@@ -111,13 +111,13 @@ class Updater
             throw new \Exception($this->app['translator']->trans("<p>Can't open the file <b>%file%</b>!</p>",
                 array('%file%' => substr($target_path, strlen(FRAMEWORK_PATH)))));
         }
-        */
+
         // init unZip
         $unZip = new unZip();
         $unZip->setUnZipPath(FRAMEWORK_TEMP_PATH.'/repository');
-       // $unZip->checkDirectory($unZip->getUnZipPath());
-       // $unZip->extract($target_path);
-       // $files = $unZip->getFileList();
+        $unZip->checkDirectory($unZip->getUnZipPath());
+        $unZip->extract($target_path);
+        $files = $unZip->getFileList();
         if (null === ($subdirectory = $this->getFirstSubdirectory($unZip->getUnZipPath()))) {
             throw new \Exception($this->app['translator']->trans('<p>The received repository has an unexpected directory structure!</p>'));
         }
@@ -126,15 +126,19 @@ class Updater
         if (!isset($extension['path'])) {
             throw new \Exception($this->app['translator']->trans('<p>The received extension.json does not specifiy the path of the extension!</p>'));
         }
-        $target_directory = FRAMEWORK_PATH.'/'.trim('/\\', $extension['path']);
+        $target_directory = FRAMEWORK_PATH.$extension['path'];
+
         if (!file_exists($target_directory)) {
-            if (!mkdir($target_directory)) {
+            if (!mkdir($target_directory, 0755, true)) {
                 throw new \Exception($this->app['translator']->trans('<p>Can\'t create the target directory for the extension!</p>'));
             }
         }
+
         if (!rename($source_directory, $target_directory)) {
             throw new \Exception($this->app['translator']->trans('<p>Could not move the unzipped files to the target directory.</p>'));
         }
+
+        echo "$target_directory<br>";
         print_r($extension);
         $this->setMessage('Success!'.$source_directory);
 

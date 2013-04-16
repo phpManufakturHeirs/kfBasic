@@ -131,6 +131,25 @@ EOD;
     }
 
     /**
+     * Select registered extensions for the desired group
+     *
+     * @param string $group
+     * @param string $order_by
+     * @throws \Exception
+     * @return array
+     */
+    public function selectAllByGroup($group, $order_by = 'name')
+    {
+        try {
+            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `group`='$group' ORDER BY `$order_by` ASC";
+            $result = $this->app['db']->fetchAll($SQL);
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e->getMessage());
+        }
+        return $result;
+    }
+
+    /**
      * Delete the record with ID from the table
      *
      * @param integer $id
