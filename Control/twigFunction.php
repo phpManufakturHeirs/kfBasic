@@ -55,9 +55,10 @@ function twig_user_display_name (Application $app)
  *
  * @param string $template_namespace
  * @param string $template_file
+ * @param string $preferred_template
  * @return string
  */
-function twig_template_file ($template_namespace, $template_file)
+function twig_template_file ($template_namespace, $template_file, $preferred_template='')
 {
-    return Utils::templateFile($template_namespace, $template_file);
+    return Utils::templateFile($template_namespace, $template_file, $preferred_template);
 }
