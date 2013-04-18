@@ -138,9 +138,8 @@ class Updater
             throw new \Exception($this->app['translator']->trans('<p>Could not move the unzipped files to the target directory.</p>'));
         }
 
-        echo "$target_directory<br>";
-        print_r($extension);
-        $this->setMessage('Success!'.$source_directory);
+        $this->setMessage($this->app['translator']->trans('<p>Success! The extension %extension% is installed.</p>',
+            array('%extension%' => $extension['name'])));
 
         // return to the welcome dialog
         $Welcome = new Welcome($this->app);

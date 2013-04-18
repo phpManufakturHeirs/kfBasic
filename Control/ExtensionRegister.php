@@ -166,7 +166,7 @@ class ExtensionRegister
            }
 
            $data = $item;
-           $info = isset($cat['info']) ? json_decode(base64_decode($cat['info']), true) : json_decode(base64_decode($cat['info']), true);
+           $info = isset($cat['info']) ? json_decode(base64_decode($cat['info']), true) : array();
            $data['info'] = $info;
            if (isset($info['description'][$this->app['locale']])) {
                // description for the actual locale is available
