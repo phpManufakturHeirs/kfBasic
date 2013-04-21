@@ -340,10 +340,10 @@ $scan_paths = array(
 // loop through /phpManufaktur and /thirdParty to include bootstrap extensions
 foreach ($scan_paths as $scan_path) {
     $entries = scandir($scan_path);
-    foreach ($entries as $entry) {   	
+    foreach ($entries as $entry) {
         if (is_dir($scan_path . '/' . $entry)) {
         	  if (file_exists($scan_path . '/' . $entry . '/bootstrap.include.php')) {
-                // don't load the Basic bootstrap again               
+                // don't load the Basic bootstrap again
                 if ($entry == 'Basic') continue;
                 // include the bootstrap extension
                 include_once $scan_path . '/' . $entry . '/bootstrap.include.php';
@@ -360,7 +360,7 @@ $app->match('/kit_command/{command}/{params}', function (Request $request, $comm
         $result = $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST, false);
     } catch (\Exception $e) {
         $parameters = json_decode(base64_decode($params), true);
-        if (isset($parameters['params']['debug']) && ((strtolower($parameters['params']['debug']) == 'true') || 
+        if (isset($parameters['params']['debug']) && ((strtolower($parameters['params']['debug']) == 'true') ||
             ($parameters['params']['debug'] == 1) || ($parameters['params']['debug'] == ''))) {
             // the debug parameter isset, so return the error information
             $file = substr($e->getFile(), strlen(FRAMEWORK_PATH));
@@ -380,6 +380,33 @@ EOD;
     }
     return $result;
 });
+
+// catch all searches within kitCommands
+$app->match('/kit_search/command/{command}/{params}', function (Request $request, $command, $params) use ($app) {
+    try {
+        $subRequest = Request::create('/search/command/'.$command.'/'.$params, 'GET');
+        // important: we dont want that app->handle() catch errors, so set the third parameter to false!
+        $result = $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST , false);
+
+        /*$result = array(
+            'search' => array(
+                'text' => 'KEIN Fehler' //$e->getMessage()
+            )
+        );
+        $result = base64_encode(json_encode($result));
+        */
+    } catch (\Exception $e) {
+        // no search for this kitCommand found or error while executing
+        $result = array(
+            'search' => array(
+                'text' => 'Fehler' //$e->getMessage()
+                )
+            );
+        $result = base64_encode(json_encode($result));
+    }
+    return $result;
+});
+
 
 $app->get('/', function(Request $request) use ($app) {
     $subRequest = Request::create('/welcome', 'GET');
@@ -458,24 +485,31 @@ $app->get('/admin/updater/get/github/{organization}/{repository}/{usage}', funct
 });
 
 $app->match('/command/test/{params}', function(Request $request, $params) use ($app) {
-    /*
-    $param = json_decode(base64_decode($params), true);
-    ob_start();
-    echo "<pre>";
-    print_r($param);
-    echo "</pre>";
-    $param = ob_get_clean();
-    return $param;
-    */
     // get all routing objects
+    $kitCommands = array();
     $patterns = $app['routes']->getIterator()->current()->all();
     // walk through the routing objects
     foreach ($patterns as $pattern) {
         $match = $pattern->getPattern();
-        echo "$match<br />";
-        if (null !== ($opt = $pattern->getOption('info')))
-            echo "Info: $opt<br>";
+        if ((strpos($match, '/command/') !== false) && (strpos($match, '/command/') == 0))  {
+            $command = substr($match, strlen('/command/'));
+            $command = substr($command, 0, strpos($command, '/'));
+            $kitCommands[$command] = array(
+                'name' => $command,
+                'route' => $match,
+                'info' => (null !== ($opt = $pattern->getOption('info'))) ? $opt : '',
+                'search' => false
+                );
+        }
+        elseif ((strpos($match, '/search/command/') !== false) && (strpos($match, '/search/command/') == 0)) {
+            $command = substr($match, strlen('/search/command/'));
+            $command = substr($command, 0, strpos($command, '/'));
+            $kitCommands[$command]['search'] = true;
+        }
     }
+    echo "<pre>";
+    print_r($kitCommands);
+    echo "</pre>";
     return 'ok';
 })
 ->setOption('info', MANUFAKTUR_PATH.'/winCalc/command.wincalc.json');

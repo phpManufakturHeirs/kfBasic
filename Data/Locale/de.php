@@ -79,8 +79,6 @@ return array(
         => 'Den online Katalog nach verfügbaren Erweiterungen durchsuchen',
     '<p>Sorry, but the submitted GUID is invalid.</p><p>Please contact the webmaster.</p>' =>
         '<p>Die übermittelte GUID ist ungültig</p><p>Bitte nehmen Sie mit dem Webmaster Kontakt auf.</p>',
-    'Sorry, but your browser can not show this inline frame!'
-        => 'Entschuldigung, aber ihr Browser kann die eingebundenen Inhalte nicht darstellen.',
     'Submit' =>
        'Übermitteln',
     '<p>Success! The extension %extension% is installed.</p>'

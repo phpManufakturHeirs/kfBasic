@@ -26,6 +26,7 @@ class Basic
     protected static $SESSION = null;
     private static $message = '';
     protected static $preferred_template = null;
+    protected static $frame = null;
 
     public function __construct(Application $app, $parameters)
     {
@@ -36,10 +37,23 @@ class Basic
         Basic::$parameter = Basic::$cms_parameters['params'];
         Basic::$GET = Basic::$cms_parameters['GET'];
         Basic::$POST = Basic::$cms_parameters['POST'];
-        Basic::$SESSION = Basic::$cms_parameters['SESSION'];
         $app['translator']->setLocale(Basic::$cms['locale']);
         // check for the preferred template
         Basic::$preferred_template = (isset(Basic::$parameter['template'])) ? Basic::$parameter['template'] : '';
+        Basic::$frame = array(
+            'id' => (isset(Basic::$parameter['frame_id'])) ? Basic::$parameter['frame_id'] : 'kitframework_iframe',
+            'name' => (isset(Basic::$parameter['frame_name'])) ? Basic::$parameter['frame_name'] : 'kitframework_iframe',
+            'add' => (isset(Basic::$parameter['frame_add'])) ? Basic::$parameter['frame_add'] : 30,
+            'width' => (isset(Basic::$parameter['frame_width'])) ? Basic::$parameter['frame_width'] : '100%',
+            'height' => (isset(Basic::$parameter['frame_height'])) ? Basic::$parameter['frame_height'] : '400px',
+            'auto' => (isset(Basic::$parameter['frame_auto']) && ((Basic::$parameter['frame_auto'] == 'false') || (Basic::$parameter['frame_auto'] == '0'))) ? false : true,
+            'source' => (isset(Basic::$parameter['frame_source'])) ? Basic::$parameter['frame_source'] : ''
+        );
+    }
+
+    public function getParameters()
+    {
+        return self::$cms_parameters;
     }
 
     /**
@@ -83,11 +97,10 @@ class Basic
      */
     public function createIFrame($source)
     {
+        self::$frame['source'] = $source;
         return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'iframe.kitcommand.twig', self::$preferred_template),
             array(
-            'width' => (isset(self::$parameter['width'])) ? self::$parameter['width'] : '100%',
-            'height' => (isset(self::$parameter['height'])) ? self::$parameter['height'] : '400px',
-            'source' => $source
+                'frame' => self::$frame
             ));
     }
 
