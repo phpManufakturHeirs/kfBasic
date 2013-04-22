@@ -458,7 +458,12 @@ $app->get('/admin/scan/extensions', function () use ($app) {
     $register->scanDirectories(ExtensionRegister::GROUP_PHPMANUFAKTUR);
     $register->scanDirectories(ExtensionRegister::GROUP_THIRDPARTY);
     $Welcome = new Welcome($app);
-    $Welcome->setMessage($app['translator']->trans('<p>Successfull scanned the kitFramework for installed extensions.</p>'));
+    if ($register->isMessage()) {
+        $Welcome->setMessage($register->getMessage());
+    }
+    else {
+        $Welcome->setMessage($app['translator']->trans('<p>Successfull scanned the kitFramework for installed extensions.</p>'));
+    }
     return $Welcome->exec();
 });
 

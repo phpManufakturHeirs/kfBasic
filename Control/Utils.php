@@ -365,12 +365,14 @@ class Utils
                 default:
                     $error = 'Unknown error';
                     break;
-                    endswitch;
-                    // throw Exception
-                    throw new \Exception(sprintf('Error decoding JSON file %s, returned error code: %d - %s', $file, $code, $error));
+                endswitch;
+
+                // throw Exception
+                throw new \Exception(sprintf('Error decoding JSON file %s, returned error code: %d - %s',
+                    substr($file, strlen(FRAMEWORK_PATH)), $code, $error));
             }
         } else {
-            throw new \Exception(sprintf('Missing the configuration file: %s!', $file));
+            throw new \Exception(sprintf('Missing the configuration file: %s!', substring($file, strlen(FRAMEWORK_PATH))));
         }
         // return the configuration array
         return $config;

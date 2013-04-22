@@ -75,7 +75,6 @@ class ExtensionRegister
                     array('%directory%' => substr($path.'/extension.json', strlen(FRAMEWORK_PATH)), '%error%' => $e->getMessage())));
                 return false;
             }
-
             if (!isset($target['guid']) || !isset($target['release']['number'])) {
                 $this->setMessage($this->app['translator']->trans('<p>The extension.json of <b>%name%</b> does not contain all definitions, check GUID, Group and Release!</p>',
                     array('%name%' => $group)));
@@ -93,9 +92,9 @@ class ExtensionRegister
                 'release' => $target['release']['number'],
                 'date' => date('Y-m-d', strtotime($target['release']['date'])),
                 'info' => base64_encode(json_encode($target)),
-                'logo_url' => $logo_url,
-                'logo_width' => $logo_width,
-                'logo_height' => $logo_height,
+                'logo_url' => isset($logo_url) ? $logo_url : '',
+                'logo_width' => isset($logo_width) ? $logo_width : 0,
+                'logo_height' => isset($logo_height) ? $logo_height : 0,
                 'start_url' => (isset($target['link']['start'])) ? $target['link']['start'] : '',
                 'about_url' => (isset($target['link']['about'])) ? $target['link']['about'] : ''
             );
@@ -136,7 +135,6 @@ class ExtensionRegister
                 }
             }
         }
-
         if (!empty($checkedExtensions)) {
             // check for widows in the table
             $Register = new Register($this->app);
