@@ -13,6 +13,8 @@ namespace phpManufaktur\Basic\Control\gitHub;
 class gitHub
 {
 
+    const USERAGENT = 'kitFramework::Basic';
+
     /**
      * GET command to GitHub
      *
@@ -27,6 +29,7 @@ class gitHub
             $command = "https://api.github.com$command";
         $ch = curl_init($command);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_USERAGENT, self::USERAGENT);
         $result = curl_exec($ch);
         if (! curl_errno($ch)) {
             $info = curl_getinfo($ch);
