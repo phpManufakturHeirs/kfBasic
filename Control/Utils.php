@@ -372,7 +372,7 @@ class Utils
                     substr($file, strlen(FRAMEWORK_PATH)), $code, $error));
             }
         } else {
-            throw new \Exception(sprintf('Missing the configuration file: %s!', substring($file, strlen(FRAMEWORK_PATH))));
+            throw new \Exception(sprintf('Missing the configuration file: %s!', substr($file, strlen(FRAMEWORK_PATH))));
         }
         // return the configuration array
         return $config;
