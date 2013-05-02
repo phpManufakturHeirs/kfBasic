@@ -30,6 +30,8 @@ use phpManufaktur\Basic\Data\Setup\Setup;
 use phpManufaktur\Basic\Control\ExtensionRegister;
 use phpManufaktur\Basic\Control\ExtensionCatalog;
 use phpManufaktur\Updater\Updater;
+use Symfony\Component\BrowserKit\Response;
+use Nicl\Silex\MarkdownServiceProvider;
 
 
 // set the error handling
@@ -227,6 +229,9 @@ $app['twig'] = $app->share($app->extend('twig', function  ($twig, $app)
 
 $app['monolog']->addInfo('TwigServiceProvider registered.');
 
+// register the Markdown service provider
+$app->register(new MarkdownServiceProvider());
+
 // register Validator Service
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 $app['monolog']->addInfo('Validator Service Provider registered.');
@@ -267,6 +272,7 @@ if (FRAMEWORK_SETUP) {
     $Setup->exec();
 }
 
+// init the firewall
 $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     'security.firewalls' => array(
         'admin' => array(
@@ -290,47 +296,13 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     })
 ));
 
-
-$app->get('/login', function (Request $request) use($app)
-{
-    return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'login.twig'), array(
-        'error' => $app['security.last_error']($request),
-        'last_username' => $app['session']->get('_security.last_username'),
-    ));
-});
-
-$app->get('/password/forgotten', function () use($app)
-{
-    // user has forgot the password
-    $forgotPassword = new forgottenPassword($app);
-    return $forgotPassword->dialogForgottenPassword();
-});
-
-$app->match('/password/reset', function (Request $request) use ($app)
-{
-    // send the user a GUID to reset the password
-    $resetPassword = new forgottenPassword($app);
-    return $resetPassword->dialogResetPassword();
-});
-
-$app->match('/password/retype', function (Request $request) use ($app) {
-    $retypePassword = new forgottenPassword($app);
-    return $retypePassword->dialogRetypePassword();
-});
-
-$app->get('/password/create/{guid}', function ($guid) use ($app)
-{
-    // validate the GUID and create a new password
-    $createPassword = new forgottenPassword($app);
-    return $createPassword->dialogCreatePassword($guid);
-});
-
-$app->get('/admin/account', function  (Request $request) use($app)
-{
-    // user the user account dialog
-    $account = new Account($app);
-    return $account->showDialog();
-});
+if (FRAMEWORK_SETUP) {
+    // the setup flag was set to TRUE, now we assume that we can set it to FALSE
+    $framework_config['FRAMEWORK_SETUP'] = false;
+    if (! file_put_contents(FRAMEWORK_PATH. '/config/framework.json', json_encode($framework_config)))
+        throw new \Exception('Can\'t write the configuration file for the framework!');
+    $app['monolog']->addInfo('Finished kitFramework setup.');
+}
 
 $scan_paths = array(
     MANUFAKTUR_PATH,
@@ -342,7 +314,7 @@ foreach ($scan_paths as $scan_path) {
     $entries = scandir($scan_path);
     foreach ($entries as $entry) {
         if (is_dir($scan_path . '/' . $entry)) {
-        	  if (file_exists($scan_path . '/' . $entry . '/bootstrap.include.php')) {
+            if (file_exists($scan_path . '/' . $entry . '/bootstrap.include.php')) {
                 // don't load the Basic bootstrap again
                 if ($entry == 'Basic') continue;
                 // include the bootstrap extension
@@ -352,33 +324,93 @@ foreach ($scan_paths as $scan_path) {
     }
 }
 
+/**
+ * predefined routes for the framework
+ */
+
+// login dialog
+$app->get('/login', function (Request $request) use($app)
+{
+    return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'login.twig'), array(
+        'error' => $app['security.last_error']($request),
+        'last_username' => $app['session']->get('_security.last_username'),
+    ));
+});
+
+// the user has forgotten his password
+$app->get('/password/forgotten', function () use($app)
+{
+    $forgotPassword = new forgottenPassword($app);
+    return $forgotPassword->dialogForgottenPassword();
+});
+
+// send the user a GUID to reset the password
+$app->match('/password/reset', function (Request $request) use ($app)
+{
+    $resetPassword = new forgottenPassword($app);
+    return $resetPassword->dialogResetPassword();
+});
+
+// the user must retype the password
+$app->match('/password/retype', function (Request $request) use ($app) {
+    $retypePassword = new forgottenPassword($app);
+    return $retypePassword->dialogRetypePassword();
+});
+
+// validate the GUID and create a new password
+$app->get('/password/create/{guid}', function ($guid) use ($app)
+{
+    $createPassword = new forgottenPassword($app);
+    return $createPassword->dialogCreatePassword($guid);
+});
+
+// display the user account
+$app->get('/admin/account', function  (Request $request) use($app)
+{
+    $account = new Account($app);
+    return $account->showDialog();
+});
+
+
 // catch all kitCommands
 $app->match('/kit_command/{command}/{params}', function (Request $request, $command, $params) use ($app) {
     try {
-        $subRequest = Request::create('/command/'.$command.'/'.$params, 'GET');
-        // important: we dont want that app->handle() catch errors, so set the third parameter to false!
-        $result = $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST, false);
+        $parameter = json_decode(base64_decode($params), true);
+        if (isset($parameter['params']['help'])) {
+            // get the help function for this kitCommand
+            $subRequest = Request::create('/command/'.$command.'/help/'.$params, 'GET');
+            // important: we dont want that app->handle() catch errors, so set the third parameter to false!
+            return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST, false);
+        }
+        else {
+            $subRequest = Request::create('/command/'.$command.'/'.$params, 'GET');
+            // important: we dont want that app->handle() catch errors, so set the third parameter to false!
+            return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST, false);
+        }
     } catch (\Exception $e) {
-        $parameters = json_decode(base64_decode($params), true);
-        if (isset($parameters['params']['debug']) && ((strtolower($parameters['params']['debug']) == 'true') ||
-            ($parameters['params']['debug'] == 1) || ($parameters['params']['debug'] == ''))) {
+        $parameter = json_decode(base64_decode($params), true);
+        if (isset($parameter['cms']['locale'])) {
+            // set the locale given by the CMS
+            $app['locale'] = $parameter['cms']['locale'];
+        }
+        if (isset($parameter['params']['debug']) && ((strtolower($parameter['params']['debug']) == 'true') ||
+            ($parameter['params']['debug'] == 1) || ($parameter['params']['debug'] == ''))) {
             // the debug parameter isset, so return the error information
-            $file = substr($e->getFile(), strlen(FRAMEWORK_PATH));
-            $result = <<<EOD
-    <div style="border:1px solid #ccc;color:#000;background-color:#fff8dc;margin:20px 0 10px 0;padding:10px;font-size:13px;">
-      <p>Error executing the kitCommand <b>$command</b>:</p>
-      <p><b>File:</b> $file</p>
-      <p><b>Line:</b> {$e->getLine()}</p>
-      <p><b>Message:</b> {$e->getMessage()}</p>
-    </div>
-EOD;
+            $debug = array(
+                'command' => $command,
+                'file' => substr($e->getFile(), strlen(FRAMEWORK_PATH)),
+                'line' => $e->getLine(),
+                'message' => $e->getMessage()
+            );
+            return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand.debug.twig'),
+                array('debug' => $debug));
         }
         else {
             // no debug parameter, we assume that the kitCommand does not exists
-            $result = "~~ <b>Error</b>: Can't execute the kitCommand: <i>$command</i> ~~";
+            return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand.error.twig'),
+                array('command' => $command));
         }
     }
-    return $result;
 });
 
 // catch all searches within kitCommands
@@ -407,27 +439,159 @@ $app->match('/kit_search/command/{command}/{params}', function (Request $request
     return $result;
 });
 
+// general help for the kitCommands
+$app->match('/command/help/{params}', function(Request $request, $params) use ($app) {
+    $subRequest = Request::create('/command/help/help/'.$params, 'GET');
+    return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+})
+->setOption('info', MANUFAKTUR_PATH.'/Basic/command.help.json');
 
-$app->get('/', function(Request $request) use ($app) {
-    $subRequest = Request::create('/welcome', 'GET');
-    return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST, false);
+// the help function for all kitCommands
+$app->match('/command/{command}/help/{params}', function (Request $request, $params, $command) use ($app) {
+    $parameter = json_decode(base64_decode($params), true);
+    if (isset($parameter['cms']['locale'])) {
+        // set the locale given by the CMS
+        $app['locale'] = $parameter['cms']['locale'];
+    }
+    $patterns = $app['routes']->getIterator()->current()->all();
+    foreach ($patterns as $pattern) {
+        $match = $pattern->getPattern();
+        if ((strpos($match, "/command/$command/") !== false) && (strpos($match, "/command/$command/") == 0))  {
+            if ((null !== $info_path = $pattern->getOption('info')) && file_exists($info_path)) {
+                $info = $app['utils']->readConfiguration($info_path);
+                if (isset($info['help'][$app['locale']]['gist_id'])) {
+                    $gist_id = $info['help'][$app['locale']]['gist_id'];
+                    $gist_link = (isset($info['help'][$app['locale']]['link'])) ? $info['help'][$app['locale']]['link'] : '';
+                }
+                elseif (isset($info['help']['en']['gist_id'])) {
+                    $gist_id = $info['help']['en']['gist_id'];
+                    $gist_link = (isset($info['help']['en']['link'])) ? $info['help']['en']['link'] : '';
+                }
+                else {
+                    return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand.help.unavailable.twig'),
+                        array('command' => $command));
+                }
+                $ch = curl_init("https://api.github.com/gists/$gist_id");
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_USERAGENT, 'kitFramework:Basic');
+                $result = curl_exec($ch);
+                if (!curl_errno($ch)) {
+                    $info = curl_getinfo($ch);
+                }
+                curl_close($ch);
+                if (isset($info) && isset($info['http_code']) && ($info['http_code'] == '200')) {
+                    $result = json_decode($result, true);
+                    if (isset($result['files'])) {
+                        foreach ($result['files'] as $file) {
+                            if (isset($file['content'])) {
+                                $help = array(
+                                    'command' => $command,
+                                    'content' => $file['content'],
+                                    'link' => $gist_link
+                                    );
+                                return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand.help.twig'),
+                                    array('help' => $help));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand.help.unavailable.twig'),
+        array('command' => $command));
 });
 
-$app->get('/admin', function(Request $request) use ($app) {
-    $subRequest = Request::create('/welcome', 'GET');
-    return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST, false);
-});
+$app->match('/command/list/{params}', function(Request $request, $params) use ($app) {
+    $parameter = json_decode(base64_decode($params), true);
+    if (isset($parameter['cms']['locale'])) {
+        // set the locale given by the CMS
+        $app['locale'] = $parameter['cms']['locale'];
+    }
+    // get all routing objects
+    $kitCommands = array();
+    $patterns = $app['routes']->getIterator()->current()->all();
+    // walk through the routing objects
+    foreach ($patterns as $pattern) {
+        $match = $pattern->getPattern();
+        if ((strpos($match, '/command/') !== false) && (strpos($match, '/command/') == 0))  {
+            $command = substr($match, strlen('/command/'));
+            $command = substr($command, 0, strpos($command, '/'));
+            if ($command[0] == '{') {
+                // add no subroutings to the list!
+                continue;
+            }
+            $info = array();
+            if ((null !== ($info_path = $pattern->getOption('info'))) && file_exists($info_path)) {
+                $config = $app['utils']->readConfiguration($info_path);
+                $vendor_name = (isset($config['vendor']['name'])) ? $config['vendor']['name'] : null;
+                $vendor_url = (isset($config['vendor']['url'])) ? $config['vendor']['url'] : null;
+                $name = (isset($config['name'][$app['locale']])) ? $config['name'][$app['locale']] :
+                    ((isset($config['name']['en'])) ? $config['name']['en'] : null);
+                $description = (isset($config['description'][$app['locale']])) ? $config['description'][$app['locale']] :
+                    ((isset($config['description']['en'])) ? $config['description']['en'] : null);
+                $info_url = (isset($config['info'][$app['locale']]['link'])) ? $config['info'][$app['locale']]['link'] :
+                    ((isset($config['info']['en']['link'])) ? $config['info']['en']['link'] : null);
+                $info = array(
+                    'vendor' => array(
+                        'name' => $vendor_name,
+                        'url' => $vendor_url
+                        ),
+                    'info' => array(
+                        'name' => $command,
+                        'url' => $info_url
+                        ),
+                    'name' => $name,
+                    'description' => $description
+                    );
+            }
+            $kitCommands[$command] = array(
+                'command' => $command,
+                'route' => $match,
+                'info' => $info,
+                'search' => false
+            );
+        }
+        elseif ((strpos($match, '/search/command/') !== false) && (strpos($match, '/search/command/') == 0)) {
+            $command = substr($match, strlen('/search/command/'));
+            $command = substr($command, 0, strpos($command, '/'));
+            $kitCommands[$command]['search'] = true;
+        }
+    }
+    // sort the kitCommands
+    ksort($kitCommands);
+    // return the kitCommands list
+    return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand.list.twig'),
+        array('commands' => $kitCommands));
+})
+->setOption('info', MANUFAKTUR_PATH.'/Basic/command.list.json');
 
+
+
+/**
+ * Show the welcome dialog
+ */
 $app->get('/admin/welcome', function (Request $request) use ($app) {
     $Welcome = new Welcome($app);
     return $Welcome->exec();
 });
 
-$app->match('/welcome', function (Request $request) use ($app) {
-    $Welcome = new Welcome($app);
-    return $Welcome->exec();
+// redirect to the welcome dialog
+$app->get('/', function(Request $request) use ($app) {
+    return $app->redirect('/kit2/admin/welcome');
 });
 
+// redirect to the welcome dialog
+$app->get('/admin', function(Request $request) use ($app) {
+    return $app->redirect('/kit2/admin/welcome');
+});
+
+// redirect to the welcome dialog
+$app->match('/welcome', function (Request $request) use ($app) {
+    return $app->redirect('/kit2/admin/welcome');
+});
+
+// the welcome dialog is called by the CMS backend
 $app->match('/welcome/cms/{cms}', function ($cms) use ($app) {
     // get the CMS info parameters
     $cms = json_decode(base64_decode($cms), true);
@@ -453,6 +617,7 @@ $app->match('/welcome/cms/{cms}', function ($cms) use ($app) {
     return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
 });
 
+// scan for extensions
 $app->get('/admin/scan/extensions', function () use ($app) {
     $register = new ExtensionRegister($app);
     $register->scanDirectories(ExtensionRegister::GROUP_PHPMANUFAKTUR);
@@ -467,6 +632,7 @@ $app->get('/admin/scan/extensions', function () use ($app) {
     return $Welcome->exec();
 });
 
+// scan the extension catalog
 $app->get('/admin/scan/catalog', function() use($app) {
     $catalog = new ExtensionCatalog($app);
     $catalog->getOnlineCatalog();
@@ -489,43 +655,6 @@ $app->get('/admin/updater/get/github/{organization}/{repository}/{usage}', funct
     return $updater->getLastGithubRepository($organization, $repository);
 });
 
-$app->match('/command/test/{params}', function(Request $request, $params) use ($app) {
-    // get all routing objects
-    $kitCommands = array();
-    $patterns = $app['routes']->getIterator()->current()->all();
-    // walk through the routing objects
-    foreach ($patterns as $pattern) {
-        $match = $pattern->getPattern();
-        if ((strpos($match, '/command/') !== false) && (strpos($match, '/command/') == 0))  {
-            $command = substr($match, strlen('/command/'));
-            $command = substr($command, 0, strpos($command, '/'));
-            $kitCommands[$command] = array(
-                'name' => $command,
-                'route' => $match,
-                'info' => (null !== ($opt = $pattern->getOption('info'))) ? $opt : '',
-                'search' => false
-                );
-        }
-        elseif ((strpos($match, '/search/command/') !== false) && (strpos($match, '/search/command/') == 0)) {
-            $command = substr($match, strlen('/search/command/'));
-            $command = substr($command, 0, strpos($command, '/'));
-            $kitCommands[$command]['search'] = true;
-        }
-    }
-    echo "<pre>";
-    print_r($kitCommands);
-    echo "</pre>";
-    return 'ok';
-})
-->setOption('info', MANUFAKTUR_PATH.'/winCalc/command.wincalc.json');
-
-if (FRAMEWORK_SETUP) {
-    // the setup flag was set to TRUE, now we assume that we can set it to FALSE
-    $framework_config['FRAMEWORK_SETUP'] = false;
-    if (! file_put_contents(FRAMEWORK_PATH. '/config/framework.json', json_encode($framework_config)))
-        throw new \Exception('Can\'t write the configuration file for the framework!');
-    $app['monolog']->addInfo('Finished kitFramework setup.');
-}
 
 if ($app['debug'])
     $app->run();

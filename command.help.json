@@ -1,0 +1,26 @@
+{
+  "command":"help",
+  "vendor": {
+    "name":"phpManufaktur",
+    "url":"https://phpmanufaktur.de"
+    },
+  "name": {
+    "en":"Help for kitCommands",
+    "de":"Hilfe zu den kitCommands"
+  },
+  "description": {
+    "en":"General help file for the kitCommands, show the usage and give you hints",
+    "de":"Allgemeine Hilfe zu den kitCommands. Zeigt Ihnen die Handhabung, gibt Tipps und zeigt Tricks."
+  },
+  "help": {
+    "en": {
+      "link":"https://gist.github.com/hertsch/5493623",
+      "gist_id":"5493623"
+    }
+  },
+  "info": {
+    "en": {
+      "link":"https://kit2.phpmanufaktur.de"
+    }
+  }
+}

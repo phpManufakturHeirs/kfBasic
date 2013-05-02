@@ -37,6 +37,12 @@ return array(
         'Ein neues Password anlegen',
     'Email' =>
         'E-Mail',
+    "<b>Error</b>: Can't execute the kitCommand: <i>%command%</i>"
+        => '<b>Fehler</b>: Das kitCommand <i>%command%</i> konnte nicht ausgeführt werden.',
+    'Error executing the kitCommand <b>%command%</b>'
+        => 'Bei der Ausführung des kitCommand <b>%command%</b> ist ein Fehler aufgetreten',
+    'File'
+        => 'Datei',
     'Forgot your password?' =>
         'Passwort vergessen?',
     '<p>Hello %name%,<br />you have asked to create a new password for the kitFramework hosted at %server%.</p>' =>
@@ -55,16 +61,24 @@ return array(
         'kitFramework - Abmeldung',
     'kitFramework password reset' =>
         'kitFramework - Passwort zurücksetzen',
+    'Line'
+        => 'Zeile',
     'Link transmitted' =>
         'Link übermittelt',
     'Login' =>
         'Anmelden',
     'Logout' =>
         'Abmelden',
+    'Message'
+        => 'Mitteilung',
+    'more information about <b>%command%</b> ...'
+        => 'mehr Informationen über <b>%command%</b> ...',
     '<p>New kitFramework release available!</p>'
         => '<p>Es ist eine neue kitFramework Release verfügbar!</p>',
     'Password' =>
         'Passwort',
+    'Please <a href="%link%" target="_blank">comment this help</a> to improve the kitCommand <b>%command%</b>.'
+        => 'Bitte <a href="%link%" target="_blank">kommentieren Sie diese Hilfe</a> um das kitCommand <b>%command%</b> zu verbessern.',
     '<p>Please login to the kitFramework with your username or email address and the assigned password.</p><p>Your can also use your username and password for the CMS.</p>' =>
         '<p>Bitte melden Sie sich am kitFramework mit Ihrem Benutzernamen oder Ihrer E-Mail Adresse und Ihrem Passwort an.</p><p>Sie können sich auch mit Ihrem Benutzernamen und Passwort für das CMS anmelden.</p>',
     '<p>Please use the following link to create a new password:<br />%reset_url%</p>' =>
@@ -101,12 +115,16 @@ return array(
         => '<p>Das empfangene Repository hat eine unterwartete Verzeichnisstruktur und kann nicht eingelesen werden.</p>',
     '<p>The submitted GUID was already used and is no longer valid.</p><p>Please <a href="%password_forgotten%">order a new link</a>.</p>' =>
         '<p>Die übermittelte GUID wurde bereits verwendet und ist nicht mehr gültig.</p><p>Bitte <a href="%password_forgotten%">fordern Sie einen neuen Link an</a>.</p>',
+    'There is no help available for the kitCommand <b>%command%</b>.'
+        => 'Für das kitCommand <b>%command%</b> ist keine Hilfe verfügbar.',
     "This link enable you to change your password once within 24 hours." =>
         "Dieser Link ermöglicht es Ihnen, ihr Passwort einmal innerhalb von 24 Stunden zu ändern.",
     '<p>This value is not a valid email address.</p>' =>
         '<p>Es wurde keine gültige E-Mail Adresse übergeben!</p>',
     '<p>Updated the catalog data for <b>%name%</b>.</p>'
         => '<p>Die Katalogdaten für die Erweiterung <b>%name%</b> wurden aktualisiert.</p>',
+    'Use <code>~~ help ~~</code> to view the general help file for the kitCommands.'
+        => 'Verwenden Sie <code>~~ help ~~</code> um sich die allgemeine Hilfe zu den kitCommands anzeigen zu lassen.',
     'Username' =>
         'Benutzername',
     'Username or email address' =>
