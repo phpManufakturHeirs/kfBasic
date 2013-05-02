@@ -98,7 +98,7 @@ class Basic
     public function createIFrame($source)
     {
         self::$frame['source'] = $source;
-        return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'iframe.kitcommand.twig', self::$preferred_template),
+        return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand.iframe.twig', self::$preferred_template),
             array(
                 'frame' => self::$frame
             ));
