@@ -17,6 +17,8 @@ class cURL {
 
     protected $app = null;
 
+    const USERAGENT = 'kitFramework::Basic';
+
     public function __construct(Application $app)
     {
         $this->app = $app;
@@ -35,6 +37,7 @@ class cURL {
             // init cURL
             $ch = curl_init();
             // set the cURL options
+            curl_setopt($ch, CURLOPT_USERAGENT, self::USERAGENT);
             curl_setopt($ch, CURLOPT_URL, $source_url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_FAILONERROR, true);
