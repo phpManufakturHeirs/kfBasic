@@ -47,7 +47,8 @@ class Basic
             'width' => (isset(Basic::$parameter['frame_width'])) ? Basic::$parameter['frame_width'] : '100%',
             'height' => (isset(Basic::$parameter['frame_height'])) ? Basic::$parameter['frame_height'] : '400px',
             'auto' => (isset(Basic::$parameter['frame_auto']) && ((Basic::$parameter['frame_auto'] == 'false') || (Basic::$parameter['frame_auto'] == '0'))) ? false : true,
-            'source' => (isset(Basic::$parameter['frame_source'])) ? Basic::$parameter['frame_source'] : ''
+            'source' => (isset(Basic::$parameter['frame_source'])) ? Basic::$parameter['frame_source'] : '',
+            'class' => (isset(Basic::$parameter['frame_class'])) ? Basic::$parameter['frame_class'] : 'kitcommand'
         );
     }
 
