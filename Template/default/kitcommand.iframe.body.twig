@@ -1,0 +1,50 @@
+{# 
+  kfHelloWorld
+
+  @author Team phpManufaktur <team@phpmanufaktur.de>
+  @link https://kit2.phpmanufaktur.de
+  @link https://github.com/phpManufaktur/kitFramework/wiki  
+  @copyright 2012 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+  @license MIT License (MIT) http://www.opensource.org/licenses/MIT
+#}
+<!DOCTYPE html>
+<html>
+  <head>
+    {% block head %}
+      {#
+        If the iFrame content is opened as single page it will redirect to the
+        parent URL and set the iFrame source to the content of this page
+      #}
+      <script type="text/javascript">
+        if (top.location == self.location) {
+          document.location.replace("{{ cms.page_url }}{% if redirect|length > 0 %}?redirect={{ redirect }}{% endif %}");
+        }
+      </script>
+      <title>{{ title }}</title>
+      <meta http-equiv="Content-Type" content="text/html; charset={{ charset|default('UTF-8') }}"/>
+      <meta name="robots" content="{{ robots|default('index,follow') }}" />
+      <meta name="description" content="{{ description }}" />
+      <meta name="keywords" content="{{ keywords }}" />
+      {% block stylesheet %}{% endblock stylesheet %}
+      {% block jquery %}{% endblock jquery %}
+    {% endblock head %}
+  </head>
+  <body>
+    <div id="content">
+      {% block content %}{% endblock content %}
+    </div> 
+    {% block footer %}
+      {% if frame.auto %}
+        <script type="text/javascript">
+          if (typeof 'jQuery' !== 'undefined') {
+            $(document).ready(function() {
+              {# setting the iFrame height dynamically by the height of the inbounded document #}
+              var content_height = $('#content').height() + {{ frame.add|default(30) }} + "px";
+              parent.document.getElementById("{{ frame.id }}").style.height = content_height;
+            });
+          }
+        </script>
+      {% endif frame.auto %}
+    {% endblock footer %}
+  </body>
+</html>
