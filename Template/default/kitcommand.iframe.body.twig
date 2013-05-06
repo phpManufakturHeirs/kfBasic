@@ -1,5 +1,5 @@
 {# 
-  kfHelloWorld
+  kitFramework::Basic
 
   @author Team phpManufaktur <team@phpmanufaktur.de>
   @link https://kit2.phpmanufaktur.de
@@ -11,40 +11,58 @@
 <html>
   <head>
     {% block head %}
-      {#
-        If the iFrame content is opened as single page it will redirect to the
-        parent URL and set the iFrame source to the content of this page
-      #}
-      <script type="text/javascript">
-        if (top.location == self.location) {
-          document.location.replace("{{ cms.page_url }}{% if redirect|length > 0 %}?redirect={{ redirect }}{% endif %}");
-        }
-      </script>
-      <title>{{ title }}</title>
-      <meta http-equiv="Content-Type" content="text/html; charset={{ charset|default('UTF-8') }}"/>
-      <meta name="robots" content="{{ robots|default('index,follow') }}" />
-      <meta name="description" content="{{ description }}" />
-      <meta name="keywords" content="{{ keywords }}" />
-      {% block stylesheet %}{% endblock stylesheet %}
-      {% block jquery %}{% endblock jquery %}
+      {% if basic.frame.redirect.active %}
+        {# catch the iframe content into the CMS if the URL is executed external #}
+        <script type="text/javascript">
+          if (top.location == self.location) {
+            document.location.replace("{{ basic.cms.page_url }}{% if basic.frame.redirect.route|length > 0 %}?redirect={{ basic.frame.redirect.route }}{% endif %}");
+          }
+        </script>
+      {% endif %}
+      <title>{{ basic.page.title|default('') }}</title>
+      <meta http-equiv="Content-Type" content="text/html; charset={{ basic.page.charset|default('UTF-8') }}"/>
+      <meta name="robots" content="{{ basic.page.robots|default('index,follow') }}" />
+      <meta name="description" content="{{ basic.page.description|default('') }}" />
+      <meta name="keywords" content="{{ basic.page.keywords|default('') }}" />
+      {% block stylesheet %}
+        <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Basic/Template/default/css/kitcommand.css" media="screen, projection" />
+      {% endblock stylesheet %}
+      {% block jquery %}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+      {% endblock jquery %}
     {% endblock head %}
   </head>
   <body>
-    <div id="content">
-      {% block content %}{% endblock content %}
-    </div> 
+    <div class="iframe_content">
+      {% block content %}
+        {% if basic.message|length > 0 %}
+          <div class="iframe_content message">{{ basic.message }}</div>
+        {% endif %}
+      {% endblock content %}
+    </div>
     {% block footer %}
-      {% if frame.auto %}
+      {% if basic.frame.auto %}
         <script type="text/javascript">
           if (typeof 'jQuery' !== 'undefined') {
             $(document).ready(function() {
               {# setting the iFrame height dynamically by the height of the inbounded document #}
-              var content_height = $('#content').height() + {{ frame.add|default(30) }} + "px";
-              parent.document.getElementById("{{ frame.id }}").style.height = content_height;
+              try {
+                {# try to set the frame height - will fail if the URI is executed out of the iframe! #}
+                var content_height = document.body.offsetHeight + {{ basic.frame.add|default(30) }};
+                parent.document.getElementById("{{ basic.frame.id }}").style.height = content_height + "px";
+              } catch(err) {
+                {# nothing to do, we ignore any errors here ... #}
+              }
             });
           }
         </script>
-      {% endif frame.auto %}
+      {% endif %}
     {% endblock footer %}
+    {% block tracking %}
+      {% if basic.page.tracking|length > 0 %}
+        <!-- tracking code from /kit2/config/tracking.htt -->
+        {{ basic.page.tracking }}
+      {% endif %}
+    {% endblock tracking %}
   </body>
 </html>
