@@ -19,16 +19,16 @@
           }
         </script>
       {% endif %}
-      <title>{{ basic.page.title|default('') }}</title>
+      <title>{% block title %}{{ basic.page.title|default('') }}{% endblock title %}</title>
       <meta http-equiv="Content-Type" content="text/html; charset={{ basic.page.charset|default('UTF-8') }}"/>
-      <meta name="robots" content="{{ basic.page.robots|default('index,follow') }}" />
-      <meta name="description" content="{{ basic.page.description|default('') }}" />
-      <meta name="keywords" content="{{ basic.page.keywords|default('') }}" />
+      <meta name="robots" content="{% block robots %}{{ basic.page.robots|default('index,follow') }}{% endblock %}" />
+      <meta name="description" content="{% block description %}{{ basic.page.description|default('') }}{% endblock %}" />
+      <meta name="keywords" content="{% block keywords %}{{ basic.page.keywords|default('') }}{% endblock %}" />
       {% block stylesheet %}
         <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Basic/Template/default/css/kitcommand.css" media="screen, projection" />
       {% endblock stylesheet %}
       {% block jquery %}
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
       {% endblock jquery %}
     {% endblock head %}
   </head>
