@@ -12,36 +12,70 @@
 namespace phpManufaktur\Basic\Control\kitCommand;
 
 use Silex\Application;
+use phpManufaktur\Basic\Data\kitCommandParameter;
 
 class Basic
 {
-
     protected $app = null;
-    private static $cms_parameters = null;
-    protected static $parameter_string = null;
-    protected static $cms = null;
-    protected static $parameter = null;
-    protected static $GET = null;
-    protected static $POST = null;
-    protected static $SESSION = null;
     private static $message = '';
-    protected static $preferred_template = null;
-    protected static $frame = null;
-    protected static $page = null;
+    private static $cms_info = null;
+    private static $parameter = null;
+    private static $GET = null;
+    private static $POST = null;
+    private static $preferred_template = null;
+    private static $frame = null;
+    private static $page = null;
+    private static $parameter_id = null;
 
-    public function __construct(Application $app, $parameters)
+    public function __construct(Application $app, $parameter_id=-1)
     {
         $this->app = $app;
-        Basic::$parameter_string = $parameters;
-        Basic::$cms_parameters = json_decode(base64_decode($parameters), true);
-        Basic::$cms = Basic::$cms_parameters['cms'];
-        Basic::$parameter = Basic::$cms_parameters['params'];
-        Basic::$GET = Basic::$cms_parameters['GET'];
-        Basic::$POST = Basic::$cms_parameters['POST'];
+        // set the given parameter ID
+        self::$parameter_id = $parameter_id;
+        if ((self::$parameter_id == -1) && (!is_null($this->app['request']->request->get('pid')) ||
+            (!is_null($this->app['request']->query->get('pid'))))) {
+            if (!is_null($this->app['request']->request->get('pid'))) {
+                // read the parameter ID from the POST
+                self::$parameter_id = $this->app['request']->request->get('pid');
+            }
+            else {
+                self::$parameter_id = $this->app['request']->query->get('pid');
+            }
+        }
+        // init the CMS parameters
+        $this->initParameters();
         // set the locale from the CMS locale
-        $app['translator']->setLocale(Basic::$cms['locale']);
-        // check for the preferred template
-        Basic::$preferred_template = (isset(Basic::$parameter['template'])) ? Basic::$parameter['template'] : '';
+        $app['translator']->setLocale($this->getCMSlocale());
+    }
+
+    protected function initParameters()
+    {
+        // init the parameter table
+        $cmdParameter = new kitCommandParameter($this->app);
+
+        if (is_null($this->app['request']->request->get('cms'))) {
+            if (self::$parameter_id == '-1') {
+                throw new \Exception('Need at least CMS POST parameters or a parameter ID!');
+            }
+            if (false === ($params = $cmdParameter->selectParameter(self::$parameter_id))) {
+                throw new \Exception('Can not get the data for parameter ID '.self::$parameter_id);
+            }
+            $this->app['request']->request->set('cms', $params['cms']);
+            $this->app['request']->request->set('parameter', $params['parameter']);
+            $this->app['request']->request->set('GET', $params['GET']);
+            $this->app['request']->request->set('POST', $params['POST']);
+        }
+
+        // get the CMS information
+        Basic::$cms_info = $this->app['request']->request->get('cms', array(), true);
+        // get the parameters for the kitCommand
+        Basic::$parameter = $this->app['request']->request->get('parameter', array(), true);
+        // get the CMS $_GET parameters
+        Basic::$GET = $this->app['request']->request->get('GET', array(), true);
+        // get the CMS $_POST parameters
+        Basic::$POST = $this->app['request']->request->get('POST', array(), true);
+        // get the preferred template
+        Basic::$preferred_template = (isset(Basic::$parameter['template'])) ? Basic::$parameter['template'] : 'default';
         // set the values for the frame
         Basic::$frame = array(
             'id' => (isset(Basic::$parameter['frame_id'])) ? Basic::$parameter['frame_id'] : 'kitframework_iframe',
@@ -57,7 +91,7 @@ class Basic
                 'route' => (isset(Basic::$GET['redirect'])) ? Basic::$GET['redirect'] : ''
                 ),
             'tracking' => (isset(Basic::$parameter['frame_tracking']) && ((strtolower(Basic::$parameter['frame_tracking']) == 'false') || (Basic::$parameter['frame_tracking'] == '0'))) ? false : true
-        );
+            );
         $tracking = '';
         if (Basic::$frame['tracking'] && file_exists(FRAMEWORK_PATH.'/config/tracking.htt')) {
             // enable the tracking for the iframe
@@ -71,8 +105,113 @@ class Basic
             'robots' => (isset(Basic::$parameter['frame_robots'])) ? Basic::$parameter['frame_robots'] : 'index,follow',
             'charset' => (isset(Basic::$parameter['frame_charset'])) ? Basic::$parameter['frame_charset'] : 'UTF-8',
             'tracking' => $tracking
-        );
+            );
 
+        if (Basic::$parameter_id == -1) {
+            $parameter_array = array(
+                'cms' => Basic::$cms_info,
+                'parameter' => Basic::$parameter,
+                'GET' => Basic::$GET,
+                'POST' => Basic::$POST
+            );
+            $parameter_str = json_encode($parameter_array);
+            $link = md5($parameter_str);
+            if (false === ($para = $cmdParameter->selectParameter($link))) {
+                // create a new parameter record
+                $data = array(
+                    'link' => $link,
+                    'parameter' => $parameter_str
+                );
+                $cmdParameter->insert($data);
+            }
+            Basic::$parameter_id = $link;
+            $this->app['request']->request->set('parameter_id', $link);
+        }
+    }
+
+    public function getParameterID()
+    {
+        return self::$parameter_id;
+    }
+
+    public function getCommandParameters()
+    {
+        return (isset(Basic::$parameter)) ? Basic::$parameter : array();
+    }
+
+    public function getCMSgetParameters()
+    {
+        return (isset(Basic::$GET)) ? Basic::$GET : array();
+    }
+
+    public function getCMSpostParameters()
+    {
+        return (isset(Basic::$POST)) ? Basic::$POST : array();
+    }
+
+    /**
+     * Get the information array of the CMS
+     *
+     * @return array
+     */
+    public function getCMSinfoArray()
+    {
+        return Basic::$cms_info;
+    }
+
+    public function getCMStype()
+    {
+        return isset(Basic::$cms_info['type']) ? Basic::$cms_info['type'] : 'UNKNOWN';
+    }
+
+    public function getCMSversion()
+    {
+        return isset(Basic::$cms_info['version']) ? Basic::$cms_info['version'] : '0.0.0';
+    }
+
+    public function getCMSlocale()
+    {
+        return isset(Basic::$cms_info['locale']) ? Basic::$cms_info['locale'] : 'en';
+    }
+
+    public function getCMSurl()
+    {
+        return isset(Basic::$cms_info['url']) ? Basic::$cms_info['url'] : CMS_URL;
+    }
+
+    public function getCMSpath()
+    {
+        return isset(Basic::$cms_info['path']) ? Basic::$cms_info['path'] : CMS_PATH;
+    }
+
+    public function getCMSpageID()
+    {
+        return isset(Basic::$cms_info['page_id']) ? Basic::$cms_info['page_id'] : -1;
+    }
+
+    public function getCMSpageURL()
+    {
+        return isset(Basic::$cms_info['page_url']) ? Basic::$cms_info['page_url'] : CMS_URL;
+    }
+
+    public function getCMSuserID()
+    {
+        return isset(Basic::$cms_info['user']['id']) ? Basic::$cms_info['user']['id'] : -1;
+    }
+
+    public function getCMSuserName()
+    {
+        return (isset(Basic::$cms_info['user']['id'])) ? Basic::$cms_info['user']['id'] : -1;
+    }
+
+    public function getCMSuserEMail()
+    {
+        return (isset(Basic::$cms_info['user']['email'])) ? Basic::$cms_info['user']['email'] : '';
+    }
+
+    public function getPreferredTemplateStyle()
+    {
+        return (isset(Basic::$preferred_template)) ? Basic::$preferred_template : 'default';
     }
 
     /**
@@ -84,20 +223,11 @@ class Basic
     {
         return array(
             'message' => $this->getMessage(),
-            'cms' => self::$cms,
-            'frame' => self::$frame,
-            'page' => self::$page
+            'cms' => Basic::$cms_info,
+            'frame' => Basic::$frame,
+            'page' => Basic::$page,
+            'parameter_id' => Basic::$parameter_id
         );
-    }
-
-    /**
-     * Return the complete parameter array given from the CMS
-     *
-     * @return array parameters
-     */
-    public function getAllParameters()
-    {
-        return Basic::$cms_parameters;
     }
 
     /**
