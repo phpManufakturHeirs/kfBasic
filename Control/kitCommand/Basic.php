@@ -226,7 +226,8 @@ class Basic
             'cms' => Basic::$cms_info,
             'frame' => Basic::$frame,
             'page' => Basic::$page,
-            'parameter_id' => Basic::$parameter_id
+            'parameter_id' => Basic::$parameter_id,
+            'pid' => Basic::$parameter_id
         );
     }
 
