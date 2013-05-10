@@ -16,6 +16,7 @@ use phpManufaktur\Basic\Data\Security\Users;
 use phpManufaktur\Basic\Data\ExtensionCatalog;
 use phpManufaktur\Basic\Data\Setting;
 use phpManufaktur\Basic\Data\ExtensionRegister;
+use phpManufaktur\Basic\Data\kitCommandParameter;
 
 class Setup
 {
@@ -49,6 +50,10 @@ class Setup
         // create the table for the extension register
         $register = new ExtensionRegister($this->app);
         $register->createTable();
+
+        // create the table for the kitCommand parameters
+        $cmdParameter = new kitCommandParameter($this->app);
+        $cmdParameter->createTable();
 
     }
 
