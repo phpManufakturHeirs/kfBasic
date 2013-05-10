@@ -14,6 +14,7 @@ namespace phpManufaktur\Basic\Control;
 use Twig_Extension;
 use Twig_SimpleFunction;
 use Silex\Application;
+
 require_once MANUFAKTUR_PATH . '/Basic/Control/twigFunction.php';
 
 class twigExtension extends Twig_Extension
