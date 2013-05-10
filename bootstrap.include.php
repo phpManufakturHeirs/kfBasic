@@ -30,8 +30,8 @@ use phpManufaktur\Basic\Data\Setup\Setup;
 use phpManufaktur\Basic\Control\ExtensionRegister;
 use phpManufaktur\Basic\Control\ExtensionCatalog;
 use phpManufaktur\Updater\Updater;
-use Symfony\Component\BrowserKit\Response;
 use Nicl\Silex\MarkdownServiceProvider;
+use phpManufaktur\Basic\Control\kitCommand\Basic;
 
 
 // set the error handling
@@ -158,6 +158,12 @@ $app->register(new Silex\Provider\SessionServiceProvider(), array(
     )
 ));
 $app['monolog']->addInfo('SessionServiceProvider registered.');
+
+$app->before(function ($request) {
+    $request->getSession()->start();
+});
+
+
 
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app['monolog']->addInfo('UrlGeneratorServiceProvider registered.');
@@ -371,31 +377,41 @@ $app->get('/admin/account', function  (Request $request) use($app)
     return $account->showDialog();
 });
 
+$app->post('/kit_filter/{filter}', function ($filter) use ($app) {
+    if (!isset($_POST['cms_parameter'])) {
+        throw new \Exception('Invalid kitFilter execution: missing the POST CONTENT parameter!');
+    }
+   $cms_parameter = $_POST['cms_parameter'];
+   $content = isset($cms_parameter['content']) ? $cms_parameter['content'] : '- no content retrieved! -';
 
-// catch all kitCommands
-$app->match('/kit_command/{command}/{params}', function (Request $request, $command, $params) use ($app) {
+   return 'FILTER INACTIVE!'.$content;
+});
+
+$app->match('/kit_command/{command}', function ($command) use ($app) {
     try {
-        $parameter = json_decode(base64_decode($params), true);
-        if (isset($parameter['params']['help'])) {
+        if (!isset($_POST['cms_parameter'])) {
+            throw new \Exception('Invalid kitCommand execution: missing the POST CMS parameter!');
+        }
+        $cms_parameter = $_POST['cms_parameter'];
+        if (isset($cms_parameter['params']['help'])) {
             // get the help function for this kitCommand
-            $subRequest = Request::create('/command/'.$command.'/help/'.$params, 'GET');
+            $subRequest = Request::create('/command/'.$command.'/help', 'POST', $cms_parameter);
             // important: we dont want that app->handle() catch errors, so set the third parameter to false!
             return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST, false);
         }
         else {
-            $subRequest = Request::create('/command/'.$command.'/'.$params, 'GET');
+            $subRequest = Request::create('/command/'.$command, 'POST', $cms_parameter);
             // important: we dont want that app->handle() catch errors, so set the third parameter to false!
             return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST, false);
         }
     } catch (\Exception $e) {
-        $parameter = json_decode(base64_decode($params), true);
-        if (isset($parameter['cms']['locale'])) {
+        if (isset($cms_parameter['cms']['locale'])) {
             // set the locale given by the CMS
-            $app['locale'] = $parameter['cms']['locale'];
+            $app['locale'] = $cms_parameter['cms']['locale'];
         }
-        if (isset($parameter['params']['debug']) && ((strtolower($parameter['params']['debug']) == 'true') ||
-            ($parameter['params']['debug'] == 1) || ($parameter['params']['debug'] == ''))) {
-            // the debug parameter isset, so return the error information
+        if (isset($cms_parameter['parameter']['debug']) && ((strtolower($cms_parameter['parameter']['debug']) == 'true') ||
+            ($cms_parameter['parameter']['debug'] == 1) || ($cms_parameter['parameter']['debug'] == ''))) {
+            // the debug parameter isset, so return the extended error information
             $debug = array(
                 'command' => $command,
                 'file' => substr($e->getFile(), strlen(FRAMEWORK_PATH)),
@@ -413,50 +429,20 @@ $app->match('/kit_command/{command}/{params}', function (Request $request, $comm
     }
 });
 
-// catch all searches within kitCommands
-$app->match('/kit_search/command/{command}/{params}', function (Request $request, $command, $params) use ($app) {
-    try {
-        $subRequest = Request::create('/search/command/'.$command.'/'.$params, 'GET');
-        // important: we dont want that app->handle() catch errors, so set the third parameter to false!
-        $result = $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST , false);
-
-        /*$result = array(
-            'search' => array(
-                'text' => 'KEIN Fehler' //$e->getMessage()
-            )
-        );
-        $result = base64_encode(json_encode($result));
-        */
-    } catch (\Exception $e) {
-        // no search for this kitCommand found or error while executing
-        $result = array(
-            'search' => array(
-                'text' => 'Fehler' //$e->getMessage()
-                )
-            );
-        $result = base64_encode(json_encode($result));
-    }
-    return $result;
-});
-
 // general help for the kitCommands
-$app->match('/command/help/{params}', function(Request $request, $params) use ($app) {
-    $subRequest = Request::create('/command/help/help/'.$params, 'GET');
+$app->post('/command/help', function(Request $request) use ($app) {
+    $subRequest = Request::create('/command/help/help', 'POST', $request->request->all());
     return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
 })
 ->setOption('info', MANUFAKTUR_PATH.'/Basic/command.help.json');
 
-// the help function for all kitCommands
-$app->match('/command/{command}/help/{params}', function (Request $request, $params, $command) use ($app) {
-    $parameter = json_decode(base64_decode($params), true);
-    if (isset($parameter['cms']['locale'])) {
-        // set the locale given by the CMS
-        $app['locale'] = $parameter['cms']['locale'];
-    }
+$app->post('/command/{command}/help', function (Request $request, $command) use ($app) {
+    // set the CMS locale to the framework locale
+    $app['locale'] = $request->request->get('cms[locale]', 'en', true);
     $patterns = $app['routes']->getIterator()->current()->all();
     foreach ($patterns as $pattern) {
         $match = $pattern->getPattern();
-        if ((strpos($match, "/command/$command/") !== false) && (strpos($match, "/command/$command/") == 0))  {
+        if ((strpos($match, "/command/$command") !== false) && (strpos($match, "/command/$command") == 0))  {
             if ((null !== $info_path = $pattern->getOption('info')) && file_exists($info_path)) {
                 $info = $app['utils']->readConfiguration($info_path);
                 if (isset($info['help'][$app['locale']]['gist_id'])) {
@@ -502,12 +488,9 @@ $app->match('/command/{command}/help/{params}', function (Request $request, $par
         array('command' => $command));
 });
 
-$app->match('/command/list/{params}', function(Request $request, $params) use ($app) {
-    $parameter = json_decode(base64_decode($params), true);
-    if (isset($parameter['cms']['locale'])) {
-        // set the locale given by the CMS
-        $app['locale'] = $parameter['cms']['locale'];
-    }
+$app->match('/command/list', function(Request $request) use ($app) {
+    // set the CMS locale to the framework locale
+    $app['locale'] = $request->request->get('cms[locale]', 'en', true);
     // get all routing objects
     $kitCommands = array();
     $patterns = $app['routes']->getIterator()->current()->all();
@@ -516,8 +499,7 @@ $app->match('/command/list/{params}', function(Request $request, $params) use ($
         $match = $pattern->getPattern();
         if ((strpos($match, '/command/') !== false) && (strpos($match, '/command/') == 0))  {
             $command = substr($match, strlen('/command/'));
-            $command = substr($command, 0, strpos($command, '/'));
-            if ($command[0] == '{') {
+            if (!isset($command[0]) || ($command[0] == '{')) {
                 // add no subroutings to the list!
                 continue;
             }
@@ -527,23 +509,23 @@ $app->match('/command/list/{params}', function(Request $request, $params) use ($
                 $vendor_name = (isset($config['vendor']['name'])) ? $config['vendor']['name'] : null;
                 $vendor_url = (isset($config['vendor']['url'])) ? $config['vendor']['url'] : null;
                 $name = (isset($config['name'][$app['locale']])) ? $config['name'][$app['locale']] :
-                    ((isset($config['name']['en'])) ? $config['name']['en'] : null);
+                ((isset($config['name']['en'])) ? $config['name']['en'] : null);
                 $description = (isset($config['description'][$app['locale']])) ? $config['description'][$app['locale']] :
-                    ((isset($config['description']['en'])) ? $config['description']['en'] : null);
+                ((isset($config['description']['en'])) ? $config['description']['en'] : null);
                 $info_url = (isset($config['info'][$app['locale']]['link'])) ? $config['info'][$app['locale']]['link'] :
-                    ((isset($config['info']['en']['link'])) ? $config['info']['en']['link'] : null);
+                ((isset($config['info']['en']['link'])) ? $config['info']['en']['link'] : null);
                 $info = array(
                     'vendor' => array(
                         'name' => $vendor_name,
                         'url' => $vendor_url
-                        ),
+                    ),
                     'info' => array(
                         'name' => $command,
                         'url' => $info_url
-                        ),
+                    ),
                     'name' => $name,
                     'description' => $description
-                    );
+                );
             }
             $kitCommands[$command] = array(
                 'command' => $command,
@@ -558,15 +540,41 @@ $app->match('/command/list/{params}', function(Request $request, $params) use ($
             $kitCommands[$command]['search'] = true;
         }
     }
+    $kCommands = array();
+    foreach ($kitCommands as $command) {
+        // to prevent "search" widows ...
+        if (isset($command['search']) && !isset($command['command'])) continue;
+        $kCommands[$command['command']] = $command;
+    }
     // sort the kitCommands
-    ksort($kitCommands);
+    ksort($kCommands);
     // return the kitCommands list
     return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand.list.twig'),
-        array('commands' => $kitCommands));
+        array('commands' => $kCommands));
 })
 ->setOption('info', MANUFAKTUR_PATH.'/Basic/command.list.json');
 
-
+// catch all searches within kitCommands
+$app->match('/kit_search/command/{command}', function (Request $request, $command) use ($app) {
+    try {
+        if (!isset($_POST['cms_parameter'])) {
+            throw new \Exception('Invalid kitCommand execution: missing the POST CMS parameter!');
+        }
+        $cms_parameter = $_POST['cms_parameter'];
+        $subRequest = Request::create('/search/command/'.$command, 'POST', $cms_parameter);
+        // important: we dont want that app->handle() catch errors, so set the third parameter to false!
+        $result = $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST , false);
+    } catch (\Exception $e) {
+        // no search for this kitCommand found or error while executing
+        $result = array(
+            'search' => array(
+                'text' => $e->getMessage()
+            )
+        );
+        $result = base64_encode(json_encode($result));
+    }
+    return $result;
+});
 
 /**
  * Show the welcome dialog
@@ -654,7 +662,6 @@ $app->get('/admin/updater/get/github/{organization}/{repository}/{usage}', funct
     $updater = new Updater($app);
     return $updater->getLastGithubRepository($organization, $repository);
 });
-
 
 if ($app['debug'])
     $app->run();
