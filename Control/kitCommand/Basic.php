@@ -42,6 +42,16 @@ class Basic
                 self::$parameter_id = $this->app['request']->query->get('pid');
             }
         }
+        if ((self::$parameter_id == -1) && (!is_null($this->app['request']->request->get('parameter_id')) ||
+            (!is_null($this->app['request']->query->get('parameter_id'))))) {
+            if (!is_null($this->app['request']->request->get('parameter_id'))) {
+                // read the parameter ID from the POST
+                self::$parameter_id = $this->app['request']->request->get('parameter_id');
+            }
+            else {
+                self::$parameter_id = $this->app['request']->query->get('parameter_id');
+            }
+        }
         // init the CMS parameters
         $this->initParameters();
         // set the locale from the CMS locale
