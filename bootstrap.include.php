@@ -32,6 +32,7 @@ use phpManufaktur\Basic\Control\ExtensionCatalog;
 use phpManufaktur\Updater\Updater;
 use Nicl\Silex\MarkdownServiceProvider;
 use phpManufaktur\Basic\Control\kitCommand\Basic;
+use phpManufaktur\Basic\Control\kitCommand\Help;
 
 
 // set the error handling
@@ -393,7 +394,7 @@ $app->match('/kit_command/{command}', function ($command) use ($app) {
             throw new \Exception('Invalid kitCommand execution: missing the POST CMS parameter!');
         }
         $cms_parameter = $_POST['cms_parameter'];
-        if (isset($cms_parameter['params']['help'])) {
+        if (isset($cms_parameter['parameter']['help'])) {
             // get the help function for this kitCommand
             $subRequest = Request::create('/command/'.$command.'/help', 'POST', $cms_parameter);
             // important: we dont want that app->handle() catch errors, so set the third parameter to false!
@@ -436,6 +437,7 @@ $app->post('/command/help', function(Request $request) use ($app) {
 })
 ->setOption('info', MANUFAKTUR_PATH.'/Basic/command.help.json');
 
+// execute the help for any kitCommand
 $app->post('/command/{command}/help', function (Request $request, $command) use ($app) {
     // set the CMS locale to the framework locale
     $app['locale'] = $request->request->get('cms[locale]', 'en', true);
@@ -444,43 +446,8 @@ $app->post('/command/{command}/help', function (Request $request, $command) use 
         $match = $pattern->getPattern();
         if ((strpos($match, "/command/$command") !== false) && (strpos($match, "/command/$command") == 0))  {
             if ((null !== $info_path = $pattern->getOption('info')) && file_exists($info_path)) {
-                $info = $app['utils']->readConfiguration($info_path);
-                if (isset($info['help'][$app['locale']]['gist_id'])) {
-                    $gist_id = $info['help'][$app['locale']]['gist_id'];
-                    $gist_link = (isset($info['help'][$app['locale']]['link'])) ? $info['help'][$app['locale']]['link'] : '';
-                }
-                elseif (isset($info['help']['en']['gist_id'])) {
-                    $gist_id = $info['help']['en']['gist_id'];
-                    $gist_link = (isset($info['help']['en']['link'])) ? $info['help']['en']['link'] : '';
-                }
-                else {
-                    return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand.help.unavailable.twig'),
-                        array('command' => $command));
-                }
-                $ch = curl_init("https://api.github.com/gists/$gist_id");
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_USERAGENT, 'kitFramework:Basic');
-                $result = curl_exec($ch);
-                if (!curl_errno($ch)) {
-                    $info = curl_getinfo($ch);
-                }
-                curl_close($ch);
-                if (isset($info) && isset($info['http_code']) && ($info['http_code'] == '200')) {
-                    $result = json_decode($result, true);
-                    if (isset($result['files'])) {
-                        foreach ($result['files'] as $file) {
-                            if (isset($file['content'])) {
-                                $help = array(
-                                    'command' => $command,
-                                    'content' => $file['content'],
-                                    'link' => $gist_link
-                                    );
-                                return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand.help.twig'),
-                                    array('help' => $help));
-                            }
-                        }
-                    }
-                }
+                $Help = new Help($app);
+                return $Help->getContent($info_path);
             }
         }
     }
@@ -488,6 +455,7 @@ $app->post('/command/{command}/help', function (Request $request, $command) use 
         array('command' => $command));
 });
 
+// show a list of all available kitCommands
 $app->match('/command/list', function(Request $request) use ($app) {
     // set the CMS locale to the framework locale
     $app['locale'] = $request->request->get('cms[locale]', 'en', true);

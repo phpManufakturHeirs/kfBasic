@@ -78,7 +78,7 @@ return array(
     'Password' =>
         'Passwort',
     'Please <a href="%link%" target="_blank">comment this help</a> to improve the kitCommand <b>%command%</b>.'
-        => 'Bitte <a href="%link%" target="_blank">kommentieren Sie diese Hilfe</a> um das kitCommand <b>%command%</b> zu verbessern.',
+        => 'Bitte <a href="%link%" target="_blank">kommentieren und ergänzen Sie diese Hilfe</a> um das kitCommand <b>%command%</b> zu verbessern.',
     '<p>Please login to the kitFramework with your username or email address and the assigned password.</p><p>Your can also use your username and password for the CMS.</p>' =>
         '<p>Bitte melden Sie sich am kitFramework mit Ihrem Benutzernamen oder Ihrer E-Mail Adresse und Ihrem Passwort an.</p><p>Sie können sich auch mit Ihrem Benutzernamen und Passwort für das CMS anmelden.</p>',
     '<p>Please use the following link to create a new password:<br />%reset_url%</p>' =>
