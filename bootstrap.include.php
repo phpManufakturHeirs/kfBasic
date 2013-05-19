@@ -31,8 +31,10 @@ use phpManufaktur\Basic\Control\ExtensionRegister;
 use phpManufaktur\Basic\Control\ExtensionCatalog;
 use phpManufaktur\Updater\Updater;
 use Nicl\Silex\MarkdownServiceProvider;
-use phpManufaktur\Basic\Control\kitCommand\Basic;
+use phpManufaktur\Basic\Control\kitCommand\Basic as kitCommand;
+use phpManufaktur\Basic\Control\kitCommand\Help as kitHelp;
 use phpManufaktur\Basic\Control\kitCommand\Help;
+use phpManufaktur\Basic\Control\kitCommand\ListCommands;
 
 
 // set the error handling
@@ -231,6 +233,7 @@ $app['twig'] = $app->share($app->extend('twig', function  ($twig, $app)
     if ($app['debug']) {
         $twig->addExtension(new Twig_Extension_Debug());
     }
+    $twig->addExtension(new Twig_Extension_StringLoader());
     return $twig;
 }));
 
@@ -388,7 +391,8 @@ $app->post('/kit_filter/{filter}', function ($filter) use ($app) {
    return 'FILTER INACTIVE!'.$content;
 });
 
-$app->match('/kit_command/{command}', function ($command) use ($app) {
+$app->match('/kit_command/{command}', function ($command) use ($app)
+{
     try {
         if (!isset($_POST['cms_parameter'])) {
             throw new \Exception('Invalid kitCommand execution: missing the POST CMS parameter!');
@@ -396,7 +400,7 @@ $app->match('/kit_command/{command}', function ($command) use ($app) {
         $cms_parameter = $_POST['cms_parameter'];
         if (isset($cms_parameter['parameter']['help'])) {
             // get the help function for this kitCommand
-            $subRequest = Request::create('/command/'.$command.'/help', 'POST', $cms_parameter);
+            $subRequest = Request::create("/command/help?command=$command", 'POST', $cms_parameter);
             // important: we dont want that app->handle() catch errors, so set the third parameter to false!
             return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST, false);
         }
@@ -430,97 +434,38 @@ $app->match('/kit_command/{command}', function ($command) use ($app) {
     }
 });
 
-// general help for the kitCommands
-$app->post('/command/help', function(Request $request) use ($app) {
-    $subRequest = Request::create('/command/help/help', 'POST', $request->request->all());
-    return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+// general kitCommand help function
+$app->match('/command/help', function (Request $request) use ($app) {
+    // the additional parameter command can contain the name of the kitCommand, by default "help"
+    $command = $request->query->get('command', 'help');
+    $kitCommand = new kitCommand($app);
+    $cmsGET = $kitCommand->getCMSgetParameters();
+    $pid = isset($cmsGET['parameter_id']) ? $cmsGET['parameter_id'] : $kitCommand->getParameterID();
+    // create the iframe and load the help
+    return $kitCommand->createIFrame(FRAMEWORK_URL."/basic/help/$command?pid=$pid");
 })
 ->setOption('info', MANUFAKTUR_PATH.'/Basic/command.help.json');
 
-// execute the help for any kitCommand
-$app->post('/command/{command}/help', function (Request $request, $command) use ($app) {
-    // set the CMS locale to the framework locale
-    $app['locale'] = $request->request->get('cms[locale]', 'en', true);
-    $patterns = $app['routes']->getIterator()->current()->all();
-    foreach ($patterns as $pattern) {
-        $match = $pattern->getPattern();
-        if ((strpos($match, "/command/$command") !== false) && (strpos($match, "/command/$command") == 0))  {
-            if ((null !== $info_path = $pattern->getOption('info')) && file_exists($info_path)) {
-                $Help = new Help($app);
-                return $Help->getContent($info_path);
-            }
-        }
-    }
-    return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand.help.unavailable.twig'),
-        array('command' => $command));
+// show the help for the requested kitCommand
+$app->get('/basic/help/{command}', function($command) use ($app) {
+    $Help = new Help($app);
+    return $Help->getHelpPage($command);
 });
 
 // show a list of all available kitCommands
 $app->match('/command/list', function(Request $request) use ($app) {
-    // set the CMS locale to the framework locale
-    $app['locale'] = $request->request->get('cms[locale]', 'en', true);
-    // get all routing objects
-    $kitCommands = array();
-    $patterns = $app['routes']->getIterator()->current()->all();
-    // walk through the routing objects
-    foreach ($patterns as $pattern) {
-        $match = $pattern->getPattern();
-        if ((strpos($match, '/command/') !== false) && (strpos($match, '/command/') == 0))  {
-            $command = substr($match, strlen('/command/'));
-            if (!isset($command[0]) || ($command[0] == '{')) {
-                // add no subroutings to the list!
-                continue;
-            }
-            $info = array();
-            if ((null !== ($info_path = $pattern->getOption('info'))) && file_exists($info_path)) {
-                $config = $app['utils']->readConfiguration($info_path);
-                $vendor_name = (isset($config['vendor']['name'])) ? $config['vendor']['name'] : null;
-                $vendor_url = (isset($config['vendor']['url'])) ? $config['vendor']['url'] : null;
-                $name = (isset($config['name'][$app['locale']])) ? $config['name'][$app['locale']] :
-                ((isset($config['name']['en'])) ? $config['name']['en'] : null);
-                $description = (isset($config['description'][$app['locale']])) ? $config['description'][$app['locale']] :
-                ((isset($config['description']['en'])) ? $config['description']['en'] : null);
-                $info_url = (isset($config['info'][$app['locale']]['link'])) ? $config['info'][$app['locale']]['link'] :
-                ((isset($config['info']['en']['link'])) ? $config['info']['en']['link'] : null);
-                $info = array(
-                    'vendor' => array(
-                        'name' => $vendor_name,
-                        'url' => $vendor_url
-                    ),
-                    'info' => array(
-                        'name' => $command,
-                        'url' => $info_url
-                    ),
-                    'name' => $name,
-                    'description' => $description
-                );
-            }
-            $kitCommands[$command] = array(
-                'command' => $command,
-                'route' => $match,
-                'info' => $info,
-                'search' => false
-            );
-        }
-        elseif ((strpos($match, '/search/command/') !== false) && (strpos($match, '/search/command/') == 0)) {
-            $command = substr($match, strlen('/search/command/'));
-            $command = substr($command, 0, strpos($command, '/'));
-            $kitCommands[$command]['search'] = true;
-        }
-    }
-    $kCommands = array();
-    foreach ($kitCommands as $command) {
-        // to prevent "search" widows ...
-        if (isset($command['search']) && !isset($command['command'])) continue;
-        $kCommands[$command['command']] = $command;
-    }
-    // sort the kitCommands
-    ksort($kCommands);
-    // return the kitCommands list
-    return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand.list.twig'),
-        array('commands' => $kCommands));
+    $kitCommand = new kitCommand($app);
+    $cmsGET = $kitCommand->getCMSgetParameters();
+    $pid = isset($cmsGET['parameter_id']) ? $cmsGET['parameter_id'] : $kitCommand->getParameterID();
+    // create the iframe and return the list with the available kitCommands
+    return $kitCommand->createIFrame(FRAMEWORK_URL."/basic/list?pid=$pid");
 })
 ->setOption('info', MANUFAKTUR_PATH.'/Basic/command.list.json');
+
+$app->match('/basic/list', function() use ($app) {
+    $List = new ListCommands($app);
+    return $List->getList();
+});
 
 // catch all searches within kitCommands
 $app->match('/kit_search/command/{command}', function (Request $request, $command) use ($app) {
