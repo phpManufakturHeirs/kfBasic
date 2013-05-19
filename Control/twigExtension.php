@@ -50,7 +50,14 @@ class twigExtension extends Twig_Extension
         return array(
             'FRAMEWORK_URL' => FRAMEWORK_URL,
             'FRAMEWORK_TEMPLATE_URL' => FRAMEWORK_TEMPLATE_URL,
+            'FRAMEWORK_MEDIA_URL' => FRAMEWORK_MEDIA_URL,
+            'FRAMEWORK_MEDIA_PROTECTED_URL' => FRAMEWORK_MEDIA_PROTECTED_URL,
             'CMS_TEMPLATE_URL' => CMS_TEMPLATE_URL,
+            'CMS_URL' => CMS_URL,
+            'CMS_MEDIA_URL' => CMS_MEDIA_URL,
+            'CMS_ADMIN_URL' => CMS_ADMIN_URL,
+            'CMS_TYPE' => CMS_TYPE,
+            'CMS_VERSION' => CMS_VERSION,
             'MANUFAKTUR_URL' => MANUFAKTUR_URL,
             'THIRDPARTY_URL' => THIRDPARTY_URL
         );
