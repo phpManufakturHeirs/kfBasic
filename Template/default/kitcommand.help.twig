@@ -7,12 +7,51 @@
   @copyright 2012 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
-<div class="kitcommand">
-  <div style="">
-    {{ help.content|markdown }}
+{% extends template_file('@phpManufaktur/Basic/Template', 'kitcommand.iframe.body.twig') %}
+{% block title %}{{ 'kitCommand - General help container'|trans }}{% endblock %}
+{% block description %}{{ 'General help container for kitCommand help files'|trans }}{% endblock %}
+{% block content %}
+  <div class="kitcommand help navigation">
+    
+    <div class="navigation block left">
+      {% if command.info.url is defined and command.info.url|length > 0 %}
+        <div class="navigation item">
+          [ <a href="{{ command.info.url }}" target="_blank" title="{{ 'Get more information about %command%'|trans({'%command%':command.command}) }}">{{ 'Info'|trans }}</a> ]
+        </div>
+      {% endif %} 
+      {% if command.wiki.url is defined and command.wiki.url|length > 0 %}
+        <div class="navigation item">
+          [ <a href="{{ command.wiki.url }}" target="_blank" title="{{ 'Visit the Wiki for %command% and learn more about it!'|trans({'%command%':command.command}) }}">{{ 'Wiki'|trans }}</a> ]
+        </div>
+      {% endif %}
+      {% if command.issues.url is defined and command.issues.url|length > 0 %}
+        <div class="navigation item">
+          [ <a href="{{ command.issues.url }}" target="_blank" title="{{ 'Please report all issues and help to improve %command%!'|trans({'%command%':command.command}) }}">{{ 'Issues'|trans }}</a> ]
+        </div>
+      {% endif %}
+      {% if command.support.url is defined and command.support.url|length > 0 %}
+        <div class="navigation item">
+          [ <a href="{{ command.support.url }}" target="_blank" title="{{ 'Get in touch with the developers, receive support, tipps and tricks for %command%!'|trans({'%command%':command.command}) }}">{{ 'Support'|trans }}</a> ]
+        </div> 
+      {% endif %}
+    </div>
+    
+    <div class="navigation block">
+      <div class="navigation item">
+        [ <a href="{{ command.general.help.url }}" title="{{ 'View the general help for kitCommands'|trans }}" >{{ 'Help'|trans }}</a> ]
+      </div>
+      <div class="navigation item">
+        [ <a href="{{ command.general.list.url }}" title="{{ 'Show a list of all installed kitCommands'|trans }}" >{{ 'List'|trans }}</a> ]
+      </div>
+      <div class="navigation item">
+        <a href="{{ command.general.extern.url }}" target="_blank" title="{{ 'Open this helpfile in a new window'|trans }}"><img src="{{ MANUFAKTUR_URL }}/Basic/Template/default/images/expand_10x10.png" width="10" height="10" alt="{{ 'Open this helpfile in a new window'|trans }}" /></a>
+      </div>
+    </div>
+    
   </div>
-  <div style="margin: 20px 0 0 0; padding:0; color:#333; background-color: transparent; font-size: 11px;">
-    {% if help.command != 'help' %}<p>{{ 'Use <code>~~ help ~~</code> to view the general help file for the kitCommands.'|trans }}</p>{% endif %}
-    {% if help.link|length > 0 %}<p>{{ 'Please <a href="%link%" target="_blank">comment this help</a> to improve the kitCommand <b>%command%</b>.'|trans({'%link%':help.link,'%command%':help.command}) }}</p>{% endif %}    
-  </div>
-</div>
+  <div class="navigation clear"></div>
+  {# need the parent to enable prompting messages #}
+  {{ parent() }}
+  {# use template_from_string() to enable parsing of the Gist help content #} 
+  {{ include(template_from_string(help)) }}
+{% endblock content %}
