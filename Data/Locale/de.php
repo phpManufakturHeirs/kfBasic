@@ -45,14 +45,22 @@ return array(
         => 'Datei',
     'Forgot your password?' =>
         'Passwort vergessen?',
+    'Get in touch with the developers, receive support, tipps and tricks for %command%!'
+        => 'Treten Sie mit den Entwicklern in Kontakt und erhalten Unterstützung, erfahren Tipps sowie Tricks zu %command%!',
+    'Get more information about %command%'
+        => 'Erfahren Sie mehr über %command%',
     '<p>Hello %name%,<br />you have asked to create a new password for the kitFramework hosted at %server%.</p>' =>
         '<p>Hallo %name%,<br />Sie haben darum gebeten ein neues Passwort für das kitFramework auf %server% zu erhalten.</p>',
     '<p>Hello %name%,</p><p>you want to change your password, so please type in a new one, repeat it and submit the form.</p><p>If you won\'t change your password just leave this dialog.</p>' =>
         '<p>Hallo %name%,</p><p>Sie möchten Ihr Passwort ändern, bitte geben Sie das neue Passwort ein, wiederholen Sie es zur Sicherheit und schicken Sie das Formular ab.</p><p>Falls Sie Ihr Passwort nicht ändern möchten, verlassen Sie bitte einfach diesen Dialog.</p>',
+    'Help'
+        => 'Hilfe',
     '<p>If you have forgotten your password, you can order a link to create a new one.</p><p>Please type in the email address assigned to your account and submit the form.</p>' =>
         '<p>Falls Sie Ihr Passwort vergessen haben, können Sie einen Link anfordern um ein neues Passwort zu erstellen.</p><p>Bitte tragen Sie die E-Mail Adresse ein, die ihrem Konto zugeordnet ist und übermitteln Sie das Formular.</p>',
     '<p>If you have not asked to create a new password, just do nothing. The link above is valid only for 24 hours and your actual password has not changed now.</p>' =>
          '<p>Falls Sie kein neues Passwort angefordert haben, ignorieren Sie diese E-Mail bitte. Der o.a. Link ist lediglich für 24 Stunden gültig und ihr aktuelles Passwort wurde nicht geändert.</p>',
+    'Issues'
+        => 'Mängel',
     'kitFramework - Create new password' =>
         'kitFramework - Neues Passwort anlegen',
     'kitFramework - Login' =>
@@ -75,12 +83,16 @@ return array(
         => 'mehr Informationen über <b>%command%</b> ...',
     '<p>New kitFramework release available!</p>'
         => '<p>Es ist eine neue kitFramework Release verfügbar!</p>',
+    'Open this helpfile in a new window'
+        => 'Diese Hilfedatei in einem neuen Fenster öffnen',
     'Password' =>
         'Passwort',
     'Please <a href="%link%" target="_blank">comment this help</a> to improve the kitCommand <b>%command%</b>.'
         => 'Bitte <a href="%link%" target="_blank">kommentieren und ergänzen Sie diese Hilfe</a> um das kitCommand <b>%command%</b> zu verbessern.',
     '<p>Please login to the kitFramework with your username or email address and the assigned password.</p><p>Your can also use your username and password for the CMS.</p>' =>
         '<p>Bitte melden Sie sich am kitFramework mit Ihrem Benutzernamen oder Ihrer E-Mail Adresse und Ihrem Passwort an.</p><p>Sie können sich auch mit Ihrem Benutzernamen und Passwort für das CMS anmelden.</p>',
+    'Please report all issues and help to improve %command%!'
+        => 'Bitte melden Sie alle auftretenden Probleme und helfen Sie mit %command% zu verbessern!',
     '<p>Please use the following link to create a new password:<br />%reset_url%</p>' =>
         '<p>Bitte verwenden Sie den folgenden Link um ein neues Passwort anzulegen:<br />%reset_url%</p>',
     '<p>Regards<br />Your kitFramework team</p>' =>
@@ -91,6 +103,8 @@ return array(
         => 'Nach installierten Erweiterungen suchen',
     'Scan the online catalog for available extensions'
         => 'Den online Katalog nach verfügbaren Erweiterungen durchsuchen',
+    'Show a list of all installed kitCommands'
+        => 'Eine Liste mit den installierten kitCommands anzeigen',
     '<p>Sorry, but the submitted GUID is invalid.</p><p>Please contact the webmaster.</p>' =>
         '<p>Die übermittelte GUID ist ungültig</p><p>Bitte nehmen Sie mit dem Webmaster Kontakt auf.</p>',
     'Submit' =>
@@ -129,6 +143,12 @@ return array(
         'Benutzername',
     'Username or email address' =>
         'Benutzername oder E-Mail Adresse',
+    'View the general help for kitCommands'
+        => 'Die allgemeine Hilfe zu den kitCommands anzeigen',
+    'View the helpfile for %command%'
+        => 'Die Hilfedatei zu %command% anzeigen',
+    'Visit the Wiki for %command% and learn more about it!'
+        => 'Besuchen Sie das Wiki zu %command% und erfahren Sie mehr über die Möglichkeiten!',
     'We have send a link to your email address %email%.' =>
         'Wir haben Ihnen einen Link an Ihre E-Mail Adresse %email% gesendet.',
     'Welcome' =>
