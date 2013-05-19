@@ -9,4 +9,7 @@
 #}
 <div style="border:1px solid #ccc; color:#000; background-color:#fff8dc; margin:20px 0 10px 0; padding:10px; font-size:13px;">
   {{ 'There is no help available for the kitCommand <b>%command%</b>.'|trans({'%command%':command}) }}
+  {% if curl_info.http_code is defined %}
+    <p>HTTP Status Code: {{ curl_info.http_code }}</p>
+  {% endif %}
 </div>

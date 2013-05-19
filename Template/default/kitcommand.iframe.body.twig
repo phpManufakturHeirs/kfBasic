@@ -11,7 +11,7 @@
 <html>
   <head>
     {% block head %}
-      {% if basic.frame.redirect.active %}
+      {% if (basic.frame is defined and basic.frame.redirect.active) %}
         {# catch the iframe content into the CMS if the URL is executed external #}
         <script type="text/javascript">
           if (top.location == self.location) {
@@ -41,7 +41,7 @@
       {% endblock content %}
     </div>
     {% block footer %}
-      {% if basic.frame.auto %}
+      {% if basic.frame is defined and basic.frame.auto %}
         <script type="text/javascript">
           if (typeof 'jQuery' !== 'undefined') {
             $(document).ready(function() {
@@ -59,7 +59,7 @@
       {% endif %}
     {% endblock footer %}
     {% block tracking %}
-      {% if basic.page.tracking|length > 0 %}
+      {% if basic.page is defined and basic.page.tracking|length > 0 %}
         <!-- tracking code from /kit2/config/tracking.htt -->
         {{ basic.page.tracking }}
       {% endif %}
