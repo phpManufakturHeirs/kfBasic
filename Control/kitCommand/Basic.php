@@ -65,9 +65,31 @@ class Basic
 
         if (is_null($this->app['request']->request->get('cms'))) {
             if (self::$parameter_id == '-1') {
-                throw new \Exception('Need at least CMS POST parameters or a parameter ID!');
+                // create a default parameter array for the FRAMEWORK
+                //throw new \Exception('Need at least CMS POST parameters or a parameter ID!');
+                $params = array(
+                    'cms' => array(
+                        'type' => 'framework',
+                        'version' => null,
+                        'locale' => $this->app['locale'],
+                        'url' => FRAMEWORK_URL,
+                        'path' => FRAMEWORK_PATH,
+                        'page_id' => -1,
+                        'page_url' => null,
+                        'user' => array(
+                            'id' => -1,
+                            'name' => '',
+                            'email' => ''
+                        )
+                    ),
+                    'GET' => array(),
+                    'POST' => array(),
+                    'parameter' => array(
+                        'frame_redirect' => 'false'
+                    ),
+                );
             }
-            if (false === ($params = $cmdParameter->selectParameter(self::$parameter_id))) {
+            elseif (false === ($params = $cmdParameter->selectParameter(self::$parameter_id))) {
                 throw new \Exception('Can not get the data for parameter ID '.self::$parameter_id);
             }
             $this->app['request']->request->set('cms', $params['cms']);
@@ -528,6 +550,25 @@ class Basic
         return Basic::$frame['class'];
     }
 
+    /**
+     * Get the path to the kitCommand info file command.xxx.json
+     *
+     * @param string $command
+     * @return string|boolean path on success otherwise false
+     */
+    public function getInfoPath($command)
+    {
+        $patterns = $this->app['routes']->getIterator()->current()->all();
+        foreach ($patterns as $pattern) {
+            $match = $pattern->getPattern();
+            if ((strpos($match, "/command/$command") !== false) && (strpos($match, "/command/$command") == 0))  {
+                if ((null !== $info_path = $pattern->getOption('info')) && file_exists($info_path)) {
+                    return $info_path;
+                }
+            }
+        }
+        return false;
+    }
 
     /**
      * Create a iFrame for embedding a kitCommand within a Content Management System
