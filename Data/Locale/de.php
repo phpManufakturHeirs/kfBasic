@@ -15,24 +15,26 @@ if ('á' != "\xc3\xa1") {
 }
 
 return array(
-    '<p>Add the extension <b>%name%</b> to the catalog.</p>'
-        => '<p>Die Erweiterung <b>%name%</b> wurde dem Katalog hinzugefügt.</p>',
+    'Add the extension <b>%name%</b> to the catalog.'
+        => 'Die Erweiterung <b>%name%</b> wurde dem Katalog hinzugefügt.',
+    'Add the extension <b>%name%</b> to the register.'
+        => 'Die Erweiterung <b>%name%</b> wurde dem Register hinzugefügt.',
     'Bad credentials' =>
         'Die Angaben sind unvollständig oder ungültig!',
-    '<p>Can\'t create the target directory for the extension!</p>'
-        => '<p>Konnte das Zielverzeichnis für die Extension nicht erstellen!</p>',
-    '<p>Can not read the extension.json for %name%!</p><p>Error message: %error%</p>'
-        => '<p>Kann die Beschreibungsdatei extension.json für die Erweiterung <b>%name%</b> nicht lesen!</p><p>Fehlermeldung: %error%</p>',
-    '<p>Can not read the information file for the kitFramework!</p>'
-        => '<p>Kann die Beschreibungsdatei für das kitFramework nicht lesen!</p>',
+    'Can\'t create the target directory for the extension!'
+        => 'Konnte das Zielverzeichnis für die Extension nicht erstellen!',
+    'Can not read the extension.json for %name%!<br />Error message: %error%'
+        => 'Kann die Beschreibungsdatei extension.json für die Erweiterung <b>%name%</b> nicht lesen!<br />Fehlermeldung: %error%',
+    'Can not read the information file for the kitFramework!'
+        => 'Kann die Beschreibungsdatei für das kitFramework nicht lesen!',
     '<p>Can\'t create a new GUID as long the last GUID is not expired. You must wait 24 hours between the creation of new passwords.</p>' =>
         '<p>Es kann keine neue GUID erzeugt werden, solange die letzte noch gültig ist. Sie können das Anlegen eines neuen Passwort nur einmal innerhalb von 24 Stunden anfordern!</p>',
-    "<p>Can't open the file <b>%file%</b>!</p>"
+    "Can't open the file <b>%file%</b>!"
         => '<p>Kann die Datei <b>%file%</b> nicht öffnen!</p>',
-    "<p>Can't read the the %repository% from %organization% at Github!</p>"
-        => '<p>Kann das Repository <b>%repository%</b> von der Organisation <b>%organization%</b> auf Github nicht lesen!</p>',
-    '<p>Could not move the unzipped files to the target directory.</p>'
-        => '<p>Konnte die entpackten Dateien nicht in das Zielverzeichnis verschieben!</p>',
+    "Can't read the the %repository% from %organization% at Github!"
+        => 'Kann das Repository <b>%repository%</b> von der Organisation <b>%organization%</b> auf Github nicht lesen!',
+    'Could not move the unzipped files to the target directory.'
+        => 'Konnte die entpackten Dateien nicht in das Zielverzeichnis verschieben!',
     'Create a new password' =>
         'Ein neues Password anlegen',
     'Email' =>
@@ -81,8 +83,8 @@ return array(
         => 'Mitteilung',
     'more information about <b>%command%</b> ...'
         => 'mehr Informationen über <b>%command%</b> ...',
-    '<p>New kitFramework release available!</p>'
-        => '<p>Es ist eine neue kitFramework Release verfügbar!</p>',
+    'New kitFramework release available!'
+        => 'Es ist eine neue kitFramework Release verfügbar!',
     'Open this helpfile in a new window'
         => 'Diese Hilfedatei in einem neuen Fenster öffnen',
     'Password' =>
@@ -109,24 +111,24 @@ return array(
         '<p>Die übermittelte GUID ist ungültig</p><p>Bitte nehmen Sie mit dem Webmaster Kontakt auf.</p>',
     'Submit' =>
        'Übermitteln',
-    '<p>Success! The extension %extension% is installed.</p>'
-        => '<p>Die Erweiterung %extension% wurde erfolgreich installiert.</p>',
+    'Success! The extension %extension% is installed.'
+        => 'Die Erweiterung %extension% wurde erfolgreich installiert.',
     '<p>Successfull scanned the kitFramework for installed extensions.</p>'
         => '<p>Das kitFramework wurde nach installierten Erweiterungen durchsucht.</p>',
     '<p>Successfull scanned the kitFramework online catalog for available extensions.</p>'
         => '<p>Der online Katalog für das kitFramework wurde nach verfügbaren Erweiterungen durchsucht.</p>',
     '<p>The both passwords you have typed in does not match, please try again!</p>' =>
         '<p>Die beiden Passwörter die Sie eingegeben haben stimmen nicht überein, bitte versuchen Sie es noch einmal!</p>',
-    '<p>The extension.json of <b>%name%</b> does not contain all definitions, check GUID, Group and Release!</p>'
-        => '<p>Die Beschreibungsdatei extension.json für die Erweiterung <b>%name%</b> enthält nicht alle Definitionen, prüfen Sie <i>GUID</i>, <i>Group</i> und <i>Release</i>!</p>',
+    'The extension.json of <b>%name%</b> does not contain all definitions, check GUID, Group and Release!'
+        => 'Die Beschreibungsdatei extension.json für die Erweiterung <b>%name%</b> enthält nicht alle Definitionen, prüfen Sie <i>GUID</i>, <i>Group</i> und <i>Release</i>!',
     '<p>The password for the kitFramework was successfull changed.</p><p>You can now <a href="%login%">login using the new password</a>.</p>' =>
         '<p>Ihr Passwort für das kitFramework wurde erfolgreich geändert.</p><p>Sie können sich jetzt <a href="%login%">mit Ihrem neuen Passwort anmeldend</a>.</p>',
     '<p>The password you have typed in is not strength enough.</p><p>Please choose a password at minimun 8 characters long, containing lower and uppercase characters, numbers and special chars. Spaces are not allowed.</p>' =>
         '<p>Das übermittelte Passwort ist nicht stark genug.</p><p>Bitte wählen Sie ein Passwort mit mindestens 8 Zeichen Länge, mit einem Mix aus Groß- und Kleinbuchstaben, Zahlen und Sonderzeichen. Leerzeichen sind nicht gestattet.</p>',
-    '<p>The received extension.json does not specifiy the path of the extension!</p>'
-        => '<p>Die empfangene extension.json enthält nicht den Installationspfand für die Extension!</p>',
-    '<p>The received repository has an unexpected directory structure!</p>'
-        => '<p>Das empfangene Repository hat eine unterwartete Verzeichnisstruktur und kann nicht eingelesen werden.</p>',
+    'The received extension.json does not specifiy the path of the extension!'
+        => 'Die empfangene extension.json enthält nicht den Installationspfand für die Extension!',
+    'The received repository has an unexpected directory structure!'
+        => 'Das empfangene Repository hat eine unterwartete Verzeichnisstruktur und kann nicht eingelesen werden.',
     '<p>The submitted GUID was already used and is no longer valid.</p><p>Please <a href="%password_forgotten%">order a new link</a>.</p>' =>
         '<p>Die übermittelte GUID wurde bereits verwendet und ist nicht mehr gültig.</p><p>Bitte <a href="%password_forgotten%">fordern Sie einen neuen Link an</a>.</p>',
     'There is no help available for the kitCommand <b>%command%</b>.'
@@ -135,8 +137,10 @@ return array(
         "Dieser Link ermöglicht es Ihnen, ihr Passwort einmal innerhalb von 24 Stunden zu ändern.",
     '<p>This value is not a valid email address.</p>' =>
         '<p>Es wurde keine gültige E-Mail Adresse übergeben!</p>',
-    '<p>Updated the catalog data for <b>%name%</b>.</p>'
-        => '<p>Die Katalogdaten für die Erweiterung <b>%name%</b> wurden aktualisiert.</p>',
+    'Updated the catalog data for <b>%name%</b>.'
+        => 'Die Katalogdaten für die Erweiterung <b>%name%</b> wurden aktualisiert.',
+    'Updated the register data for <b>%name%</b>.'
+        => 'Die Registrierdaten für die Erweiterung <b>%name%</b> wurden aktualisiert.',
     'Use <code>~~ help ~~</code> to view the general help file for the kitCommands.'
         => 'Verwenden Sie <code>~~ help ~~</code> um sich die allgemeine Hilfe zu den kitCommands anzeigen zu lassen.',
     'Username' =>

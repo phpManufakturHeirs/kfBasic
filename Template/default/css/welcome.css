@@ -60,7 +60,9 @@ a:active {
   font-size: 13px;
   text-align: left;
 }
-
+.message.item {
+  border: none;
+}
 .small {
   font-size: smaller;
 }

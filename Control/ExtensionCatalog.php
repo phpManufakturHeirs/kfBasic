@@ -38,17 +38,17 @@ class ExtensionCatalog
     /**
      * @return the $message
      */
-    public static function getMessage ()
+    public function getMessage ()
     {
         return self::$message;
     }
 
-    /**
-     * @param string $message
-     */
-    public static function setMessage ($message)
+    public function setMessage($message, $params=array())
     {
-        self::$message .= $message;
+        self::$message .= $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'message.twig'),
+        array(
+            'message' => $this->app['translator']->trans($message, $params)
+        ));
     }
 
     /**
@@ -56,7 +56,7 @@ class ExtensionCatalog
      *
      * @return boolean
      */
-    public static function isMessage()
+    public function isMessage()
     {
         return !empty(self::$message);
     }
@@ -64,7 +64,7 @@ class ExtensionCatalog
     /**
      * Clear the existing message(s)
      */
-    public static function clearMessage()
+    public function clearMessage()
     {
         self::$message = '';
     }
@@ -102,14 +102,14 @@ class ExtensionCatalog
         $github = new gitHub();
         $release = null;
         if (false === ($catalog_url = $github->getLastRepositoryZipUrl('phpManufaktur', 'kitFramework_Catalog', $release))) {
-            throw new \Exception($this->app['translator']->trans("<p>Can't read the the %repository% from %organization% at Github!</p>",
+            throw new \Exception($this->app['translator']->trans("Can't read the the %repository% from %organization% at Github!",
                 array('%repository%' => 'kitFramework_Catalog', '%organization%' => 'phpManufaktur')));
         }
 
         $Setting = new Setting($this->app);
         $last_release = $Setting->select('extension_catalog_release');
         if (\version_compare($release, $last_release, '>')) {
-            $this->setMessage("<p>actual: $last_release, online: $release (online is newer, we'll update!)</p>");
+            $this->setMessage("actual: $last_release, online: $release (online is newer, we'll update!)");
         }
         else {
             // nothing to do!
@@ -122,7 +122,7 @@ class ExtensionCatalog
 
         // catalog.zip is in temp directory
         if (!file_exists($target_path)) {
-            throw new \Exception($this->app['translator']->trans("<p>Can't open the file <b>%file%</b>!</p>",
+            throw new \Exception($this->app['translator']->trans("Can't open the file <b>%file%</b>!",
                 array('%file%' => substr($target_path, strlen(FRAMEWORK_PATH)))));
         }
         // init unZip
@@ -132,7 +132,7 @@ class ExtensionCatalog
         $unZip->extract($target_path);
         $files = $unZip->getFileList();
         if (null === ($subdirectory = $this->getFirstSubdirectory($unZip->getUnZipPath()))) {
-            throw new \Exception($this->app['translator']->trans('<p>The received repository has an unexpected directory structure!</p>'));
+            throw new \Exception($this->app['translator']->trans('The received repository has an unexpected directory structure!'));
         }
 
         // init catalog
@@ -149,14 +149,14 @@ class ExtensionCatalog
                                 try {
                                     $framework = $this->app['utils']->readConfiguration($file['file_path']);
                                 } catch (\Exception $e) {
-                                    $this->setMessage($this->app['translator']->trans('<p>Can not read the information file for the kitFramework!</p>'));
+                                    $this->setMessage('Can not read the information file for the kitFramework!');
                                 }
                                 if (file_exists(FRAMEWORK_PATH.'/framework.json') && isset($framework['release']['number'])) {
                                     // check if a new kitFramework release is available
                                     $actual_framework = $this->app['utils']->readConfiguration(FRAMEWORK_PATH.'/framework.json');
                                     if (version_compare($framework['release']['number'], $actual_framework['release']['number'], '>')) {
                                         // the framework version has changed!
-                                        $this->setMessage($this->app['translator']->trans('<p>New kitFramework release available!</p>'));
+                                        $this->setMessage('New kitFramework release available!');
                                     }
                                 }
                             }
@@ -168,13 +168,13 @@ class ExtensionCatalog
                                 try {
                                     $target = $this->app['utils']->readConfiguration($file['file_path']);
                                 } catch (\Exception $e) {
-                                    $this->setMessage($this->app['translator']->trans('<p>Can not read the extension.json for %name%!</p><p>Error message: %error%</p>',
-                                        array('%name%' => $name, '%error%' => $e->getMessage())));
+                                    $this->setMessage('Can not read the extension.json for %name%!<br />Error message: %error%',
+                                        array('%name%' => $name, '%error%' => $e->getMessage()));
                                     break;
                                 }
                                 if (!isset($target['guid']) || !isset($target['group']) || !isset($target['release']['number'])) {
-                                    $this->setMessage($this->app['translator']->trans('<p>The extension.json of <b>%name%</b> does not contain all definitions, check GUID, Group and Release!</p>',
-                                        array('%name%' => $name)));
+                                    $this->setMessage('The extension.json of <b>%name%</b> does not contain all definitions, check GUID, Group and Release!',
+                                        array('%name%' => $name));
                                     break;
                                 }
                                 $path = substr($file['file_path'], 0, strrpos($file['file_path'], '/')+1);
@@ -218,14 +218,14 @@ class ExtensionCatalog
                                 if (null === ($id = $catalog->selectIDbyGUID($data['guid']))) {
                                     // insert as new record
                                     $id = $catalog->insert($data);
-                                    $this->setMessage($this->app['translator']->trans('<p>Add the extension <b>%name%</b> to the catalog.</p>',
-                                        array('%name%' => $data['name'])));
+                                    $this->setMessage('Add the extension <b>%name%</b> to the catalog.',
+                                        array('%name%' => $data['name']));
                                 }
                                 else {
                                     // update the existing record
                                     $catalog->update($id, $data);
-                                    $this->setMessage($this->app['translator']->trans('<p>Updated the catalog data for <b>%name%</b>.</p>',
-                                        array('%name%' => $data['name'])));
+                                    $this->setMessage('Updated the catalog data for <b>%name%</b>.',
+                                        array('%name%' => $data['name']));
                                 }
                             }
                             break;

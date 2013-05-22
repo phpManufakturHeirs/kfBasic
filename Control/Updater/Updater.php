@@ -38,17 +38,17 @@ class Updater
     /**
      * @return the $message
      */
-    public static function getMessage ()
+    public function getMessage ()
     {
         return self::$message;
     }
 
-    /**
-     * @param string $message
-     */
-    public static function setMessage ($message)
+    public function setMessage($message, $params=array())
     {
-        self::$message .= $message;
+        self::$message .= $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'message.twig'),
+        array(
+            'message' => $this->app['translator']->trans($message, $params)
+        ));
     }
 
     /**
@@ -56,7 +56,7 @@ class Updater
      *
      * @return boolean
      */
-    public static function isMessage()
+    public function isMessage()
     {
         return !empty(self::$message);
     }
@@ -64,7 +64,7 @@ class Updater
     /**
      * Clear the existing message(s)
      */
-    public static function clearMessage()
+    public function clearMessage()
     {
         self::$message = '';
     }
@@ -97,18 +97,18 @@ class Updater
         $github = new gitHub();
         $release = null;
         if (false === ($tag_url = $github->getLastRepositoryZipUrl($organization, $repository, $release))) {
-            throw new \Exception($this->app['translator']->trans("<p>Can't read the the %repository% from %organization% at Github!</p>",
+            throw new \Exception($this->app['translator']->trans("Can't read the the %repository% from %organization% at Github!",
                 array('%repository%' => $repository, '%organization%' => $organization)));
         }
 
         $cURL = new cURL($this->app);
-        $info = array();
+
         $target_path = FRAMEWORK_TEMP_PATH.'/repository.zip';
         $cURL->DownloadRedirectedURL($tag_url, $target_path);
 
         // repository.zip is in temp directory
         if (!file_exists($target_path)) {
-            throw new \Exception($this->app['translator']->trans("<p>Can't open the file <b>%file%</b>!</p>",
+            throw new \Exception($this->app['translator']->trans("Can't open the file <b>%file%</b>!",
                 array('%file%' => substr($target_path, strlen(FRAMEWORK_PATH)))));
         }
 
@@ -119,27 +119,47 @@ class Updater
         $unZip->extract($target_path);
         $files = $unZip->getFileList();
         if (null === ($subdirectory = $this->getFirstSubdirectory($unZip->getUnZipPath()))) {
-            throw new \Exception($this->app['translator']->trans('<p>The received repository has an unexpected directory structure!</p>'));
+            throw new \Exception($this->app['translator']->trans('The received repository has an unexpected directory structure!'));
         }
         $source_directory = $unZip->getUnZipPath().'/'.$subdirectory;
         $extension = $this->app['utils']->readConfiguration($source_directory.'/extension.json');
         if (!isset($extension['path'])) {
-            throw new \Exception($this->app['translator']->trans('<p>The received extension.json does not specifiy the path of the extension!</p>'));
+            throw new \Exception($this->app['translator']->trans('The received extension.json does not specifiy the path of the extension!'));
         }
         $target_directory = FRAMEWORK_PATH.$extension['path'];
 
         if (!file_exists($target_directory)) {
             if (!mkdir($target_directory, 0755, true)) {
-                throw new \Exception($this->app['translator']->trans('<p>Can\'t create the target directory for the extension!</p>'));
+                throw new \Exception($this->app['translator']->trans('Can\'t create the target directory for the extension!'));
             }
         }
 
+        /*
         if (!rename($source_directory, $target_directory)) {
-            throw new \Exception($this->app['translator']->trans('<p>Could not move the unzipped files to the target directory.</p>'));
+            throw new \Exception($this->app['translator']->trans('Could not move the unzipped files to the target directory.'));
+        }
+        */
+
+        if (!$this->app['utils']->xcopy($source_directory, $target_directory)) {
+            throw new \Exception($this->app['translator']->trans('Could not move the unzipped files to the target directory.'));
         }
 
-        $this->setMessage($this->app['translator']->trans('<p>Success! The extension %extension% is installed.</p>',
-            array('%extension%' => $extension['name'])));
+        $mode = $this->app['request']->query->get('mode', 'install');
+
+        if (($mode == 'upgrade') && file_exists($target_directory.'/extension.upgrade.php')) {
+            $result = include_once $target_directory.'/extension.upgrade.php';
+            if (is_string($result) && !empty($result)) {
+                $this->setMessage($result);
+            }
+        }
+        elseif (file_exists($target_directory.'/extension.install.php')) {
+            $result = include_once $target_directory.'/extension.install.php';
+            if (is_string($result) && !empty($result)) {
+                $this->setMessage($result);
+            }
+        }
+
+        $this->setMessage('Success! The extension %extension% is installed.', array('%extension%' => $extension['name']));
 
         // return to the welcome dialog
         $Welcome = new Welcome($this->app);
@@ -147,9 +167,5 @@ class Updater
         return $Welcome->exec();
     }
 
-    public function exec($github_organization, $github_repository)
-    {
-
-    }
 }
 

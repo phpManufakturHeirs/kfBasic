@@ -33,7 +33,7 @@ class ExtensionRegister
     /**
      * @return the $message
      */
-    public static function getMessage ()
+    public function getMessage ()
     {
         return self::$message;
     }
@@ -41,9 +41,12 @@ class ExtensionRegister
     /**
      * @param string $message
      */
-    public static function setMessage ($message)
+    public function setMessage($message, $params=array())
     {
-        self::$message .= $message;
+        self::$message .= $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'message.twig'),
+        array(
+            'message' => $this->app['translator']->trans($message, $params)
+        ));
     }
 
     /**
@@ -51,7 +54,7 @@ class ExtensionRegister
      *
      * @return boolean
      */
-    public static function isMessage()
+    public function isMessage()
     {
         return !empty(self::$message);
     }
@@ -59,7 +62,7 @@ class ExtensionRegister
     /**
      * Clear the existing message(s)
      */
-    public static function clearMessage()
+    public function clearMessage()
     {
         self::$message = '';
     }
@@ -71,13 +74,13 @@ class ExtensionRegister
             try {
                 $target = $this->app['utils']->readConfiguration($path.'/extension.json');
             } catch (\Exception $e) {
-                $this->setMessage($this->app['translator']->trans('<p>Can not read the extension.json in %directory%!</p><p>Error message: %error%</p>',
-                    array('%directory%' => substr($path.'/extension.json', strlen(FRAMEWORK_PATH)), '%error%' => $e->getMessage())));
+                $this->setMessage('Can not read the extension.json in %directory%!</p><p>Error message: %error%',
+                    array('%directory%' => substr($path.'/extension.json', strlen(FRAMEWORK_PATH)), '%error%' => $e->getMessage()));
                 return false;
             }
             if (!isset($target['guid']) || !isset($target['release']['number'])) {
-                $this->setMessage($this->app['translator']->trans('<p>The extension.json of <b>%name%</b> does not contain all definitions, check GUID, Group and Release!</p>',
-                    array('%name%' => $group)));
+                $this->setMessage('The extension.json of <b>%name%</b> does not contain all definitions, check GUID, Group and Release!',
+                    array('%name%' => $group));
                 return false;
             }
             if (file_exists($path.'/extension.jpg') || file_exists($path.'/extension.png')) {
@@ -103,14 +106,14 @@ class ExtensionRegister
                 // insert as new record
                 $data['date_installed'] = date('Y-m-d');
                 $id = $register->insert($data);
-                $this->setMessage($this->app['translator']->trans('<p>Add the extension <b>%name%</b> to the register.</p>',
-                    array('%name%' => $data['name'])));
+                $this->setMessage('Add the extension <b>%name%</b> to the register.',
+                    array('%name%' => $data['name']));
             }
             else {
                 // update the existing record
                 $register->update($id, $data);
-                $this->setMessage($this->app['translator']->trans('<p>Updated the register data for <b>%name%</b>.</p>',
-                    array('%name%' => $data['name'])));
+                $this->setMessage('Updated the register data for <b>%name%</b>.',
+                    array('%name%' => $data['name']));
             }
             $extension = $data['name'];
             return true;
