@@ -33,7 +33,7 @@
     {% endblock head %}
   </head>
   <body>
-    <div class="iframe_content">
+    <div {% block iframe_content_attribute %}class="iframe_content"{% endblock iframe_content_attribute %}>
       {% block content %}
         {% if basic.message|length > 0 %}
           <div class="iframe_content message">{{ basic.message }}</div>
@@ -52,6 +52,7 @@
                 parent.document.getElementById("{{ basic.frame.id }}").style.height = content_height + "px";
               } catch(err) {
                 {# nothing to do, we ignore any errors here ... #}
+                  alert(err);
               }
             });
           }
