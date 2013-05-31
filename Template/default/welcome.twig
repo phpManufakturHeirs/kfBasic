@@ -62,7 +62,9 @@
         <div class="extension_title">{{ item.description.title }}</div>
         <div class="extension_description">{{ item.description.short }}</div>
         <div class="extension_release">Release {{ item.release }} <em>({{ item.date|date('d.m.Y') }})</em></div>
-        <p><a href="{{ FRAMEWORK_URL }}/admin/updater/get/github/{{ item.info.download.github.organization }}/{{ item.info.download.github.repository }}/{{ usage }}">Install</a></p>
+        {% if item.info.download.github is defined %}
+          <p><a href="{{ FRAMEWORK_URL }}/admin/updater/get/github/{{ item.info.download.github.organization }}/{{ item.info.download.github.repository }}/{{ usage }}">Install</a></p>
+        {% endif %}
       </div>
     {% endfor %}  
     <div class="clear"></div>  
