@@ -1,0 +1,37 @@
+{# 
+  kitFramework:Basic
+
+  @author Team phpManufaktur <team@phpmanufaktur.de>
+  @link https://kit2.phpmanufaktur.de
+  @link https://github.com/phpManufaktur/kitFramework/wiki  
+  @copyright 2012 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+  @license MIT License (MIT) http://www.opensource.org/licenses/MIT
+#}
+
+{% extends template_file('@phpManufaktur/Basic/Template', 'kitcommand.iframe.body.twig') %}
+{% block title %}{{ 'kitCommand - Login Dialog for the CMS'|trans }}{% endblock %}
+{% block description %}{{ 'The kitCommand cms_login provide you with a login dialog for the parent CMS'|trans }}{% endblock %}
+{% block stylesheet %}
+  {{ parent() }}
+  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Basic/Template/default/css/kitcommand.cms.login.css" media="screen, projection" />
+{% endblock stylesheet %}
+{% block content %}
+  <div class="cms_login_container">
+    <form name="login" action="{{ FRAMEWORK_URL }}/basic/cms/login/check?pid={{ basic.pid }}" method="post">
+      <fieldset>
+        {{ parent() }}
+        <legend>{{ 'Login'|trans }}</legend>
+        <label class="required" for="user_name" accesskey="1">{{ 'Username'|trans }}</label>
+        <input type="text" name="user_name" value="" />
+        <label class="required" for="user_pass" accesskey="2">{{ 'Password'|trans }}</label>
+        <input type="password" name="user_pass" value="" />
+        <div class="clear"></div>
+        <input type="submit" name="submit" value="{{ 'Login'|trans }}" />  
+        <div class="forgot_password">
+          <a href="{{ FRAMEWORK_URL }}/basic/cms/forgot/password?pid={{ basic.pid }}">{{ 'Forgot your password?'|trans }}</a>
+        </div>
+      </fieldset>
+      <div class="clear"></div>        
+    </form>
+  </div>
+{% endblock content %}

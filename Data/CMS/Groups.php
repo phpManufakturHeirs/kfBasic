@@ -13,7 +13,7 @@ namespace phpManufaktur\Basic\Data\CMS;
 
 use Silex\Application;
 
-class Users
+class Groups
 {
 
     protected $app = null;
@@ -23,23 +23,15 @@ class Users
         $this->app = $app;
     } // __construct()
 
-    public function selectUser ($name, &$is_admin = false)
+    public function selectGroup($group_id)
     {
         try {
-            $login = strtolower($name);
-            $SQL = "SELECT * FROM `" . CMS_TABLE_PREFIX . "users` WHERE (`username`='$login' OR `email`='$login') AND `active`='1'";
+            $SQL = "SELECT * FROM `" . CMS_TABLE_PREFIX . "groups` WHERE `group_id`='$group_id'";
             $result = $this->app['db']->fetchAssoc($SQL);
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e->getMessage(), 0, $e);
         }
-        if (! isset($result['username']))
-            return false;
-        $user = array();
-        foreach ($result as $key => $value)
-            $user[$key] = (is_string($value)) ? $this->app['utils']->unsanitizeText($value) : $value;
-        $groups = explode(',', $user['groups_id']);
-        $is_admin = (in_array(1, $groups));
-        return $user;
+        return (!isset($result['group_id'])) ? false : $result;
     } // selectUser()
 
 } // class Users

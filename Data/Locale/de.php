@@ -89,6 +89,8 @@ return array(
         => 'Diese Hilfedatei in einem neuen Fenster öffnen',
     'Password' =>
         'Passwort',
+    'Please check the username and password and try again!'
+        => 'Bitte prüfen Sie den angegebenen Benutzernamen sowie das Passwort und versuchen Sie es erneut!',
     'Please <a href="%link%" target="_blank">comment this help</a> to improve the kitCommand <b>%command%</b>.'
         => 'Bitte <a href="%link%" target="_blank">kommentieren und ergänzen Sie diese Hilfe</a> um das kitCommand <b>%command%</b> zu verbessern.',
     '<p>Please login to the kitFramework with your username or email address and the assigned password.</p><p>Your can also use your username and password for the CMS.</p>' =>
@@ -137,6 +139,8 @@ return array(
         "Dieser Link ermöglicht es Ihnen, ihr Passwort einmal innerhalb von 24 Stunden zu ändern.",
     '<p>This value is not a valid email address.</p>' =>
         '<p>Es wurde keine gültige E-Mail Adresse übergeben!</p>',
+    'Unknown user'
+        => 'Unbekannter Benutzer',
     'Updated the catalog data for <b>%name%</b>.'
         => 'Die Katalogdaten für die Erweiterung <b>%name%</b> wurden aktualisiert.',
     'Updated the register data for <b>%name%</b>.'

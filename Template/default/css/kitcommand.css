@@ -143,12 +143,16 @@ iframe.kitcommand {
   background-color: #fff;
 }
 .iframe_content.message {
-  height: auto;
+  min-height: 0;
   width: auto;
   border: 1px solid #ccc;
   color: #363636;
   background-color: #fff8dc;
-  margin: 20px 0 10px 0;
+  margin: 10px 0 10px 0;
   padding: 10px;
   font-size: 13px;
+}
+.message.item {
+  margin: 0;
+  padding: 0 0 5px 0;
 }

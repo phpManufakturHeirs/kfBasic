@@ -1,0 +1,77 @@
+/* 
+  kfBasic:kitCommands
+
+  @author Team phpManufaktur <team@phpmanufaktur.de>
+  @link https://kit2.phpmanufaktur.de
+  @link https://github.com/phpManufaktur/kitFramework/wiki  
+  @copyright 2012 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+  @license MIT License (MIT) http://www.opensource.org/licenses/MIT
+*/
+
+.iframe_content {
+  color: #363636;
+  background-color: transparent;
+}
+.iframe_content.message {
+  min-height: 0;
+  width: auto;
+  border: 1px solid #ccc;
+  color: #363636;
+  background-color: #fff8dc;
+  margin: 5px 0 5px 0;
+  padding: 5px;
+  font-size: 10px;
+}
+.cms_login_container {
+  width: 100%;
+  height: auto;
+  color: #363636;
+  background-color: transparent;
+}
+.cms_login_container .clear {
+  clear: both;
+  width: 0;
+  height: 0;
+}
+.cms_login_container fieldset {
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 9px;
+  padding: 2px;
+  margin: 0;
+}
+.cms_login_container label {
+  clear: both;
+  display: block;
+  margin: 0;
+  padding: 5px 0 2px 0;
+  text-align: left;
+}
+.cms_login_container input {
+  clear: both;
+  width: 95%;
+  font-size: 9px;
+  margin: 0;
+  padding: 1px;
+}
+.cms_login_container input[type=submit] {
+  margin: 5px 0 0 0;
+  padding: 3px;
+  font-size: 10px;
+}
+.cms_login_container a:link,
+.cms_login_container a:visited {
+  text-decoration: none;
+  color: #da251d;
+  background-color: transparent;
+}
+.cms_login_container a:hover,
+.cms_login_container a:active {
+  text-decoration: underline;
+  color: #da251d;
+  background-color: transparent;
+}
+.forgot_password {
+  margin: 10px 0 5px 0;
+  padding: 0;
+  font-size: 9px;
+}

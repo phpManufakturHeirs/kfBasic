@@ -13,7 +13,8 @@ namespace phpManufaktur\Basic\Control\kitCommand;
 
 use phpManufaktur\Basic\Control\kitCommand\Basic as kitCommand;
 
-class ListCommands extends kitCommand {
+class ListCommands extends kitCommand
+{
 
     public function getList()
     {
