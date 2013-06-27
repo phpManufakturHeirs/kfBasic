@@ -340,7 +340,7 @@ class Utils
     function readConfiguration ($file)
     {
         if (file_exists($file)) {
-            if (null == ($config = json_decode(file_get_contents($file), true))) {
+            if (null === ($config = json_decode(file_get_contents($file), true))) {
                 $code = json_last_error();
                 // get JSON error message from last error code
                 switch ($code) :
@@ -377,6 +377,11 @@ class Utils
         // return the configuration array
         return $config;
     } // readConfiguration()
+
+    public function readJSON($file)
+    {
+        return $this->readConfiguration($file);
+    }
 
     /**
      * Scan the given $locale_path for language files and add them to the global
