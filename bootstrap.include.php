@@ -198,8 +198,6 @@ if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
 
 // register the Translator
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
-    'translator.messages' => array(),
-    'locale' => $locale,
     'locale_fallback' => 'en'
 ));
 
@@ -208,6 +206,8 @@ $app['translator'] = $app->share($app->extend('translator', function  ($translat
     $translator->addLoader('array', new ArrayLoader());
     return $translator;
 }));
+$app['translator']->setLocale($locale);
+
 $app['monolog']->addInfo('Translator Service registered. Added ArrayLoader to the Translator');
 
 // load the /Basic language files
