@@ -199,13 +199,14 @@ class Utils
      * Return a valid path to the desired template, depending on the namespace,
      * the preconfigured Framework template names and/or the preferred template
      *
-     * @param string $template_namespace
-     * @param string $template_file
-     * @param string $preferred_template
+     * @param string $template_namespace the Twig namespace to use
+     * @param string $template_file the file to load, you can use leading directories
+     * @param string $preferred_template optional specifiy a preferred template
+     * @param boolean $return_path return the path instead of the Twig namespace
      * @throws \Exception
      * @return string
      */
-    public static function templateFile ($template_namespace, $template_file, $preferred_template='')
+    public static function templateFile ($template_namespace, $template_file, $preferred_template='', $return_path=false)
     {
         $TEMPLATE_NAMESPACES = array(
             'phpManufaktur' => MANUFAKTUR_PATH,
@@ -242,8 +243,14 @@ class Utils
         foreach ($template_names as $name) {
             $file = $TEMPLATE_NAMESPACES[$namespace] . $directory . '/' . $name . '/' . $template_file;
             if (file_exists($file)) {
-                // success - build the path for Twig
-                return $template_namespace . '/' . $name . '/' . $template_file;
+                if ($return_path) {
+                    // return the PATH
+                    return $file;
+                }
+                else {
+                    // success - build the namespace path for Twig
+                    return $template_namespace . '/' . $name . '/' . $template_file;
+                }
             }
         }
         // Uuups - no template found!
