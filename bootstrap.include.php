@@ -213,6 +213,9 @@ $app['monolog']->addInfo('Translator Service registered. Added ArrayLoader to th
 // load the /Basic language files
 $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Basic/Data/Locale');
 
+// load the /Custom/Basic language files
+$app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Basic/Data/Locale/Custom');
+
 // register Twig
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.options' => array(

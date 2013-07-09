@@ -403,10 +403,10 @@ class Utils
         try {
             if (false === ($lang_files = scandir($locale_path)))
                 throw new \Exception(sprintf("Can't read the /Locale directory %s!", $locale_path));
-            $ignore = array('.', '..', 'index.php');
+            $ignore = array('.', '..', 'index.php', 'README.md');
             foreach ($lang_files as $lang_file) {
                 if (!is_file($locale_path.'/'.$lang_file)) continue;
-                if (in_array($lang_file, $ignore)) continue;
+                if (in_array($lang_file, $ignore) || (pathinfo($locale_path.'/'.$lang_file, PATHINFO_EXTENSION) != 'php')) continue;
                 $lang_name = pathinfo($locale_path.'/'.$lang_file, PATHINFO_FILENAME);
                 // get the array from the desired file
                 $lang_array = include_once $locale_path.'/'.$lang_file;
