@@ -33,10 +33,7 @@ use phpManufaktur\Updater\Updater;
 use Nicl\Silex\MarkdownServiceProvider;
 use phpManufaktur\Basic\Control\kitCommand\Basic as kitCommand;
 use phpManufaktur\Basic\Control\kitCommand\Help as kitHelp;
-use phpManufaktur\Basic\Control\kitCommand\Help;
 use phpManufaktur\Basic\Control\kitCommand\ListCommands;
-use phpManufaktur\Basic\Control\kitCommand\cmsLogin;
-use phpManufaktur\Basic\Control\kitCommand\cmsLoginCheck;
 
 
 // set the error handling
@@ -455,7 +452,7 @@ $app->match('/command/help', function (Request $request) use ($app) {
 
 // show the help for the requested kitCommand
 $app->get('/basic/help/{command}', function($command) use ($app) {
-    $Help = new Help($app);
+    $Help = new kitHelp($app);
     return $Help->getHelpPage($command);
 });
 
@@ -482,16 +479,6 @@ $app->match('/command/cms_login', function() use ($app) {
     // create the iframe and return the list with the available kitCommands
     return $kitCommand->createIFrame(FRAMEWORK_URL."/basic/cms/login?pid=$pid");
 
-});
-
-$app->match('/basic/cms/login', function() use ($app) {
-    $Login = new cmsLogin($app);
-    return $Login->getLoginDialog();
-});
-
-$app->match('/basic/cms/login/check', function() use($app) {
-    $loginCheck = new cmsLoginCheck($app);
-    return $loginCheck->check();
 });
 
 // catch all searches within kitCommands
