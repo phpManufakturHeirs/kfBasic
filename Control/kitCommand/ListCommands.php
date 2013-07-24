@@ -13,6 +13,12 @@ namespace phpManufaktur\Basic\Control\kitCommand;
 
 use phpManufaktur\Basic\Control\kitCommand\Basic as kitCommand;
 
+/**
+ * Class to list all kitCommands as structured list
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ *
+ */
 class ListCommands extends kitCommand
 {
 

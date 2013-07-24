@@ -23,6 +23,8 @@ use Silex\Application;
 /**
  * Class UserProvider implements UserProviderInterface
  * Usermanagement and -roles
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
  */
 class UserProvider implements UserProviderInterface
 {

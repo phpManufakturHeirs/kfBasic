@@ -8,11 +8,6 @@
  * @copyright 2012 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
  *
- *
- * IMPORTANT
- * This class will never executed within phpManufaktur/Basic/Control/Updater,
- * it will ever placed (copied) at phpManufaktur/Updater to prevent conflicts
- * while updating phpManufaktur/Basic itself.
  */
 
 namespace phpManufaktur\Updater;
@@ -21,10 +16,19 @@ use Silex\Application;
 use phpManufaktur\Basic\Control\gitHub\gitHub;
 use phpManufaktur\Basic\Control\cURL\cURL;
 use phpManufaktur\Basic\Control\unZip\unZip;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpFoundation\Request;
 use phpManufaktur\Basic\Control\Welcome;
 
+/**
+ * Updater Class for the kitFramework
+ *
+ * IMPORTANT
+ * This class will never executed within phpManufaktur/Basic/Control/Updater,
+ * it will ever placed (copied) at phpManufaktur/Updater to prevent conflicts
+ * while updating phpManufaktur/Basic itself.
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ *
+ */
 class Updater
 {
     protected $app = null;
@@ -133,12 +137,6 @@ class Updater
                 throw new \Exception($this->app['translator']->trans('Can\'t create the target directory for the extension!'));
             }
         }
-
-        /*
-        if (!rename($source_directory, $target_directory)) {
-            throw new \Exception($this->app['translator']->trans('Could not move the unzipped files to the target directory.'));
-        }
-        */
 
         if (!$this->app['utils']->xcopy($source_directory, $target_directory)) {
             throw new \Exception($this->app['translator']->trans('Could not move the unzipped files to the target directory.'));

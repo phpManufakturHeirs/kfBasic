@@ -13,6 +13,12 @@ namespace phpManufaktur\Basic\Data;
 
 use Silex\Application;
 
+/**
+ * Data table for basic settings and configuration information of the kitFramework
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ *
+ */
 class Setting {
 
     protected $app = null;

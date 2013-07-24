@@ -19,6 +19,12 @@ use phpManufaktur\Basic\Data\ExtensionCatalog as Catalog;
 use phpManufaktur\Basic\Data\Setting;
 use phpManufaktur\Basic\Data\ExtensionRegister as Register;
 
+/**
+ * Get the catalog with all for the kitFramework available extensions from GitHub
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ *
+ */
 class ExtensionCatalog
 {
 

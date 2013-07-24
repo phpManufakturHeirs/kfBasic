@@ -15,6 +15,13 @@ use Silex\Application;
 use phpManufaktur\Basic\Data\ExtensionRegister as Register;
 use phpManufaktur\Basic\Data\ExtensionCatalog as Catalog;
 
+/**
+ * Check for installed extensions and read the information from extension.json
+ * and read the data into the register table
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ *
+ */
 class ExtensionRegister
 {
     protected $app = null;

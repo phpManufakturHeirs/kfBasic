@@ -10,6 +10,12 @@
  */
 namespace phpManufaktur\Basic\Control\unZip;
 
+/**
+ * UnZip Exception handler
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ *
+ */
 class unZipException extends \Exception
 {
 

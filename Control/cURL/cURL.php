@@ -13,6 +13,12 @@ namespace phpManufaktur\Basic\Control\cURL;
 
 use Silex\Application;
 
+/**
+ * Class to access the cURL library
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ *
+ */
 class cURL {
 
     protected $app = null;

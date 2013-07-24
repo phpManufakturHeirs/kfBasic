@@ -14,6 +14,12 @@ namespace phpManufaktur\Basic\Control;
 use Silex\Application;
 use phpManufaktur\Basic\Control\ExtensionRegister;
 
+/**
+ * Display a welcome to the kitFramework dialog
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ *
+ */
 class Welcome
 {
 

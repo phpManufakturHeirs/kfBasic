@@ -13,6 +13,12 @@ namespace phpManufaktur\Basic\Control;
 
 use Silex\Application;
 
+/**
+ * Class with usefull utils for the general usage within the kitFramework
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ *
+ */
 class Utils
 {
 

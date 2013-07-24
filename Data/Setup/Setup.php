@@ -18,6 +18,12 @@ use phpManufaktur\Basic\Data\Setting;
 use phpManufaktur\Basic\Data\ExtensionRegister;
 use phpManufaktur\Basic\Data\kitCommandParameter;
 
+/**
+ * Setup all needed database tables and initialize the kitFramework
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ *
+ */
 class Setup
 {
     protected $app = null;

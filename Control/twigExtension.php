@@ -17,6 +17,12 @@ use Silex\Application;
 
 require_once MANUFAKTUR_PATH . '/Basic/Control/twigFunction.php';
 
+/**
+ * The Twig extension class for the kitFramework
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ *
+ */
 class twigExtension extends Twig_Extension
 {
 

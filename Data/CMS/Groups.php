@@ -13,6 +13,12 @@ namespace phpManufaktur\Basic\Data\CMS;
 
 use Silex\Application;
 
+/**
+ * Class to access the CMS user groups
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ *
+ */
 class Groups
 {
 

@@ -13,6 +13,13 @@ namespace phpManufaktur\Basic\Control\kitCommand;
 
 use phpManufaktur\Basic\Control\kitCommand\Basic as kitCommand;
 
+/**
+ * Class to get help informations from the desired GIST and display them within
+ * the kitCommand
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ *
+ */
 class Help extends kitCommand {
 
     const USERAGENT = 'kitFramework:Basic';

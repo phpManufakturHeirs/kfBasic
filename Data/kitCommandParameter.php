@@ -13,6 +13,12 @@ namespace phpManufaktur\Basic\Data;
 
 use Silex\Application;
 
+/**
+ * Data table to save Base64 encoded kitCommand parameters
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ *
+ */
 class kitCommandParameter
 {
     protected $app = null;

@@ -13,6 +13,12 @@ namespace phpManufaktur\Basic\Data;
 
 use Silex\Application;
 
+/**
+ * Data table for information about all local installed extensions
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ *
+ */
 class ExtensionRegister
 {
     protected $app = null;

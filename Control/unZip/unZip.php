@@ -14,6 +14,12 @@ use phpManufaktur\Basic\Control\unZip\unZipException;
 
 require_once MANUFAKTUR_PATH . '/Basic/Control/unZip/unZipException.php';
 
+/**
+ * UnZip class
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ *
+ */
 class unZip
 {
 

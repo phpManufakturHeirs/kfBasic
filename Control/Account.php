@@ -12,6 +12,12 @@ namespace phpManufaktur\Basic\Control;
 
 use Silex\Application;
 
+/**
+ * Display the account dialog for the actual user
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ *
+ */
 class Account
 {
 

@@ -10,6 +10,12 @@
  */
 namespace phpManufaktur\Basic\Control\gitHub;
 
+/**
+ * Class to access GitHub
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpManufaktur.de>
+ *
+ */
 class gitHub
 {
 

@@ -13,6 +13,12 @@ namespace phpManufaktur\Basic\Data;
 
 use Silex\Application;
 
+/**
+ * Data table for the extension catalog for the kitFramework
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ *
+ */
 class ExtensionCatalog
 {
     protected $app = null;

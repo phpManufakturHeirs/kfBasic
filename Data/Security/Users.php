@@ -14,6 +14,13 @@ namespace phpManufaktur\Basic\Data\Security;
 use phpManufaktur\Basic\Control\manufakturPasswordEncoder;
 use Silex\Application;
 
+/**
+ * User table for the kitFramework.
+ * Contains the encrypted password, username, email and roles
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ *
+ */
 class Users
 {
 

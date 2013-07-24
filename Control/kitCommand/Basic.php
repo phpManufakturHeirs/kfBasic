@@ -14,6 +14,12 @@ namespace phpManufaktur\Basic\Control\kitCommand;
 use Silex\Application;
 use phpManufaktur\Basic\Data\kitCommandParameter;
 
+/**
+ * The elementary basic class for all kitCommands
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ *
+ */
 class Basic
 {
     protected $app = null;

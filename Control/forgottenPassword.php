@@ -14,6 +14,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 use phpManufaktur\Basic\Data\Security\Users;
 use Silex\Application;
 
+/**
+ * Display a dialog and enable the user to get a new password
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ *
+ */
 class forgottenPassword
 {
 
