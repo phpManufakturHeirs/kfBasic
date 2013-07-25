@@ -1,8 +1,14 @@
-## kitFramework::kfBasic - Changelog ##
+## kitFramework::kfBasic ##
 
-**0.11** - 2013-04-06
+(c) 2013 phpManufaktur by Ralf Hertsch
 
-* moved the essential content of /bootstrap.php loader to /phpManufaktur/Basic/include.bootstrap.php
+MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
+
+kitFramework - <https://kit2.phpmanufaktur.de>
+
+**0.23** - 2013-07-25
+
+* first beta release
 
 **0.10** - 2013-04-05
 
