@@ -36,7 +36,7 @@ class Users
             $SQL = "SELECT * FROM `" . CMS_TABLE_PREFIX . "users` WHERE (`username`='$login' OR `email`='$login') AND `active`='1'";
             $result = $this->app['db']->fetchAssoc($SQL);
         } catch (\Doctrine\DBAL\DBALException $e) {
-            throw new \Exception($e->getMessage(), 0, $e);
+            throw new \Exception($e);
         }
         if (! isset($result['username']))
             return false;

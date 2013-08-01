@@ -58,7 +58,7 @@ try {
     $framework_config = $app['utils']->readConfiguration(__DIR__ . '/../../../../config/framework.json');
     // framework constants
     define('FRAMEWORK_URL', $framework_config['FRAMEWORK_URL']);
-    define('FRAMEWORK_PATH', $framework_config['FRAMEWORK_PATH']);
+    define('FRAMEWORK_PATH', $app['utils']->sanitizePath($framework_config['FRAMEWORK_PATH']));
     define('FRAMEWORK_TEMP_PATH', isset($framework_config['FRAMEWORK_TEMP_PATH']) ? $framework_config['FRAMEWORK_TEMP_PATH'] : FRAMEWORK_PATH . '/temp');
     define('FRAMEWORK_TEMP_URL', isset($framwework_config['FRAMEWORK_TEMP_URL']) ? $framework_config['FRAMEWORK_TEMP_URL'] : FRAMEWORK_URL . '/temp');
     define('FRAMEWORK_TEMPLATES', isset($framework_config['FRAMEWORK_TEMPLATES']) ? $framework_config['FRAMEWORK_TEMPLATES'] : 'default');
@@ -119,13 +119,13 @@ try {
     // read the CMS configuration
     $cms_config = $app['utils']->readConfiguration(FRAMEWORK_PATH . '/config/cms.json');
     // setting the CMS constants
-    define('CMS_PATH', $cms_config['CMS_PATH']);
+    define('CMS_PATH', $app['utils']->sanitizePath($cms_config['CMS_PATH']));
     define('CMS_URL', $cms_config['CMS_URL']);
-    define('CMS_MEDIA_PATH', $cms_config['CMS_MEDIA_PATH']);
+    define('CMS_MEDIA_PATH', $app['utils']->sanitizePath($cms_config['CMS_MEDIA_PATH']));
     define('CMS_MEDIA_URL', $cms_config['CMS_MEDIA_URL']);
-    define('CMS_TEMP_PATH', $cms_config['CMS_TEMP_PATH']);
+    define('CMS_TEMP_PATH', $app['utils']->sanitizePath($cms_config['CMS_TEMP_PATH']));
     define('CMS_TEMP_URL', $cms_config['CMS_TEMP_URL']);
-    define('CMS_ADMIN_PATH', $cms_config['CMS_ADMIN_PATH']);
+    define('CMS_ADMIN_PATH', $app['utils']->sanitizePath($cms_config['CMS_ADMIN_PATH']));
     define('CMS_ADMIN_URL', $cms_config['CMS_ADMIN_URL']);
     define('CMS_TYPE', $cms_config['CMS_TYPE']);
     define('CMS_VERSION', $cms_config['CMS_VERSION']);
@@ -513,17 +513,17 @@ $app->get('/admin/welcome', function (Request $request) use ($app) {
 
 // redirect to the welcome dialog
 $app->get('/', function(Request $request) use ($app) {
-    return $app->redirect('/kit2/admin/welcome');
+    return $app->redirect(FRAMEWORK_URL.'/admin/welcome');
 });
 
 // redirect to the welcome dialog
 $app->get('/admin', function(Request $request) use ($app) {
-    return $app->redirect('/kit2/admin/welcome');
+    return $app->redirect(FRAMEWORK_URL.'/admin/welcome');
 });
 
 // redirect to the welcome dialog
 $app->match('/welcome', function (Request $request) use ($app) {
-    return $app->redirect('/kit2/admin/welcome');
+    return $app->redirect(FRAMEWORK_URL.'/admin/welcome');
 });
 
 // the welcome dialog is called by the CMS backend
