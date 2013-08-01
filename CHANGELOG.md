@@ -6,6 +6,11 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.24** - 2013-08-01
+
+* added the EmbeddedAdministration feature
+* switched cURL SSL check off
+
 **0.23** - 2013-07-25
 
 * first beta release

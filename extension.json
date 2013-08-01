@@ -8,8 +8,8 @@
   "path":"\/extension\/phpmanufaktur\/phpManufaktur\/Basic",
   "namespace": "phpManufaktur\\Basic",
   "release": {
-    "number" : "0.23",
-    "date" : "2013-07-25"
+    "number" : "0.24",
+    "date" : "2013-08-01"
   },
   "description": {
     "en": {
@@ -27,7 +27,7 @@
   },
   "require": {
     "framework": {
-      "release": "0.17"
+      "release": "0.20"
     }
   },
   "license":"MIT License",
