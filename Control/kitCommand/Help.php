@@ -48,6 +48,8 @@ class Help extends kitCommand {
         $ch = curl_init("https://api.github.com/gists/$gist_id");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_USERAGENT, self::USERAGENT);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         $result = curl_exec($ch);
         if (!curl_errno($ch)) {
             $curl_info = curl_getinfo($ch);
@@ -74,7 +76,7 @@ class Help extends kitCommand {
             return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand.help.unavailable.twig'),
                 array(
                     'command' => $info['command'],
-                    'curl_info' => $curl_info
+                    'curl_info' => isset($curl_info) ? $curl_info : '- no information available -'
             ));
         }
     }
