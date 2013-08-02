@@ -564,11 +564,11 @@ class Basic
      */
     public function getInfoPath($command)
     {
-        $patterns = $this->app['routes']->getIterator()->current()->all();
+        $patterns = $this->app['routes']->getIterator(); //->current()->all();
         foreach ($patterns as $pattern) {
             $match = $pattern->getPattern();
             if ((strpos($match, "/command/$command") !== false) && (strpos($match, "/command/$command") == 0))  {
-                if ((null !== $info_path = $pattern->getOption('info')) && file_exists($info_path)) {
+                if ((null !== ($info_path = $pattern->getOption('info'))) && file_exists($info_path)) {
                     return $info_path;
                 }
             }

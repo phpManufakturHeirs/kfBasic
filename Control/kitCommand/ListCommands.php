@@ -29,7 +29,7 @@ class ListCommands extends kitCommand
         // get all routing objects
         $kitCommands = array();
         // get an iterator through all kitFramework routes
-        $patterns = $this->app['routes']->getIterator()->current()->all();
+        $patterns = $this->app['routes']->getIterator();
         // walk through the routing objects
         foreach ($patterns as $pattern) {
             $match = $pattern->getPattern();
