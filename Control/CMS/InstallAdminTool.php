@@ -13,6 +13,7 @@ namespace phpManufaktur\Basic\Control\CMS;
 
 use phpManufaktur\Basic\Control\CMS\WebsiteBaker\InstallAdminTool as WebsiteBakerInstallAdminTool;
 use phpManufaktur\Basic\Control\CMS\LEPTON\InstallAdminTool as LeptonInstallAdminTool;
+use phpManufaktur\Basic\Control\CMS\BlackCat\InstallAdminTool as BlackCatInstallAdminTool;
 use Silex\Application;
 
 class InstallAdminTool
@@ -29,8 +30,14 @@ class InstallAdminTool
         if (CMS_TYPE == 'WebsiteBaker') {
             $admin_tool = new WebsiteBakerInstallAdminTool($this->app);
         }
-        else {
+        elseif (CMS_TYPE == 'BlackCat') {
+            $admin_tool = new BlackCatInstallAdminTool($this->app);
+        }
+        elseif (CMS_TYPE == 'LEPTON') {
             $admin_tool = new LeptonInstallAdminTool($this->app);
+        }
+        else {
+            throw new \Exception('The CMS_TYPE '.CMS_TYPE.' is not supported!');
         }
         return $admin_tool->exec($extension_path, $extension_route);
     }
