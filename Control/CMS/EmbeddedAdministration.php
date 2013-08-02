@@ -64,7 +64,7 @@ class EmbeddedAdministration
         $this->app['security']->setToken($token);
         $this->app['session']->set('_security_'.$secureAreaName, serialize($token) );
 
-        $usage = ($cms['target'] == 'cms') ? $cms['type'] : 'framework';
+        $usage = ($cms['target'] == 'cms') ? CMS_TYPE : 'framework';
 
         // sub request to the starting point of Event
         $subRequest = Request::create($route_to, 'GET', array('usage' => $usage));
