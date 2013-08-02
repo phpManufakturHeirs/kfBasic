@@ -8,8 +8,8 @@
   "path":"\/extension\/phpmanufaktur\/phpManufaktur\/Basic",
   "namespace": "phpManufaktur\\Basic",
   "release": {
-    "number" : "0.24",
-    "date" : "2013-08-01"
+    "number" : "0.25",
+    "date" : "2013-08-02"
   },
   "description": {
     "en": {

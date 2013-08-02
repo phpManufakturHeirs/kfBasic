@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+** 0.25** - 2013-08-02
+
+* added support for BlackCat CMS
+
 **0.24** - 2013-08-01
 
 * added the EmbeddedAdministration feature
