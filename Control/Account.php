@@ -38,7 +38,7 @@ class Account
      */
     public function showDialog ()
     {
-        return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'account.twig'), array());
+        return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/account.twig'), array());
     }
 
 } // class Account

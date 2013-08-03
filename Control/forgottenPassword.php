@@ -81,7 +81,7 @@ class forgottenPassword
         }
 
         // create the email body
-        $body = $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'mail/password.create.twig'),
+        $body = $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/mail/password.create.twig'),
             array('name' => $user['displayname'], 'server' => FRAMEWORK_URL,
                 'reset_password_url' => FRAMEWORK_URL.'/password/create/'.$guid['guid']
             ));
@@ -96,7 +96,7 @@ class forgottenPassword
         $this->app['mailer']->send($message);
 
         // show a response dialog
-        return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'password.create.twig'),
+        return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/password.create.twig'),
             array('email' => $form['email']));
     } // dialogResetPassword()
 
@@ -163,7 +163,7 @@ class forgottenPassword
         ->getForm();
 
         return $this->app['twig']->render(
-            $this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'password.set.twig'),
+            $this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/password.set.twig'),
             array(
                 'form' => $form->createView(),
                 'message' => $this->app['translator']->trans('<p>Hello %name%,</p><p>you want to change your password, so please type in a new one, repeat it and submit the form.</p><p>If you won\'t change your password just leave this dialog.</p>', array('%name%' => $user['displayname']))
@@ -215,7 +215,7 @@ class forgottenPassword
         ->getForm();
 
         return $this->app['twig']->render(
-            $this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'password.set.twig'),
+            $this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/password.set.twig'),
             array(
                 'form' => $form->createView(),
                 'message' => $message

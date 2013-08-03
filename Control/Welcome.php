@@ -105,7 +105,7 @@ class Welcome
         $register = new ExtensionRegister($this->app);
         $register_items = $register->getInstalledExtensions();
 
-        return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'welcome.twig'), array(
+        return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/welcome.twig'), array(
             'usage' => self::$usage,
             'iframe_add_height' => '300',
             'catalog_items' => $catalog_items,

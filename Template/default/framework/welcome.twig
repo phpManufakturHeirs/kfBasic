@@ -12,13 +12,13 @@
     {% set template_file = 'body.twig' %}
 {% else %}
     {% set template_namespace = '@phpManufaktur/Basic/Template' %}
-    {% set template_file = 'backend.body.twig' %}
+    {% set template_file = 'framework/backend.body.twig' %}
 {% endif %}
 {% extends template_file(template_namespace, template_file) %}
 {% block title %}{{ 'kitFramework - Welcome'|trans }}{% endblock %}
 {% block head %}
   {{ parent() }}
-  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Basic/Template/default/css/welcome.css" media="screen, projection" />
+  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Basic/Template/default/framework/css/welcome.css" media="screen, projection" />
 {% endblock %}
 {% block content %}
   <a name="top"></a>

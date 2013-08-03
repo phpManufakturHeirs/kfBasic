@@ -50,7 +50,7 @@ class ExtensionRegister
      */
     public function setMessage($message, $params=array())
     {
-        self::$message .= $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'message.twig'),
+        self::$message .= $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/message.twig'),
         array(
             'message' => $this->app['translator']->trans($message, $params)
         ));

@@ -345,7 +345,7 @@ foreach ($scan_paths as $scan_path) {
 // login dialog
 $app->get('/login', function (Request $request) use($app)
 {
-    return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'login.twig'), array(
+    return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/login.twig'), array(
         'error' => $app['security.last_error']($request),
         'last_username' => $app['session']->get('_security.last_username'),
     ));
