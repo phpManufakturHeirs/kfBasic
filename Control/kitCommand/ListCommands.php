@@ -102,7 +102,7 @@ class ListCommands extends kitCommand
         // sort the kitCommands
         ksort($kCommands);
         // return the kitCommands list
-        return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand.list.twig'),
+        return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand/list.twig'),
             array(
                 'commands' => $kCommands,
                 'basic' => $this->getBasicSettings()

@@ -66,14 +66,14 @@ class Help extends kitCommand {
                             'link' => $gist_link,
                             'help' => FRAMEWORK_URL.'/command/help?pid='.$this->getParameterID()
                         );
-                        return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand.help.content.twig'),
+                        return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand/help.content.twig'),
                             array('help' => $help));
                     }
                 }
             }
         }
         else {
-            return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand.help.unavailable.twig'),
+            return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand/help.unavailable.twig'),
                 array(
                     'command' => $info['command'],
                     'curl_info' => isset($curl_info) ? $curl_info : '- no information available -'
@@ -99,7 +99,7 @@ class Help extends kitCommand {
 
         $locale = $this->app['request']->query->get('locale', $this->getCMSlocale());
 
-        return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand.help.twig'),
+        return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand/help.twig'),
             array(
                 'help' => $help,
                 //'command' => $command,

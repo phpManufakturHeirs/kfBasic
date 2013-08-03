@@ -282,7 +282,7 @@ class Basic
      */
     public function setMessage($message, $params=array())
     {
-        Basic::$message .= $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand.iframe.message.twig', self::$preferred_template),
+        Basic::$message .= $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand/iframe.message.twig', self::$preferred_template),
             array(
                 'message' => $this->app['translator']->trans($message, $params)
             ));
@@ -584,7 +584,7 @@ class Basic
     public function createIFrame($source)
     {
         Basic::$frame['source'] = $source;
-        return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand.iframe.twig', self::$preferred_template),
+        return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand/iframe.twig', self::$preferred_template),
             array(
                 'frame' => Basic::$frame
             ));

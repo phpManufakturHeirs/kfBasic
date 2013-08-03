@@ -427,12 +427,12 @@ $app->match('/kit_command/{command}', function ($command) use ($app)
                 'line' => $e->getLine(),
                 'message' => $e->getMessage()
             );
-            return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand.debug.twig'),
+            return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand/debug.twig'),
                 array('debug' => $debug));
         }
         else {
             // no debug parameter, we assume that the kitCommand does not exists
-            return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand.error.twig'),
+            return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand/error.twig'),
                 array('command' => $command));
         }
     }

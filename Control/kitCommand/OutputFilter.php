@@ -92,7 +92,7 @@ class OutputFilter
                             $content = str_ireplace('<!-- kitFramework:CSS -->', $replace, $content);
                         }
                         else {
-                            $replace = '<link rel="stylesheet" type="text/css" href="'.$css_url.'" media="all" />'."\n".'</head>';
+                            $replace = '<!-- kitFramework:CSS -->'."\n".'<link rel="stylesheet" type="text/css" href="'.$css_url.'" media="all" />'."\n".'</head>';
                             $content = str_ireplace('</head>', $replace, $content);
                         }
                         return true;
@@ -139,7 +139,7 @@ class OutputFilter
                             $content = str_ireplace('<!-- kitFramework:JS -->', $replace, $content);
                         }
                         else {
-                            $replace = '<script src="'.$css_url.'" type="text/javascript"></script>'."\n".'</head>';
+                            $replace = '<!-- kitFramework:JS -->'."\n".'<script src="'.$css_url.'" type="text/javascript"></script>'."\n".'</head>';
                             $content = str_ireplace('</head>', $replace, $content);
                         }
                         return true;
@@ -249,7 +249,7 @@ class OutputFilter
             }
             if (!$css_loaded) {
                 // load the kitCommand default CSS file
-                $this->load_css_file($content, 'basic', '/css/kitcommand.css', 'default');
+                $this->load_css_file($content, 'basic', '/kitcommand/css/kitcommand.css', 'default');
             }
             $cmd_array = array(
                 'cms' => array(
