@@ -40,6 +40,10 @@ class ListCommands extends kitCommand
                     // add no subroutings to the list!
                     continue;
                 }
+                if (strpos($command, '/{')) {
+                    // remove additional parameter enclosures
+                    $command = substr($command, 0, strpos($command, '/{'));
+                }
                 $info = array();
                 if ((null !== ($info_path = $pattern->getOption('info'))) && file_exists($info_path)) {
                     // info file exists so we use the additional informations
