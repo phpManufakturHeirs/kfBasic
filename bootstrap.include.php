@@ -471,16 +471,6 @@ $app->match('/basic/list', function() use ($app) {
     return $List->getList();
 });
 
-// login dialog for the CMS
-$app->match('/command/cms_login', function() use ($app) {
-    $kitCommand = new kitCommand($app);
-    $cmsGET = $kitCommand->getCMSgetParameters();
-    $pid = isset($cmsGET['parameter_id']) ? $cmsGET['parameter_id'] : $kitCommand->getParameterID();
-    // create the iframe and return the list with the available kitCommands
-    return $kitCommand->createIFrame(FRAMEWORK_URL."/basic/cms/login?pid=$pid");
-
-});
-
 // catch all searches within kitCommands
 $app->match('/kit_search/command/{command}', function (Request $request, $command) use ($app) {
     try {
