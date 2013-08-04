@@ -253,8 +253,6 @@ class OutputFilter
             }
             $cmd_array = array(
                 'cms' => array(
-                    'type' => defined('LEPTON_VERSION') ? 'LEPTON' : 'WebsiteBaker',
-                    'version' => defined('LEPTON_VERSION') ? LEPTON_VERSION : WB_VERSION,
                     'locale' => strtolower(LANGUAGE),
                     'url' => WB_URL,
                     'path' => WB_PATH,
