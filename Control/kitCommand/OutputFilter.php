@@ -254,8 +254,6 @@ class OutputFilter
             $cmd_array = array(
                 'cms' => array(
                     'locale' => strtolower(LANGUAGE),
-                    'url' => WB_URL,
-                    'path' => WB_PATH,
                     'page_id' => PAGE_ID,
                     'page_url' => $this->getURLbyPageID(PAGE_ID),
                     'user' => array(
