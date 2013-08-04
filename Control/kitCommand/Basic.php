@@ -197,29 +197,9 @@ class Basic
         return Basic::$cms_info;
     }
 
-    public function getCMStype()
-    {
-        return isset(Basic::$cms_info['type']) ? Basic::$cms_info['type'] : 'UNKNOWN';
-    }
-
-    public function getCMSversion()
-    {
-        return isset(Basic::$cms_info['version']) ? Basic::$cms_info['version'] : '0.0.0';
-    }
-
     public function getCMSlocale()
     {
         return isset(Basic::$cms_info['locale']) ? Basic::$cms_info['locale'] : 'en';
-    }
-
-    public function getCMSurl()
-    {
-        return isset(Basic::$cms_info['url']) ? Basic::$cms_info['url'] : CMS_URL;
-    }
-
-    public function getCMSpath()
-    {
-        return isset(Basic::$cms_info['path']) ? Basic::$cms_info['path'] : CMS_PATH;
     }
 
     public function getCMSpageID()
