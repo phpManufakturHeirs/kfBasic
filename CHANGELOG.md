@@ -6,7 +6,13 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
-** 0.25** - 2013-08-02
+**0.26** - 2013-08-06
+
+* added support for installations behind a proxy
+* restructured the template directory
+* removed no longer used code
+
+**0.25** - 2013-08-02
 
 * added support for BlackCat CMS
 
