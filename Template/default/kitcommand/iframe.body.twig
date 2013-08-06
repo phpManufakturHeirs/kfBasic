@@ -43,20 +43,14 @@
     {% block footer %}
       {% if basic.frame is defined and basic.frame.auto %}
         <script type="text/javascript">
-          if (typeof 'jQuery' !== 'undefined') {
-            $(document).ready(function() {
-              {# setting the iFrame height dynamically by the height of the inbounded document #}
-              try {
-                {# try to set the frame height - will fail if the URI is executed out of the iframe! #}
-                var content_height = document.body.offsetHeight + {{ basic.frame.add|default(30) }};
-                parent.document.getElementById("{{ basic.frame.id }}").style.height = content_height + "px";
-              } catch(err) {
-                {# nothing to do, we ignore any errors here ... #}
-                  alert(err);
-              }
-            });
-          }
-        </script>
+        if (typeof 'jQuery' !== 'undefined') {
+          $(document).ready(function() {
+            {# setting the iFrame height dynamically by the height of the inbounded document #}
+            var content_height = $('.iframe_content').height() + {{ iframe_add_height|default(30) }} + "px";
+            parent.document.getElementById("kitframework_iframe").style.height = content_height;
+          });
+        }
+      </script>
       {% endif %}
     {% endblock footer %}
     {% block tracking %}
