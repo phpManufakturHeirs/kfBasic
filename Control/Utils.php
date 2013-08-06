@@ -34,9 +34,11 @@ class Utils
     public function __construct (Application $app)
     {
         $this->app = $app;
-        // set the proxy options
-        if (file_exists(FRAMEWORK_PATH.'/config/proxy.json')) {
-            $proxy = $this->readJSON(FRAMEWORK_PATH.'/config/proxy.json');
+        // FRAMEWORK_PATH is not set at this point!
+        $proxy_file = self::sanitizePath(realpath(__DIR__.'/../../../../../config/proxy.json'));
+        if (file_exists($proxy_file)) {
+            // set the proxy options
+            $proxy = $this->readJSON($proxy_file);
             if (isset($proxy['PROXYAUTH']) && ($proxy['PROXYAUTH'] != 'NONE')) {
                 if (strtoupper($proxy['PROXYAUTH']) == 'NTLM') {
                     self::$proxy_auth = CURLAUTH_NTLM;
