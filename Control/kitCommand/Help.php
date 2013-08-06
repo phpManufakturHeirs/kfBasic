@@ -50,6 +50,10 @@ class Help extends kitCommand {
         curl_setopt($ch, CURLOPT_USERAGENT, self::USERAGENT);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        // set proxy if needed
+        $this->app['utils']->setCURLproxy($ch);
+
         $result = curl_exec($ch);
         if (!curl_errno($ch)) {
             $curl_info = curl_getinfo($ch);

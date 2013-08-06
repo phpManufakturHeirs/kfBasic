@@ -283,10 +283,13 @@ class OutputFilter
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_FORBID_REUSE => true,
                 CURLOPT_TIMEOUT => 4,
-                CURLOPT_POSTFIELDS => http_build_query(array('cms_parameter' => $cmd_array))
+                CURLOPT_POSTFIELDS => http_build_query(array('cms_parameter' => $cmd_array)),
+                CURLOPT_SSL_VERIFYHOST => false,
+                CURLOPT_SSL_VERIFYPEER => false
             );
             $ch = curl_init();
             curl_setopt_array($ch, $options);
+
             if (false === ($response = curl_exec($ch))) {
                 trigger_error(curl_error($ch));
             }

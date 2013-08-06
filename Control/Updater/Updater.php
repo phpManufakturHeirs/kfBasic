@@ -98,7 +98,7 @@ class Updater
     {
 
         // init GitHub
-        $github = new gitHub();
+        $github = new gitHub($this->app);
         $release = null;
         if (false === ($tag_url = $github->getLastRepositoryZipUrl($organization, $repository, $release))) {
             throw new \Exception($this->app['translator']->trans("Can't read the the %repository% from %organization% at Github!",

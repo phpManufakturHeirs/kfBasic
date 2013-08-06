@@ -10,6 +10,7 @@
  */
 namespace phpManufaktur\Basic\Control\gitHub;
 
+use Silex\Application;
 /**
  * Class to access GitHub
  *
@@ -20,6 +21,13 @@ class gitHub
 {
 
     const USERAGENT = 'kitFramework::Basic';
+
+    protected $app = null;
+
+    public function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
 
     /**
      * GET command to GitHub
@@ -34,16 +42,20 @@ class gitHub
         if (strpos($command, 'https://api.github.com') !== 0)
             $command = "https://api.github.com$command";
         if (false === ($ch = curl_init($command))) {
-		        throw new \Exception('Got no handle for cURL!');
-		    }
-		    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                throw new \Exception('Got no handle for cURL!');
+            }
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_USERAGENT, self::USERAGENT);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-		    if (false === ($result = curl_exec($ch))) {
-		        throw new \Exception(curl_error($ch));
-		    }
-		    if (! curl_errno($ch)) {
+
+        // set proxy if needed
+        $this->app['utils']->setCURLproxy($ch);
+
+        if (false === ($result = curl_exec($ch))) {
+            throw new \Exception(curl_error($ch));
+        }
+        if (! curl_errno($ch)) {
             $info = curl_getinfo($ch);
         }
         curl_close($ch);

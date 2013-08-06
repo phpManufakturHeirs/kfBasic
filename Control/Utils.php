@@ -23,6 +23,10 @@ class Utils
 {
 
     protected $app = null;
+    protected static $proxy = null;
+    protected static $proxy_auth = CURLAUTH_BASIC;
+    protected static $proxy_port = null;
+    protected static $proxy_usrpwd = null;
 
     /**
      * Constructor for the Utils
@@ -30,6 +34,21 @@ class Utils
     public function __construct (Application $app)
     {
         $this->app = $app;
+        // set the proxy options
+        if (file_exists(FRAMEWORK_PATH.'/config/proxy.json')) {
+            $proxy = $this->readJSON(FRAMEWORK_PATH.'/config/proxy.json');
+            if (isset($proxy['PROXYAUTH']) && ($proxy['PROXYAUTH'] != 'NONE')) {
+                if (strtoupper($proxy['PROXYAUTH']) == 'NTLM') {
+                    self::$proxy_auth = CURLAUTH_NTLM;
+                }
+                else {
+                    self::$proxy_auth = CURLAUTH_BASIC;
+                }
+                self::$proxy_usrpwd = $proxy['PROXYUSERPWD'];
+            }
+            self::$proxy = $proxy['PROXY'];
+            self::$proxy_port = $proxy['PROXYPORT'];
+        }
     } // __construct()
 
     /**
@@ -471,6 +490,21 @@ class Utils
         // Clean up
         $dir->close();
         return true;
+    }
+
+    /**
+     * Set the cURL options for the usage of a proxy
+     *
+     * @param resource $curl_resource
+     */
+    public function setCURLproxy($curl_resource)
+    {
+        if (!is_null(self::$proxy)) {
+            curl_setopt($curl_resource, CURLOPT_PROXYAUTH, self::$proxy_auth);
+            curl_setopt($curl_resource, CURLOPT_PROXY, self::$proxy);
+            curl_setopt($curl_resource, CURLOPT_PROXYPORT, self::$proxy_port);
+            curl_setopt($curl_resource, CURLOPT_PROXYUSERPWD, self::$proxy_usrpwd);
+        }
     }
 
 } // class Utils
