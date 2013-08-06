@@ -31,9 +31,7 @@ use phpManufaktur\Basic\Control\ExtensionRegister;
 use phpManufaktur\Basic\Control\ExtensionCatalog;
 use phpManufaktur\Updater\Updater;
 use Nicl\Silex\MarkdownServiceProvider;
-use phpManufaktur\Basic\Control\kitCommand\Basic as kitCommand;
-use phpManufaktur\Basic\Control\kitCommand\Help as kitHelp;
-use phpManufaktur\Basic\Control\kitCommand\ListCommands;
+use phpManufaktur\Basic\Control\kitCommand\Basic as kitCommandBasic;
 
 
 // set the error handling
@@ -442,34 +440,24 @@ $app->match('/kit_command/{command}', function ($command) use ($app)
 $app->match('/command/help', function (Request $request) use ($app) {
     // the additional parameter command can contain the name of the kitCommand, by default "help"
     $command = $request->query->get('command', 'help');
-    $kitCommand = new kitCommand($app);
-    $cmsGET = $kitCommand->getCMSgetParameters();
-    $pid = isset($cmsGET['parameter_id']) ? $cmsGET['parameter_id'] : $kitCommand->getParameterID();
+    $kitCommand = new kitCommandBasic($app);
     // create the iframe and load the help
-    return $kitCommand->createIFrame(FRAMEWORK_URL."/basic/help/$command?pid=$pid");
+    return $kitCommand->createIFrame("/basic/help/$command");
 })
 ->setOption('info', MANUFAKTUR_PATH.'/Basic/command.help.json');
 
 // show the help for the requested kitCommand
-$app->get('/basic/help/{command}', function($command) use ($app) {
-    $Help = new kitHelp($app);
-    return $Help->getHelpPage($command);
-});
+$app->get('/basic/help/{command}', 'phpManufaktur\Basic\Control\kitCommand\Help::getHelpPage');
 
 // show a list of all available kitCommands
 $app->match('/command/list', function(Request $request) use ($app) {
-    $kitCommand = new kitCommand($app);
-    $cmsGET = $kitCommand->getCMSgetParameters();
-    $pid = isset($cmsGET['parameter_id']) ? $cmsGET['parameter_id'] : $kitCommand->getParameterID();
-    // create the iframe and return the list with the available kitCommands
-    return $kitCommand->createIFrame(FRAMEWORK_URL."/basic/list?pid=$pid");
+    $kitCommand = new kitCommandBasic($app);
+    return $kitCommand->createIFrame('/basic/list');
 })
 ->setOption('info', MANUFAKTUR_PATH.'/Basic/command.list.json');
 
-$app->match('/basic/list', function() use ($app) {
-    $List = new ListCommands($app);
-    return $List->getList();
-});
+// return a list with all available kitCommands and additional information
+$app->get('/basic/list', 'phpManufaktur\Basic\Control\kitCommand\ListCommands::getList');
 
 // catch all searches within kitCommands
 $app->match('/kit_search/command/{command}', function (Request $request, $command) use ($app) {
@@ -496,25 +484,10 @@ $app->match('/kit_search/command/{command}', function (Request $request, $comman
 /**
  * Show the welcome dialog
  */
-$app->get('/admin/welcome', function (Request $request) use ($app) {
-    $Welcome = new Welcome($app);
-    return $Welcome->exec();
-});
-
-// redirect to the welcome dialog
-$app->get('/', function(Request $request) use ($app) {
-    return $app->redirect(FRAMEWORK_URL.'/admin/welcome');
-});
-
-// redirect to the welcome dialog
-$app->get('/admin', function(Request $request) use ($app) {
-    return $app->redirect(FRAMEWORK_URL.'/admin/welcome');
-});
-
-// redirect to the welcome dialog
-$app->match('/welcome', function (Request $request) use ($app) {
-    return $app->redirect(FRAMEWORK_URL.'/admin/welcome');
-});
+$app->get('/admin/welcome', 'phpManufaktur\Basic\Control\Welcome::exec');
+$app->get('/', 'phpManufaktur\Basic\Control\Welcome::exec');
+$app->get('/admin', 'phpManufaktur\Basic\Control\Welcome::exec');
+$app->get('/welcome', 'phpManufaktur\Basic\Control\Welcome::exec');
 
 // the welcome dialog is called by the CMS backend
 $app->match('/welcome/cms/{cms}', function ($cms) use ($app) {
