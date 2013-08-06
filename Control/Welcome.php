@@ -28,18 +28,6 @@ class Welcome
     protected static $usage = 'framework';
 
     /**
-     * Constructor
-     *
-     * @param Application $app
-     */
-    public function __construct (Application $app)
-    {
-        $this->app = $app;
-        $cms = $this->app['request']->get('usage');
-        self::$usage = is_null($cms) ? 'framework' : $cms;
-    } // __construct()
-
-    /**
      * @return the $message
      */
     public static function getMessage ()
@@ -86,8 +74,12 @@ class Welcome
     /**
      * Execute the welcome dialog
      */
-    public function exec ()
+    public function exec (Application $app)
     {
+        $this->app = $app;
+        $cms = $this->app['request']->get('usage');
+        self::$usage = is_null($cms) ? 'framework' : $cms;
+
         // use reflection to dynamical load a class
         $reflection = new \ReflectionClass('phpManufaktur\\Basic\\Control\\ExtensionCatalog');
         $catalog = $reflection->newInstanceArgs(array($this->app));

@@ -12,6 +12,7 @@
 namespace phpManufaktur\Basic\Control\kitCommand;
 
 use phpManufaktur\Basic\Control\kitCommand\Basic as kitCommand;
+use Silex\Application;
 
 /**
  * Class to get help informations from the desired GIST and display them within
@@ -90,8 +91,11 @@ class Help extends kitCommand {
      *
      * @param string $command
      */
-    public function getHelpPage($command)
+    public function getHelpPage(Application $app, $command)
     {
+        $this->app = $app;
+        $this->initParameters();
+
         if (false === ($info_path = $this->getInfoPath($command))) {
             $this->setMessage('There is no help available for the kitCommand <b>%command%</b>.', array('%command%' => $command));
             $help = '';

@@ -12,6 +12,7 @@
 namespace phpManufaktur\Basic\Control\kitCommand;
 
 use phpManufaktur\Basic\Control\kitCommand\Basic as kitCommand;
+use Silex\Application;
 
 /**
  * Class to list all kitCommands as structured list
@@ -22,8 +23,12 @@ use phpManufaktur\Basic\Control\kitCommand\Basic as kitCommand;
 class ListCommands extends kitCommand
 {
 
-    public function getList()
+    public function getList(Application $app)
     {
+        // init BASIC
+        $this->app = $app;
+        $this->initParameters();
+
         // get the CMS locale
         $locale = $this->getCMSlocale();
         // get all routing objects
