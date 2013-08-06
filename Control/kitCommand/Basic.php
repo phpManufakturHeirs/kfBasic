@@ -33,39 +33,32 @@ class Basic
     private static $page = null;
     private static $parameter_id = null;
 
-    public function __construct(Application $app, $parameter_id=-1)
+    public function __construct(Application $app=null, $parameter_id=-1)
     {
         $this->app = $app;
         // set the given parameter ID
         self::$parameter_id = $parameter_id;
-        if ((self::$parameter_id == -1) && (!is_null($this->app['request']->request->get('pid')) ||
-            (!is_null($this->app['request']->query->get('pid'))))) {
-            if (!is_null($this->app['request']->request->get('pid'))) {
-                // read the parameter ID from the POST
-                self::$parameter_id = $this->app['request']->request->get('pid');
-            }
-            else {
-                self::$parameter_id = $this->app['request']->query->get('pid');
-            }
+        if (!is_null($this->app)) {
+            $this->initParameters();
         }
-        if ((self::$parameter_id == -1) && (!is_null($this->app['request']->request->get('parameter_id')) ||
-            (!is_null($this->app['request']->query->get('parameter_id'))))) {
-            if (!is_null($this->app['request']->request->get('parameter_id'))) {
-                // read the parameter ID from the POST
-                self::$parameter_id = $this->app['request']->request->get('parameter_id');
-            }
-            else {
-                self::$parameter_id = $this->app['request']->query->get('parameter_id');
-            }
-        }
-        // init the CMS parameters
-        $this->initParameters();
-        // set the locale from the CMS locale
-        $app['translator']->setLocale($this->getCMSlocale());
     }
 
     protected function initParameters()
     {
+        $pids = array('pid', 'parameter_id');
+        foreach ($pids as $pid_name) {
+            if ((self::$parameter_id == -1) && (!is_null($this->app['request']->request->get($pid_name)) ||
+                (!is_null($this->app['request']->query->get($pid_name))))) {
+                if (!is_null($this->app['request']->request->get($pid_name))) {
+                    // read the parameter ID from the POST
+                    self::$parameter_id = $this->app['request']->request->get($pid_name);
+                }
+                else {
+                    self::$parameter_id = $this->app['request']->query->get($pid_name);
+                }
+            }
+        }
+
         // init the parameter table
         $cmdParameter = new kitCommandParameter($this->app);
 
@@ -165,6 +158,9 @@ class Basic
             Basic::$parameter_id = $link;
             $this->app['request']->request->set('parameter_id', $link);
         }
+
+        // set the locale from the CMS locale
+        $this->app['translator']->setLocale($this->getCMSlocale());
     }
 
     public function getParameterID()
@@ -559,11 +555,15 @@ class Basic
     /**
      * Create a iFrame for embedding a kitCommand within a Content Management System
      *
-     * @param string $source the content URL of the iFrame
+     * @param string $start_route the start route for the iframe content
+     * @param boolean $redirect if true the function check for possible redirects
      */
-    public function createIFrame($source)
+    public function createIFrame($start_route, $redirect=true)
     {
-        Basic::$frame['source'] = $source;
+        $route = ($redirect && !empty(Basic::$frame['redirect']['route'])) ? Basic::$frame['redirect']['route'] : Basic::$frame['source'] = $start_route;
+
+        Basic::$frame['source'] = FRAMEWORK_URL.$route.'?pid='.$this->getParameterID();
+
         return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand/iframe.twig', self::$preferred_template),
             array(
                 'frame' => Basic::$frame
