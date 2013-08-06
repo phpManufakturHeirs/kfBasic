@@ -44,10 +44,13 @@ class ListCommands extends kitCommand
                     // remove additional parameter enclosures
                     $command = substr($command, 0, strpos($command, '/{'));
                 }
+                $command_name = $command;
                 $info = array();
                 if ((null !== ($info_path = $pattern->getOption('info'))) && file_exists($info_path)) {
                     // info file exists so we use the additional informations
                     $config = $this->app['utils']->readConfiguration($info_path);
+                    // command name set?
+                    $command_name = (isset($config['command'])) ? $config['command'] : $command;
                     // help available?
                     $gist_id = (isset($config['help'][$locale]['link'])) ? true :
                         ((isset($config['help']['en']['link'])) ? true : false);
@@ -84,7 +87,7 @@ class ListCommands extends kitCommand
                     );
                 }
                 $kitCommands[$command] = array(
-                    'command' => $command,
+                    'command' => $command_name,
                     'route' => $match,
                     'info' => $info,
                     'search' => false
@@ -101,7 +104,7 @@ class ListCommands extends kitCommand
         foreach ($kitCommands as $command) {
             // to prevent "search" widows ...
             if (isset($command['search']) && !isset($command['command'])) continue;
-            $kCommands[$command['command']] = $command;
+            $kCommands[strtolower($command['command'])] = $command;
         }
         // sort the kitCommands
         ksort($kCommands);
