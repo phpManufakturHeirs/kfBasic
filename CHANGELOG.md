@@ -6,6 +6,12 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.27** - 2013-08-07
+
+* changed internal handling for kitCommands
+* controllers can now use classes
+* fixed a problem with proxies
+
 **0.26** - 2013-08-06
 
 * added support for installations behind a proxy
