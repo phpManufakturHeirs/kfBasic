@@ -35,16 +35,16 @@ class Basic
 
     public function __construct(Application $app=null, $parameter_id=-1)
     {
-        $this->app = $app;
-        // set the given parameter ID
-        self::$parameter_id = $parameter_id;
-        if (!is_null($this->app)) {
-            $this->initParameters();
+        if (!is_null($app)) {
+            $this->initParameters($app, $parameter_id);
         }
     }
 
-    protected function initParameters()
+    protected function initParameters(Application $app, $parameter_id=-1)
     {
+        $this->app = $app;
+        // set the given parameter ID
+        self::$parameter_id = $parameter_id;
         $pids = array('pid', 'parameter_id');
         foreach ($pids as $pid_name) {
             if ((self::$parameter_id == -1) && (!is_null($this->app['request']->request->get($pid_name)) ||
