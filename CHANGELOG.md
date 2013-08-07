@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.28** - 2013-08-07
+
+* changed handling of initParameters() in the kitCommand Basic class
+
 **0.27** - 2013-08-07
 
 * changed internal handling for kitCommands
