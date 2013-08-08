@@ -371,7 +371,7 @@ class Utils
      * @throws \Exception
      * @return array configuration items
      */
-    function readConfiguration ($file)
+    public function readConfiguration($file)
     {
         if (file_exists($file)) {
             if (null === ($config = json_decode(file_get_contents($file), true))) {
@@ -406,7 +406,7 @@ class Utils
                     substr($file, strlen(FRAMEWORK_PATH)), $code, $error));
             }
         } else {
-            throw new \Exception(sprintf('Missing the configuration file: %s!', substr($file, strlen(FRAMEWORK_PATH))));
+            throw new \Exception(sprintf('Missing the configuration file: %s!', substr($file, strlen(BOOTSTRAP_PATH))));
         }
         // return the configuration array
         return $config;

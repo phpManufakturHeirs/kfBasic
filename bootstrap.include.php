@@ -9,7 +9,8 @@
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
  */
 
-require_once __DIR__ . '../../../../../framework/autoload.php';
+//require_once realpath( __DIR__ . '../../../../../framework/autoload.php');
+require_once realpath(BOOTSTRAP_PATH.'/framework/autoload.php');
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Debug\ErrorHandler;
@@ -53,7 +54,7 @@ $app['utils'] = $app->share(function($app) {
 
 try {
     // check for the framework configuration file
-    $framework_config = $app['utils']->readConfiguration(__DIR__ . '/../../../../config/framework.json');
+    $framework_config = $app['utils']->readConfiguration(realpath(BOOTSTRAP_PATH . '/config/framework.json'));
     // framework constants
     define('FRAMEWORK_URL', $framework_config['FRAMEWORK_URL']);
     define('FRAMEWORK_PATH', $app['utils']->sanitizePath($framework_config['FRAMEWORK_PATH']));
@@ -527,7 +528,7 @@ $app->get('/admin/scan/extensions', function () use ($app) {
     else {
         $Welcome->setMessage($app['translator']->trans('<p>Successfull scanned the kitFramework for installed extensions.</p>'));
     }
-    return $Welcome->exec();
+    return $Welcome->exec($app);
 });
 
 // scan the extension catalog
