@@ -11,7 +11,7 @@
 
 namespace phpManufaktur\Basic\Control\kitCommand;
 
-use phpManufaktur\Basic\Control\kitCommand\Basic as kitCommand;
+use phpManufaktur\Basic\Control\kitCommand\Basic;
 use Silex\Application;
 
 /**
@@ -21,7 +21,7 @@ use Silex\Application;
  * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
  *
  */
-class Help extends kitCommand {
+class Help extends Basic {
 
     const USERAGENT = 'kitFramework:Basic';
 
@@ -93,8 +93,7 @@ class Help extends kitCommand {
      */
     public function getHelpPage(Application $app, $command)
     {
-        $this->app = $app;
-        $this->initParameters();
+        $this->initParameters($app);
 
         if (false === ($info_path = $this->getInfoPath($command))) {
             $this->setMessage('There is no help available for the kitCommand <b>%command%</b>.', array('%command%' => $command));

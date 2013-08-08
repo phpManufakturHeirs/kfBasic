@@ -11,7 +11,7 @@
 
 namespace phpManufaktur\Basic\Control\kitCommand;
 
-use phpManufaktur\Basic\Control\kitCommand\Basic as kitCommand;
+use phpManufaktur\Basic\Control\kitCommand\Basic;
 use Silex\Application;
 
 /**
@@ -20,14 +20,13 @@ use Silex\Application;
  * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
  *
  */
-class ListCommands extends kitCommand
+class ListCommands extends Basic
 {
 
     public function getList(Application $app)
     {
         // init BASIC
-        $this->app = $app;
-        $this->initParameters();
+        $this->initParameters($app);
 
         // get the CMS locale
         $locale = $this->getCMSlocale();
