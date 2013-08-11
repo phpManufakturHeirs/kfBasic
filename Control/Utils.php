@@ -351,17 +351,37 @@ class Utils
         return $new_path;
     } // sanitizePath()
 
+    
     /**
-     * Convert a german formatted number string into a valid float val
-     *
-     * @param string $str
-     * @return number
-     * @link http://www.rither.de/a/informatik/php-beispiele/strings/string-in-float-umwandeln/
+     * Transform a string into a float value, using the localized settings for
+     * the thousend and decimal separator.
+     *  
+     * @param string $string
+     * @return float
      */
-    public static function str2float ($str)
+    public function str2float($string) 
     {
-        $pos = strrpos($str = strtr(trim(strval($str)), ',', '.'), '.');
-        return ($pos === false ? floatval($str) : floatval(str_replace('.', '', substr($str, 0, $pos)) . substr($str, $pos)));
+        // remove the localized thousand separator
+        $string = str_replace($this->app['translator']->trans('THOUSAND_SEPARATOR'), '', $string);
+        // replace the localized decimal separator with a dot
+        $string = str_replace($this->app['translator']->trans('DECIMAL_SEPARATOR'), '.', $string);
+        return floatval($string);
+    }
+    
+    /**
+     * Transform a string into a integer value, using the localized settings for
+     * the thousend and decimal separator.
+     *  
+     * @param string $string
+     * @return integer
+     */
+    public function str2int($string)
+    {
+        // remove the localized thousand separator
+        $string = str_replace($this->app['translator']->trans('THOUSAND_SEPARATOR'), '', $string);
+        // replace the localized decimal separator with a dot
+        $string = str_replace($this->app['translator']->trans('DECIMAL_SEPARATOR'), '.', $string);
+        return intval($string);
     }
 
     /**
