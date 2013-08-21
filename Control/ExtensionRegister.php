@@ -81,7 +81,7 @@ class ExtensionRegister
             try {
                 $target = $this->app['utils']->readConfiguration($path.'/extension.json');
             } catch (\Exception $e) {
-                $this->setMessage('Can not read the extension.json in %directory%!</p><p>Error message: %error%',
+                $this->setMessage('Can not read the extension.json in %directory%!<br />Error message: %error%',
                     array('%directory%' => substr($path.'/extension.json', strlen(FRAMEWORK_PATH)), '%error%' => $e->getMessage()));
                 return false;
             }
