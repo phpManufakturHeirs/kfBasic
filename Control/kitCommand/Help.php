@@ -30,17 +30,29 @@ class Help extends Basic {
      *
      * @param string $info_path to the command.xxx.json file
      */
-    public function getContent($info_path)
+    public function getContent($info_path, $help_file='help')
     {
         $info = $this->app['utils']->readConfiguration($info_path);
         $locale = $this->app['request']->query->get('locale', $this->getCMSlocale());
         if (isset($info['help'][$locale]['gist_id'])) {
             $gist_id = $info['help'][$locale]['gist_id'];
             $gist_link = (isset($info['help'][$locale]['link'])) ? $info['help'][$locale]['link'] : '';
+            if ($help_file == 'help') {
+                $help_file = (isset($info['help'][$locale]['file']['help'])) ? $info['help'][$locale]['file']['help'] : '';
+            }
+            else {
+                $help_file = (isset($info['help'][$locale]['file'][$help_file])) ? $info['help'][$locale]['file'][$help_file] : '';
+            }
         }
         elseif (isset($info['help']['en']['gist_id'])) {
             $gist_id = $info['help']['en']['gist_id'];
             $gist_link = (isset($info['help']['en']['link'])) ? $info['help']['en']['link'] : '';
+            if ($help_file == 'help') {
+                $help_file = (isset($info['help']['en']['file']['help'])) ? $info['help']['en']['file']['help'] : '';
+            }
+            else {
+                $help_file = (isset($info['help']['en']['file'][$help_file])) ? $info['help']['en']['file'][$help_file] : '';
+            }
         }
         else {
             return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand.help.unavailable.twig'),
@@ -65,6 +77,10 @@ class Help extends Basic {
             if (isset($result['files'])) {
                 foreach ($result['files'] as $file) {
                     if (isset($file['content'])) {
+                        if (!empty($help_file) && (strtolower($file['filename']) != strtolower($help_file))) {
+                            continue;
+                        }
+                        // we assume only the first file of the gist as helpfile!
                         $help = array(
                             'command' => $info['command'],
                             'content' => $file['content'],
@@ -77,13 +93,12 @@ class Help extends Basic {
                 }
             }
         }
-        else {
-            return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand/help.unavailable.twig'),
-                array(
-                    'command' => $info['command'],
-                    'curl_info' => isset($curl_info) ? $curl_info : '- no information available -'
-            ));
-        }
+        return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand/help.unavailable.twig'),
+            array(
+                'command' => $info['command'],
+                'curl_info' => isset($curl_info) ? $curl_info : '- no information available -',
+                'content' => (!empty($help_file)) ? $this->app['translator']->trans('The file %file% does not exists in Gist %gist_id%!', array('%file%' => $help_file, '%gist_id%' => $gist_id)) : ''
+        ));
     }
 
     /**
