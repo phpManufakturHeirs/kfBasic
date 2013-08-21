@@ -33,6 +33,12 @@ class Basic
     private static $page = null;
     private static $parameter_id = null;
 
+    /**
+     * Constructor
+     *
+     * @param Application $app
+     * @param integer $parameter_id
+     */
     public function __construct(Application $app=null, $parameter_id=-1)
     {
         if (!is_null($app)) {
@@ -40,6 +46,13 @@ class Basic
         }
     }
 
+    /**
+     * Initialize the class Basic and set all parameters needed for the kitCommands
+     *
+     * @param Application $app
+     * @param integer $parameter_id
+     * @throws \Exception
+     */
     protected function initParameters(Application $app, $parameter_id=-1)
     {
         $this->app = $app;
@@ -163,21 +176,41 @@ class Basic
         $this->app['translator']->setLocale($this->getCMSlocale());
     }
 
+    /**
+     * Get the parameter ID  (PID)
+     *
+     * @return integer
+     */
     public function getParameterID()
     {
         return self::$parameter_id;
     }
 
+    /**
+     * Get the parameters submitted with the kitCommand
+     *
+     * @return array
+     */
     public function getCommandParameters()
     {
         return (isset(Basic::$parameter)) ? Basic::$parameter : array();
     }
 
+    /**
+     * Get the GET parameters submitted to the CMS
+     *
+     * @return array
+     */
     public function getCMSgetParameters()
     {
         return (isset(Basic::$GET)) ? Basic::$GET : array();
     }
 
+    /**
+     * Get the POST parameters submitted to the CMS
+     *
+     * @return array
+     */
     public function getCMSpostParameters()
     {
         return (isset(Basic::$POST)) ? Basic::$POST : array();
@@ -193,36 +226,71 @@ class Basic
         return Basic::$cms_info;
     }
 
+    /**
+     * Get the locale set for the CMS
+     *
+     * @return string
+     */
     public function getCMSlocale()
     {
         return isset(Basic::$cms_info['locale']) ? Basic::$cms_info['locale'] : 'en';
     }
 
+    /**
+     * Get the PAGE ID set for the actual page in the CMS
+     *
+     * @return number
+     */
     public function getCMSpageID()
     {
         return isset(Basic::$cms_info['page_id']) ? Basic::$cms_info['page_id'] : -1;
     }
 
+    /**
+     * Get the URL for the actual page in the CMS
+     *
+     * @return string
+     */
     public function getCMSpageURL()
     {
         return isset(Basic::$cms_info['page_url']) ? Basic::$cms_info['page_url'] : CMS_URL;
     }
 
+    /**
+     * Get the USER ID of the authenticated CMS user
+     *
+     * @return number USER ID or -1 if no user is authenticated
+     */
     public function getCMSuserID()
     {
         return isset(Basic::$cms_info['user']['id']) ? Basic::$cms_info['user']['id'] : -1;
     }
 
+    /**
+     * Get the USER NAME of the authenticated CMS user or an empty string
+     *
+     * @return string
+     */
     public function getCMSuserName()
     {
-        return (isset(Basic::$cms_info['user']['id'])) ? Basic::$cms_info['user']['id'] : -1;
+        return (isset(Basic::$cms_info['user']['name'])) ? Basic::$cms_info['user']['name'] : '';
     }
 
+    /**
+     * Get the USER EMAIL address of the authenticated CMS user or an empty string
+     *
+     * @return string
+     */
     public function getCMSuserEMail()
     {
         return (isset(Basic::$cms_info['user']['email'])) ? Basic::$cms_info['user']['email'] : '';
     }
 
+    /**
+     * Get the preferred template style to use otherwise return 'default'
+     *
+     * @return string
+     */
     public function getPreferredTemplateStyle()
     {
         return (isset(Basic::$preferred_template)) ? Basic::$preferred_template : 'default';
@@ -254,14 +322,27 @@ class Basic
     }
 
     /**
+     * Set a message. Messages are chained and will be translated with the given
+     * parameters. If $log_message = true, the message will also logged to the
+     * kitFramework logfile.
+     *
      * @param string $message
+     * @param array $params
+     * @param boolean $log_message
      */
-    public function setMessage($message, $params=array())
+    public function setMessage($message, $params=array(), $log_message=false)
     {
-        Basic::$message .= $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand/iframe.message.twig', self::$preferred_template),
+        Basic::$message .= $this->app['twig']->render($this->app['utils']->templateFile(
+            '@phpManufaktur/Basic/Template',
+            'kitcommand/iframe.message.twig',
+            self::$preferred_template),
             array(
                 'message' => $this->app['translator']->trans($message, $params)
             ));
+        if ($log_message) {
+            // log this message
+            $this->app['monolog']->addInfo(strip_tags($this->app['translator']->trans($message, $params, 'messages', 'en')));
+        }
     }
 
     /**
