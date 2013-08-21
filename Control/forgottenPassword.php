@@ -63,19 +63,19 @@ class forgottenPassword
             // invalid email
             $message = '';
             foreach ($errors as $error) {
-                $message .= sprintf('<p>%s</p>', $error->getMessage());
+                $message .= sprintf('%s< br />', $error->getMessage());
             }
             return $this->dialogForgottenPassword($message);
         }
         $Users = new Users();
         if (false === ($user = $Users->selectUser($form['email']))) {
-            $message = '<p>There exists no user with the submitted email address.</p>';
+            $message = 'There exists no user with the submitted email address.';
             $this->app['monolog']->addDebug(sprintf('[%s - %s] %s', __METHOD__, __LINE__, $message));
             return $this->dialogForgottenPassword($message);
         }
         // email address is valid, so we can create a new GUID and send a mail
         if (false === ($guid = $Users->createNewGUID($form['email']))) {
-            $message = '<p>Can\'t create a new GUID as long the last GUID is not expired. You must wait 24 hours between the creation of new passwords.</p>';
+            $message = 'Can\'t create a new GUID as long the last GUID is not expired. You must wait 24 hours between the creation of new passwords.';
             $this->app['monolog']->addDebug(sprintf('[%s - %s] %s', __METHOD__, __LINE__, 'No GUID created, last creation within the last 24 hours.'));
             return $this->dialogForgottenPassword($message);
         }
@@ -115,7 +115,7 @@ class forgottenPassword
             return $this->app['twig']->render($this->app['utils']->templateFile('@framework', 'message.twig'),
                 array('title' => 'Create a new password',
                     'message' => $this->app['translator']->trans(
-                        '<p>Sorry, but the submitted GUID is invalid.</p><p>Please contact the webmaster.</p>')
+                        'Sorry, but the submitted GUID is invalid. Please contact the webmaster.')
                 ));
         }
         if ($user['guid_status'] != 'ACTIVE') {
@@ -123,7 +123,7 @@ class forgottenPassword
             return $this->app['twig']->render($this->app['utils']->templateFile('@framework', 'message.twig'),
                 array('title' => 'Create a new password',
                     'message' => $this->app['translator']->trans(
-                        '<p>The submitted GUID was already used and is no longer valid.</p><p>Please <a href="%password_forgotten%">order a new link</a>.</p>',
+                        'The submitted GUID was already used and is no longer valid.<b />Please <a href="%password_forgotten%">order a new link</a>.',
                         array('%password_forgotten%' => $this->app['url_generator']->generate('password_forgotten')))
                 ));
         }
@@ -138,7 +138,7 @@ class forgottenPassword
                 array(
                     'title' => 'Create a new password',
                     'message' => $this->app['translator']->trans(
-                        '<p>The submitted GUID is expired and no longer valid.</p><p>Please <a href="%password_forgotten%">order a new link</a>.</p>',
+                        'The submitted GUID is expired and no longer valid.<br />Please <a href="%password_forgotten%">order a new link</a>.',
                         array('%password_forgotten%' => $this->app['url_generator']->generate('password_forgotten')))
                     )
                 );
