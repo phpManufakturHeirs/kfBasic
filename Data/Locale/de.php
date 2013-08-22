@@ -154,6 +154,8 @@ return array(
         => 'Die empfangene extension.json enthält nicht den Installationspfand für die Extension!',
     'The received repository has an unexpected directory structure!'
         => 'Das empfangene Repository hat eine unterwartete Verzeichnisstruktur und kann nicht eingelesen werden.',
+    'The requested page could not be found!'
+        => 'Die angeforderte Seite wurde nicht gefunden!',
     'The submitted GUID is expired and no longer valid.<br />Please <a href="%password_forgotten%">order a new link</a>.'
         => 'Die übermittelte GUID ist abgelaufen und nicht länger gültig.<br />Bitte <a href="%password_forgotten%">fordern Sie einen neuen Link an</a>.',
     'The submitted GUID was already used and is no longer valid.<br />Please <a href="%password_forgotten%">order a new link</a>.'

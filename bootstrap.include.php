@@ -33,7 +33,7 @@ use phpManufaktur\Basic\Control\ExtensionCatalog;
 use phpManufaktur\Updater\Updater;
 use Nicl\Silex\MarkdownServiceProvider;
 use phpManufaktur\Basic\Control\kitCommand\Basic as kitCommandBasic;
-
+use Symfony\Component\HttpFoundation\Response;
 
 // set the error handling
 ini_set('display_errors', 1);
@@ -448,7 +448,10 @@ $app->match('/command/help', function (Request $request) use ($app) {
 ->setOption('info', MANUFAKTUR_PATH.'/Basic/command.help.json');
 
 // show the help for the requested kitCommand
-$app->get('/basic/help/{command}', 'phpManufaktur\Basic\Control\kitCommand\Help::getHelpPage');
+$app->get('/basic/help/{command}',
+    'phpManufaktur\Basic\Control\kitCommand\Help::getHelpPage');
+$app->get('/basic/help/{command}/{help_file}',
+    'phpManufaktur\Basic\Control\kitCommand\Help::getHelpPage');
 
 // show a list of all available kitCommands
 $app->match('/command/list', function(Request $request) use ($app) {
@@ -552,6 +555,32 @@ $app->get('/admin/updater/get/github/{organization}/{repository}/{usage}', funct
     }
     $updater = new Updater($app);
     return $updater->getLastGithubRepository($organization, $repository);
+});
+
+
+$app->error(function (\Exception $e, $code) use ($app) {
+    if ($app['debug']) {
+        // on debugging mode use the regular exception handler!
+        return;
+    }
+    switch ($code) {
+        case 404:
+            // the requested page could not be found
+            $message = $app['twig']->render($app['utils']->templateFile(
+                '@phpManufaktur/Basic/Template', 'framework/error.404.twig'));
+            break;
+        default:
+            // general error message
+            $message = $app['twig']->render($app['utils']->templateFile(
+                '@phpManufaktur/Basic/Template', 'framework/error.twig'),
+                array(
+                    'message' => array(
+                        'full' => $e->getMessage(),
+                        'short' => substr($e->getMessage(), 0, stripos($e->getMessage(), 'Stack trace:'))
+                    )));
+            break;
+    }
+    return new Response($message);
 });
 
 if ($app['debug'])
