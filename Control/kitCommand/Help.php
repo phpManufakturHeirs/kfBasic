@@ -106,7 +106,7 @@ class Help extends Basic {
      *
      * @param string $command
      */
-    public function getHelpPage(Application $app, $command)
+    public function getHelpPage(Application $app, $command, $help_file='help')
     {
         $this->initParameters($app);
 
@@ -115,7 +115,7 @@ class Help extends Basic {
             $help = '';
         }
         else {
-            $help = $this->getContent($info_path);
+            $help = $this->getContent($info_path, $help_file);
             $info = $this->app['utils']->readConfiguration($info_path);
         }
 
@@ -124,7 +124,6 @@ class Help extends Basic {
         return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand/help.twig'),
             array(
                 'help' => $help,
-                //'command' => $command,
                 'basic' => $this->getBasicSettings(),
                 'command' => array(
                     'command' => $command,
@@ -142,6 +141,11 @@ class Help extends Basic {
                     'info' => array(
                         'url' => (isset($info['info'][$locale]['link'])) ? $info['info'][$locale]['link'] :
                                     ((isset($info['info']['en']['link'])) ? $info['info']['en']['link'] : null)
+                    ),
+                    'help' => array(
+                        // the help for the command itself
+                        'file' => $help_file,
+                        'url' => FRAMEWORK_URL.'/basic/help/'.$command.'?pid='.$this->getParameterID()
                     ),
                     'wiki' => array(
                         'url' => (isset($info['wiki'][$locale]['link'])) ? $info['wiki'][$locale]['link'] :
