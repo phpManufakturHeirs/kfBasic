@@ -208,7 +208,8 @@ class OutputFilter
      * @param string $content
      * @return mixed
      */
-    public function parse($content) {
+    public function parse($content, $parseCMS=true, &$kit_command=array()) {
+        $kit_command = array();
         $load_css = array();
         preg_match_all('/(~~ ).*( ~~)/', $content, $matches, PREG_SET_ORDER);
         foreach ($matches as $match) {
@@ -240,65 +241,91 @@ class OutputFilter
                 $value = trim(strip_tags(substr($parameter_pair[1], 0, strrpos($parameter_pair[1], ']'))));
                 // add to the params array
                 $params[$key] = $value;
-                if (($key == 'css') || ($key == 'js')) {
-                    // we have to load an additional CSS file
-                    if ($this->checkLoadFile($content, $command, $key, $value) && ($key == 'css')) {
-                        $css_loaded = true;
+                if ($parseCMS) {
+                    // only css and js within the CMS!
+                    if (($key == 'css') || ($key == 'js')) {
+                        // we have to load an additional CSS file
+                        if ($this->checkLoadFile($content, $command, $key, $value) && ($key == 'css')) {
+                            $css_loaded = true;
+                        }
                     }
                 }
             }
-            if (!$css_loaded) {
-                // load the kitCommand default CSS file
-                $this->load_css_file($content, 'basic', '/kitcommand/css/kitcommand.css', 'default');
-            }
-            $cmd_array = array(
-                'cms' => array(
-                    'locale' => strtolower(LANGUAGE),
-                    'page_id' => PAGE_ID,
-                    'page_url' => $this->getURLbyPageID(PAGE_ID),
-                    'user' => array(
-                        'id' => (isset($_SESSION['USER_ID'])) ? $_SESSION['USER_ID'] : -1,
-                        'name' => (isset($_SESSION['USERNAME'])) ? $_SESSION['USERNAME'] : '',
-                        'email' => (isset($_SESSION['EMAIL'])) ? $_SESSION['EMAIL'] : ''
-                    )
-                ),
-                'GET' => $_GET,
-                'POST' => $_POST,
-                'parameter' => $params,
-            );
-            $kit_filter = false;
-            $command_url = WB_URL.'/kit2/kit_command/'.$command;
-            if ((false !== ($pos = strpos($command, 'filter:'))) && ($pos == 0)) {
-                $kit_filter = true;
-                $command = trim(substr($command, strlen('filter:')));
-                $cmd_array['content'] = $content;
-                $cmd_array['filter_expression'] = $command_expression;
-                $command_url = WB_URL.'/kit2/kit_filter/'.$command;
-            }
-            $options = array(
-                CURLOPT_POST => true,
-                CURLOPT_HEADER => false,
-                CURLOPT_URL => $command_url,
-                CURLOPT_FRESH_CONNECT => true,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_FORBID_REUSE => true,
-                CURLOPT_TIMEOUT => 4,
-                CURLOPT_POSTFIELDS => http_build_query(array('cms_parameter' => $cmd_array)),
-                CURLOPT_SSL_VERIFYHOST => false,
-                CURLOPT_SSL_VERIFYPEER => false
-            );
-            $ch = curl_init();
-            curl_setopt_array($ch, $options);
+            if ($parseCMS) {
+                // parse() is executed for the CMS content!
+                if (!$css_loaded) {
+                    // load the kitCommand default CSS file
+                    $this->load_css_file($content, 'basic', '/kitcommand/css/kitcommand.css', 'default');
+                }
+                $cmd_array = array(
+                    'cms' => array(
+                        'locale' => strtolower(LANGUAGE),
+                        'page_id' => PAGE_ID,
+                        'page_url' => $this->getURLbyPageID(PAGE_ID),
+                        'user' => array(
+                            'id' => (isset($_SESSION['USER_ID'])) ? $_SESSION['USER_ID'] : -1,
+                            'name' => (isset($_SESSION['USERNAME'])) ? $_SESSION['USERNAME'] : '',
+                            'email' => (isset($_SESSION['EMAIL'])) ? $_SESSION['EMAIL'] : ''
+                        )
+                    ),
+                    'GET' => $_GET,
+                    'POST' => $_POST,
+                    'parameter' => $params,
+                );
+                $kit_filter = false;
+                $command_url = WB_URL.'/kit2/kit_command/'.$command;
+                if ((false !== ($pos = strpos($command, 'filter:'))) && ($pos == 0)) {
+                    $kit_filter = true;
+                    $command = trim(substr($command, strlen('filter:')));
+                    $cmd_array['content'] = $content;
+                    $cmd_array['filter_expression'] = $command_expression;
+                    $command_url = WB_URL.'/kit2/kit_filter/'.$command;
+                }
+                $options = array(
+                    CURLOPT_POST => true,
+                    CURLOPT_HEADER => false,
+                    CURLOPT_URL => $command_url,
+                    CURLOPT_FRESH_CONNECT => true,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_FORBID_REUSE => true,
+                    CURLOPT_TIMEOUT => 4,
+                    CURLOPT_POSTFIELDS => http_build_query(array('cms_parameter' => $cmd_array)),
+                    CURLOPT_SSL_VERIFYHOST => false,
+                    CURLOPT_SSL_VERIFYPEER => false
+                );
+                $ch = curl_init();
+                curl_setopt_array($ch, $options);
 
-            if (false === ($response = curl_exec($ch))) {
-                trigger_error(curl_error($ch));
-            }
-            curl_close($ch);
-            if ($kit_filter) {
-                $content = $response;
+                if (false === ($response = curl_exec($ch))) {
+                    trigger_error(curl_error($ch));
+                }
+                curl_close($ch);
+                if ($kit_filter) {
+                    $content = $response;
+                }
+                else {
+                    $content = str_replace($command_expression, $response, $content);
+                }
             }
             else {
-                $content = str_replace($command_expression, $response, $content);
+                // parse() is executed within the Framework !!!
+                $kit_command[] = array(
+                    'cms' => array(
+                        'locale' => 'en',
+                        'page_id' => '-1',
+                        'page_url' => '',
+                        'user' => array(
+                            'id' => -1,
+                            'name' => '',
+                            'email' => ''
+                        ),
+                    ),
+                    'GET' => array(),
+                    'POST' => array(),
+                    'command' => $command,
+                    'parameter' => $params,
+                    'expression' => $command_expression
+                );
             }
         }
         return $content;
