@@ -208,7 +208,8 @@ class OutputFilter
      * @param string $content
      * @return mixed
      */
-    public function parse($content, $parseCMS=true, &$kit_command=array()) {
+    public function parse($content, $parseCMS=true, &$kit_command=array())
+    {
         $kit_command = array();
         $load_css = array();
         preg_match_all('/(~~ ).*( ~~)/', $content, $matches, PREG_SET_ORDER);
