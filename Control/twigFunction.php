@@ -62,3 +62,15 @@ function twig_template_file ($template_namespace, $template_file, $preferred_tem
 {
     return Utils::templateFile($template_namespace, $template_file, $preferred_template);
 }
+
+/**
+ * Parse the content for kitCommands and execute them
+ *
+ * @param Application $app
+ * @param string $content
+ * @return string parsed content
+ */
+function twig_parse_command(Application $app, $content)
+{
+    return $app['utils']->parseKITcommand($content);
+}

@@ -78,7 +78,8 @@ class twigExtension extends Twig_Extension
         return array(
             new Twig_SimpleFunction('is_authenticated', 'twig_is_authenticated'),
             new Twig_SimpleFunction('user_display_name', 'twig_user_display_name'),
-            new Twig_SimpleFunction('template_file', 'twig_template_file')
+            new Twig_SimpleFunction('template_file', 'twig_template_file'),
+            new Twig_SimpleFunction('parse_command', 'twig_parse_command')
         );
     } // getFunctions()
 

@@ -12,6 +12,9 @@
 namespace phpManufaktur\Basic\Control;
 
 use Silex\Application;
+use phpManufaktur\Basic\Control\kitCommand\OutputFilter;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
  * Class with usefull utils for the general usage within the kitFramework
@@ -351,15 +354,15 @@ class Utils
         return $new_path;
     } // sanitizePath()
 
-    
+
     /**
      * Transform a string into a float value, using the localized settings for
      * the thousend and decimal separator.
-     *  
+     *
      * @param string $string
      * @return float
      */
-    public function str2float($string) 
+    public function str2float($string)
     {
         // remove the localized thousand separator
         $string = str_replace($this->app['translator']->trans('THOUSAND_SEPARATOR'), '', $string);
@@ -367,11 +370,11 @@ class Utils
         $string = str_replace($this->app['translator']->trans('DECIMAL_SEPARATOR'), '.', $string);
         return floatval($string);
     }
-    
+
     /**
      * Transform a string into a integer value, using the localized settings for
      * the thousend and decimal separator.
-     *  
+     *
      * @param string $string
      * @return integer
      */
@@ -527,6 +530,26 @@ class Utils
             curl_setopt($curl_resource, CURLOPT_PROXYPORT, self::$proxy_port);
             curl_setopt($curl_resource, CURLOPT_PROXYUSERPWD, self::$proxy_usrpwd);
         }
+    }
+
+    /**
+     * Parse the given content for kitCommands, execute them and replace the content
+     *
+     * @param string $content
+     * @return string parsed content
+     */
+    public function parseKITcommand($content)
+    {
+        $Filter = new OutputFilter();
+        $commands = array();
+        $content = $Filter->parse($content, false, $commands);
+        foreach ($commands as $command) {
+            // process each kitCommand
+            $subRequest = Request::create('/command/'.$command['command'], 'POST', $command);
+            $Response = $this->app->handle($subRequest, HttpKernelInterface::SUB_REQUEST, false);
+            $content = str_replace($command['expression'], $Response->getContent(), $content);
+        }
+        return $content;
     }
 
 } // class Utils
