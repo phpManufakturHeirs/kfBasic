@@ -403,6 +403,11 @@ $app->match('/kit_command/{command}', function ($command) use ($app)
             throw new \Exception('Invalid kitCommand execution: missing the POST CMS parameter!');
         }
         $cms_parameter = $_POST['cms_parameter'];
+        if (isset($cms_parameter['parameter']['cache']) && (($cms_parameter['parameter']['cache'] == '0') ||
+            (strtolower($cms_parameter['parameter']['cache']) == 'false'))) {
+            // clear the Twig cache
+            $app['twig']->clearCacheFiles();
+        }
         if (isset($cms_parameter['parameter']['help'])) {
             // get the help function for this kitCommand
             $subRequest = Request::create("/command/help?command=$command", 'POST', $cms_parameter);
