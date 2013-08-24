@@ -552,4 +552,27 @@ class Utils
         return $content;
     }
 
+    public function execKITcommand($command, $parameter=array())
+    {
+        $params = array(
+            'cms' => array(
+                'locale' => 'en',
+                'page_id' => '-1',
+                'page_url' => '',
+                'user' => array(
+                    'id' => -1,
+                    'name' => '',
+                    'email' => ''
+                ),
+            ),
+            'GET' => array(),
+            'POST' => array(),
+            'parameter' => $parameter,
+        );
+        // process each kitCommand
+        $subRequest = Request::create('/command/'.strtolower($command), 'POST', $params);
+        $Response = $this->app->handle($subRequest, HttpKernelInterface::SUB_REQUEST, false);
+        return $Response->getContent();
+    }
+
 } // class Utils

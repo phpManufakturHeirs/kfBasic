@@ -58,7 +58,7 @@ function twig_user_display_name (Application $app)
  * @param string $preferred_template
  * @return string
  */
-function twig_template_file ($template_namespace, $template_file, $preferred_template='')
+function twig_template_file($template_namespace, $template_file, $preferred_template='')
 {
     return Utils::templateFile($template_namespace, $template_file, $preferred_template);
 }
@@ -73,4 +73,9 @@ function twig_template_file ($template_namespace, $template_file, $preferred_tem
 function twig_parse_command(Application $app, $content)
 {
     return $app['utils']->parseKITcommand($content);
+}
+
+function twig_exec_command(Application $app, $command, $parameter=array())
+{
+    return $app['utils']->execKITcommand($command, $parameter);
 }

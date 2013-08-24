@@ -547,7 +547,7 @@ $app->get('/admin/scan/catalog', function() use($app) {
     $catalog->getOnlineCatalog();
     $Welcome = new Welcome($app);
     $Welcome->setMessage($app['translator']->trans('<p>Successfull scanned the kitFramework online catalog for available extensions.</p>'));
-    return $Welcome->exec();
+    return $Welcome->exec($app);
 });
 
 $app->get('/admin/updater/get/github/{organization}/{repository}/{usage}', function (Request $request, $organization, $repository, $usage) use ($app) {
