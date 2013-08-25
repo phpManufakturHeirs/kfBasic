@@ -162,7 +162,7 @@ class Updater
         // return to the welcome dialog
         $Welcome = new Welcome($this->app);
         $Welcome->setMessage($this->getMessage());
-        return $Welcome->exec();
+        return $Welcome->exec($this->app);
     }
 
 }
