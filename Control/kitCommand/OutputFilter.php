@@ -212,16 +212,17 @@ class OutputFilter
     {
         $kit_command = array();
         $load_css = array();
-        preg_match_all('/(~~ ).*( ~~)/', $content, $matches, PREG_SET_ORDER);
+        //preg_match_all('/(~~ ).*( ~~)/', $content, $matches, PREG_SET_ORDER);
+        preg_match_all('/(~~)( |&nbsp;)(.){3,128}( |&nbsp;)(~~)/', $content, $matches, PREG_SET_ORDER);
         foreach ($matches as $match) {
-            $command_expression = $match[0];
+            $command_expression = str_ireplace("&nbsp;", ' ', $match[0]);
             // get the expression without leading and trailing ~~
-            $command_string = trim(str_replace('~~', '', $match[0]));
+            $command_string = trim(str_replace('~~', '', $command_expression));
             if (empty($command_string)) continue;
             // explode the string into an array by spaces
             $command_array = explode(' ', $command_string);
             // the first match is the command!
-            $command = strtolower(trim(strip_tags($command_array[0])));
+            $command = strtolower(trim($command_array[0]));
             // delete the command from array
             unset($command_array[0]);
             // get the parameter string
@@ -267,7 +268,11 @@ class OutputFilter
                             'id' => (isset($_SESSION['USER_ID'])) ? $_SESSION['USER_ID'] : -1,
                             'name' => (isset($_SESSION['USERNAME'])) ? $_SESSION['USERNAME'] : '',
                             'email' => (isset($_SESSION['EMAIL'])) ? $_SESSION['EMAIL'] : ''
-                        )
+                        ),
+                        'special' => array(
+                            'post_id' => defined('POST_ID') ? POST_ID : null,
+                            'topic_id' => defined('TOPIC_ID') ? TOPIC_ID : null
+                            )
                     ),
                     'GET' => $_GET,
                     'POST' => $_POST,
@@ -320,6 +325,10 @@ class OutputFilter
                             'name' => '',
                             'email' => ''
                         ),
+                        special => array(
+                            'post_id' => null,
+                            'topic_id' => null
+                            )
                     ),
                     'GET' => array(),
                     'POST' => array(),
