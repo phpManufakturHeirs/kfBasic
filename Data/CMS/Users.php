@@ -12,6 +12,9 @@
 namespace phpManufaktur\Basic\Data\CMS;
 
 use Silex\Application;
+use phpManufaktur\Basic\Data\CMS\WebsiteBaker\Users as WebsiteBakerUsers;
+use phpManufaktur\Basic\Data\CMS\LEPTON\Users as LeptonUsers;
+use phpManufaktur\Basic\Data\CMS\BlackCat\Users as BlackCatUsers;
 
 /**
  * Class to access the CMS users
@@ -27,25 +30,21 @@ class Users
     public function __construct (Application $app)
     {
         $this->app = $app;
-    } // __construct()
+        switch (CMS_TYPE) {
+            case 'WebsiteBaker':
+                $this->cms = new WebsiteBakerUsers($app); break;
+            case 'LEPTON':
+                $this->cms = new LeptonUsers($app); break;
+            case 'BlackCat':
+                $this->cms = new BlackCatUsers($app); break;
+            default:
+                throw new \Exception(sprintf("The CMS TYPE <b>%s</b> is not supported!", CMS_TYPE));
+        }
+    }
 
     public function selectUser ($name, &$is_admin = false)
     {
-        try {
-            $login = strtolower($name);
-            $SQL = "SELECT * FROM `" . CMS_TABLE_PREFIX . "users` WHERE (`username`='$login' OR `email`='$login') AND `active`='1'";
-            $result = $this->app['db']->fetchAssoc($SQL);
-        } catch (\Doctrine\DBAL\DBALException $e) {
-            throw new \Exception($e);
-        }
-        if (! isset($result['username']))
-            return false;
-        $user = array();
-        foreach ($result as $key => $value)
-            $user[$key] = (is_string($value)) ? $this->app['utils']->unsanitizeText($value) : $value;
-        $groups = explode(',', $user['groups_id']);
-        $is_admin = (in_array(1, $groups));
-        return $user;
-    } // selectUser()
+        return $this->cms->selectUser($name, $is_admin);
+    }
 
-} // class Users
+}
