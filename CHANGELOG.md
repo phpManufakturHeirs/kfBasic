@@ -6,7 +6,7 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
-**0.30** - 2013-08-22
+**0.31** - 2013-08-26
 
 * just in progress ...
 
