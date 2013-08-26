@@ -12,6 +12,9 @@
 namespace phpManufaktur\Basic\Data\CMS;
 
 use Silex\Application;
+use phpManufaktur\Basic\Data\CMS\WebsiteBaker\Addons as WebsiteBakerAddons;
+use phpManufaktur\Basic\Data\CMS\LEPTON\Addons as LeptonAddons;
+use phpManufaktur\Basic\Data\CMS\BlackCat\Addons as BlackCatAddons;
 
 /**
  * Class to access the CMS addons
@@ -32,6 +35,16 @@ class Addons
     public function __construct (Application $app)
     {
         $this->app = $app;
+        switch (CMS_TYPE) {
+            case 'WebsiteBaker':
+                $this->cms = new WebsiteBakerAddons($app); break;
+            case 'LEPTON':
+                $this->cms = new LeptonAddons($app); break;
+            case 'BlackCat':
+                $this->cms = new BlackCatAddons($app); break;
+            default:
+                throw new \Exception(sprintf("The CMS TYPE <b>%s</b> is not supported!", CMS_TYPE));
+        }
     }
 
     /**
@@ -43,13 +56,7 @@ class Addons
      */
     public function existsDirectory($directory)
     {
-        try {
-            $SQL = "SELECT `directory` FROM `" . CMS_TABLE_PREFIX . "addons` WHERE `directory`='$directory'";
-            $result = $this->app['db']->fetchColumn($SQL);
-            return ($result == $directory);
-        } catch (\Doctrine\DBAL\DBALException $e) {
-            throw new \Exception($e);
-        }
+        return $this->cms->existsDirectory($directory);
     }
 
     /**
@@ -61,16 +68,7 @@ class Addons
      */
     public function insert($data, &$addon_id=null)
     {
-        try {
-            $insert = array();
-            foreach ($data as $key => $value) {
-                $insert[$this->app['db']->quoteIdentifier($key)] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
-            }
-            $this->app['db']->insert(CMS_TABLE_PREFIX.'addons', $insert);
-            $addon_id = $this->app['db']->lastInsertId();
-        } catch (\Doctrine\DBAL\DBALException $e) {
-            throw new \Exception($e);
-        }
+        return $this->cms->insert($data, $addon_id);
     }
 
     /**
@@ -82,18 +80,7 @@ class Addons
      */
     public function update($directory, $data)
     {
-        try {
-            $update = array();
-            foreach ($data as $key => $value) {
-                if ($key == 'directory') continue;
-                $update[$this->app['db']->quoteIdentifier($key)] = is_string($value) ? $this->app['utils']->sanitizeText($value) : $value;
-            }
-            if (!empty($update)) {
-                $this->app['db']->update(CMS_TABLE_PREFIX.'addons', $update, array('directory' => $directory));
-            }
-        } catch (\Doctrine\DBAL\DBALException $e) {
-            throw new \Exception($e);
-        }
+        return $this->cms->update($directory, $data);
     }
 
     /**
@@ -104,11 +91,7 @@ class Addons
      */
     public function delete($directory)
     {
-        try {
-            $this->app['db']->delete(CMS_TABLE_PREFIX.'addons', array('directory' => $directory));
-        } catch (\Doctrine\DBAL\DBALException $e) {
-            throw new \Exception($e);
-        }
+        return $this->delete($directory);
     }
 
-} // class Users
+}
