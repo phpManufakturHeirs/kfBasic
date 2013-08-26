@@ -217,9 +217,10 @@ $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Basic/Data/Locale/Custom');
 // register Twig
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.options' => array(
-        'cache' => $app['debug'] ? false : FRAMEWORK_PATH . '/temp/cache/',
+        //'cache' => $app['debug'] ? false : FRAMEWORK_PATH . '/temp/cache/',
+        'cache' => FRAMEWORK_CACHE ? FRAMEWORK_PATH . '/temp/cache/' : false,
         'strict_variables' => $app['debug'] ? true : false,
-        'debug' => $app['debug'] ? true : false,
+        'debug' => FRAMEWORK_DEBUG ? true : false,
         'autoescape' => false
     )
 ));
@@ -584,7 +585,10 @@ $app->error(function (\Exception $e, $code) use ($app) {
                     'message' => array(
                         'full' => $e->getMessage(),
                         'short' => substr($e->getMessage(), 0, stripos($e->getMessage(), 'Stack trace:'))
-                    )));
+                    ),
+                    'file' => substr($e->getFile(), strlen(MANUFAKTUR_PATH)),
+                    'line' => $e->getLine()
+                ));
             break;
     }
     return new Response($message);

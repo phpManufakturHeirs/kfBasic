@@ -197,6 +197,16 @@ class Basic
     }
 
     /**
+     * Set the parameters for the kitCommand
+     *
+     * @param array $parameters
+     */
+    public function setCommandParameters($parameters)
+    {
+        Basic::$parameter = $parameters;
+    }
+
+    /**
      * Get the GET parameters submitted to the CMS
      *
      * @return array
@@ -254,6 +264,11 @@ class Basic
     public function getCMSpageURL()
     {
         return isset(Basic::$cms_info['page_url']) ? Basic::$cms_info['page_url'] : CMS_URL;
+    }
+
+    public function setCMSpageURL($url)
+    {
+        Basic::$cms_info['page_url'] = $url;
     }
 
     /**
