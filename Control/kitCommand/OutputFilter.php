@@ -325,7 +325,7 @@ class OutputFilter
                             'name' => '',
                             'email' => ''
                         ),
-                        special => array(
+                        'special' => array(
                             'post_id' => null,
                             'topic_id' => null
                             )
