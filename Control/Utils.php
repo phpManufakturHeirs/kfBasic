@@ -542,9 +542,12 @@ class Utils
     {
         $Filter = new OutputFilter();
         $commands = array();
+        // get the commands
         $content = $Filter->parse($content, false, $commands);
+        // process each kitCommand
         foreach ($commands as $command) {
-            // process each kitCommand
+            // set the locale for the command
+            $command['cms']['locale'] = $this->app['translator']->getLocale();
             $subRequest = Request::create('/command/'.$command['command'], 'POST', $command);
             $Response = $this->app->handle($subRequest, HttpKernelInterface::SUB_REQUEST, false);
             $content = str_replace($command['expression'], $Response->getContent(), $content);
@@ -556,7 +559,7 @@ class Utils
     {
         $params = array(
             'cms' => array(
-                'locale' => 'en',
+                'locale' => $this->app['translator']->getLocale(),
                 'page_id' => '-1',
                 'page_url' => '',
                 'user' => array(
