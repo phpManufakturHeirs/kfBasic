@@ -58,16 +58,27 @@ class Basic
         $this->app = $app;
         // set the given parameter ID
         self::$parameter_id = $parameter_id;
-        $pids = array('pid', 'parameter_id');
-        foreach ($pids as $pid_name) {
-            if ((self::$parameter_id == -1) && (!is_null($this->app['request']->request->get($pid_name)) ||
-                (!is_null($this->app['request']->query->get($pid_name))))) {
+
+        $get_parameters = array();
+
+        if (self::$parameter_id == -1) {
+            $pids = array('pid', 'parameter_id');
+            $GET = $this->app['request']->request->get('GET');
+            foreach ($pids as $pid_name) {
                 if (!is_null($this->app['request']->request->get($pid_name))) {
                     // read the parameter ID from the POST
                     self::$parameter_id = $this->app['request']->request->get($pid_name);
                 }
-                else {
+                elseif (!is_null($this->app['request']->query->get($pid_name))) {
                     self::$parameter_id = $this->app['request']->query->get($pid_name);
+                }
+                elseif (isset($GET[$pid_name])) {
+                    // get the parameter ID from the CMS
+                    self::$parameter_id = $GET[$pid_name];
+                    foreach ($GET as $key => $value) {
+                        if ($key == $pid_name) continue;
+                        $get_parameters[$key] = $value;
+                    }
                 }
             }
         }
@@ -114,6 +125,13 @@ class Basic
         Basic::$cms_info = $this->app['request']->request->get('cms', array(), true);
         // get the parameters for the kitCommand
         Basic::$parameter = $this->app['request']->request->get('parameter', array(), true);
+        if (!empty($get_parameters)) {
+            // inject parameters form the CMS URL
+            foreach ($get_parameters as $key => $value) {
+                Basic::$parameter[$key] = $value;
+            }
+            $this->app['request']->request->set('parameter', Basic::$parameter);
+        }
         // get the CMS $_GET parameters
         Basic::$GET = $this->app['request']->request->get('GET', array(), true);
         // get the CMS $_POST parameters
@@ -152,28 +170,39 @@ class Basic
             );
 
         if (Basic::$parameter_id == -1) {
+            $this->createParameterID();
+        }
+
+        // set the locale from the CMS locale
+        $this->app['translator']->setLocale($this->getCMSlocale());
+    }
+
+    protected function createParameterID($parameter_array=null)
+    {
+        if (!is_array($parameter_array)) {
             $parameter_array = array(
                 'cms' => Basic::$cms_info,
                 'parameter' => Basic::$parameter,
                 'GET' => Basic::$GET,
                 'POST' => Basic::$POST
             );
-            $parameter_str = json_encode($parameter_array);
-            $link = md5($parameter_str);
-            if (false === ($para = $cmdParameter->selectParameter($link))) {
-                // create a new parameter record
-                $data = array(
-                    'link' => $link,
-                    'parameter' => $parameter_str
-                );
-                $cmdParameter->insert($data);
-            }
-            Basic::$parameter_id = $link;
-            $this->app['request']->request->set('parameter_id', $link);
         }
+        $parameter_str = json_encode($parameter_array);
+        $link = md5($parameter_str);
 
-        // set the locale from the CMS locale
-        $this->app['translator']->setLocale($this->getCMSlocale());
+        $cmdParameter = new kitCommandParameter($this->app);
+
+        if (false === ($para = $cmdParameter->selectParameter($link))) {
+            // create a new parameter record
+            $data = array(
+                'link' => $link,
+                'parameter' => $parameter_str
+            );
+            $cmdParameter->insert($data);
+        }
+        Basic::$parameter_id = $link;
+        $this->app['request']->request->set('parameter_id', $link);
+        return Basic::$parameter_id;
     }
 
     /**
