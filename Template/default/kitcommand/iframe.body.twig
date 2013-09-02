@@ -9,6 +9,7 @@
 #}
 <!DOCTYPE html>
 <html>
+  {% spaceless %}
   <head>
     {% block head %}
       {% if (basic.frame is defined and basic.frame.redirect.active) %}
@@ -60,4 +61,5 @@
       {% endif %}
     {% endblock tracking %}
   </body>
+  {% endspaceless %}
 </html>
