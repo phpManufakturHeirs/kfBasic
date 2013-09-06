@@ -9,7 +9,6 @@
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
  */
 
-//require_once realpath( __DIR__ . '../../../../../framework/autoload.php');
 require_once realpath(BOOTSTRAP_PATH.'/framework/autoload.php');
 
 use Symfony\Component\HttpFoundation\Request;
@@ -37,12 +36,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 // set the error handling
 ini_set('display_errors', 1);
-error_reporting(- 1);
+error_reporting(-1);
 ErrorHandler::register();
 if ('cli' !== php_sapi_name()) {
     ExceptionHandler::register();
 }
-
 
 // init application
 $app = new Silex\Application();
@@ -82,7 +80,7 @@ try {
 } catch (\Exception $e) {
     throw new \Exception('Problem setting the framework constants!', 0, $e);
 }
-
+throw new \Exception('Test');
 // debug mode
 $app['debug'] = FRAMEWORK_DEBUG;
 
