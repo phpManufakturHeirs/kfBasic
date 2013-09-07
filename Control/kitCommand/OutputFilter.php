@@ -213,7 +213,7 @@ class OutputFilter
         $kit_command = array();
         $load_css = array();
         //preg_match_all('/(~~ ).*( ~~)/', $content, $matches, PREG_SET_ORDER);
-        preg_match_all('/(~~)( |&nbsp;)(.){3,128}( |&nbsp;)(~~)/', $content, $matches, PREG_SET_ORDER);
+        preg_match_all('/(~~)( |&nbsp;)(.){3,256}( |&nbsp;)(~~)/', $content, $matches, PREG_SET_ORDER);
         foreach ($matches as $match) {
             $command_expression = str_ireplace("&nbsp;", ' ', $match[0]);
             // get the expression without leading and trailing ~~

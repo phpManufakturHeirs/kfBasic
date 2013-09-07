@@ -80,7 +80,7 @@ try {
 } catch (\Exception $e) {
     throw new \Exception('Problem setting the framework constants!', 0, $e);
 }
-throw new \Exception('Test');
+
 // debug mode
 $app['debug'] = FRAMEWORK_DEBUG;
 
