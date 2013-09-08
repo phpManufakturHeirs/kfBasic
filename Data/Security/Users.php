@@ -69,7 +69,7 @@ class Users
       `displayname` VARCHAR(64) NOT NULL DEFAULT '',
       `last_login` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
       `roles` TEXT NOT NULL,
-    	`guid` VARCHAR(64) NOT NULL DEFAULT '',
+      `guid` VARCHAR(64) NOT NULL DEFAULT '',
       `guid_timestamp` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
       `guid_status` ENUM('ACTIVE', 'LOCKED') NOT NULL DEFAULT 'ACTIVE',
       `timestamp` TIMESTAMP,
