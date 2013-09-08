@@ -85,7 +85,7 @@ class Help extends Basic {
                             'command' => $info['command'],
                             'content' => $file['content'],
                             'link' => $gist_link,
-                            'help' => FRAMEWORK_URL.'/command/help?pid='.$this->getParameterID()
+                            'help' => FRAMEWORK_URL.'/basic/help/help?pid='.$this->getParameterID()
                         );
                         return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand/help.content.twig'),
                             array('help' => $help));
