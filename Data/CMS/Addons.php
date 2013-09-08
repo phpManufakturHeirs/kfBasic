@@ -91,7 +91,7 @@ class Addons
      */
     public function delete($directory)
     {
-        return $this->delete($directory);
+        return $this->cms->delete($directory);
     }
 
 }
