@@ -15,8 +15,14 @@ if ('á' != "\xc3\xa1") {
 }
 
 return array(
+    'DATE_FORMAT'
+        => 'd.m.Y',
+    'DATETIME_FORMAT'
+        => 'd.m.Y - H:i',
     'DECIMAL_SEPARATOR'
         => ',',
+    'TIME_FORMAT'
+        => 'H:i',
     'THOUSAND_SEPARATOR'
         => '.',
 
