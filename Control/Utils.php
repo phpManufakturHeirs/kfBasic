@@ -390,7 +390,7 @@ class Utils
     /**
      * Read the specified configuration file in JSON format and return array
      *
-     * @param string $file
+     * @param string $file path to JSON file
      * @throws \Exception
      * @return array configuration items
      */
@@ -435,6 +435,13 @@ class Utils
         return $config;
     } // readConfiguration()
 
+    /**
+     * Alias for readConfiguration()
+     *
+     * @see readConfiguration()
+     * @param string $file path to JSON file
+     * @return Ambigous <multitype:, mixed>
+     */
     public function readJSON($file)
     {
         return $this->readConfiguration($file);
