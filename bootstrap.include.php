@@ -33,6 +33,7 @@ use phpManufaktur\Updater\Updater;
 use Nicl\Silex\MarkdownServiceProvider;
 use phpManufaktur\Basic\Control\kitCommand\Basic as kitCommandBasic;
 use Symfony\Component\HttpFoundation\Response;
+use Monolog\Handler\SwiftMailerHandler;
 
 // set the error handling
 ini_set('display_errors', 1);
@@ -58,7 +59,7 @@ try {
     define('FRAMEWORK_PATH', $app['utils']->sanitizePath($framework_config['FRAMEWORK_PATH']));
     define('FRAMEWORK_TEMP_PATH', isset($framework_config['FRAMEWORK_TEMP_PATH']) ? $framework_config['FRAMEWORK_TEMP_PATH'] : FRAMEWORK_PATH . '/temp');
     define('FRAMEWORK_TEMP_URL', isset($framwework_config['FRAMEWORK_TEMP_URL']) ? $framework_config['FRAMEWORK_TEMP_URL'] : FRAMEWORK_URL . '/temp');
-    define('FRAMEWORK_TEMPLATES', isset($framework_config['FRAMEWORK_TEMPLATES']) ? $framework_config['FRAMEWORK_TEMPLATES'] : 'default');
+    define('FRAMEWORK_TEMPLATES', isset($framework_config['FRAMEWORK_TEMPLATES']) ? implode(',', $framework_config['FRAMEWORK_TEMPLATES']) : 'default');
     $templates = explode(',', FRAMEWORK_TEMPLATES);
     define('FRAMEWORK_TEMPLATE_PREFERRED', trim($templates[0]));
     define('MANUFAKTUR_PATH', FRAMEWORK_PATH . '/extension/phpmanufaktur/phpManufaktur');
@@ -278,7 +279,25 @@ try {
     define('SERVER_EMAIL_NAME', $swift_config['SERVER_NAME']);
     $app['monolog']->addInfo('SwiftMailer Service registered');
 
-    //
+    // check the auto mailing
+    if (!isset($framework_config['LOGFILE_EMAIL_ACTIVE'])) {
+        $framework_config['LOGFILE_EMAIL_ACTIVE'] = true;
+        $framework_config['LOGFILE_EMAIL_LEVEL'] = 400; // 400 = ERROR
+        $framework_config['LOGFILE_EMAIL_SUBJECT'] = 'kitFramework error at: '.FRAMEWORK_URL;
+        $framework_config['LOGFILE_EMAIL_TO'] = SERVER_EMAIL_ADDRESS;
+    }
+    define('LOGFILE_EMAIL_ACTIVE', $framework_config['LOGFILE_EMAIL_ACTIVE']);
+    define('LOGFILE_EMAIL_LEVEL', $framework_config['LOGFILE_EMAIL_LEVEL']);
+
+    if (LOGFILE_EMAIL_ACTIVE) {
+        // push handler for SwiftMail to Monolog to prompt errors
+        $message = \Swift_Message::newInstance($framework_config['LOGFILE_EMAIL_SUBJECT'])
+        ->setFrom(SERVER_EMAIL_ADDRESS, SERVER_EMAIL_NAME)
+        ->setTo($framework_config['LOGFILE_EMAIL_TO'])
+        ->setBody('kitFramework errror report');
+        $app['monolog']->pushHandler(new SwiftMailerHandler($app['mailer'], $message, LOGFILE_EMAIL_LEVEL));
+        $app['monolog']->addInfo('Monolog handler for SwiftMailer initialized');
+    }
 } catch (\Exception $e) {
     throw new \Exception('Problem initializing the SwiftMailer!');
 }
@@ -317,7 +336,7 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
 if (FRAMEWORK_SETUP) {
     // the setup flag was set to TRUE, now we assume that we can set it to FALSE
     $framework_config['FRAMEWORK_SETUP'] = false;
-    if (! file_put_contents(FRAMEWORK_PATH. '/config/framework.json', json_encode($framework_config)))
+    if (!file_put_contents(FRAMEWORK_PATH. '/config/framework.json', $app['utils']->JSONFormat($framework_config)))
         throw new \Exception('Can\'t write the configuration file for the framework!');
     $app['monolog']->addInfo('Finished kitFramework setup.');
 }
