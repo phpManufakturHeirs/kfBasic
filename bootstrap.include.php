@@ -100,9 +100,13 @@ $directories = array(
 if (! $app['filesystem']->exists($directories))
     $app['filesystem']->mkdir($directories);
 
-$max_log_size = (isset($framework_config['LOGFILE_MAX_SIZE'])) ? $framework_config['LOGFILE_MAX_SIZE'] : 2 * 1024 * 1024; // 2 MB
+if (!isset($framework_config['LOGFILE_MAX_SIZE'])) {
+    // set the default value for the logfile size
+    $framework_config['LOGFILE_MAX_SIZE'] = 2 * 1024 * 1024; // 2 MB;
+}
+
 $log_file = FRAMEWORK_PATH . '/logfile/kit2.log';
-if ($app['filesystem']->exists($log_file) && (filesize($log_file) > $max_log_size)) {
+if ($app['filesystem']->exists($log_file) && (filesize($log_file) > $framework_config['LOGFILE_MAX_SIZE'])) {
     $app['filesystem']->remove(FRAMEWORK_PATH . '/logfile/kit2.log.bak');
     $app['filesystem']->rename($log_file, FRAMEWORK_PATH . '/logfile/kit2.log.bak');
 }
@@ -165,8 +169,6 @@ $app['monolog']->addInfo('SessionServiceProvider registered.');
 $app->before(function ($request) {
     $request->getSession()->start();
 });
-
-
 
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app['monolog']->addInfo('UrlGeneratorServiceProvider registered.');
@@ -260,8 +262,8 @@ $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
 ));
 $app['monolog']->addInfo('HTTP Cache Service registered.');
 
-// register the SwiftMailer
 try {
+    // register the SwiftMailer
     $swift_config = $app['utils']->readConfiguration(FRAMEWORK_PATH . '/config/swift.cms.json');
     $app->register(new Silex\Provider\SwiftmailerServiceProvider());
     $app['swiftmailer.options'] = array(
@@ -275,8 +277,10 @@ try {
     define('SERVER_EMAIL_ADDRESS', $swift_config['SERVER_EMAIL']);
     define('SERVER_EMAIL_NAME', $swift_config['SERVER_NAME']);
     $app['monolog']->addInfo('SwiftMailer Service registered');
+
+    //
 } catch (\Exception $e) {
-    throw new \Exception('Problem initilizing the SwiftMailer!');
+    throw new \Exception('Problem initializing the SwiftMailer!');
 }
 
 

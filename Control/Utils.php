@@ -15,6 +15,7 @@ use Silex\Application;
 use phpManufaktur\Basic\Control\kitCommand\OutputFilter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use phpManufaktur\Basic\Control\JSON\JSONFormat;
 
 /**
  * Class with usefull utils for the general usage within the kitFramework
@@ -562,6 +563,12 @@ class Utils
         return $content;
     }
 
+    /**
+     * Execute the given kitCommand and return the content of the result.
+     *
+     * @param string $command name of the kitCommand
+     * @param array $parameter to use by the kitCommand
+     */
     public function execKITcommand($command, $parameter=array())
     {
         $params = array(
@@ -583,6 +590,19 @@ class Utils
         $subRequest = Request::create('/command/'.strtolower($command), 'POST', $params);
         $Response = $this->app->handle($subRequest, HttpKernelInterface::SUB_REQUEST, false);
         return $Response->getContent();
+    }
+
+    /**
+     * Like json_encode but format the JSON in a human friendly way
+     *
+     * @param array $chunk the array to save as JSON
+     * @param string $already_json set true if $chunk is already JSON and should be formatted
+     * @return string
+     */
+    public function JSONFormat($chunk, $already_json = false)
+    {
+        $JSONFormat = new JSONFormat();
+        return $JSONFormat->format($chunk, $already_json);
     }
 
 } // class Utils
