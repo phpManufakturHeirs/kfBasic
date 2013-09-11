@@ -18,7 +18,7 @@
   <body>
     <div id="error">
       <div class="message">
-        {% if message.short|length > 0 %}{{ message.short }}{% else %}{{ message.full }}{% endif %}
+        <b>{{ code }}</b> - {% if message.short|length > 0 %}{{ message.full }}{% else %}{{ message.full }}{% endif %}
       </div>
       <div class="file">[{{ line }}] {{ file }}</div>
       <div class="report">        

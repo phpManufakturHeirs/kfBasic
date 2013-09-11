@@ -163,4 +163,13 @@ class Help extends Basic {
             ));
     }
 
+    public function createHelpFrame(Application $app)
+    {
+        $this->initParameters($app);
+        // the additional parameter command can contain the name of the kitCommand, by default "help"
+        $command = $app['request']->query->get('command', 'help');
+        // create the iframe and load the help
+        return $this->createIFrame("/basic/help/$command");
+    }
+
  }

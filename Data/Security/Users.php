@@ -284,4 +284,17 @@ EOD;
         return true;
     }
 
+    /**
+     * Encode the raw password
+     *
+     * @param string $raw the password
+     * @param string $salt (actual not used)
+     * @return string
+     */
+    public function encodePassword($raw, $salt='')
+    {
+        $passwordEncoder = new manufakturPasswordEncoder($this->app);
+        return $passwordEncoder->encodePassword($raw, '');
+    }
+
 } // class Users

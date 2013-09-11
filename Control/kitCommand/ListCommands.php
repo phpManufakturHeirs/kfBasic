@@ -118,6 +118,11 @@ class ListCommands extends Basic
                 'commands' => $kCommands,
                 'basic' => $this->getBasicSettings()
         ));
+    }
 
+    public function createListFrame(Application $app)
+    {
+        $this->initParameters($app);
+        return $this->createIFrame('/basic/list');
     }
 }

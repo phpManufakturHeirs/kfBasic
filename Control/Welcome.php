@@ -13,6 +13,10 @@ namespace phpManufaktur\Basic\Control;
 
 use Silex\Application;
 use phpManufaktur\Basic\Control\ExtensionRegister;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\Security\Core\User\User;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
  * Display a welcome to the kitFramework dialog
@@ -74,12 +78,27 @@ class Welcome
     /**
      * Execute the welcome dialog
      */
-    public function exec (Application $app)
+    public function exec(Application $app)
     {
         $this->app = $app;
         $cms = $this->app['request']->get('usage');
         self::$usage = is_null($cms) ? 'framework' : $cms;
 
+
+        if (!$this->app['security']->isGranted('ROLE_ADMIN')) {
+            return 'anonymous...';
+        }
+        /*
+        $token = $app['security']->getToken();
+        if (is_null($token))
+            return 'ANONYMOUS';
+        // get user by token
+
+        $user = $token->getUser();
+        echo '<pre>';
+        var_dump($user);
+        echo '</pre>';
+*/
         // use reflection to dynamical load a class
         $reflection = new \ReflectionClass('phpManufaktur\\Basic\\Control\\ExtensionCatalog');
         $catalog = $reflection->newInstanceArgs(array($this->app));
@@ -106,6 +125,32 @@ class Welcome
             'scan_extensions' => FRAMEWORK_URL.'/admin/scan/extensions?usage='.self::$usage,
             'scan_catalog' => FRAMEWORK_URL.'/admin/scan/catalog?usage='.self::$usage
         ));
+    }
+
+    public function welcomeCMS(Application $app, $cms)
+    {
+        // get the CMS info parameters
+        $cms = json_decode(base64_decode($cms), true);
+
+        // save them partial into session
+        $app['session']->set('CMS_TYPE', $cms['type']);
+        $app['session']->set('CMS_VERSION', $cms['version']);
+        $app['session']->set('CMS_LOCALE', $cms['locale']);
+        $app['session']->set('CMS_USER_NAME', $cms['username']);
+
+        // auto login into the admin area and then exec the welcome dialog
+        $secureAreaName = 'admin';
+        // @todo the access control is very soft and the ROLE is actually not checked!
+        $user = new User($cms['username'],'', array('ROLE_ADMIN'), true, true, true, true);
+        $token = new UsernamePasswordToken($user, null, $secureAreaName, $user->getRoles());
+        $app['security']->setToken($token);
+        $app['session']->set('_security_'.$secureAreaName, serialize($token) );
+
+        $usage = ($cms['target'] == 'cms') ? $cms['type'] : 'framework';
+
+        // sub request to the welcome dialog
+        $subRequest = Request::create('/admin/welcome', 'GET', array('usage' => $usage));
+        return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
     }
 
 } // class Account

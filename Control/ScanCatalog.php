@@ -13,14 +13,14 @@ namespace phpManufaktur\Basic\Control;
 
 use Silex\Application;
 
-class Account
+class ScanCatalog
 {
-    /**
-     * Return the Account dialog
-     */
     public function exec(Application $app)
     {
-        return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/account.twig'), array());
+        $catalog = new ExtensionCatalog($app);
+        $catalog->getOnlineCatalog();
+        $Welcome = new Welcome($app);
+        $Welcome->setMessage($app['translator']->trans('<p>Successfull scanned the kitFramework online catalog for available extensions.</p>'));
+        return $Welcome->exec($app);
     }
-
 }

@@ -1,9 +1,9 @@
-{# 
+{#
   kitFramework
 
   @author Team phpManufaktur <team@phpmanufaktur.de>
   @link https://kit2.phpmanufaktur.de
-  @link https://github.com/phpManufaktur/kitFramework/wiki  
+  @link https://github.com/phpManufaktur/kitFramework/wiki
   @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
@@ -28,7 +28,7 @@
       <div class="message">{{ message|trans }}</div>
     {% else %}
       <div class="message"><p>Dieser Übersichtsdialog befindet sich noch im Experimentierstadium, Vorschläge und Ideen sind herzlich willkommen!</p></div>
-    {% endif %}    
+    {% endif %}
     <h2>Installierte Erweiterungen</h2>
     <p>Diese Erweiterungen sind bereits in kitFramework installiert und können verwendet werden.</p>
     {% for item in register_items %}
@@ -63,17 +63,17 @@
         <div class="extension_description">{{ item.description.short }}</div>
         <div class="extension_release">Release {{ item.release }} <em>({{ item.date|date('d.m.Y') }})</em></div>
         {% if item.info.download.github is defined %}
-          <p><a href="{{ FRAMEWORK_URL }}/admin/updater/get/github/{{ item.info.download.github.organization }}/{{ item.info.download.github.repository }}/{{ usage }}">Install</a></p>
+          <p><a href="{{ FRAMEWORK_URL }}/admin/updater/get/github/{{ item.info.download.github.organization }}/{{ item.info.download.github.repository }}">Install</a></p>
         {% endif %}
       </div>
-    {% endfor %}  
-    <div class="clear"></div>  
+    {% endfor %}
+    <div class="clear"></div>
     <div class="extension_scan_directories">
       <a href="{{ scan_extensions }}#top">{{ 'Scan for installed extensions'|trans }}</a>
     </div>
     <div class="extension_scan_catalog">
       <a href="{{ scan_catalog }}#top">{{ 'Scan the online catalog for available extensions'|trans }}</a>
     </div>
-    
+
   </div>
 {% endblock %}

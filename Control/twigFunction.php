@@ -20,7 +20,7 @@ use phpManufaktur\Basic\Control\Utils;
 function twig_is_authenticated (Application $app)
 {
     $token = $app['security']->getToken();
-    return ! is_null($token);
+    return !is_null($token);
 } // twig_is_authenticated()
 
 /**
@@ -36,6 +36,7 @@ function twig_user_display_name (Application $app)
         if (is_null($token))
             return 'ANONYMOUS';
             // get user by token
+
         $user = $token->getUser();
         // get the user record
         $frameworkUsers = new frameworkUsers($app);

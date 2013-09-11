@@ -11,7 +11,6 @@
 
 require_once realpath(BOOTSTRAP_PATH.'/framework/autoload.php');
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Debug\ErrorHandler;
 use Symfony\Component\HttpKernel\Debug\ExceptionHandler;
 use Symfony\Component\Filesystem\Filesystem;
@@ -19,19 +18,10 @@ use Symfony\Component\Translation\Loader\ArrayLoader;
 use phpManufaktur\Basic\Control\UserProvider;
 use phpManufaktur\Basic\Control\manufakturPasswordEncoder;
 use phpManufaktur\Basic\Control\twigExtension;
-use phpManufaktur\Basic\Control\Account;
-use phpManufaktur\Basic\Control\forgottenPassword;
 use phpManufaktur\Basic\Control\Utils;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use phpManufaktur\Basic\Control\Welcome;
-use Symfony\Component\Security\Core\User\User;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use phpManufaktur\Basic\Data\Setup\Setup;
-use phpManufaktur\Basic\Control\ExtensionRegister;
-use phpManufaktur\Basic\Control\ExtensionCatalog;
 use phpManufaktur\Updater\Updater;
 use Nicl\Silex\MarkdownServiceProvider;
-use phpManufaktur\Basic\Control\kitCommand\Basic as kitCommandBasic;
 use Symfony\Component\HttpFoundation\Response;
 use Monolog\Handler\SwiftMailerHandler;
 
@@ -330,7 +320,10 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     'security.encoder.digest' => $app->share(function  ($app)
     {
         return new manufakturPasswordEncoder($app);
-    })
+    }),
+    'security.access_rules' => array(
+        array('^/admin', 'ROLE_ADMIN')
+    )
 ));
 
 if (FRAMEWORK_SETUP) {
@@ -341,12 +334,14 @@ if (FRAMEWORK_SETUP) {
     $app['monolog']->addInfo('Finished kitFramework setup.');
 }
 
-$scan_paths = array(
-    MANUFAKTUR_PATH,
-    THIRDPARTY_PATH
-);
+
+// ADMIN
+$admin = $app['controllers_factory'];
+// kitCOMMAND
+$command = $app['controllers_factory'];
 
 // loop through /phpManufaktur and /thirdParty to include bootstrap extensions
+$scan_paths = array(MANUFAKTUR_PATH, THIRDPARTY_PATH);
 foreach ($scan_paths as $scan_path) {
     $entries = scandir($scan_path);
     foreach ($entries as $entry) {
@@ -361,231 +356,79 @@ foreach ($scan_paths as $scan_path) {
     }
 }
 
-/**
- * predefined routes for the framework
- */
-
-// login dialog
-$app->get('/login', function (Request $request) use($app)
-{
-    return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/login.twig'), array(
-        'error' => $app['security.last_error']($request),
-        'last_username' => $app['session']->get('_security.last_username'),
-    ));
+// GENERAL ROUTES for the kitFramework
+$app->get('/', function() use($app) {
+    return $app->redirect(FRAMEWORK_URL.'/admin/welcome');
 });
+$app->get('/login',
+    'phpManufaktur\Basic\Control\Login::exec');
+$app->get('/password/forgotten',
+    'phpManufaktur\Basic\Control\forgottenPassword::dialogForgottenPassword');
+$app->post('password/reset',
+    'phpManufaktur\Basic\Control\forgottenPassword::dialogResetPassword');
+$app->post('/password/retype',
+    'phpManufaktur\Basic\Control\forgottenPassword::dialogRetypePassword');
+$app->get('/password/create/{guid}',
+    'phpManufaktur\Basic\Control\forgottenPassword::dialogCreatePassword');
 
-// the user has forgotten his password
-$app->get('/password/forgotten', function () use($app)
-{
-    $forgotPassword = new forgottenPassword($app);
-    return $forgotPassword->dialogForgottenPassword();
-});
-
-// send the user a GUID to reset the password
-$app->match('/password/reset', function (Request $request) use ($app)
-{
-    $resetPassword = new forgottenPassword($app);
-    return $resetPassword->dialogResetPassword();
-});
-
-// the user must retype the password
-$app->match('/password/retype', function (Request $request) use ($app) {
-    $retypePassword = new forgottenPassword($app);
-    return $retypePassword->dialogRetypePassword();
-});
-
-// validate the GUID and create a new password
-$app->get('/password/create/{guid}', function ($guid) use ($app)
-{
-    $createPassword = new forgottenPassword($app);
-    return $createPassword->dialogCreatePassword($guid);
-});
-
-// display the user account
-$app->get('/admin/account', function  (Request $request) use($app)
-{
-    $account = new Account($app);
-    return $account->showDialog();
-});
-
-$app->post('/kit_filter/{filter}', function ($filter) use ($app) {
-    if (!isset($_POST['cms_parameter'])) {
-        throw new \Exception('Invalid kitFilter execution: missing the POST CONTENT parameter!');
+// ADMIN ROUTES
+$admin->get('/',
+    'phpManufaktur\Basic\Control\Welcome::exec');
+$admin->get('/account',
+    'phpManufaktur\Basic\Control\Account::exec');
+$admin->get('/welcome',
+    'phpManufaktur\Basic\Control\Welcome::exec');
+$admin->get('/scan/extensions',
+    'phpManufaktur\Basic\Control\ScanExtensions::exec');
+$admin->get('/scan/catalog',
+    'phpManufaktur\Basic\Control\ScanCatalog::exec');
+$admin->get('/updater/get/github/{organization}/{repository}',
+    function ($organization, $repository) use ($app) {
+        if (!file_exists(MANUFAKTUR_PATH.'/Updater')) {
+            $app['filesystem']->mkdir(MANUFAKTUR_PATH.'/Updater');
+        }
+        $app['filesystem']->copy(MANUFAKTUR_PATH.'/Basic/Control/Updater/Updater.php', MANUFAKTUR_PATH.'/Updater/Updater.php', true);
+        $updater = new Updater($app);
+        return $updater->getLastGithubRepository($organization, $repository);
     }
-   $cms_parameter = $_POST['cms_parameter'];
-   $content = isset($cms_parameter['content']) ? $cms_parameter['content'] : '- no content retrieved! -';
+);
 
-   return 'FILTER INACTIVE!'.$content;
-});
+$app->get('/welcome/cms/{cms}',
+    // the welcome dialog is called by the CMS backend
+    'phpManufaktur\Basic\Control\Welcome::welcomeCMS');
 
-$app->match('/kit_command/{command}', function ($command) use ($app)
-{
-    try {
-        if (!isset($_POST['cms_parameter'])) {
-            throw new \Exception('Invalid kitCommand execution: missing the POST CMS parameter!');
-        }
-        $cms_parameter = $_POST['cms_parameter'];
-        if (isset($cms_parameter['parameter']['cache']) && (($cms_parameter['parameter']['cache'] == '0') ||
-            (strtolower($cms_parameter['parameter']['cache']) == 'false'))) {
-            // clear the Twig cache
-            $app['twig']->clearCacheFiles();
-        }
-        if (isset($cms_parameter['parameter']['help'])) {
-            // get the help function for this kitCommand
-            $subRequest = Request::create("/command/help?command=$command", 'POST', $cms_parameter);
-            // important: we dont want that app->handle() catch errors, so set the third parameter to false!
-            return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST, false);
-        }
-        else {
-            $subRequest = Request::create('/command/'.$command, 'POST', $cms_parameter);
-            // important: we dont want that app->handle() catch errors, so set the third parameter to false!
-            return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST, false);
-        }
-    } catch (\Exception $e) {
-        if (isset($cms_parameter['cms']['locale'])) {
-            // set the locale given by the CMS
-            $app['locale'] = $cms_parameter['cms']['locale'];
-        }
-        if (isset($cms_parameter['parameter']['debug']) && ((strtolower($cms_parameter['parameter']['debug']) == 'true') ||
-            ($cms_parameter['parameter']['debug'] == 1) || ($cms_parameter['parameter']['debug'] == ''))) {
-            // the debug parameter isset, so return the extended error information
-            $debug = array(
-                'command' => $command,
-                'file' => substr($e->getFile(), strlen(FRAMEWORK_PATH)),
-                'line' => $e->getLine(),
-                'message' => $e->getMessage()
-            );
-            return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand/debug.twig'),
-                array('debug' => $debug));
-        }
-        else {
-            // no debug parameter, we assume that the kitCommand does not exists
-            return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand/error.twig'),
-                array('command' => $command));
-        }
-    }
-});
+// kitFILTER
+$app->post('/kit_filter/{filter}',
+    'phpManufaktur\Basic\Control\kitFilter\Filter::exec');
 
-// general kitCommand help function
-$app->match('/command/help', function (Request $request) use ($app) {
-    // the additional parameter command can contain the name of the kitCommand, by default "help"
-    $command = $request->query->get('command', 'help');
-    $kitCommand = new kitCommandBasic($app);
-    // create the iframe and load the help
-    return $kitCommand->createIFrame("/basic/help/$command");
-})
-->setOption('info', MANUFAKTUR_PATH.'/Basic/command.help.json');
+// kitCOMMAND
+$app->post('/kit_command/{command}',
+    'phpManufaktur\Basic\Control\kitCommand\kitCommand::exec');
+$command->post('/help',
+    'phpManufaktur\Basic\Control\kitCommand\Help::createHelpFrame')
+    ->setOption('info', MANUFAKTUR_PATH.'/Basic/command.help.json');
+$command->post('/list',
+    'phpManufaktur\Basic\Control\kitCommand\ListCommands\createListFrame')
+    ->setOption('info', MANUFAKTUR_PATH.'/Basic/command.list.json');
 
-// show the help for the requested kitCommand
+// BASIC responses to kitCommands
 $app->get('/basic/help/{command}',
+    // show the help for the requested kitCommand
     'phpManufaktur\Basic\Control\kitCommand\Help::getHelpPage');
 $app->get('/basic/help/{command}/{help_file}',
     'phpManufaktur\Basic\Control\kitCommand\Help::getHelpPage');
+$app->get('/basic/list',
+    // return a list with all available kitCommands and additional information
+    'phpManufaktur\Basic\Control\kitCommand\ListCommands::getList');
 
-// show a list of all available kitCommands
-$app->match('/command/list', function(Request $request) use ($app) {
-    $kitCommand = new kitCommandBasic($app);
-    return $kitCommand->createIFrame('/basic/list');
-})
-->setOption('info', MANUFAKTUR_PATH.'/Basic/command.list.json');
+// kitSEARCH
+$app->post('/kit_search/command/{command}',
+    // catch all searches within kitCommands
+    'phpManufaktur\Basic\Conttrol\kitSearch\Search::exec');
 
-// return a list with all available kitCommands and additional information
-$app->get('/basic/list', 'phpManufaktur\Basic\Control\kitCommand\ListCommands::getList');
 
-// catch all searches within kitCommands
-$app->match('/kit_search/command/{command}', function (Request $request, $command) use ($app) {
-    try {
-        if (!isset($_POST['cms_parameter'])) {
-            throw new \Exception('Invalid kitCommand execution: missing the POST CMS parameter!');
-        }
-        $cms_parameter = $_POST['cms_parameter'];
-        $subRequest = Request::create('/search/command/'.$command, 'POST', $cms_parameter);
-        // important: we dont want that app->handle() catch errors, so set the third parameter to false!
-        $result = $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST , false);
-    } catch (\Exception $e) {
-        // no search for this kitCommand found or error while executing
-        $result = array(
-            'search' => array(
-                'text' => $e->getMessage()
-            )
-        );
-        $result = base64_encode(json_encode($result));
-    }
-    return $result;
-});
-
-/**
- * Show the welcome dialog
- */
-$app->get('/admin/welcome', 'phpManufaktur\Basic\Control\Welcome::exec');
-$app->get('/', 'phpManufaktur\Basic\Control\Welcome::exec');
-$app->get('/admin', 'phpManufaktur\Basic\Control\Welcome::exec');
-$app->get('/welcome', 'phpManufaktur\Basic\Control\Welcome::exec');
-
-// the welcome dialog is called by the CMS backend
-$app->match('/welcome/cms/{cms}', function ($cms) use ($app) {
-    // get the CMS info parameters
-    $cms = json_decode(base64_decode($cms), true);
-
-    // save them partial into session
-    $app['session']->set('CMS_TYPE', $cms['type']);
-    $app['session']->set('CMS_VERSION', $cms['version']);
-    $app['session']->set('CMS_LOCALE', $cms['locale']);
-    $app['session']->set('CMS_USER_NAME', $cms['username']);
-
-    // auto login into the admin area and then exec the welcome dialog
-    $secureAreaName = 'admin';
-    // @todo the access control is very soft and the ROLE is actually not checked!
-    $user = new User($cms['username'],'', array('ROLE_ADMIN'), true, true, true, true);
-    $token = new UsernamePasswordToken($user, null, $secureAreaName, $user->getRoles());
-    $app['security']->setToken($token);
-    $app['session']->set('_security_'.$secureAreaName, serialize($token) );
-
-    $usage = ($cms['target'] == 'cms') ? $cms['type'] : 'framework';
-
-    // sub request to the welcome dialog
-    $subRequest = Request::create('/admin/welcome', 'GET', array('usage' => $usage));
-    return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
-});
-
-// scan for extensions
-$app->get('/admin/scan/extensions', function () use ($app) {
-    $register = new ExtensionRegister($app);
-    $register->scanDirectories(ExtensionRegister::GROUP_PHPMANUFAKTUR);
-    $register->scanDirectories(ExtensionRegister::GROUP_THIRDPARTY);
-    $Welcome = new Welcome($app);
-    if ($register->isMessage()) {
-        $Welcome->setMessage($register->getMessage());
-    }
-    else {
-        $Welcome->setMessage($app['translator']->trans('<p>Successfull scanned the kitFramework for installed extensions.</p>'));
-    }
-    return $Welcome->exec($app);
-});
-
-// scan the extension catalog
-$app->get('/admin/scan/catalog', function() use($app) {
-    $catalog = new ExtensionCatalog($app);
-    $catalog->getOnlineCatalog();
-    $Welcome = new Welcome($app);
-    $Welcome->setMessage($app['translator']->trans('<p>Successfull scanned the kitFramework online catalog for available extensions.</p>'));
-    return $Welcome->exec($app);
-});
-
-$app->get('/admin/updater/get/github/{organization}/{repository}/{usage}', function (Request $request, $organization, $repository, $usage) use ($app) {
-    $message = '';
-    if (file_exists(MANUFAKTUR_PATH.'/Updater/Updater.php')) {
-        unlink(MANUFAKTUR_PATH.'/Updater/Updater.php');
-        rmdir(MANUFAKTUR_PATH.'/Updater');
-    }
-    if (!file_exists(MANUFAKTUR_PATH.'/Updater/Updater.php')) {
-        mkdir(MANUFAKTUR_PATH.'/Updater');
-        copy(MANUFAKTUR_PATH.'/Basic/Control/Updater/Updater.php', MANUFAKTUR_PATH.'/Updater/Updater.php');
-    }
-    $updater = new Updater($app);
-    return $updater->getLastGithubRepository($organization, $repository);
-});
-
+$app->mount('/admin', $admin);
+$app->mount('/command', $command);
 
 $app->error(function (\Exception $e, $code) use ($app) {
     if ($app['debug']) {
@@ -598,16 +441,22 @@ $app->error(function (\Exception $e, $code) use ($app) {
             $message = $app['twig']->render($app['utils']->templateFile(
                 '@phpManufaktur/Basic/Template', 'framework/error.404.twig'));
             break;
+        case 403:
+            // access denied
+            $message = $app['twig']->render($app['utils']->templateFile(
+                '@phpManufaktur/Basic/Template', 'framework/error.403.twig'));
+            break;
         default:
             // general error message
             $message = $app['twig']->render($app['utils']->templateFile(
                 '@phpManufaktur/Basic/Template', 'framework/error.twig'),
                 array(
+                    'code' => $code,
                     'message' => array(
                         'full' => $e->getMessage(),
                         'short' => substr($e->getMessage(), 0, stripos($e->getMessage(), 'Stack trace:'))
                     ),
-                    'file' => substr($e->getFile(), strlen(MANUFAKTUR_PATH)),
+                    'file' => substr($app['utils']->sanitizePath($e->getFile()), strlen(FRAMEWORK_PATH)),
                     'line' => $e->getLine()
                 ));
             break;

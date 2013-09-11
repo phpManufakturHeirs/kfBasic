@@ -113,6 +113,8 @@ return array(
 
     'Password'
         => 'Passwort',
+    'Password changed'
+        => 'Passwort geändert',
     'Please check the username and password and try again!'
         => 'Bitte prüfen Sie den angegebenen Benutzernamen sowie das Passwort und versuchen Sie es erneut!',
     'Please <a href="%link%" target="_blank">comment this help</a> to improve the kitCommand <b>%command%</b>.'
@@ -153,7 +155,7 @@ return array(
     'The extension.json of <b>%name%</b> does not contain all definitions, check GUID, Group and Release!'
         => 'Die Beschreibungsdatei extension.json für die Erweiterung <b>%name%</b> enthält nicht alle Definitionen, prüfen Sie <i>GUID</i>, <i>Group</i> und <i>Release</i>!',
     '<p>The password for the kitFramework was successfull changed.</p><p>You can now <a href="%login%">login using the new password</a>.</p>'
-        => '<p>Ihr Passwort für das kitFramework wurde erfolgreich geändert.</p><p>Sie können sich jetzt <a href="%login%">mit Ihrem neuen Passwort anmeldend</a>.</p>',
+        => '<p>Ihr Passwort für das kitFramework wurde erfolgreich geändert.</p><p>Sie können sich jetzt <a href="%login%">mit Ihrem neuen Passwort anmelden</a>.</p>',
     '<p>The password you have typed in is not strength enough.</p><p>Please choose a password at minimun 8 characters long, containing lower and uppercase characters, numbers and special chars. Spaces are not allowed.</p>'
         => '<p>Das übermittelte Passwort ist nicht stark genug.</p><p>Bitte wählen Sie ein Passwort mit mindestens 8 Zeichen Länge, mit einem Mix aus Groß- und Kleinbuchstaben, Zahlen und Sonderzeichen. Leerzeichen sind nicht gestattet.</p>',
     'The received extension.json does not specifiy the path of the extension!'
@@ -163,9 +165,9 @@ return array(
     'The requested page could not be found!'
         => 'Die angeforderte Seite wurde nicht gefunden!',
     'The submitted GUID is expired and no longer valid.<br />Please <a href="%password_forgotten%">order a new link</a>.'
-        => 'Die übermittelte GUID ist abgelaufen und nicht länger gültig.<br />Bitte <a href="%password_forgotten%">fordern Sie einen neuen Link an</a>.',
+        => '<p>Die übermittelte GUID ist abgelaufen und nicht länger gültig.</p><p>Bitte <a href="%password_forgotten%">fordern Sie einen neuen Link an</a>.</p>',
     'The submitted GUID was already used and is no longer valid.<br />Please <a href="%password_forgotten%">order a new link</a>.'
-        => 'Die übermittelte GUID wurde bereits verwendet und ist nicht mehr gültig.<br />Bitte <a href="%password_forgotten%">fordern Sie einen neuen Link an</a>.',
+        => '<p>Die übermittelte GUID wurde bereits verwendet und ist nicht mehr gültig.</p><p>Bitte <a href="%password_forgotten%">fordern Sie einen neuen Link an</a>.</p>',
     'There exists no user with the submitted email address.'
         => 'Die übermittelte E-Mail Adresse kann keinem Benutzer zugeordnet werden.',
     'There is no help available for the kitCommand <b>%command%</b>.'
@@ -196,5 +198,8 @@ return array(
     'We have send a link to your email address %email%.'
         => 'Wir haben Ihnen einen Link an Ihre E-Mail Adresse %email% gesendet.',
     'Welcome' =>
-        'Herzlich Willkommen!'
+        'Herzlich Willkommen!',
+
+    'You are not allowed to access this resource!'
+        => 'Sie sind nicht befugt auf diese Resource zuzugreifen.'
 );
