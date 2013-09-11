@@ -225,6 +225,23 @@ class Utils
         return $strength;
     } // passwordStrength()
 
+    /**
+     * Create a password
+     *
+     * @param number $length default = 12
+     * @return string generated password
+     */
+    public function createPassword($length=12)
+    {
+        $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789|!@#$%&*\=?,;.:-_+~/^';
+        $password = '';
+        $max = strlen($chars) - 1;
+
+        for ($i=0; $i < $length; $i++) {
+            $password .= $chars[rand(0, $max)];
+        }
+        return $password;
+    }
 
     /**
      * Return a valid path to the desired template, depending on the namespace,
