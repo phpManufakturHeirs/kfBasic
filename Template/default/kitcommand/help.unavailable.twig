@@ -12,7 +12,7 @@
   {% if curl_info.http_code is defined %}
     <p>HTTP Status Code: {{ curl_info.http_code }}</p>
   {% endif %}
-  {% if content|length > 0 %}
+  {% if content|default('')|length > 0 %}
     <p>{{ 'Additional information'|trans }}: {{ content }}</p>
   {% endif %}
 </div>
