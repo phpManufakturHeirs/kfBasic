@@ -18,13 +18,15 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class kitCommand
 {
-    public function exec(Application $app, $command)
+    public function exec(Application $app, $command, $params=null)
     {
         try {
-            if (null === ($cms_parameter = $app['request']->get('cms_parameter', null))) {
+            if (!is_null($params)) {
+                $cms_parameter = json_decode(base64_decode($params), true);
+            }
+            elseif (null === ($cms_parameter = $app['request']->get('cms_parameter', null))) {
                 throw new \Exception('Invalid kitCommand execution: missing the POST CMS parameter!');
             }
-
             if (isset($cms_parameter['parameter']['cache']) && (($cms_parameter['parameter']['cache'] == '0') ||
                 (strtolower($cms_parameter['parameter']['cache']) == 'false'))) {
                 // clear the Twig cache

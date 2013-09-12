@@ -210,6 +210,15 @@ class OutputFilter
      */
     public function parse($content, $parseCMS=true, &$kit_command=array())
     {
+        $use_alternate_parameter = false;
+        $config_path = realpath(__DIR__.'/../../../../../../config/cms.json');
+        if (file_exists($config_path)) {
+            $config = json_decode(file_get_contents($config_path), true);
+            if (isset($config['OUTPUT_FILTER']['METHOD']) && ($config['OUTPUT_FILTER']['METHOD'] == 'ALTERNATE')) {
+                $use_alternate_parameter = true;
+            }
+        }
+
         $kit_command = array();
         $load_css = array();
         //preg_match_all('/(~~ ).*( ~~)/', $content, $matches, PREG_SET_ORDER);
@@ -279,7 +288,12 @@ class OutputFilter
                     'parameter' => $params,
                 );
                 $kit_filter = false;
-                $command_url = WB_URL.'/kit2/kit_command/'.$command;
+                if ($use_alternate_parameter) {
+                    $command_url = WB_URL.'/kit2/kit_command/'.$command.'/'.base64_encode(json_encode($cmd_array));
+                }
+                else {
+                    $command_url = WB_URL.'/kit2/kit_command/'.$command;
+                }
                 if ((false !== ($pos = strpos($command, 'filter:'))) && ($pos == 0)) {
                     $kit_filter = true;
                     $command = trim(substr($command, strlen('filter:')));
