@@ -404,6 +404,8 @@ $app->post('/kit_filter/{filter}',
 // kitCOMMAND
 $app->post('/kit_command/{command}',
     'phpManufaktur\Basic\Control\kitCommand\kitCommand::exec');
+$app->post('/kit_command/{command}/{params}',
+    'phpManufaktur\Basic\Control\kitCommand\kitCommand::exec');
 $command->post('/help',
     'phpManufaktur\Basic\Control\kitCommand\Help::createHelpFrame')
     ->setOption('info', MANUFAKTUR_PATH.'/Basic/command.help.json');
