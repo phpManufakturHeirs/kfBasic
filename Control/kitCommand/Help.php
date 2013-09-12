@@ -55,7 +55,7 @@ class Help extends Basic {
             }
         }
         else {
-            return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand.help.unavailable.twig'),
+            return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand/help.unavailable.twig'),
                 array('command' => $info['command']));
         }
         $ch = curl_init("https://api.github.com/gists/$gist_id");
