@@ -24,6 +24,7 @@ use phpManufaktur\Updater\Updater;
 use Nicl\Silex\MarkdownServiceProvider;
 use Symfony\Component\HttpFoundation\Response;
 use Monolog\Handler\SwiftMailerHandler;
+use phpManufaktur\Basic\Control\ReCaptcha\ReCaptcha;
 
 // set the error handling
 ini_set('display_errors', 1);
@@ -204,6 +205,11 @@ $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Basic/Data/Locale');
 
 // load the /Custom/Basic language files
 $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Basic/Data/Locale/Custom');
+
+// register the ReCaptcha service
+$app['recaptcha'] = $app->share(function($app) {
+    return new ReCaptcha($app);
+});
 
 // register Twig
 $app->register(new Silex\Provider\TwigServiceProvider(), array(

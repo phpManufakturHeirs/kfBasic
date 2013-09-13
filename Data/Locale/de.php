@@ -48,6 +48,8 @@ return array(
         => '<p>Kann die Datei <b>%file%</b> nicht öffnen!</p>',
     "Can't read the the %repository% from %organization% at Github!"
         => 'Kann das Repository <b>%repository%</b> von der Organisation <b>%organization%</b> auf Github nicht lesen!',
+    'captcha-timeout'
+        => 'Zeitüberschreitung bei der CAPTCHA Übermittlung, bitte versuchen Sie es erneut.',
     'Could not move the unzipped files to the target directory.'
         => 'Konnte die entpackten Dateien nicht in das Zielverzeichnis verschieben!',
     'Create a new password' =>
@@ -80,6 +82,12 @@ return array(
         => '<p>Falls Sie Ihr Passwort vergessen haben, können Sie einen Link anfordern um ein neues Passwort zu erstellen.</p><p>Bitte tragen Sie die E-Mail Adresse ein, die ihrem Konto zugeordnet ist und übermitteln Sie das Formular.</p>',
     '<p>If you have not asked to create a new password, just do nothing. The link above is valid only for 24 hours and your actual password has not changed now.</p>'
         => '<p>Falls Sie kein neues Passwort angefordert haben, ignorieren Sie diese E-Mail bitte. Der o.a. Link ist lediglich für 24 Stunden gültig und ihr aktuelles Passwort wurde nicht geändert.</p>',
+    'incorrect-captcha-sol'
+        => 'Der übermittelte CAPTCHA ist nicht korrekt.',
+    'invalid-request-cookie'
+        => 'Ungültige ReCaptcha Anfrage',
+    'invalid-site-private-key'
+        => 'Der private Schlüssel für den ReCaptcha Service ist ungültig, prüfen Sie die Einstellungen!',
     'Issues'
         => 'Mängel',
 

@@ -76,7 +76,29 @@ function twig_parse_command(Application $app, $content)
     return $app['utils']->parseKITcommand($content);
 }
 
-function twig_exec_command(Application $app, $command, $parameter=array())
+/**
+ * Execute a kitCommand with the given parameter
+ *
+ * @param Application $app
+ * @param string $command
+ * @param array $parameter
+ */
+function twig_exec_command(Application $app, $command, array $parameter=array())
 {
     return $app['utils']->execKITcommand($command, $parameter);
+}
+
+/**
+ * Return a ReCaptcha dialog if the ReCaptcha service is active
+ *
+ * @param Application $app
+ */
+function twig_recaptcha(Application $app)
+{
+    return $app['recaptcha']->getHTML();
+}
+
+function twig_recaptcha_is_active(Application $app)
+{
+    return $app['recaptcha']->isActive();
 }

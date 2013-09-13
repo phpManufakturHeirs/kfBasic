@@ -26,4 +26,13 @@ return array(
     'TIME_FORMAT'
         => 'h:i a',
 
+    'captcha-timeout'
+        => 'The solution was received after the CAPTCHA timed out.',
+    'incorrect-captcha-sol'
+        => 'The CAPTCHA solution was incorrect.',
+    'invalid-request-cookie'
+        => 'The challenge parameter of the ReCaptcha verify script was incorrect.',
+    'invalid-site-private-key'
+        => 'The private key for the ReCaptcha is invalid, please check the settings!',
+
 );
