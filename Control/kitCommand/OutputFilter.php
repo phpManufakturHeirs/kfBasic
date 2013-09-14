@@ -300,6 +300,9 @@ class OutputFilter
                     $cmd_array['content'] = $content;
                     $cmd_array['filter_expression'] = $command_expression;
                     $command_url = WB_URL.'/kit2/kit_filter/'.$command;
+                    if ($use_alternate_parameter) {
+                        $command_url = WB_URL.'/kit2/kit_filter/'.$command.'/'.base64_encode(json_encode($cmd_array));
+                    }
                 }
                 $options = array(
                     CURLOPT_POST => true,
@@ -320,7 +323,7 @@ class OutputFilter
                     trigger_error(curl_error($ch));
                 }
                 curl_close($ch);
-                if ($kit_filter) {
+                if ($kit_filter && !key_exists('help', $params)) {
                     $content = $response;
                 }
                 else {

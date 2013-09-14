@@ -665,10 +665,15 @@ class Basic
      */
     public function getInfoPath($command)
     {
-        $patterns = $this->app['routes']->getIterator(); //->current()->all();
+        $prefix = 'command';
+        if ((strpos($command, 'filter:') !== false) && (strpos($command, 'filter:') == 0)) {
+            $prefix = 'filter';
+            $command = substr($command, strlen('filter:'));
+        }
+        $patterns = $this->app['routes']->getIterator();
         foreach ($patterns as $pattern) {
             $match = $pattern->getPattern();
-            if ((strpos($match, "/command/$command") !== false) && (strpos($match, "/command/$command") == 0))  {
+            if ((strpos($match, "/$prefix/$command") !== false) && (strpos($match, "/$prefix/$command") == 0))  {
                 if ((null !== ($info_path = $pattern->getOption('info'))) && file_exists($info_path)) {
                     return $info_path;
                 }

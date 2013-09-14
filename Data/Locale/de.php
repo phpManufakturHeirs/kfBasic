@@ -138,6 +138,8 @@ return array(
         => '<p>Mit freundlichn Grüßen<br />Ihr kitFramework Team</p>',
     'Repeat Password'
         => 'Passwort wiederholen',
+    'Reveal this e-mail address'
+        => 'Anklicken um die vollständige E-Mail Adresse anzuzeigen',
 
     'Scan for installed extensions'
         => 'Nach installierten Erweiterungen suchen',

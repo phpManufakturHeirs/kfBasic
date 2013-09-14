@@ -82,7 +82,9 @@ class twigExtension extends Twig_Extension
             new Twig_SimpleFunction('parse_command', 'twig_parse_command'),
             new Twig_SimpleFunction('command', 'twig_exec_command'),
             new Twig_SimpleFunction('recaptcha', 'twig_recaptcha'),
-            new Twig_SimpleFunction('recaptcha_is_active', 'twig_recaptcha_is_active')
+            new Twig_SimpleFunction('recaptcha_is_active', 'twig_recaptcha_is_active'),
+            new Twig_SimpleFunction('mailhide_is_active', 'twig_mailhide_is_active'),
+            new Twig_SimpleFunction('mailhide', 'twig_mailhide')
         );
     } // getFunctions()
 

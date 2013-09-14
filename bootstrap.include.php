@@ -345,6 +345,8 @@ if (FRAMEWORK_SETUP) {
 $admin = $app['controllers_factory'];
 // kitCOMMAND
 $command = $app['controllers_factory'];
+// kitFilter
+$filter = $app['controllers_factory'];
 
 // loop through /phpManufaktur and /thirdParty to include bootstrap extensions
 $scan_paths = array(MANUFAKTUR_PATH, THIRDPARTY_PATH);
@@ -405,7 +407,13 @@ $app->get('/welcome/cms/{cms}',
 
 // kitFILTER
 $app->post('/kit_filter/{filter}',
-    'phpManufaktur\Basic\Control\kitFilter\Filter::exec');
+    'phpManufaktur\Basic\Control\kitFilter\kitFilter::exec');
+$app->post('/kit_filter/{filter}/{params}',
+    'phpManufaktur\Basic\Control\kitFilter\kitFilter::exec');
+
+$filter->post('/mailhide',
+    'phpManufaktur\Basic\Control\kitFilter\MailHide::exec')
+    ->setOption('info', MANUFAKTUR_PATH.'/Basic/filter.mailhide.json');
 
 // kitCOMMAND
 $app->post('/kit_command/{command}',
@@ -416,7 +424,7 @@ $command->post('/help',
     'phpManufaktur\Basic\Control\kitCommand\Help::createHelpFrame')
     ->setOption('info', MANUFAKTUR_PATH.'/Basic/command.help.json');
 $command->post('/list',
-    'phpManufaktur\Basic\Control\kitCommand\ListCommands\createListFrame')
+    'phpManufaktur\Basic\Control\kitCommand\ListCommands::createListFrame')
     ->setOption('info', MANUFAKTUR_PATH.'/Basic/command.list.json');
 
 // BASIC responses to kitCommands
@@ -437,6 +445,7 @@ $app->post('/kit_search/command/{command}',
 
 $app->mount('/admin', $admin);
 $app->mount('/command', $command);
+$app->mount('/filter', $filter);
 
 $app->error(function (\Exception $e, $code) use ($app) {
     if ($app['debug']) {

@@ -38,17 +38,38 @@ class ListCommands extends Basic
         foreach ($patterns as $pattern) {
             $match = $pattern->getPattern();
             // we are searching for all matching kitCommands, starting with '/command/'
-            if ((strpos($match, '/command/') !== false) && (strpos($match, '/command/') == 0))  {
-                $command = substr($match, strlen('/command/'));
-                if (!isset($command[0]) || ($command[0] == '{')) {
-                    // add no subroutings to the list!
-                    continue;
+            if (((strpos($match, '/command/') !== false) && (strpos($match, '/command/') == 0)) ||
+                ((strpos($match, '/filter/') !== false) && (strpos($match, '/filter/') == 0))) {
+
+                if ((strpos($match, '/filter/') !== false) && (strpos($match, '/filter/') == 0)) {
+                    // kitFilter
+                    $command = substr($match, strlen('/filter/'));
+                    if (!isset($command[0]) || ($command[0] == '{')) {
+                        // add no subroutings to the list!
+                        continue;
+                    }
+                    if (strpos($command, '/{')) {
+                        // remove additional parameter enclosures
+                        $command = substr($command, 0, strpos($command, '/{'));
+                    }
+                    if ($command == 'help') {
+                        continue;
+                    }
+                    $command_name = 'filter:'.$command;
                 }
-                if (strpos($command, '/{')) {
-                    // remove additional parameter enclosures
-                    $command = substr($command, 0, strpos($command, '/{'));
+                else {
+                    // kitCommand
+                    $command = substr($match, strlen('/command/'));
+                    if (!isset($command[0]) || ($command[0] == '{')) {
+                        // add no subroutings to the list!
+                        continue;
+                    }
+                    if (strpos($command, '/{')) {
+                        // remove additional parameter enclosures
+                        $command = substr($command, 0, strpos($command, '/{'));
+                    }
+                    $command_name = $command;
                 }
-                $command_name = $command;
                 $info = array();
                 if ((null !== ($info_path = $pattern->getOption('info'))) && file_exists($info_path)) {
                     // info file exists so we use the additional informations
@@ -82,7 +103,7 @@ class ListCommands extends Basic
                                         ((isset($config['support']['en']['link'])) ? $config['support']['en']['link'] : null)
                         ),
                         'help' => array(
-                            'url' => $gist_id ? FRAMEWORK_URL."/basic/help/$command?pid=".$this->getParameterID() : ''
+                            'url' => $gist_id ? FRAMEWORK_URL."/basic/help/".strtolower($command_name)."?pid=".$this->getParameterID() : ''
                             ),
                         'name' => (isset($config['name'][$locale])) ? $config['name'][$locale] :
                                     ((isset($config['name']['en'])) ? $config['name']['en'] : null),
@@ -97,6 +118,33 @@ class ListCommands extends Basic
                     'search' => false
                 );
             }
+            /*
+            elseif ((strpos($match, '/filter/') !== false) && (strpos($match, '/filter/') == 0)) {
+                $filter = substr($match, strlen('/filter/'));
+                if (!isset($filter[0]) || ($filter[0] == '{')) {
+                    // add no subroutings to the list!
+                    continue;
+                }
+                if (strpos($filter, '/{')) {
+                    // remove additional parameter enclosures
+                    $filter = substr($filter, 0, strpos($filter, '/{'));
+                }
+                if ($filter == 'help') {
+
+                    continue;
+                }
+
+                $filter_name = 'filter:'.$filter;
+
+                $kitCommands[$filter] = array(
+                    'command' => $filter_name,
+                    'route' => $match,
+                    'info' => array(),
+                    'search' => false
+                );
+
+            }
+            */
             elseif ((strpos($match, '/search/command/') !== false) && (strpos($match, '/search/command/') == 0)) {
                 // this kitCommand support the CMS search function!
                 $command = substr($match, strlen('/search/command/'));

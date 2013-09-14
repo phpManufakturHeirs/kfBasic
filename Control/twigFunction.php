@@ -92,13 +92,48 @@ function twig_exec_command(Application $app, $command, array $parameter=array())
  * Return a ReCaptcha dialog if the ReCaptcha service is active
  *
  * @param Application $app
+ * @param string theme to use (override global settings)
+ * @param string widget to use for 'custom' theme
+ *
+ * @link https://developers.google.com/recaptcha/docs/customization
  */
-function twig_recaptcha(Application $app)
+function twig_recaptcha(Application $app, $theme=null, $widget=null)
 {
-    return $app['recaptcha']->getHTML();
+    return $app['recaptcha']->getHTML($theme, $widget);
 }
 
+/**
+ * Check if the ReCaptcha Service is active or not
+ *
+ * @param Application $app
+ * @return boolean
+ */
 function twig_recaptcha_is_active(Application $app)
 {
     return $app['recaptcha']->isActive();
+}
+
+/**
+ * Check if the MailHide Service is active or not
+ *
+ * @param Application $app
+ */
+function twig_mailhide_is_active(Application $app)
+{
+    return $app['recaptcha']->MailHideIsActive();
+}
+
+/**
+ * Return a MailHide link if the service is active. Otherwise, if $mailto is true,
+ * return a complete mailto link. You can set an optional $class for this mailto link
+ *
+ * @param Application $app
+ * @param string $email
+ * @param string $title
+ * @param boolean $mailto
+ * @param string $class
+ */
+function twig_mailhide(Application $app, $email, $title='', $class='', $mailto=true)
+{
+    return $app['recaptcha']->MailHideGetHTML($email, $title, $class, $mailto);
 }
