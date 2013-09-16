@@ -6,6 +6,15 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.33** - 2013-09-16
+
+* added ReCaptcha handling and Twig extension
+* Introduce kitFilter and add as first filter MailHide with ReCaptcha
+* Changed behaviour of the welcome dialog: only admins can access, at first access the user must login to create a kitFramework account and enable auto-login for the future access.
+* added path variables to the Twig extension
+* changed minimun height for kitCommand iFrames to 5px
+* changed static iframe ID to dynamically created IDs - this enable multiple kitCommand iFrames at the same WYSIWYG page
+
 **0.32** - 2013-09-12
 
 * looks like 'BETA' is coming soon ... 8-)
