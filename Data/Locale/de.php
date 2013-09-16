@@ -147,6 +147,8 @@ return array(
         => 'Den online Katalog nach verfügbaren Erweiterungen durchsuchen',
     'Show a list of all installed kitCommands'
         => 'Eine Liste mit den installierten kitCommands anzeigen',
+    'Sorry, but only Administrators are allowed to access the kitFramework CMS Tool.'
+        => 'Ihre Berechtigung ist nicht ausreichend, nur Administratoren dürfen das kitFramework CMS Tool verwenden.',
     'Sorry, but the submitted GUID is invalid. Please contact the webmaster.'
         => 'Die übermittelte GUID ist ungültig. Bitte nehmen Sie mit dem Webmaster Kontakt auf.',
     'Submit'
@@ -199,12 +201,14 @@ return array(
         => 'Benutzername',
     'Username or email address'
         => 'Benutzername oder E-Mail Adresse',
+
     'View the general help for kitCommands'
         => 'Die allgemeine Hilfe zu den kitCommands anzeigen',
     'View the helpfile for %command%'
         => 'Die Hilfedatei zu %command% anzeigen',
     'Visit the Wiki for %command% and learn more about it!'
         => 'Besuchen Sie das Wiki zu %command% und erfahren Sie mehr über die Möglichkeiten!',
+
     'We have send a link to your email address %email%.'
         => 'Wir haben Ihnen einen Link an Ihre E-Mail Adresse %email% gesendet.',
     'Welcome' =>
