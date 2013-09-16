@@ -133,7 +133,7 @@ iframe.kitcommand {
   height: 1px;
 }
 .iframe_content {
-  min-height: 50px;
+  min-height: 5px;
   width: 100%;
   margin: 0;
   padding: 0;
