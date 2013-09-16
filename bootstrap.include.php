@@ -404,6 +404,8 @@ $admin->get('/updater/get/github/{organization}/{repository}',
 $app->get('/welcome/cms/{cms}',
     // the welcome dialog is called by the CMS backend
     'phpManufaktur\Basic\Control\Welcome::welcomeCMS');
+$app->post('/welcome/login/check',
+    'phpManufaktur\Basic\Control\Welcome::checkFirstLogin');
 
 // kitFILTER
 $app->post('/kit_filter/{filter}',
@@ -442,7 +444,7 @@ $app->post('/kit_search/command/{command}',
     // catch all searches within kitCommands
     'phpManufaktur\Basic\Conttrol\kitSearch\Search::exec');
 
-
+// mount the controller factories
 $app->mount('/admin', $admin);
 $app->mount('/command', $command);
 $app->mount('/filter', $filter);
