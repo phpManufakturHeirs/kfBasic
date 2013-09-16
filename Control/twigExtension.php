@@ -55,6 +55,7 @@ class twigExtension extends Twig_Extension
     {
         return array(
             'FRAMEWORK_URL' => FRAMEWORK_URL,
+            'FRAMEWORK_PATH' => FRAMEWORK_PATH,
             'FRAMEWORK_TEMPLATE_URL' => FRAMEWORK_TEMPLATE_URL,
             'FRAMEWORK_MEDIA_URL' => FRAMEWORK_MEDIA_URL,
             'FRAMEWORK_MEDIA_PROTECTED_URL' => FRAMEWORK_MEDIA_PROTECTED_URL,
@@ -65,7 +66,9 @@ class twigExtension extends Twig_Extension
             'CMS_TYPE' => CMS_TYPE,
             'CMS_VERSION' => CMS_VERSION,
             'MANUFAKTUR_URL' => MANUFAKTUR_URL,
-            'THIRDPARTY_URL' => THIRDPARTY_URL
+            'MANUFAKTUR_PATH' => MANUFAKTUR_PATH,
+            'THIRDPARTY_URL' => THIRDPARTY_URL,
+            'THIRDPARTY_PATH' => THIRDPARTY_PATH
         );
     } // getGlobals()
 
