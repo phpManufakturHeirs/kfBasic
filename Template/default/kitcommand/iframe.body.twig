@@ -44,14 +44,14 @@
     {% block footer %}
       {% if basic.frame is defined and basic.frame.auto %}
         <script type="text/javascript">
-        if (typeof 'jQuery' !== 'undefined') {
-          $(document).ready(function() {
-            {# setting the iFrame height dynamically by the height of the inbounded document #}
-            var content_height = $('.iframe_content').height() + {{ iframe_add_height|default(30) }} + "px";
-            parent.document.getElementById("kitframework_iframe").style.height = content_height;
-          });
-        }
-      </script>
+          if (typeof 'jQuery' !== 'undefined') {
+            $(document).ready(function() {
+              {# setting the iFrame height dynamically by the height of the inbounded document #}
+              var content_height = $('.iframe_content').height() + {{ iframe_add_height|default(30) }} + "px";
+              parent.document.getElementById("{{ basic.frame.id }}").style.height = content_height;
+            });
+          }
+        </script>
       {% endif %}
     {% endblock footer %}
     {% block tracking %}

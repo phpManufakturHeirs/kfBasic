@@ -110,6 +110,7 @@ class Basic
                     'parameter' => array(
                         'frame_redirect' => 'false'
                     ),
+                    'iFrame' => null
                 );
             }
             elseif (false === ($params = $cmdParameter->selectParameter(self::$parameter_id))) {
@@ -119,6 +120,7 @@ class Basic
             $this->app['request']->request->set('parameter', $params['parameter']);
             $this->app['request']->request->set('GET', $params['GET']);
             $this->app['request']->request->set('POST', $params['POST']);
+            $this->app['request']->request->set('iFrame', $params['iFrame']);
         }
 
         // get the CMS information
@@ -139,21 +141,26 @@ class Basic
         // get the preferred template
         Basic::$preferred_template = (isset(Basic::$parameter['template'])) ? Basic::$parameter['template'] : 'default';
         // set the values for the frame
-        Basic::$frame = array(
-            'id' => (isset(Basic::$parameter['frame_id'])) ? Basic::$parameter['frame_id'] : 'kitframework_iframe',
-            'name' => (isset(Basic::$parameter['frame_name'])) ? Basic::$parameter['frame_name'] : 'kitframework_iframe',
-            'add' => (isset(Basic::$parameter['frame_add'])) ? Basic::$parameter['frame_add'] : 50,
-            'width' => (isset(Basic::$parameter['frame_width'])) ? Basic::$parameter['frame_width'] : '100%',
-            'height' => (isset(Basic::$parameter['frame_height'])) ? Basic::$parameter['frame_height'] : '400px',
-            'auto' => (isset(Basic::$parameter['frame_auto']) && ((Basic::$parameter['frame_auto'] == 'false') || (Basic::$parameter['frame_auto'] == '0'))) ? false : true,
-            'source' => (isset(Basic::$parameter['frame_source'])) ? Basic::$parameter['frame_source'] : '',
-            'class' => (isset(Basic::$parameter['frame_class'])) ? Basic::$parameter['frame_class'] : 'kitcommand',
-            'redirect' => array(
-                'active' => (isset(Basic::$parameter['frame_redirect']) && ((strtolower(Basic::$parameter['frame_redirect']) == 'false') || (Basic::$parameter['frame_redirect'] == '0'))) ? false : true,
-                'route' => (isset(Basic::$GET['redirect'])) ? Basic::$GET['redirect'] : ''
-                ),
-            'tracking' => (isset(Basic::$parameter['frame_tracking']) && ((strtolower(Basic::$parameter['frame_tracking']) == 'false') || (Basic::$parameter['frame_tracking'] == '0'))) ? false : true
-            );
+
+        if (null === (Basic::$frame = $this->app['request']->request->get('iFrame', null, true))) {
+            // gather the iFrame parameters
+            Basic::$frame = array(
+                'id' => (isset(Basic::$parameter['frame_id'])) ? Basic::$parameter['frame_id'] : 'iframe-'.$this->app['utils']->createGUID(), //'kitframework_iframe',
+                'name' => (isset(Basic::$parameter['frame_name'])) ? Basic::$parameter['frame_name'] : 'kitframework_iframe',
+                'add' => (isset(Basic::$parameter['frame_add'])) ? Basic::$parameter['frame_add'] : 50,
+                'width' => (isset(Basic::$parameter['frame_width'])) ? Basic::$parameter['frame_width'] : '100%',
+                'height' => (isset(Basic::$parameter['frame_height'])) ? Basic::$parameter['frame_height'] : '400px',
+                'auto' => (isset(Basic::$parameter['frame_auto']) && ((Basic::$parameter['frame_auto'] == 'false') || (Basic::$parameter['frame_auto'] == '0'))) ? false : true,
+                'source' => (isset(Basic::$parameter['frame_source'])) ? Basic::$parameter['frame_source'] : '',
+                'class' => (isset(Basic::$parameter['frame_class'])) ? Basic::$parameter['frame_class'] : 'kitcommand',
+                'redirect' => array(
+                    'active' => (isset(Basic::$parameter['frame_redirect']) && ((strtolower(Basic::$parameter['frame_redirect']) == 'false') || (Basic::$parameter['frame_redirect'] == '0'))) ? false : true,
+                    'route' => (isset(Basic::$GET['redirect'])) ? Basic::$GET['redirect'] : ''
+                    ),
+                'tracking' => (isset(Basic::$parameter['frame_tracking']) && ((strtolower(Basic::$parameter['frame_tracking']) == 'false') || (Basic::$parameter['frame_tracking'] == '0'))) ? false : true
+                );
+        }
+
         $tracking = '';
         if (Basic::$frame['tracking'] && file_exists(FRAMEWORK_PATH.'/config/tracking.htt')) {
             // enable the tracking for the iframe
@@ -184,9 +191,11 @@ class Basic
                 'cms' => Basic::$cms_info,
                 'parameter' => Basic::$parameter,
                 'GET' => Basic::$GET,
-                'POST' => Basic::$POST
+                'POST' => Basic::$POST,
+                'iFrame' => Basic::$frame
             );
         }
+
         $parameter_str = json_encode($parameter_array);
         $link = md5($parameter_str);
 
@@ -690,7 +699,7 @@ class Basic
      */
     public function createIFrame($start_route, $redirect=true)
     {
-        $route = ($redirect && !empty(Basic::$frame['redirect']['route'])) ? Basic::$frame['redirect']['route'] : Basic::$frame['source'] = $start_route;
+        $route = ($redirect && !empty(Basic::$frame['redirect']['route'])) ? Basic::$frame['redirect']['route'] : $start_route;
 
         Basic::$frame['source'] = FRAMEWORK_URL.$route.'?pid='.$this->getParameterID();
 
