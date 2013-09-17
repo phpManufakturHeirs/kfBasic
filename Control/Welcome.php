@@ -210,7 +210,7 @@ class Welcome
             $kitFrameworkUser->insertUser($data);
 
             // auto login into the admin area and then exec the welcome dialog
-            $secureAreaName = 'admin';
+            $secureAreaName = 'general';
             // @todo the access control is very soft and the ROLE is actually not checked!
             $user = new User($user['username'], $user['password'], array('ROLE_ADMIN'), true, true, true, true);
             $token = new UsernamePasswordToken($user, null, $secureAreaName, $user->getRoles());
@@ -267,7 +267,7 @@ class Welcome
 
 
         // auto login into the admin area and then exec the welcome dialog
-        $secureAreaName = 'admin';
+        $secureAreaName = 'general';
         // @todo the access control is very soft and the ROLE is actually not checked!
         $user = new User($cms['username'],'', array('ROLE_ADMIN'), true, true, true, true);
         $token = new UsernamePasswordToken($user, null, $secureAreaName, $user->getRoles());

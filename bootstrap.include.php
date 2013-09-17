@@ -308,8 +308,9 @@ if (FRAMEWORK_SETUP) {
 // init the firewall
 $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     'security.firewalls' => array(
-        'admin' => array(
-            'pattern' => '^/admin',
+        'general' => array(
+            'pattern' => '^/',
+            'anonymous' => true,
             'form' => array(
                 'login_path' => '/login',
                 'check_path' => '/admin/login_check'
@@ -323,7 +324,7 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
             )
         )
     ),
-    'security.encoder.digest' => $app->share(function  ($app)
+    'security.encoder.digest' => $app->share(function ($app)
     {
         return new manufakturPasswordEncoder($app);
     }),
