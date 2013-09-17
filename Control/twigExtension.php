@@ -101,7 +101,11 @@ class twigExtension extends Twig_Extension
     function isAuthenticated ()
     {
         $token = $this->app['security']->getToken();
-        return !is_null($token);
+        if (is_null($token)) {
+            return false;
+        }
+        $user = $token->getUser();
+        return ($user == 'anon.') ? false : true;
     }
 
     /**
@@ -116,9 +120,12 @@ class twigExtension extends Twig_Extension
             $token = $this->app['security']->getToken();
             if (is_null($token))
                 return 'ANONYMOUS';
-            // get user by token
 
             $user = $token->getUser();
+
+            if ($user == 'anon.') {
+                return 'ANONYMOUS';
+            }
             // get the user record
             $frameworkUsers = new frameworkUsers($this->app);
             if (false === ($user_data = $frameworkUsers->selectUser($user->getUsername()))) {
