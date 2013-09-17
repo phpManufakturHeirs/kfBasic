@@ -58,12 +58,32 @@ class BasicFilter
     }
 
     /**
+     * Set the content
+     *
+     * @param string $content
+     */
+    public function setContent($content)
+    {
+        self::$content = $content;
+    }
+
+    /**
      * Remove the filter expression from the content
      *
      */
     protected function removeExpression()
     {
         self::$content = str_replace(self::$filter_expression, '', self::$content);
+    }
+
+    /**
+     * Get the complete expression
+     *
+     * @return string expression
+     */
+    public function getExpression()
+    {
+        return self::$filter_expression;
     }
 
     /**
