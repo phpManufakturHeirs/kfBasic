@@ -8,8 +8,8 @@
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
 {% if usage == 'framework' %}
-    {% set template_namespace = '@framework' %}
-    {% set template_file = 'body.twig' %}
+    {% set template_namespace = '@phpManufaktur/Basic/Template' %}
+    {% set template_file = 'framework/body.twig' %}
 {% else %}
     {% set template_namespace = '@phpManufaktur/Basic/Template' %}
     {% set template_file = 'framework/backend.body.twig' %}

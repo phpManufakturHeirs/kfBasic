@@ -57,10 +57,6 @@ try {
     define('MANUFAKTUR_URL', FRAMEWORK_URL . '/extension/phpmanufaktur/phpManufaktur');
     define('THIRDPARTY_PATH', FRAMEWORK_PATH . '/extension/thirdparty/thirdParty');
     define('THIRDPARTY_URL', FRAMEWORK_URL . '/extension/thirdparty/thirdParty');
-    define('FRAMEWORK_TEMPLATE_PATH', FRAMEWORK_PATH . '/template/framework');
-    define('FRAMEWORK_TEMPLATE_URL', FRAMEWORK_URL . '/template/framework');
-    define('CMS_TEMPLATE_PATH', FRAMEWORK_PATH . '/template/cms');
-    define('CMS_TEMPLATE_URL', FRAMEWORK_URL . '/template/cms');
     define('CONNECT_CMS_USERS', isset($framework_config['CONNECT_CMS_USERS']) ? $framework_config['CONNECT_CMS_USERS'] : true);
     define('FRAMEWORK_SETUP', isset($framework_config['FRAMEWORK_SETUP']) ? $framework_config['FRAMEWORK_SETUP'] : true);
     define('FRAMEWORK_MEDIA_PATH', FRAMEWORK_PATH.'/media/public');
@@ -225,8 +221,6 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 // set namespaces for phpManufaktur, thirdParty, framework and CMS template
 $app['twig.loader.filesystem']->addPath(MANUFAKTUR_PATH, 'phpManufaktur');
 $app['twig.loader.filesystem']->addPath(THIRDPARTY_PATH, 'thirdParty');
-$app['twig.loader.filesystem']->addPath(FRAMEWORK_TEMPLATE_PATH, 'framework');
-$app['twig.loader.filesystem']->addPath(CMS_TEMPLATE_PATH, 'CMS');
 // IMPORTANT: define these namespaces also in phpManufaktur\Basic\Control\Utils\templateFile()
 
 $app['twig'] = $app->share($app->extend('twig', function  ($twig, $app)

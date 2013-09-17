@@ -258,9 +258,7 @@ class Utils
     {
         $TEMPLATE_NAMESPACES = array(
             'phpManufaktur' => MANUFAKTUR_PATH,
-            'thirdParty' => THIRDPARTY_PATH,
-            'framework' => FRAMEWORK_TEMPLATE_PATH,
-            'cms' => CMS_TEMPLATE_PATH
+            'thirdParty' => THIRDPARTY_PATH
         );
 
         if ($template_namespace[0] != '@') {

@@ -103,7 +103,7 @@ class forgottenPassword
         $Users = new Users($app);
         if (false === ($user = $Users->selectUserByGUID($guid))) {
             // GUID does not exists
-            return $app['twig']->render($app['utils']->templateFile('@framework', 'message.twig'),
+            return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/body.message.twig'),
                 array('title' => 'Create a new password',
                     'message' => $app['translator']->trans(
                         'Sorry, but the submitted GUID is invalid. Please contact the webmaster.')
@@ -111,7 +111,7 @@ class forgottenPassword
         }
         if ($user['guid_status'] != 'ACTIVE') {
             // the GUID was already used
-            return $app['twig']->render($app['utils']->templateFile('@framework', 'message.twig'),
+            return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/body.message.twig'),
                 array('title' => 'Create a new password',
                     'message' => $app['translator']->trans(
                         'The submitted GUID was already used and is no longer valid.<br />Please <a href="%password_forgotten%">order a new link</a>.',
@@ -125,7 +125,7 @@ class forgottenPassword
         if (time() > $limit) {
             // the GUID is expired
             return $app['twig']->render(
-                $app['utils']->templateFile('@framework', 'message.twig'),
+                $app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/body.message.twig'),
                 array(
                     'title' => 'Create a new password',
                     'message' => $app['translator']->trans(
@@ -185,7 +185,7 @@ class forgottenPassword
             $Users = new Users($app);
             $Users->updateUser($form['username'], array('password' => $password));
             // return a info message and leave the dialog
-            return $app['twig']->render($app['utils']->templateFile('@framework', 'message.twig'),
+            return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/body.message.twig'),
                 array('title' => 'Password changed',
                     'message' => $app['translator']->trans(
                         '<p>The password for the kitFramework was successfull changed.</p><p>You can now <a href="%login%">login using the new password</a>.</p>',

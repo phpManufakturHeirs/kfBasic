@@ -55,10 +55,8 @@ class twigExtension extends Twig_Extension
         return array(
             'FRAMEWORK_URL' => FRAMEWORK_URL,
             'FRAMEWORK_PATH' => FRAMEWORK_PATH,
-            'FRAMEWORK_TEMPLATE_URL' => FRAMEWORK_TEMPLATE_URL,
             'FRAMEWORK_MEDIA_URL' => FRAMEWORK_MEDIA_URL,
             'FRAMEWORK_MEDIA_PROTECTED_URL' => FRAMEWORK_MEDIA_PROTECTED_URL,
-            'CMS_TEMPLATE_URL' => CMS_TEMPLATE_URL,
             'CMS_URL' => CMS_URL,
             'CMS_MEDIA_URL' => CMS_MEDIA_URL,
             'CMS_ADMIN_URL' => CMS_ADMIN_URL,
