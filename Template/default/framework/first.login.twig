@@ -14,7 +14,7 @@
     {% set template_namespace = '@phpManufaktur/Basic/Template' %}
     {% set template_file = 'framework/backend.body.twig' %}
 {% endif %}
-{% extends template_file(template_namespace, template_file) %}
+{% extends getTemplateFile(template_namespace, template_file) %}
 {% block title %}{{ 'kitFramework - First Login'|trans }}{% endblock %}
 {% block head %}
   {{ parent() }}
@@ -22,7 +22,7 @@
 {% endblock %}
 {% block content %}
   <div class="login_form">
-    <h2>{{ 'kitFramework - Login'|trans }}</h2>    
+    <h2>{{ 'kitFramework - Login'|trans }}</h2>
     {% if app.translator.locale == 'de' %}
       {# GERMAN language #}
       {% if message|length > 0 %}
@@ -44,7 +44,7 @@
           <p>this is the first time you are executing the kitFramework.</p>
           <p>You are already logged in  at {{ cms_type }}. To enable a auto-login into the kitFramework you must authenticate with your password only one times.</p>
         </div>
-      {% endif %}  
+      {% endif %}
     {% endif %}
     <form action="{{ FRAMEWORK_URL }}/welcome/login/check?usage={{ usage }}" method="post" {{ form_enctype(form) }}>
       {{ form_widget(form) }}
@@ -62,5 +62,5 @@
         $('input[id=form_password]').focus();
       });
     }
-  </script>  
+  </script>
 {% endblock footer %}

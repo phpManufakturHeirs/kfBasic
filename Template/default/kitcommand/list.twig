@@ -1,13 +1,13 @@
-{# 
+{#
   kitFramework:Basic
 
   @author Team phpManufaktur <team@phpmanufaktur.de>
   @link https://kit2.phpmanufaktur.de
-  @link https://github.com/phpManufaktur/kitFramework/wiki  
+  @link https://github.com/phpManufaktur/kitFramework/wiki
   @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
-{% extends template_file('@phpManufaktur/Basic/Template', 'kitcommand/iframe.body.twig') %}
+{% extends getTemplateFile('@phpManufaktur/Basic/Template', 'kitcommand/iframe.body.twig') %}
 {% block title %}{{ 'kitCommand - General help container'|trans }}{% endblock %}
 {% block description %}{{ 'General help container for kitCommand help files'|trans }}{% endblock %}
 {% block content %}
@@ -44,22 +44,22 @@
                 <div class="list help item">
                   [ <a href="{{ command.info.help.url }}" title="{{ 'View the helpfile for %command%'|trans({'%command%':command.command}) }}">{{ 'Help'|trans }}</a> ]
                 </div>
-              {% endif %}              
+              {% endif %}
               {% if (command.info.wiki.url is defined and (command.info.wiki.url|length > 0)) %}
                 <div class="list help item">
                   [ <a href="{{ command.info.wiki.url }}" target="_blank" title="{{ 'Visit the Wiki for %command% and learn more about it!'|trans({'%command%':command.command}) }}">{{ 'Wiki'|trans }}</a> ]
                 </div>
-              {% endif %}              
+              {% endif %}
               {% if (command.info.issues.url is defined and (command.info.issues.url|length > 0)) %}
                 <div class="list help item">
                   [ <a href="{{ command.info.issues.url }}" target="_blank" title="{{ 'Please report all issues and help to improve %command%!'|trans({'%command%':command.command}) }}">{{ 'Issues'|trans }}</a> ]
                 </div>
-              {% endif %}              
+              {% endif %}
               {% if (command.info.support.url is defined and (command.info.support.url|length > 0)) %}
                 <div class="list help item">
                   [ <a href="{{ command.info.support.url }}" target="_blank" title="{{ 'Get in touch with the developers, receive support, tipps and tricks for %command%!'|trans({'%command%':command.command}) }}">{{ 'Support'|trans }}</a> ]
                 </div>
-              {% endif %}  
+              {% endif %}
             </div>
           {% endif %}
         </div>

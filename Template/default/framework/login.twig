@@ -1,13 +1,13 @@
-{# 
+{#
   kitFramework
 
   @author Team phpManufaktur <team@phpmanufaktur.de>
   @link https://kit2.phpmanufaktur.de
-  @link https://github.com/phpManufaktur/kitFramework/wiki  
+  @link https://github.com/phpManufaktur/kitFramework/wiki
   @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
-{% extends template_file('@framework', 'body.twig') %}
+{% extends getTemplateFile('@framework', 'body.twig') %}
 {% block title %}
   {{ 'kitFramework - Login'|trans }}
 {% endblock %}
@@ -17,14 +17,14 @@
 {% endblock %}
 {% block user_navigation %}
   {# no user navigation at the login dialog! #}
-{% endblock %}  
+{% endblock %}
 {% block content %}
   <h1>{{ 'kitFramework - Login'|trans }}</h1>
   {% if error|length > 0 %}
     <div class="message">{{ error|trans }}</div>
   {% endif %}
-  {{ '<p>Please login to the kitFramework with your username or email address and the assigned password.</p><p>Your can also use your username and password for the CMS.</p>'|trans }}  
-  <div class="framework_form">  
+  {{ '<p>Please login to the kitFramework with your username or email address and the assigned password.</p><p>Your can also use your username and password for the CMS.</p>'|trans }}
+  <div class="framework_form">
     <form action="{{ FRAMEWORK_URL }}/admin/login_check" method="post">
       <label for="_username" class="required">{{ 'Username or email address'|trans }}</label>
       <input autofocus type="text" name="_username" value="{{ last_username }}" />

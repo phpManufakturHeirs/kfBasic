@@ -14,7 +14,7 @@
     {% set template_namespace = '@phpManufaktur/Basic/Template' %}
     {% set template_file = 'framework/backend.body.twig' %}
 {% endif %}
-{% extends template_file(template_namespace, template_file) %}
+{% extends getTemplateFile(template_namespace, template_file) %}
 {% block title %}{{ 'kitFramework - Welcome'|trans }}{% endblock %}
 {% block head %}
   {{ parent() }}
