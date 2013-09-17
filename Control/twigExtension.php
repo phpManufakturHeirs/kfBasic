@@ -16,8 +16,6 @@ use Twig_SimpleFunction;
 use Silex\Application;
 use phpManufaktur\Basic\Data\Security\Users as frameworkUsers;
 
-require_once MANUFAKTUR_PATH . '/Basic/Control/twigFunction.php';
-
 /**
  * The Twig extension class for the kitFramework
  *
