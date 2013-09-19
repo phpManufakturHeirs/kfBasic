@@ -253,8 +253,26 @@ class Utils
      * @param boolean $return_path return the path instead of the Twig namespace
      * @throws \Exception
      * @return string
+     * @deprecated use getTemplateFile() instead!
      */
-    public static function templateFile ($template_namespace, $template_file, $preferred_template='', $return_path=false)
+    public static function templateFile($template_namespace, $template_file, $preferred_template='', $return_path=false)
+    {
+        trigger_error('templateFile() is deprecated, please use getTemplateFile() instead!', E_USER_DEPRECATED);
+        return self::getTemplateFile($template_namespace, $template_file, $preferred_template='', $return_path=false);
+    }
+
+    /**
+     * Return a valid path to the desired template, depending on the namespace,
+     * the preconfigured Framework template names and/or the preferred template
+     *
+     * @param string $template_namespace the Twig namespace to use
+     * @param string $template_file the file to load, you can use leading directories
+     * @param string $preferred_template optional specifiy a preferred template
+     * @param boolean $return_path return the path instead of the Twig namespace
+     * @throws \Exception
+     * @return string
+     */
+    public static function getTemplateFile($template_namespace, $template_file, $preferred_template='', $return_path=false)
     {
         $TEMPLATE_NAMESPACES = array(
             'phpManufaktur' => MANUFAKTUR_PATH,
@@ -301,7 +319,7 @@ class Utils
         }
         // Uuups - no template found!
         throw new \Exception(sprintf('Template file %s not found within the namespace %s!', $template_file, $template_namespace));
-    } // templateFile()
+    }
 
     /**
      * Formatiert einen BYTE Wert in einen lesbaren Wert und gibt
