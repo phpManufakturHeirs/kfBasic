@@ -281,7 +281,7 @@ class Basic
      */
     public function getCMSlocale()
     {
-        return isset(Basic::$cms_info['locale']) ? Basic::$cms_info['locale'] : 'en';
+        return isset(Basic::$cms_info['locale']) ? Basic::$cms_info['locale'] : $this->app['request']->getPreferredLanguage(); //'en';
     }
 
     /**
