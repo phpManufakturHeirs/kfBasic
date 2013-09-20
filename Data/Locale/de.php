@@ -147,7 +147,7 @@ return array(
         => 'Den online Katalog nach verfügbaren Erweiterungen durchsuchen',
     'Show a list of all installed kitCommands'
         => 'Eine Liste mit den installierten kitCommands anzeigen',
-    'Sorry, but only Administrators are allowed to access the kitFramework CMS Tool.'
+    'Sorry, but only Administrators are allowed to access this kitFramework extension.'
         => 'Ihre Berechtigung ist nicht ausreichend, nur Administratoren dürfen das kitFramework CMS Tool verwenden.',
     'Sorry, but the submitted GUID is invalid. Please contact the webmaster.'
         => 'Die übermittelte GUID ist ungültig. Bitte nehmen Sie mit dem Webmaster Kontakt auf.',
@@ -170,6 +170,8 @@ return array(
         => '<p>Ihr Passwort für das kitFramework wurde erfolgreich geändert.</p><p>Sie können sich jetzt <a href="%login%">mit Ihrem neuen Passwort anmelden</a>.</p>',
     '<p>The password you have typed in is not strength enough.</p><p>Please choose a password at minimun 8 characters long, containing lower and uppercase characters, numbers and special chars. Spaces are not allowed.</p>'
         => '<p>Das übermittelte Passwort ist nicht stark genug.</p><p>Bitte wählen Sie ein Passwort mit mindestens 8 Zeichen Länge, mit einem Mix aus Groß- und Kleinbuchstaben, Zahlen und Sonderzeichen. Leerzeichen sind nicht gestattet.</p>',
+    'The password you typed in is not correct, please try again.'
+        => 'Das angegebene Passwort is nicht korrekt, bitte geben Sie es erneut ein',
     'The received extension.json does not specifiy the path of the extension!'
         => 'Die empfangene extension.json enthält nicht den Installationspfand für die Extension!',
     'The received repository has an unexpected directory structure!'

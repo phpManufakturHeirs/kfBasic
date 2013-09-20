@@ -14,8 +14,6 @@ namespace phpManufaktur\Basic\Control\CMS;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\Security\Core\User\User;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class EmbeddedAdministration
 {
@@ -31,9 +29,6 @@ class EmbeddedAdministration
      * will be read, provided as session (CMS_TYPE, CMS_VERSION, CMS_LOCALE and
      * CMS_USERNAME), detect the usage (framework or specified CMS) and execute
      * the specified route. The route get as parameter the usage.
-     *
-     * @todo autologin does not check the user
-     * @todo improve the checking and setting of roles
      *
      * @param string $route_to
      * @param string $encoded_cms_information
@@ -57,14 +52,33 @@ class EmbeddedAdministration
         $this->app['session']->set('CMS_LOCALE', $cms['locale']);
         $this->app['session']->set('CMS_USERNAME', $cms['username']);
 
-        // auto login into the admin area and then execute the extension route
-        $secureAreaName = 'admin';
-        $user = new User($cms['username'],'', array('ROLE_USER'), true, true, true, true);
-        $token = new UsernamePasswordToken($user, null, $secureAreaName, $user->getRoles());
-        $this->app['security']->setToken($token);
-        $this->app['session']->set('_security_'.$secureAreaName, serialize($token) );
-
         $usage = ($cms['target'] == 'cms') ? CMS_TYPE : 'framework';
+
+        if (!$this->app['account']->checkUserIsCMSAdministrator($cms['username'])) {
+            // the user is no CMS Administrator, deny access!
+            return $this->app['twig']->render($this->app['utils']->templateFile(
+                '@phpManufaktur/Basic/Template',
+                'framework/admins.only.twig'),
+                array(
+                    'usage' => $usage
+            ));
+        }
+
+        if (!$this->app['account']->checkUserHasFrameworkAccount($cms['username'])) {
+            // this user does not exists in the kitFramework User database
+            $subRequest = Request::create('/login/first/cms', 'POST', array(
+                'usage' => $usage,
+                'username' => $cms['username'],
+                'roles' => array('ROLE_ADMIN'),
+                'auto_login' => true,
+                'secured_area' => 'general',
+                'redirect' => $route_to
+            ));
+            return $this->app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+        }
+
+        // auto login the CMS user into the secured area with admin privileges
+        $this->app['account']->loginUserToSecureArea($cms['username'], array('ROLE_ADMIN'));
 
         // sub request to the starting point of Event
         $subRequest = Request::create($route_to, 'GET', array('usage' => $usage));

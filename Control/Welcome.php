@@ -15,10 +15,6 @@ use Silex\Application;
 use phpManufaktur\Basic\Control\ExtensionRegister;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\Security\Core\User\User;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use phpManufaktur\Basic\Data\Security\Users as kitFrameworkUser;
-use phpManufaktur\Basic\Data\CMS\Users as cmsUser;
 
 /**
  * Display a welcome to the kitFramework dialog
@@ -115,118 +111,6 @@ class Welcome
     }
 
     /**
-     * Get the form for the first login dialog
-     *
-     * @param Application $app
-     * @param array $data
-     */
-    protected function getLoginForm(Application $app, $data=array())
-    {
-        return $app['form.factory']->createBuilder('form')
-            ->add('name', 'text', array(
-                'label' => 'Username',
-                'data' => isset($data['user_name']) ? $data['user_name'] : '',
-                'disabled' => true
-            ))
-            ->add('username', 'hidden', array(
-                'data' => isset($data['user_name']) ? $data['user_name'] : ''
-            ))
-            ->add('password', 'password')
-            ->add('email', 'hidden', array(
-                'data' => isset($data['user_email']) ? $data['user_email'] : '',
-            ))
-            ->add('display_name', 'hidden', array(
-                'data' => isset($data['display_name']) ? $data['display_name'] : ''
-            ))
-            ->add('cms_type', 'hidden', array(
-                'data' => isset($data['cms_array']['type']) ? $data['cms_array']['type'] : 'framework'
-            ))
-            ->getForm();
-    }
-
-    /**
-     * Return the first login dialog
-     *
-     * @param Application $app
-     * @param array $data
-     */
-    protected function firstLogin(Application $app, $data)
-    {
-        $form = $this->getLoginForm($app, $data);
-
-        return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/first.login.twig'),
-            array(
-                'usage' => self::$usage,
-                'form' => $form->createView(),
-                'cms_type' => $data['cms_array']['type'],
-                'display_name' => $data['display_name'],
-                'message' => $this->getMessage()
-            ));
-    }
-
-    /**
-     * Check the first login, create a kitFramework user, auto-login the user
-     * and execute the welcome dialog
-     *
-     * @param Application $app
-     * @throws \Exception
-     */
-    public function checkFirstLogin(Application $app)
-    {
-        self::$usage = $app['request']->get('usage', 'framework');
-
-        $form = $this->getLoginForm($app);
-        $form->bind($app['request']);
-        if ($form->isValid()) {
-            $user = $form->getData();
-            // check if the password is identical with the CMS account
-            $cmsUser = new cmsUser($app);
-            if (false === ($cmsUserData = $cmsUser->selectUser($user['username']))) {
-                // terrible wrong - user does not exists
-                throw new \Exception("The user {$user['username']} does not exists.");
-            }
-            if (md5($user['password']) != $cmsUserData['password']) {
-                // the password is not identical
-                $this->setMessage($app['translator']->trans('The password you typed in is not correct, please try again.'));
-                return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/first.login.twig'),
-                    array(
-                        'usage' => self::$usage,
-                        'form' => $form->createView(),
-                        'cms_type' => $user['cms_type'],
-                        'display_name' => $user['display_name'],
-                        'message' => $this->getMessage()
-                    ));
-            }
-
-            $kitFrameworkUser = new kitFrameworkUser($app);
-            // create the kitFramework User
-            $data = array(
-                'username' => $user['username'],
-                'email' => $user['email'],
-                'password' => $kitFrameworkUser->encodePassword($user['password']),
-                'displayname' => $user['display_name'],
-                'roles' => 'ROLE_ADMIN'
-            );
-            $kitFrameworkUser->insertUser($data);
-
-            // auto login into the admin area and then exec the welcome dialog
-            $secureAreaName = 'general';
-            // @todo the access control is very soft and the ROLE is actually not checked!
-            $user = new User($user['username'], $user['password'], array('ROLE_ADMIN'), true, true, true, true);
-            $token = new UsernamePasswordToken($user, null, $secureAreaName, $user->getRoles());
-            $app['security']->setToken($token);
-            $app['session']->set('_security_'.$secureAreaName, serialize($token) );
-
-            // sub request to the welcome dialog
-            $subRequest = Request::create('/admin/welcome', 'GET', array('usage' => self::$usage));
-            return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
-        }
-        else {
-            throw new \Exception("Ooops - the form is not valid, please try it again!");
-        }
-    }
-
-    /**
      * Prepare the execution of the welcome dialog
      *
      * @param Application $app
@@ -235,28 +119,28 @@ class Welcome
     public function welcomeCMS(Application $app, $cms)
     {
         // get the CMS info parameters
+        $cms_string = $cms;
         $cms = json_decode(base64_decode($cms), true);
 
         self::$usage = ($cms['target'] == 'cms') ? $cms['type'] : 'framework';
 
-        $cmsUser = new cmsUser($app);
-        $is_admin = false;
-        if ((false === ($cmsUserData = $cmsUser->selectUser($cms['username'], $is_admin))) || !$is_admin) {
+        if (!$app['account']->checkUserIsCMSAdministrator($cms['username'])) {
             // the user is no CMS Administrator, deny access!
             return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/admins.only.twig'),
                 array('usage' => self::$usage));
         }
 
-        $kitFrameworkUser = new kitFrameworkUser($app);
-        if (!$kitFrameworkUser->existsUser($cms['username'])) {
+        if (!$app['account']->checkUserHasFrameworkAccount($cms['username'])) {
             // this user does not exists in the kitFramework User database
-            $data = array(
-                'user_name' => $cmsUserData['username'],
-                'user_email' => $cmsUserData['email'],
-                'display_name' => $cmsUserData['display_name'],
-                'cms_array' => $cms
-            );
-            return $this->firstLogin($app, $data);
+            $subRequest = Request::create('/login/first/cms', 'POST', array(
+                'usage' => self::$usage,
+                'username' => $cms['username'],
+                'roles' => array('ROLE_ADMIN'),
+                'auto_login' => true,
+                'secured_area' => 'general',
+                'redirect' => "/welcome/cms/$cms_string"
+            ));
+            return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
         }
 
         // save them partial into session
@@ -265,15 +149,8 @@ class Welcome
         $app['session']->set('CMS_LOCALE', $cms['locale']);
         $app['session']->set('CMS_USER_NAME', $cms['username']);
 
-
-        // auto login into the admin area and then exec the welcome dialog
-        $secureAreaName = 'general';
-        // @todo the access control is very soft and the ROLE is actually not checked!
-        $user = new User($cms['username'],'', array('ROLE_ADMIN'), true, true, true, true);
-        $token = new UsernamePasswordToken($user, null, $secureAreaName, $user->getRoles());
-        $app['security']->setToken($token);
-        $app['session']->set('_security_'.$secureAreaName, serialize($token) );
-
+        // auto login the CMS user into the secured area with admin privileges
+        $app['account']->loginUserToSecureArea($cms['username'], array('ROLE_ADMIN'));
 
         // sub request to the welcome dialog
         $subRequest = Request::create('/admin/welcome', 'GET', array('usage' => self::$usage));

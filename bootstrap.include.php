@@ -25,6 +25,7 @@ use Nicl\Silex\MarkdownServiceProvider;
 use Symfony\Component\HttpFoundation\Response;
 use Monolog\Handler\SwiftMailerHandler;
 use phpManufaktur\Basic\Control\ReCaptcha\ReCaptcha;
+use phpManufaktur\Basic\Control\Account\Account;
 
 // set the error handling
 ini_set('display_errors', 1);
@@ -328,6 +329,11 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     )
 ));
 
+// register the ACCOUNT class
+$app['account'] = $app->share(function($app) {
+    return new Account($app);
+});
+
 if (FRAMEWORK_SETUP) {
     // the setup flag was set to TRUE, now we assume that we can set it to FALSE
     $framework_config['FRAMEWORK_SETUP'] = false;
@@ -374,6 +380,11 @@ $app->post('/password/retype',
     'phpManufaktur\Basic\Control\forgottenPassword::dialogRetypePassword');
 $app->get('/password/create/{guid}',
     'phpManufaktur\Basic\Control\forgottenPassword::dialogCreatePassword');
+$app->post('/login/first/cms',
+    // first login into the framework from the CMS backend
+    'phpManufaktur\Basic\Control\Account\FirstLogin::controllerCMSLogin');
+$app->post('/login/first/cms/check',
+    'phpManufaktur\Basic\Control\Account\FirstLogin::controllerCheckCMSLogin');
 
 // ADMIN ROUTES
 $admin->get('/',

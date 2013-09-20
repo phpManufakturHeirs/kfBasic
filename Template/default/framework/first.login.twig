@@ -26,27 +26,27 @@
     {% if app.translator.locale == 'de' %}
       {# GERMAN language #}
       {% if message|length > 0 %}
-        <div class="message">{{ message|trans }}</div>
+        <div class="message">{{ message }}</div>
       {% else %}
         <div class="message">
-          <p>Hallo {{ display_name }},</p>
+          <p>Hallo {{ form.display_name.vars.value }},</p>
           <p>sie rufen das kitFramework zum ersten Mal auf.</p>
-          <p>Sie sind bereits in {{ cms_type }} eingeloggt. Damit Sie künftig automatisch mit Ihrem Konto am kitFramework angemeldet werden können, müssen Sie einmalig Ihr Passwort eingeben.</p>
+          <p>Sie sind bereits in {{ usage }} eingeloggt. Damit Sie künftig automatisch mit Ihrem Konto am kitFramework angemeldet werden können, müssen Sie einmalig Ihr Passwort eingeben.</p>
         </div>
       {% endif %}
     {% else %}
       {# ENGLISH language #}
       {% if message|length > 0 %}
-        <div class="message">{{ message|trans }}</div>
+        <div class="message">{{ message }}</div>
       {% else %}
         <div class="message">
-          <p>Hello {{ display_name }},</p>
+          <p>Hello {{ form.display_name.vars.value }},</p>
           <p>this is the first time you are executing the kitFramework.</p>
-          <p>You are already logged in  at {{ cms_type }}. To enable a auto-login into the kitFramework you must authenticate with your password only one times.</p>
+          <p>You are already logged in  at {{ usage }}. To enable a auto-login into the kitFramework you must authenticate with your password only one times.</p>
         </div>
       {% endif %}
     {% endif %}
-    <form action="{{ FRAMEWORK_URL }}/welcome/login/check?usage={{ usage }}" method="post" {{ form_enctype(form) }}>
+    <form action="{{ FRAMEWORK_URL }}/login/first/cms/check?usage={{ usage }}" method="post" {{ form_enctype(form) }}>
       {{ form_widget(form) }}
       <label>&nbsp;</label><input type="submit" name="submit" />
       <div class="clear"></div>

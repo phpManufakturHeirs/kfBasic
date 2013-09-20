@@ -157,7 +157,8 @@ class Basic
                     'active' => (isset(Basic::$parameter['frame_redirect']) && ((strtolower(Basic::$parameter['frame_redirect']) == 'false') || (Basic::$parameter['frame_redirect'] == '0'))) ? false : true,
                     'route' => (isset(Basic::$GET['redirect'])) ? Basic::$GET['redirect'] : ''
                     ),
-                'tracking' => (isset(Basic::$parameter['frame_tracking']) && ((strtolower(Basic::$parameter['frame_tracking']) == 'false') || (Basic::$parameter['frame_tracking'] == '0'))) ? false : true
+                'tracking' => (isset(Basic::$parameter['frame_tracking']) && ((strtolower(Basic::$parameter['frame_tracking']) == 'false') || (Basic::$parameter['frame_tracking'] == '0'))) ? false : true,
+                'scroll_to_id' => (isset(Basic::$parameter['frame_scroll_to_id'])) ? trim(Basic::$parameter['frame_scroll_to_id']) : ''
                 );
         }
 
@@ -664,6 +665,16 @@ class Basic
     public function getFrameClass()
     {
         return Basic::$frame['class'];
+    }
+
+    public function setFrameScrollToID($class_id)
+    {
+        Basic::$frame['scroll_to_id'] = $class_id;
+    }
+
+    public function getFrameScrollToID()
+    {
+        return Basic::$frame['scroll_to_id'];
     }
 
     /**

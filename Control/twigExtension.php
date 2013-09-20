@@ -14,7 +14,6 @@ namespace phpManufaktur\Basic\Control;
 use Twig_Extension;
 use Twig_SimpleFunction;
 use Silex\Application;
-use phpManufaktur\Basic\Data\Security\Users as frameworkUsers;
 
 /**
  * The Twig extension class for the kitFramework
@@ -98,12 +97,7 @@ class twigExtension extends Twig_Extension
      */
     function isAuthenticated ()
     {
-        $token = $this->app['security']->getToken();
-        if (is_null($token)) {
-            return false;
-        }
-        $user = $token->getUser();
-        return ($user == 'anon.') ? false : true;
+        return $this->app['account']->isAuthenticated();
     }
 
     /**
@@ -114,27 +108,7 @@ class twigExtension extends Twig_Extension
      */
     function getUserDisplayName()
     {
-        try {
-            $token = $this->app['security']->getToken();
-            if (is_null($token))
-                return 'ANONYMOUS';
-
-            $user = $token->getUser();
-
-            if ($user == 'anon.') {
-                return 'ANONYMOUS';
-            }
-            // get the user record
-            $frameworkUsers = new frameworkUsers($this->app);
-            if (false === ($user_data = $frameworkUsers->selectUser($user->getUsername()))) {
-                // user not found!
-                return 'ANONYMOUS';
-            }
-            $display_name = (isset($user_data['displayname']) && ! empty($user_data['displayname'])) ? $user_data['displayname'] : $user_data['username'];
-            return $display_name;
-        } catch (\Exception $e) {
-            throw new \Twig_Error($e->getMessage());
-        }
+        return $this->app['account']->getDisplayName();
     }
 
     /**
