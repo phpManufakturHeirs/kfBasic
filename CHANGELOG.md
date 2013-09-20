@@ -6,6 +6,11 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.34**
+
+* changed template handling 
+* changed authentication handling 
+
 **0.33** - 2013-09-16
 
 * added ReCaptcha handling and Twig extension
