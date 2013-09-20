@@ -49,6 +49,9 @@
               {# setting the iFrame height dynamically by the height of the inbounded document #}
               var content_height = $('.iframe_content').height() + {{ iframe_add_height|default(30) }} + "px";
               parent.document.getElementById("{{ basic.frame.id }}").style.height = content_height;
+              {% if basic.frame.scroll_to_id|length > 0 %}
+                document.getElementById('{{ basic.frame.scroll_to_id }}').scrollIntoView(true);
+              {% endif %}
             });
           }
         </script>
