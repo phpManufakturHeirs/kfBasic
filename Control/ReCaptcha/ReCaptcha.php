@@ -100,6 +100,11 @@ class ReCaptcha
      */
     public function MailHideIsActive()
     {
+        if (!function_exists ("mcrypt_encrypt")) {
+            self::$mailhide_is_active = false;
+            $this->app['monolog']->addError("To use reCAPTCHA Mailhide, you need to have the mcrypt php module installed.",
+                array(__METHOD__, __LINE__));
+        }
         return (bool) (self::$mailhide_is_enabled && self::$mailhide_is_active);
     }
 
