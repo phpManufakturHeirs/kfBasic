@@ -29,7 +29,7 @@ class ExtensionCatalog
 {
 
     protected $app = null;
-    protected static $message;
+    protected static $message = '';
 
     /**
      * Constructor

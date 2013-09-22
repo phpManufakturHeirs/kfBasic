@@ -26,23 +26,69 @@ class Welcome
 {
 
     protected $app = null;
-    protected static $message;
+    protected static $message = null;
     protected static $usage = 'framework';
+
+    /**
+     * Constructor
+     *
+     * @param Application $app
+     */
+    public function __construct(Application $app=null)
+    {
+        if (!is_null($app)) {
+            $this->initWelcome($app);
+        }
+    }
+
+    /**
+     * Initialize the Welcome dialog
+     *
+     * @param Application $app
+     */
+    protected function initWelcome(Application $app)
+    {
+        $this->app = $app;
+
+        // grant that the updater is installed in the separated directory and is actual
+        if (!file_exists(MANUFAKTUR_PATH.'/Updater')) {
+            $app['filesystem']->mkdir(MANUFAKTUR_PATH.'/Updater');
+        }
+        $app['filesystem']->copy(MANUFAKTUR_PATH.'/Basic/Control/Updater/Updater.php', MANUFAKTUR_PATH.'/Updater/Updater.php', true);
+
+        self::$usage = $this->app['request']->get('usage', 'framework');
+
+    }
 
     /**
      * @return the $message
      */
-    public static function getMessage ()
+    public function getMessage()
     {
         return self::$message;
     }
 
     /**
+     * Set a message. Messages are chained and will be translated with the given
+     * parameters. If $log_message = true, the message will also logged to the
+     * kitFramework logfile.
+     *
      * @param string $message
+     * @param array $params
+     * @param boolean $log_message
      */
-    public static function setMessage ($message)
+    public function setMessage($message, $params=array(), $log_message=false)
     {
-        self::$message .= $message;
+        self::$message .= $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template',
+            'framework/message.twig'),
+            array(
+                'message' => $this->app['translator']->trans($message, $params)
+            ));
+        if ($log_message) {
+            // log this message
+            $this->app['monolog']->addInfo(strip_tags($this->app['translator']->trans($message, $params, 'messages', 'en')));
+        }
     }
 
     /**
@@ -50,7 +96,7 @@ class Welcome
      *
      * @return boolean
      */
-    public static function isMessage()
+    public function isMessage()
     {
         return !empty(self::$message);
     }
@@ -58,42 +104,52 @@ class Welcome
     /**
      * Clear the existing message(s)
      */
-    public static function clearMessage()
+    public function clearMessage()
     {
         self::$message = '';
     }
 
-    public static function setUsage($usage)
-    {
-        self::$usage = $usage;
-    }
-
-    public static function getUsage()
-    {
-        return self::$usage;
-    }
-
     /**
-     * Execute the welcome dialog
+     * Execute the welcome dialog. This is the main procedure, this dialog will
+     * be also executed from inside the CMS after automatic authentication with
+     * the controllerCMS()
+     *
      */
-    public function exec(Application $app)
+    public function controllerFramework(Application $app)
     {
-        $this->app = $app;
-        $cms = $this->app['request']->get('usage');
-        self::$usage = is_null($cms) ? 'framework' : $cms;
+        $this->initWelcome($app);
 
-        // use reflection to dynamical load a class
-        $reflection = new \ReflectionClass('phpManufaktur\\Basic\\Control\\ExtensionCatalog');
-        $catalog = $reflection->newInstanceArgs(array($this->app));
+        if (null !== ($install = $app['session']->get('FINISH_INSTALLATION', null))) {
+            // get the messages from the installation
+            self::$message = $install['message'];
+            foreach ($install['execute_route'] as $route) {
+                // execute the install & upgrade routes
+                $subRequest = Request::create($route, 'GET', array('usage' => self::$usage));
+                $response = $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+                $this->setMessage($response->getContent());
+            }
+            // remove the session
+            $app['session']->remove('FINISH_INSTALLATION');
+            // now scan for the installed extensions
+            $register = new ExtensionRegister($app);
+            $register->scanDirectories(ExtensionRegister::GROUP_PHPMANUFAKTUR);
+            $register->scanDirectories(ExtensionRegister::GROUP_THIRDPARTY);
+            if ($register->isMessage()) {
+                $this->setMessage($register->getMessage());
+            }
+        }
+
+        $catalog = new ExtensionCatalog($app);
 
         try {
             $catalog->getOnlineCatalog();
-            $this->setMessage($catalog->getMessage());
+            if ($catalog->isMessage()) {
+                $this->setMessage($catalog->getMessage());
+            }
         } catch (\Exception $e) {
             $this->setMessage($e->getMessage());
         }
 
-        $catalog = new ExtensionCatalog($this->app);
         $catalog_items = $catalog->getAvailableExtensions();
 
         $register = new ExtensionRegister($this->app);
@@ -119,13 +175,14 @@ class Welcome
      * @param Application $app
      * @param string $cms
      */
-    public function welcomeCMS(Application $app, $cms)
+    public function controllerCMS(Application $app, $cms)
     {
         // get the CMS info parameters
         $cms_string = $cms;
         $cms = json_decode(base64_decode($cms), true);
 
-        self::$usage = ($cms['target'] == 'cms') ? $cms['type'] : 'framework';
+        $app['request']->request->set('usage', $cms['type']);
+        $this->initWelcome($app);
 
         if (!$app['account']->checkUserIsCMSAdministrator($cms['username'])) {
             // the user is no CMS Administrator, deny access!
@@ -162,4 +219,4 @@ class Welcome
         return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
     }
 
-} // class Account
+}

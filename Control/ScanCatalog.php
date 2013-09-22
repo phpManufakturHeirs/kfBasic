@@ -20,7 +20,7 @@ class ScanCatalog
         $catalog = new ExtensionCatalog($app);
         $catalog->getOnlineCatalog();
         $Welcome = new Welcome($app);
-        $Welcome->setMessage($app['translator']->trans('<p>Successfull scanned the kitFramework online catalog for available extensions.</p>'));
-        return $Welcome->exec($app);
+        $Welcome->setMessage('Successfull scanned the kitFramework online catalog for available extensions.');
+        return $Welcome->controllerFramework($app);
     }
 }

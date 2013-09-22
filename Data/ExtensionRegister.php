@@ -170,4 +170,41 @@ EOD;
         }
     }
 
+    /**
+     * Select a registered extension by the group and name
+     *
+     * @param string $group
+     * @param string $name
+     * @throws \Exception
+     * @return Ambigous <boolean, unknown>
+     */
+    public function selectByGroupAndName($group, $name)
+    {
+        try {
+            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `group`='$group' AND `name`='$name'";
+            $result = $this->app['db']->fetchAssoc($SQL);
+            return (isset($result['id'])) ? $result : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    /**
+     * Select a registered extension by the ID
+     *
+     * @param integer $id
+     * @throws \Exception
+     * @return Ambigous <boolean, unknown>
+     */
+    public function select($id)
+    {
+        try {
+            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `id`='$id'";
+            $result = $this->app['db']->fetchAssoc($SQL);
+            return (isset($result['id'])) ? $result : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
 }

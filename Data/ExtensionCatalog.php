@@ -48,7 +48,7 @@ class ExtensionCatalog
       `release` VARCHAR(16) NOT NULL DEFAULT '',
       `date` DATE NOT NULL DEFAULT '0000-00-00',
       `info` TEXT NOT NULL,
-    	`logo_blob` BLOB NOT NULL,
+        `logo_blob` BLOB NOT NULL,
       `logo_type` ENUM ('jpg','png') NOT NULL DEFAULT 'jpg',
       `logo_width` INT NOT NULL DEFAULT '0',
       `logo_height` INT NOT NULL DEFAULT '0',
@@ -76,10 +76,10 @@ EOD;
         try {
             $SQL = "SELECT `id` FROM `".self::$table_name."` WHERE `guid`='$guid'";
             $result = $this->app['db']->fetchAssoc($SQL);
+            return (is_array($result) && isset($result['id'])) ? (int) $result['id'] : null;
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e->getMessage());
         }
-        return (is_array($result) && isset($result['id'])) ? (int) $result['id'] : null;
     }
 
     public function select($id)
@@ -87,10 +87,10 @@ EOD;
         try {
             $SQL = "SELECT * FROM `".self::$table_name."` WHERE `id`='$id'";
             $result = $this->app['db']->fetchAssoc($SQL);
+            return (is_array($result) && isset($result['id'])) ? $result : false;
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e->getMessage());
         }
-        return (is_array($result) && isset($result['id'])) ? $result : array();
     }
 
     public function insert($data)
@@ -132,10 +132,20 @@ EOD;
     {
         try {
             $SQL = "SELECT * FROM `".self::$table_name."` ORDER BY `$order_by` ASC";
-            $result = $this->app['db']->fetchAll($SQL);
+            return $this->app['db']->fetchAll($SQL);
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e->getMessage());
         }
-        return $result;
+    }
+
+    public function selectByGroupAndName($group, $name)
+    {
+        try {
+            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `group`='$group' AND `name`='$name'";
+            $result = $this->app['db']->fetchAssoc($SQL);
+            return (isset($result['id'])) ? $result : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e->getMessage());
+        }
     }
 }

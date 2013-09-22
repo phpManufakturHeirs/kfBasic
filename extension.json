@@ -9,7 +9,8 @@
   "namespace": "phpManufaktur\\Basic",
   "release": {
     "number" : "0.34",
-    "date" : "2013-09-20"
+    "date" : "2013-09-20",
+    "status" : "beta"
   },
   "description": {
     "en": {

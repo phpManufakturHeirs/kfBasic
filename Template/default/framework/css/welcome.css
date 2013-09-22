@@ -56,12 +56,14 @@ a:active {
   color: #000;
   background-color: #fff8dc;
   margin: 20px 0 10px 0;
-  padding: 10px;
+  padding: 0 10px;
   font-size: 13px;
   text-align: left;
 }
 .message.item {
   border: none;
+  margin: 0;
+  padding: 10px;
 }
 .small {
   font-size: smaller;

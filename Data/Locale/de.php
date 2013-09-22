@@ -42,6 +42,8 @@ return array(
         => 'Kann die Beschreibungsdatei extension.json für die Erweiterung <b>%name%</b> nicht lesen!<br />Fehlermeldung: %error%',
     'Can not read the information file for the kitFramework!'
         => 'Kann die Beschreibungsdatei für das kitFramework nicht lesen!',
+    "Can't read the the %repository% from %organization% at Github!"
+        => 'Kann das Repository %repository% von %organization% auf Github nicht lesen!',
     'Can\'t create a new GUID as long the last GUID is not expired. You must wait 24 hours between the creation of new passwords.'
         => 'Es kann keine neue GUID erzeugt werden, solange die letzte noch gültig ist. Sie können das Anlegen eines neuen Passwort nur einmal innerhalb von 24 Stunden anfordern!',
     "Can't open the file <b>%file%</b>!"
@@ -153,15 +155,21 @@ return array(
         => 'Die übermittelte GUID ist ungültig. Bitte nehmen Sie mit dem Webmaster Kontakt auf.',
     'Submit'
         => 'Übermitteln',
-    'Success! The extension %extension% is installed.'
+    'Successfull installed the extension %extension%.'
         => 'Die Erweiterung %extension% wurde erfolgreich installiert.',
-    '<p>Successfull scanned the kitFramework for installed extensions.</p>'
-        => '<p>Das kitFramework wurde nach installierten Erweiterungen durchsucht.</p>',
-    '<p>Successfull scanned the kitFramework online catalog for available extensions.</p>'
-        => '<p>Der online Katalog für das kitFramework wurde nach verfügbaren Erweiterungen durchsucht.</p>',
+    'Successfull scanned the kitFramework for installed extensions.'
+        => 'Das kitFramework wurde nach installierten Erweiterungen durchsucht.',
+    'Successfull scanned the kitFramework online catalog for available extensions.'
+        => 'Der online Katalog für das kitFramework wurde nach verfügbaren Erweiterungen durchsucht.',
+    'Successfull uninstalled the extension %extension%.'
+        => 'Die Erweiterung %extension% wurde erfolgreich entfernt.',
+    'Successfull updated the extension %extension%.'
+        => 'Die Erweiterung %extension% wurde erfolgreich aktualisiert.',
 
     '<p>The both passwords you have typed in does not match, please try again!</p>'
         => '<p>Die beiden Passwörter die Sie eingegeben haben stimmen nicht überein, bitte versuchen Sie es noch einmal!</p>',
+    'The extension with the ID %extension_id% does not exists!'
+        => 'Die Erweiterung mit der ID %extension_id% existiert nicht!',
     'The file %file% does not exists in Gist %gist_id%!'
         => 'Die Datei %file% existiert nicht im Gist %gist_id%',
     'The extension.json of <b>%name%</b> does not contain all definitions, check GUID, Group and Release!'
@@ -182,6 +190,8 @@ return array(
         => '<p>Die übermittelte GUID ist abgelaufen und nicht länger gültig.</p><p>Bitte <a href="%password_forgotten%">fordern Sie einen neuen Link an</a>.</p>',
     'The submitted GUID was already used and is no longer valid.<br />Please <a href="%password_forgotten%">order a new link</a>.'
         => '<p>Die übermittelte GUID wurde bereits verwendet und ist nicht mehr gültig.</p><p>Bitte <a href="%password_forgotten%">fordern Sie einen neuen Link an</a>.</p>',
+    'There exists no catalog entry for the extension %name% with the GUID %guid%.'
+        => 'Es existiert kein Katalog Eintrag für die Erweiterung %name% mit der GUID %guid%.',
     'There exists no user with the submitted email address.'
         => 'Die übermittelte E-Mail Adresse kann keinem Benutzer zugeordnet werden.',
     'There is no help available for the kitCommand <b>%command%</b>.'

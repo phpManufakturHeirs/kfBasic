@@ -20,7 +20,6 @@ use phpManufaktur\Basic\Control\manufakturPasswordEncoder;
 use phpManufaktur\Basic\Control\twigExtension;
 use phpManufaktur\Basic\Control\Utils;
 use phpManufaktur\Basic\Data\Setup\Setup;
-use phpManufaktur\Updater\Updater;
 use Nicl\Silex\MarkdownServiceProvider;
 use Symfony\Component\HttpFoundation\Response;
 use Monolog\Handler\SwiftMailerHandler;
@@ -388,29 +387,24 @@ $app->post('/login/first/cms/check',
 
 // ADMIN ROUTES
 $admin->get('/',
-    'phpManufaktur\Basic\Control\Welcome::exec');
+    'phpManufaktur\Basic\Control\Welcome::controllerFramework');
 $admin->get('/account',
     'phpManufaktur\Basic\Control\Account::exec');
 $admin->get('/welcome',
-    'phpManufaktur\Basic\Control\Welcome::exec');
-$admin->get('/scan/extensions',
+    'phpManufaktur\Basic\Control\Welcome::controllerFramework');
+$admin->match('/scan/extensions',
     'phpManufaktur\Basic\Control\ScanExtensions::exec');
 $admin->get('/scan/catalog',
     'phpManufaktur\Basic\Control\ScanCatalog::exec');
-$admin->get('/updater/get/github/{organization}/{repository}',
-    function ($organization, $repository) use ($app) {
-        if (!file_exists(MANUFAKTUR_PATH.'/Updater')) {
-            $app['filesystem']->mkdir(MANUFAKTUR_PATH.'/Updater');
-        }
-        $app['filesystem']->copy(MANUFAKTUR_PATH.'/Basic/Control/Updater/Updater.php', MANUFAKTUR_PATH.'/Updater/Updater.php', true);
-        $updater = new Updater($app);
-        return $updater->getLastGithubRepository($organization, $repository);
-    }
-);
+
+$admin->get('updater/install/{catalog_id}',
+    'phpManufaktur\Updater\Updater::controllerInstallExtension');
+$admin->get('updater/update/{extension_id}',
+    'phpManufaktur\Updater\Updater::controllerUpdateExtension');
 
 $app->get('/welcome/cms/{cms}',
     // the welcome dialog is called by the CMS backend
-    'phpManufaktur\Basic\Control\Welcome::welcomeCMS');
+    'phpManufaktur\Basic\Control\Welcome::controllerCMS');
 $app->post('/welcome/login/check',
     'phpManufaktur\Basic\Control\Welcome::checkFirstLogin');
 

@@ -25,7 +25,7 @@
   <div id="welcome_container">
     <h1>Herzlich Willkommen beim kitFramework!</h1>
     {% if message|length > 0 %}
-      <div class="message">{{ message|trans }}</div>
+      <div class="message">{{ message }}</div>
     {% else %}
       <div class="message"><p>Dieser Übersichtsdialog befindet sich noch im Experimentierstadium, Vorschläge und Ideen sind herzlich willkommen!</p></div>
     {% endif %}
@@ -41,7 +41,8 @@
         {% if item.update_available %}
           <div class="extension_update">
             <strong>{{ 'Update available!'|trans }}</strong><br />
-            Release {{ item.release_available }}
+            Release {{ item.release_available }}<br />
+            <a href="{{ FRAMEWORK_URL }}/admin/updater/update/{{ item.id }}?usage={{ usage }}">Execute Update</a>
           </div>
         {% endif %}
         {% if item.start_url|length > 0 %}
@@ -63,7 +64,7 @@
         <div class="extension_description">{{ item.description.short }}</div>
         <div class="extension_release">Release {{ item.release }} <em>({{ item.date|date('d.m.Y') }})</em></div>
         {% if item.info.download.github is defined %}
-          <p><a href="{{ FRAMEWORK_URL }}/admin/updater/get/github/{{ item.info.download.github.organization }}/{{ item.info.download.github.repository }}?usage={{ usage }}">Install</a></p>
+          <p><a href="{{ FRAMEWORK_URL }}/admin/updater/install/{{ item.id }}?usage={{ usage }}">Install</a></p>
         {% endif %}
       </div>
     {% endfor %}

@@ -25,8 +25,8 @@ class ScanExtensions
             $Welcome->setMessage($register->getMessage());
         }
         else {
-            $Welcome->setMessage($app['translator']->trans('<p>Successfull scanned the kitFramework for installed extensions.</p>'));
+            $Welcome->setMessage('Successfull scanned the kitFramework for installed extensions.');
         }
-        return $Welcome->exec($app);
+        return $Welcome->controllerFramework($app);
     }
 }
