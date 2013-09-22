@@ -386,7 +386,7 @@ class Basic
      */
     public function setMessage($message, $params=array(), $log_message=false)
     {
-        Basic::$message .= $this->app['twig']->render($this->app['utils']->templateFile(
+        Basic::$message .= $this->app['twig']->render($this->app['utils']->getTemplateFile(
             '@phpManufaktur/Basic/Template',
             'kitcommand/iframe.message.twig',
             self::$preferred_template),
@@ -714,7 +714,10 @@ class Basic
 
         Basic::$frame['source'] = FRAMEWORK_URL.$route.'?pid='.$this->getParameterID();
 
-        return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand/iframe.twig', self::$preferred_template),
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template',
+            'kitcommand/iframe.twig',
+            self::$preferred_template),
             array(
                 'frame' => Basic::$frame
             ));

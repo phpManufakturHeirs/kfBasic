@@ -119,7 +119,7 @@ class twigExtension extends Twig_Extension
     function template_file($template_namespace, $template_file, $preferred_template='')
     {
         trigger_error('template_file() is deprecated since kfBasic 0.33, use getTemplateFile() instead', E_USER_DEPRECATED);
-        return Utils::templateFile($template_namespace, $template_file, $preferred_template);
+        return $this->app['utils']->getTemplateFile($template_namespace, $template_file, $preferred_template);
     }
 
     /**
@@ -132,7 +132,7 @@ class twigExtension extends Twig_Extension
      */
     function getTemplateFile($template_namespace, $template_file, $preferred_template='')
     {
-        return $this->app['utils']->templateFile($template_namespace, $template_file, $preferred_template);
+        return $this->app['utils']->getTemplateFile($template_namespace, $template_file, $preferred_template);
     }
 
     /**

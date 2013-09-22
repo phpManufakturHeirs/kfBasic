@@ -464,17 +464,17 @@ $app->error(function (\Exception $e, $code) use ($app) {
     switch ($code) {
         case 404:
             // the requested page could not be found
-            $message = $app['twig']->render($app['utils']->templateFile(
+            $message = $app['twig']->render($app['utils']->getTemplateFile(
                 '@phpManufaktur/Basic/Template', 'framework/error.404.twig'));
             break;
         case 403:
             // access denied
-            $message = $app['twig']->render($app['utils']->templateFile(
+            $message = $app['twig']->render($app['utils']->getTemplateFile(
                 '@phpManufaktur/Basic/Template', 'framework/error.403.twig'));
             break;
         default:
             // general error message
-            $message = $app['twig']->render($app['utils']->templateFile(
+            $message = $app['twig']->render($app['utils']->getTemplateFile(
                 '@phpManufaktur/Basic/Template', 'framework/error.twig'),
                 array(
                     'code' => $code,

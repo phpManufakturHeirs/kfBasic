@@ -303,8 +303,9 @@ EOD;
         if (!self::$mailhide_is_enabled || !self::$mailhide_is_active) {
             if ($mailto) {
                 // create a mailto link
-                return $this->app['twig']->render($this->app['utils']->templateFile(
-                    '@phpManufaktur/Basic/Template', 'framework/mailto.twig'),
+                return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+                    '@phpManufaktur/Basic/Template',
+                    'framework/mailto.twig'),
                     array(
                         'email' => $email,
                         'class' => $class,
@@ -316,8 +317,9 @@ EOD;
             }
         }
         $mailhide_url = recaptcha_mailhide_url(self::$mailhide_public_key, self::$mailhide_private_key, $email);
-        return $this->app['twig']->render($this->app['utils']->templateFile(
-            '@phpManufaktur/Basic/Template', 'framework/mailhide.twig'),
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template',
+            'framework/mailhide.twig'),
             array(
                 'email_parts' => _recaptcha_mailhide_email_parts($email),
                 'class' => $class,

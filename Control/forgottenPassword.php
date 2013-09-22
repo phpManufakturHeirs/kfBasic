@@ -34,7 +34,9 @@ class forgottenPassword
         $form = $app['form.factory']->createBuilder('form')
         ->add('email', 'text', array())
         ->getForm();
-        return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/password.forgotten.twig'),
+        return $app['twig']->render($app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template',
+            'framework/password.forgotten.twig'),
             array('form' => $form->createView(), 'message' => $message));
     }
 
@@ -71,7 +73,9 @@ class forgottenPassword
         }
 
         // create the email body
-        $body = $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/mail/password.create.twig'),
+        $body = $app['twig']->render($app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template',
+            'framework/mail/password.create.twig'),
             array('name' => $user['displayname'], 'server' => FRAMEWORK_URL,
                 'reset_password_url' => FRAMEWORK_URL.'/password/create/'.$guid['guid']
             ));
@@ -86,8 +90,9 @@ class forgottenPassword
         $app['mailer']->send($message);
 
         // show a response dialog
-        return $app['twig']->render($app['utils']->templateFile(
-            '@phpManufaktur/Basic/Template', 'framework/password.create.twig'),
+        return $app['twig']->render($app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template',
+            'framework/password.create.twig'),
             array('email' => $form['email']));
     }
 
@@ -103,7 +108,9 @@ class forgottenPassword
         $Users = new Users($app);
         if (false === ($user = $Users->selectUserByGUID($guid))) {
             // GUID does not exists
-            return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/body.message.twig'),
+            return $app['twig']->render($app['utils']->getTemplateFile(
+                '@phpManufaktur/Basic/Template',
+                'framework/body.message.twig'),
                 array('title' => 'Create a new password',
                     'message' => $app['translator']->trans(
                         'Sorry, but the submitted GUID is invalid. Please contact the webmaster.')
@@ -111,7 +118,9 @@ class forgottenPassword
         }
         if ($user['guid_status'] != 'ACTIVE') {
             // the GUID was already used
-            return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/body.message.twig'),
+            return $app['twig']->render($app['utils']->getTemplateFile(
+                '@phpManufaktur/Basic/Template',
+                'framework/body.message.twig'),
                 array('title' => 'Create a new password',
                     'message' => $app['translator']->trans(
                         'The submitted GUID was already used and is no longer valid.<br />Please <a href="%password_forgotten%">order a new link</a>.',
@@ -125,7 +134,9 @@ class forgottenPassword
         if (time() > $limit) {
             // the GUID is expired
             return $app['twig']->render(
-                $app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/body.message.twig'),
+                $app['utils']->getTemplateFile(
+                    '@phpManufaktur/Basic/Template',
+                    'framework/body.message.twig'),
                 array(
                     'title' => 'Create a new password',
                     'message' => $app['translator']->trans(
@@ -154,7 +165,9 @@ class forgottenPassword
         ->getForm();
 
         return $app['twig']->render(
-            $app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/password.set.twig'),
+            $app['utils']->getTemplateFile(
+                '@phpManufaktur/Basic/Template',
+                'framework/password.set.twig'),
             array(
                 'form' => $form->createView(),
                 'message' => $app['translator']->trans('<p>Hello %name%,</p><p>you want to change your password, so please type in a new one, repeat it and submit the form.</p><p>If you won\'t change your password just leave this dialog.</p>',
@@ -185,7 +198,9 @@ class forgottenPassword
             $Users = new Users($app);
             $Users->updateUser($form['username'], array('password' => $password));
             // return a info message and leave the dialog
-            return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/body.message.twig'),
+            return $app['twig']->render($app['utils']->getTemplateFile(
+                '@phpManufaktur/Basic/Template',
+                'framework/body.message.twig'),
                 array('title' => 'Password changed',
                     'message' => $app['translator']->trans(
                         '<p>The password for the kitFramework was successfull changed.</p><p>You can now <a href="%login%">login using the new password</a>.</p>',
@@ -207,7 +222,9 @@ class forgottenPassword
         ->getForm();
 
         return $app['twig']->render(
-            $app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/password.set.twig'),
+            $app['utils']->getTemplateFile(
+                '@phpManufaktur/Basic/Template',
+                'framework/password.set.twig'),
             array(
                 'form' => $form->createView(),
                 'message' => $message

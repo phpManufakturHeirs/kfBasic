@@ -20,7 +20,10 @@ class Account
      */
     public function exec(Application $app)
     {
-        return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/account.twig'), array());
+        return $app['twig']->render($app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template',
+            'framework/account.twig'),
+            array());
     }
 
 }

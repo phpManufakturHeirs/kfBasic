@@ -56,7 +56,7 @@ class EmbeddedAdministration
 
         if (!$this->app['account']->checkUserIsCMSAdministrator($cms['username'])) {
             // the user is no CMS Administrator, deny access!
-            return $this->app['twig']->render($this->app['utils']->templateFile(
+            return $this->app['twig']->render($this->app['utils']->getTemplateFile(
                 '@phpManufaktur/Basic/Template',
                 'framework/admins.only.twig'),
                 array(

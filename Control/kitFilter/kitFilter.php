@@ -56,17 +56,23 @@ class kitFilter
                     'line' => $e->getLine(),
                     'message' => $e->getMessage()
                 );
-                $result = $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitfilter/debug.twig'),
+                $result = $app['twig']->render($app['utils']->getTemplateFile(
+                    '@phpManufaktur/Basic/Template',
+                    'kitfilter/debug.twig'),
                     array('debug' => $debug));
                 return str_replace($cms_parameter['filter_expression'], $result, $cms_parameter['content']);
             }
             elseif (isset($cms_parameter['filter_expression']) && isset($cms_parameter['content'])) {
-                $result = $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitfilter/error.twig'),
+                $result = $app['twig']->render($app['utils']->getTemplateFile(
+                    '@phpManufaktur/Basic/Template',
+                    'kitfilter/error.twig'),
                     array('filter' => $filter));
                 return str_replace($cms_parameter['filter_expression'], $result, $cms_parameter['content']);
             }
             else {
-                return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitfilter/error.twig'),
+                return $app['twig']->render($app['utils']->getTemplateFile(
+                    '@phpManufaktur/Basic/Template',
+                    'kitfilter/error.twig'),
                     array('filter' => $filter));
             }
         }

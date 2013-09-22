@@ -17,7 +17,9 @@ class Login
 {
     public function exec(Application $app, Request $request)
     {
-        return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/login.twig'), array(
+        return $app['twig']->render($app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template',
+            'framework/login.twig'), array(
             'error' => $app['security.last_error']($request),
             'last_username' => $app['session']->get('_security.last_username'),
         ));

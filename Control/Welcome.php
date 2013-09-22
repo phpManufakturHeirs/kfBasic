@@ -99,15 +99,18 @@ class Welcome
         $register = new ExtensionRegister($this->app);
         $register_items = $register->getInstalledExtensions();
 
-        return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/welcome.twig'), array(
-            'usage' => self::$usage,
-            'iframe_add_height' => '300',
-            'catalog_items' => $catalog_items,
-            'register_items' => $register_items,
-            'message' => $this->getMessage(),
-            'scan_extensions' => FRAMEWORK_URL.'/admin/scan/extensions?usage='.self::$usage,
-            'scan_catalog' => FRAMEWORK_URL.'/admin/scan/catalog?usage='.self::$usage
-        ));
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template',
+            'framework/welcome.twig'),
+            array(
+                'usage' => self::$usage,
+                'iframe_add_height' => '300',
+                'catalog_items' => $catalog_items,
+                'register_items' => $register_items,
+                'message' => $this->getMessage(),
+                'scan_extensions' => FRAMEWORK_URL.'/admin/scan/extensions?usage='.self::$usage,
+                'scan_catalog' => FRAMEWORK_URL.'/admin/scan/catalog?usage='.self::$usage
+            ));
     }
 
     /**
@@ -126,7 +129,9 @@ class Welcome
 
         if (!$app['account']->checkUserIsCMSAdministrator($cms['username'])) {
             // the user is no CMS Administrator, deny access!
-            return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'framework/admins.only.twig'),
+            return $app['twig']->render($app['utils']->getTemplateFile(
+                '@phpManufaktur/Basic/Template',
+                'framework/admins.only.twig'),
                 array('usage' => self::$usage));
         }
 

@@ -46,7 +46,7 @@ class FirstLogin
      */
     public function setMessage($message, $params=array(), $log_message=false)
     {
-        self::$message .= $this->app['twig']->render($this->app['utils']->templateFile(
+        self::$message .= $this->app['twig']->render($this->app['utils']->getTemplateFile(
             '@phpManufaktur/Basic/Template',
             'kitcommand/iframe.message.twig'),
             array(
@@ -128,7 +128,7 @@ class FirstLogin
 
         $form = $this->getLoginForm();
 
-        return $app['twig']->render($app['utils']->templateFile(
+        return $app['twig']->render($app['utils']->getTemplateFile(
             '@phpManufaktur/Basic/Template',
             'framework/first.login.twig'),
             array(
@@ -162,7 +162,8 @@ class FirstLogin
             if ($check['name'] != $check['username']) {
                 // user has changed the given login name!
                 $this->setMessage("You must login as user '%username%'!", array('%username%' => $check['username']));
-                return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template',
+                return $app['twig']->render($app['utils']->getTemplateFile(
+                    '@phpManufaktur/Basic/Template',
                     'framework/first.login.twig'),
                     array(
                         'usage' => $check['usage'],
@@ -173,7 +174,8 @@ class FirstLogin
             if (md5($check['password']) != $cmsUserData['password']) {
                 // the password is not identical
                 $this->setMessage('The password you typed in is not correct, please try again.');
-                return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template',
+                return $app['twig']->render($app['utils']->getTemplateFile(
+                    '@phpManufaktur/Basic/Template',
                     'framework/first.login.twig'),
                     array(
                         'usage' => $check['usage'],

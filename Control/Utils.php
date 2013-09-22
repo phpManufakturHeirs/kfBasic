@@ -255,10 +255,10 @@ class Utils
      * @return string
      * @deprecated use getTemplateFile() instead!
      */
-    public static function templateFile($template_namespace, $template_file, $preferred_template='', $return_path=false)
+    public function templateFile($template_namespace, $template_file, $preferred_template='', $return_path=false)
     {
         trigger_error('templateFile() is deprecated, please use getTemplateFile() instead!', E_USER_DEPRECATED);
-        return self::getTemplateFile($template_namespace, $template_file, $preferred_template='', $return_path=false);
+        return $this->getTemplateFile($template_namespace, $template_file, $preferred_template, $return_path);
     }
 
     /**
@@ -272,7 +272,7 @@ class Utils
      * @throws \Exception
      * @return string
      */
-    public static function getTemplateFile($template_namespace, $template_file, $preferred_template='', $return_path=false)
+    public function getTemplateFile($template_namespace, $template_file, $preferred_template='', $return_path=false)
     {
         $TEMPLATE_NAMESPACES = array(
             'phpManufaktur' => MANUFAKTUR_PATH,
@@ -303,6 +303,7 @@ class Utils
         if (!empty($preferred_template)) {
             array_unshift($template_names, $preferred_template);
         }
+
         // walk through the template names
         foreach ($template_names as $name) {
             $file = $TEMPLATE_NAMESPACES[$namespace] . $directory . '/' . $name . '/' . $template_file;
