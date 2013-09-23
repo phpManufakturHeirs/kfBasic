@@ -18,44 +18,37 @@ use phpManufaktur\Basic\Data\Setting;
 use phpManufaktur\Basic\Data\ExtensionRegister;
 use phpManufaktur\Basic\Data\kitCommandParameter;
 
-/**
- * Setup all needed database tables and initialize the kitFramework
- *
- * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
- *
- */
-class Setup
+class Uninstall
 {
 
     /**
-     * Create the database tables for the BASIC extension of the kitFramework
+     * Uninstall the database tables for the BASIC extension of the kitFramework
      *
      * @param Application $app
      */
     public function exec(Application $app)
     {
-        // create the framework user table
+        // drop the kitFramework users table
         $users = new Users($app);
-        $users->createTable();
+        $users->dropTable();
 
-        // create the Extension Catalog
+        // drop the Extension Catalog
         $catalog = new ExtensionCatalog($app);
-        $catalog->createTable();
+        $catalog->dropTable();
 
-        // create the setting table
+        // drop the setting table
         $setting = new Setting($app);
-        $setting->createTable();
-        $setting->insertDefaultValues();
+        $setting->dropTable();
 
-        // create the table for the extension register
+        // drop the table for the extension register
         $register = new ExtensionRegister($app);
-        $register->createTable();
+        $register->dropTable();
 
-        // create the table for the kitCommand parameters
+        // drop the table for the kitCommand parameters
         $cmdParameter = new kitCommandParameter($app);
-        $cmdParameter->createTable();
+        $cmdParameter->dropTable();
 
-        return $app['translator']->trans('Successfull installed the extension %extension%.',
+        return $app['translator']->trans('Successfull uninstalled the extension %extension%.',
             array('%extension%' => 'Basic'));
     }
 

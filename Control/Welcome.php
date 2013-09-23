@@ -123,7 +123,7 @@ class Welcome
             // get the messages from the installation
             self::$message = $install['message'];
             foreach ($install['execute_route'] as $route) {
-                // execute the install & upgrade routes
+                // execute the install & update routes
                 $subRequest = Request::create($route, 'GET', array('usage' => self::$usage));
                 $response = $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
                 $this->setMessage($response->getContent());
@@ -150,7 +150,15 @@ class Welcome
             $this->setMessage($e->getMessage());
         }
 
-        $catalog_items = $catalog->getAvailableExtensions();
+        $accepted_items = explode(',', CATALOG_ACCEPT_EXTENSION);
+        $cat_items = $catalog->getAvailableExtensions();
+        $catalog_items = array();
+        foreach ($cat_items as $item) {
+            // show only catalog items which have the accepted release status
+            if (in_array($item['release_status'], $accepted_items)) {
+                $catalog_items[] = $item;
+            }
+        }
 
         $register = new ExtensionRegister($this->app);
         $register_items = $register->getInstalledExtensions();

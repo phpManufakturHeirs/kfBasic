@@ -48,23 +48,33 @@ try {
     // framework constants
     define('FRAMEWORK_URL', $framework_config['FRAMEWORK_URL']);
     define('FRAMEWORK_PATH', $app['utils']->sanitizePath($framework_config['FRAMEWORK_PATH']));
-    define('FRAMEWORK_TEMP_PATH', isset($framework_config['FRAMEWORK_TEMP_PATH']) ? $framework_config['FRAMEWORK_TEMP_PATH'] : FRAMEWORK_PATH . '/temp');
-    define('FRAMEWORK_TEMP_URL', isset($framwework_config['FRAMEWORK_TEMP_URL']) ? $framework_config['FRAMEWORK_TEMP_URL'] : FRAMEWORK_URL . '/temp');
-    define('FRAMEWORK_TEMPLATES', isset($framework_config['FRAMEWORK_TEMPLATES']) ? implode(',', $framework_config['FRAMEWORK_TEMPLATES']) : 'default');
+    define('FRAMEWORK_TEMP_PATH', isset($framework_config['FRAMEWORK_TEMP_PATH']) ?
+        $framework_config['FRAMEWORK_TEMP_PATH'] : FRAMEWORK_PATH . '/temp');
+    define('FRAMEWORK_TEMP_URL', isset($framwework_config['FRAMEWORK_TEMP_URL']) ?
+        $framework_config['FRAMEWORK_TEMP_URL'] : FRAMEWORK_URL . '/temp');
+    define('FRAMEWORK_TEMPLATES', isset($framework_config['FRAMEWORK_TEMPLATES']) ?
+        implode(',', $framework_config['FRAMEWORK_TEMPLATES']) : 'default');
     $templates = explode(',', FRAMEWORK_TEMPLATES);
     define('FRAMEWORK_TEMPLATE_PREFERRED', trim($templates[0]));
     define('MANUFAKTUR_PATH', FRAMEWORK_PATH . '/extension/phpmanufaktur/phpManufaktur');
     define('MANUFAKTUR_URL', FRAMEWORK_URL . '/extension/phpmanufaktur/phpManufaktur');
     define('THIRDPARTY_PATH', FRAMEWORK_PATH . '/extension/thirdparty/thirdParty');
     define('THIRDPARTY_URL', FRAMEWORK_URL . '/extension/thirdparty/thirdParty');
-    define('CONNECT_CMS_USERS', isset($framework_config['CONNECT_CMS_USERS']) ? $framework_config['CONNECT_CMS_USERS'] : true);
-    define('FRAMEWORK_SETUP', isset($framework_config['FRAMEWORK_SETUP']) ? $framework_config['FRAMEWORK_SETUP'] : true);
+    define('CONNECT_CMS_USERS', isset($framework_config['CONNECT_CMS_USERS']) ?
+        $framework_config['CONNECT_CMS_USERS'] : true);
+    define('FRAMEWORK_SETUP', isset($framework_config['FRAMEWORK_SETUP']) ?
+        $framework_config['FRAMEWORK_SETUP'] : true);
     define('FRAMEWORK_MEDIA_PATH', FRAMEWORK_PATH.'/media/public');
     define('FRAMEWORK_MEDIA_URL', FRAMEWORK_URL.'/media/public');
     define('FRAMEWORK_MEDIA_PROTECTED_PATH', FRAMEWORK_PATH.'/media/protected');
     define('FRAMEWORK_MEDIA_PROTECTED_URL', FRAMEWORK_URL.'/media/protected');
-    define('FRAMEWORK_DEBUG', (isset($framework_config['DEBUG'])) ? $framework_config['DEBUG'] : false);
-    define('FRAMEWORK_CACHE', (isset($framework_config['CACHE'])) ? $framework_config['CACHE'] : true);
+    define('FRAMEWORK_DEBUG', (isset($framework_config['DEBUG'])) ?
+        $framework_config['DEBUG'] : false);
+    define('FRAMEWORK_CACHE', (isset($framework_config['CACHE'])) ?
+        $framework_config['CACHE'] : true);
+    define('CATALOG_ACCEPT_EXTENSION', isset($framework_config['CATALOG_ACCEPT_EXTENSION']) ?
+        implode(',', $framework_config['CATALOG_ACCEPT_EXTENSION']) :
+        implode(',', array('beta','pre-release','release')));
 } catch (\Exception $e) {
     throw new \Exception('Problem setting the framework constants!', 0, $e);
 }
@@ -296,8 +306,8 @@ try {
 
 if (FRAMEWORK_SETUP) {
     // execute the setup routine for kitFramework::Basic
-    $Setup = new Setup($app);
-    $Setup->exec();
+    $Setup = new Setup();
+    $Setup->exec($app);
 }
 
 // init the firewall
@@ -366,46 +376,72 @@ foreach ($scan_paths as $scan_path) {
 }
 
 // GENERAL ROUTES for the kitFramework
+
 $app->get('/', function() use($app) {
+    // redirect to the protected welcome dialog
     return $app->redirect(FRAMEWORK_URL.'/admin/welcome');
 });
 $app->get('/login',
+    // the general login dialog
     'phpManufaktur\Basic\Control\Login::exec');
 $app->get('/password/forgotten',
+    // password forgotten?
     'phpManufaktur\Basic\Control\forgottenPassword::dialogForgottenPassword');
 $app->post('password/reset',
+    // create a new password
     'phpManufaktur\Basic\Control\forgottenPassword::dialogResetPassword');
 $app->post('/password/retype',
+    // confirm the new password
     'phpManufaktur\Basic\Control\forgottenPassword::dialogRetypePassword');
 $app->get('/password/create/{guid}',
+    // confirm the link the create a new password
     'phpManufaktur\Basic\Control\forgottenPassword::dialogCreatePassword');
 $app->post('/login/first/cms',
     // first login into the framework from the CMS backend
     'phpManufaktur\Basic\Control\Account\FirstLogin::controllerCMSLogin');
 $app->post('/login/first/cms/check',
+    // first login into the kitFramework
     'phpManufaktur\Basic\Control\Account\FirstLogin::controllerCheckCMSLogin');
 
 // ADMIN ROUTES
+$admin->get('/basic/setup',
+    // setup for the BASIC extension tables (normally not needed!)
+    'phpManufaktur\Basic\Data\Setup\Setup::exec');
+$admin->get('/basic/update',
+    // update the BASIC extension tables
+    'phpManufaktur\Basic\Data\Setup\Update::exec');
+$admin->get('/basic/uninstall',
+    // uninstall the BASIC extension tables (be carefull!)
+    'phpManufaktur\Basic\Data\Setup\Uninstall::exec');
+
 $admin->get('/',
+    // redirect to the welcome dialog
     'phpManufaktur\Basic\Control\Welcome::controllerFramework');
 $admin->get('/account',
+    // user account dialog
     'phpManufaktur\Basic\Control\Account::exec');
 $admin->get('/welcome',
+    // the general welcome dialog
     'phpManufaktur\Basic\Control\Welcome::controllerFramework');
 $admin->match('/scan/extensions',
+    // scan for installed extensions
     'phpManufaktur\Basic\Control\ScanExtensions::exec');
 $admin->get('/scan/catalog',
+    // scan for available extensions from Github
     'phpManufaktur\Basic\Control\ScanCatalog::exec');
 
 $admin->get('updater/install/{catalog_id}',
+    // install a extension
     'phpManufaktur\Updater\Updater::controllerInstallExtension');
 $admin->get('updater/update/{extension_id}',
+    // update a extension
     'phpManufaktur\Updater\Updater::controllerUpdateExtension');
 
 $app->get('/welcome/cms/{cms}',
     // the welcome dialog is called by the CMS backend
     'phpManufaktur\Basic\Control\Welcome::controllerCMS');
 $app->post('/welcome/login/check',
+    // first login check
     'phpManufaktur\Basic\Control\Welcome::checkFirstLogin');
 
 // kitFILTER

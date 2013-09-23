@@ -61,25 +61,61 @@ EOD;
         }
     } // createTable()
 
+    /**
+     * Delete table - switching check for foreign keys off before executing
+     *
+     * @throws \Exception
+     */
+    public function dropTable()
+    {
+        try {
+            $table = self::$table_name;
+            $SQL = <<<EOD
+    SET foreign_key_checks = 0;
+    DROP TABLE IF EXISTS `$table`;
+    SET foreign_key_checks = 1;
+EOD;
+            $this->app['db']->query($SQL);
+            $this->app['monolog']->addInfo("Drop table '".self::$table_name."'", array(__METHOD__, __LINE__));
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Select a kitCommand parameter ID (link)
+     *
+     * @param string $link
+     * @param boolean $return_array
+     * @throws \Exception
+     * @return mixed|boolean
+     */
     public function selectParameter($link, $return_array=true)
     {
         try {
             $SQL = "SELECT `parameter` FROM `".self::$table_name."` WHERE `link`='$link'";
             $parameter = $this->app['db']->fetchColumn($SQL);
+            if (is_string($parameter)) {
+                if ($return_array) {
+                    return json_decode($this->app['utils']->unsanitizeText($parameter), true);
+                }
+                else {
+                    return $this->app['utils']->unsanitizeText($parameter);
+                }
+            }
+            return false;
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e->getMessage(), 0, $e);
         }
-        if (is_string($parameter)) {
-            if ($return_array) {
-                return json_decode($this->app['utils']->unsanitizeText($parameter), true);
-            }
-            else {
-                return $this->app['utils']->unsanitizeText($parameter);
-            }
-        }
-        return false;
     }
 
+    /**
+     * Insert a new kitCommand parameter record
+     *
+     * @param array $items
+     * @throws \Exception
+     * @return integer ID of the new record
+     */
     public function insert($items)
     {
         try {

@@ -84,11 +84,32 @@ class Users
 EOD;
         try {
             $this->app['db']->query($SQL);
-            $this->app['monolog']->addDebug("Created table 'users' for the class UserProvider");
+            $this->app['monolog']->addDebug("Created table '".self::$table_name."'", array(__METHOD__, __LINE__));
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e->getMessage(), 0, $e);
         }
     } // createTable()
+
+    /**
+     * Delete table - switching check for foreign keys off before executing
+     *
+     * @throws \Exception
+     */
+    public function dropTable()
+    {
+        try {
+            $table = self::$table_name;
+            $SQL = <<<EOD
+    SET foreign_key_checks = 0;
+    DROP TABLE IF EXISTS `$table`;
+    SET foreign_key_checks = 1;
+EOD;
+            $this->app['db']->query($SQL);
+            $this->app['monolog']->addInfo("Drop table 'basic_users'", array(__METHOD__, __LINE__));
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
 
     /**
      * Select a User record from the given $name where $name can be the login name

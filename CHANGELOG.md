@@ -6,7 +6,11 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
-**0.34**
+**0.35** - 2013-09-22
+
+* improved the handling for installation and upgrading extensions
+
+**0.34** - 2013-09-20
 
 * changed template handling 
 * changed authentication handling 

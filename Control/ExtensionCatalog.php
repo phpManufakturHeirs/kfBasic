@@ -215,6 +215,7 @@ class ExtensionCatalog
                                     'category' => $target['category'],
                                     'group' => $target['group'],
                                     'release' => $target['release']['number'],
+                                    'release_status' => (isset($target['release']['status'])) ? $target['release']['status'] : 'undefined',
                                     'date' => date('Y-m-d', strtotime($target['release']['date'])),
                                     'info' => base64_encode(json_encode($target)),
                                     'logo_blob' => $logo['blob'],

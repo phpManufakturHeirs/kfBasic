@@ -102,6 +102,7 @@ class ExtensionRegister
                 'name' => $target['name'],
                 'group' => $target['group'],
                 'release' => $target['release']['number'],
+                'release_status' => (isset($target['release']['status'])) ? $target['release']['status'] : 'undefined',
                 'date' => date('Y-m-d', strtotime($target['release']['date'])),
                 'info' => base64_encode(json_encode($target)),
                 'logo_url' => isset($logo_url) ? $logo_url : '',

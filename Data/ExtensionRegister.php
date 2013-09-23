@@ -45,6 +45,7 @@ class ExtensionRegister
       `name` VARCHAR(64) NOT NULL DEFAULT '',
       `group` VARCHAR(64) NOT NULL DEFAULT '',
       `release` VARCHAR(16) NOT NULL DEFAULT '',
+      `release_status` VARCHAR(64) NOT NULL DEFAULT 'undefined',
       `date` DATE NOT NULL DEFAULT '0000-00-00',
       `date_installed` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
       `date_updated` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -72,6 +73,34 @@ EOD;
         }
     } // createTable()
 
+    /**
+     * Delete table - switching check for foreign keys off before executing
+     *
+     * @throws \Exception
+     */
+    public function dropTable()
+    {
+        try {
+            $table = self::$table_name;
+            $SQL = <<<EOD
+    SET foreign_key_checks = 0;
+    DROP TABLE IF EXISTS `$table`;
+    SET foreign_key_checks = 1;
+EOD;
+            $this->app['db']->query($SQL);
+            $this->app['monolog']->addInfo("Drop table '".self::$table_name."'", array(__METHOD__, __LINE__));
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Select a extension by the given GUID
+     *
+     * @param string $guid
+     * @throws \Exception
+     * @return Ambigous <number, NULL>
+     */
     public function selectIDbyGUID($guid)
     {
         try {
@@ -83,6 +112,12 @@ EOD;
         return (is_array($result) && isset($result['id'])) ? (int) $result['id'] : null;
     }
 
+    /**
+     * Insert a new record into the extension register
+     *
+     * @param array $data
+     * @throws \Exception
+     */
     public function insert($data)
     {
         try {

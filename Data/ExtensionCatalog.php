@@ -46,6 +46,7 @@ class ExtensionCatalog
       `category` VARCHAR(64) NOT NULL DEFAULT '',
       `group` VARCHAR(64) NOT NULL DEFAULT '',
       `release` VARCHAR(16) NOT NULL DEFAULT '',
+      `release_status` VARCHAR(64) NOT NULL DEFAULT 'undefined',
       `date` DATE NOT NULL DEFAULT '0000-00-00',
       `info` TEXT NOT NULL,
         `logo_blob` BLOB NOT NULL,
@@ -65,12 +66,40 @@ class ExtensionCatalog
 EOD;
         try {
             $this->app['db']->query($SQL);
-            $this->app['monolog']->addDebug("Created table '".self::$table_name."' for the class ExtensionCatalog");
+            $this->app['monolog']->addInfo("Created table '".self::$table_name."' for the class ExtensionCatalog");
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e->getMessage(), 0, $e);
         }
     } // createTable()
 
+    /**
+     * Delete table - switching check for foreign keys off before executing
+     *
+     * @throws \Exception
+     */
+    public function dropTable()
+    {
+        try {
+            $table = self::$table_name;
+            $SQL = <<<EOD
+    SET foreign_key_checks = 0;
+    DROP TABLE IF EXISTS `$table`;
+    SET foreign_key_checks = 1;
+EOD;
+            $this->app['db']->query($SQL);
+            $this->app['monolog']->addInfo("Drop table '".self::$table_name."'", array(__METHOD__, __LINE__));
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Select a extension record by the given GUID
+     *
+     * @param string $guid
+     * @throws \Exception
+     * @return Ambigous <number, NULL>
+     */
     public function selectIDbyGUID($guid)
     {
         try {
@@ -82,6 +111,13 @@ EOD;
         }
     }
 
+    /**
+     * Select by ID
+     *
+     * @param integer $id
+     * @throws \Exception
+     * @return Ambigous <boolean, unknown>
+     */
     public function select($id)
     {
         try {
@@ -93,6 +129,12 @@ EOD;
         }
     }
 
+    /**
+     * Insert a new record into the extension catalog
+     *
+     * @param array $data
+     * @throws \Exception
+     */
     public function insert($data)
     {
         try {
@@ -128,6 +170,13 @@ EOD;
         }
     }
 
+    /**
+     * Select all records from the extension dialog and order them by the given
+     * 'order_by' parameter
+     *
+     * @param string $order_by
+     * @throws \Exception
+     */
     public function selectAll($order_by='name')
     {
         try {
@@ -138,6 +187,14 @@ EOD;
         }
     }
 
+    /**
+     * Select a extension record by the given group and extension name
+     *
+     * @param string $group
+     * @param string $name
+     * @throws \Exception
+     * @return Ambigous <boolean, unknown>
+     */
     public function selectByGroupAndName($group, $name)
     {
         try {

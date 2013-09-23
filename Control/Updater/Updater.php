@@ -224,9 +224,9 @@ class Updater
                 $app['monolog']->addInfo("Prepare route {$info['setup']['install']} to finish installation.");
                 $execute_route[] = $info['setup']['install'];
             }
-            elseif (($install_mode == 'updated') && isset($info['setup']['upgrade'])) {
-                $app['monolog']->addInfo("Prepare route {$info['setup']['upgrade']} to finish upgrade.");
-                $execute_route[] = $info['setup']['upgrade'];
+            elseif (($install_mode == 'updated') && isset($info['setup']['update'])) {
+                $app['monolog']->addInfo("Prepare route {$info['setup']['update']} to finish update.");
+                $execute_route[] = $info['setup']['update'];
             }
             else {
                 $this->setMessage("Successfull $install_mode the extension %extension%.",
