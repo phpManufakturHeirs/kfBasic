@@ -71,6 +71,34 @@ class Account
     }
 
     /**
+     * Return the USER name of the authenticated user or ANONYMOUS otherwise
+     *
+     * @return string
+     */
+    public function getUserName()
+    {
+        $token = $this->app['security']->getToken();
+        if (is_null($token))
+            return 'ANONYMOUS';
+
+        $user = $token->getUser();
+
+        return ($user == 'anon.') ? 'ANONYMOUS' : $user->getUsername();
+    }
+
+    /**
+     * Return the user data record of the given user or false if the user does
+     * not exists
+     *
+     * @param string $username
+     * @return boolean|Ambigous <boolean, multitype:unknown >
+     */
+    public function getUserData($username)
+    {
+        return $this->FrameworkUser->selectUser($username);
+    }
+
+    /**
      * Check if the given CMS user has administrator privileges at the CMS
      *
      * @param string $username
