@@ -197,7 +197,7 @@ class Updater
         $this->initUpdater($app);
 
         // check the dependencies for this extension
-        $this->checkDependencies(7); //$catalog_id);
+        $this->checkDependencies($catalog_id);
 
         // don't forgot to add the initial extension ...
         self::$extension_array[] = $catalog_id;
