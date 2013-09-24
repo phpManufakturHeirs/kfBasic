@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.37** - 2013-09-24
+
+* fixed: checking remote IP always return 127.0.0.1
+
 **0.36** - 2013-09-22
 
 * improved the handling for installation and upgrading extensions

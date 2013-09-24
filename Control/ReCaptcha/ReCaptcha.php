@@ -258,6 +258,7 @@ EOD;
      * Return always TRUE if the Service is not enabled or inactive
      *
      * @return boolean
+     * @todo $_SERVER['REMOTE_ADDR'] is not the best solution?!
      */
     public function isValid()
     {
@@ -270,7 +271,7 @@ EOD;
             // a ReCaptcha was submitted, so check the answer
             $response = recaptcha_check_answer(
                 self::$private_key,
-                $this->app['request']->getClientIP(), //instead of $_SERVER['REMOTE_ADDR'],
+                $_SERVER['REMOTE_ADDR'], // $this->app['request']->getClientIP() deliver always 127.0.0.1
                 $this->app['request']->get('recaptcha_challenge_field'),
                 $this->app['request']->get('recaptcha_response_field'));
             if ($response->is_valid) {
