@@ -40,6 +40,27 @@ class cURL {
     public function Download ($source_url, $target_path, &$info = array())
     {
         try {
+
+            // first try to get the redirected URL
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $source_url);
+            curl_setopt($ch, CURLOPT_HEADER, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_USERAGENT, self::USERAGENT);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+            // set proxy if needed
+            $this->app['utils']->setCURLproxy($ch);
+
+            $header = curl_exec($ch);
+            curl_close($ch);
+            if (preg_match('#Location: (.*)#', $header, $redirect)) {
+                // this is the redirected URL
+                $source_url = trim($redirect[1]);
+            }
+
             // init cURL
             $ch = curl_init();
             // set the cURL options
