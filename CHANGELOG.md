@@ -6,6 +6,11 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.38** - 2013-09-25
+
+* fixed: the post parameter from the output filter may be disturbed, changed the handling
+* changed: handling for adding extra space to kitCommand iFrames 
+
 **0.37** - 2013-09-24
 
 * fixed: checking remote IP always return 127.0.0.1
