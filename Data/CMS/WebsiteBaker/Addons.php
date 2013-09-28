@@ -111,4 +111,4 @@ class Addons
         }
     }
 
-} // class Users
+}

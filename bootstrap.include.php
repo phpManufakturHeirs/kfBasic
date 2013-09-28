@@ -75,6 +75,11 @@ try {
     define('CATALOG_ACCEPT_EXTENSION', isset($framework_config['CATALOG_ACCEPT_EXTENSION']) ?
         implode(',', $framework_config['CATALOG_ACCEPT_EXTENSION']) :
         implode(',', array('beta','pre-release','release')));
+
+    if (!isset($framework_config['CATALOG_ACCEPT_EXTENSION'])) {
+        // add the accepted extensions to the framework configuration array
+        $framework_config['CATALOG_ACCEPT_EXTENSION'] = explode(',', CATALOG_ACCEPT_EXTENSION);
+    }
 } catch (\Exception $e) {
     throw new \Exception('Problem setting the framework constants!', 0, $e);
 }
