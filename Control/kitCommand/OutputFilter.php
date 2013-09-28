@@ -13,7 +13,7 @@ namespace phpManufaktur\Basic\Control\kitCommand;
 
 class OutputFilter
 {
-/**
+    /**
      * Get the URL of the submitted PAGE_ID - check for special pages like
      * TOPICS and/or NEWS and return the URL of the TOPIC/NEW page if active
      *
