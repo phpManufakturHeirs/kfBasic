@@ -22,6 +22,7 @@ class OutputFilter
      */
     public static function getURLbyPageID($page_id) {
         global $database;
+        global $post_id;
 
         if (defined('TOPIC_ID')) {
             // this is a TOPICS page
@@ -37,9 +38,10 @@ class OutputFilter
             return WB_URL . $topics_directory . $link . PAGE_EXTENSION;
         }
 
-        if (defined('POST_ID')) {
+        if (!is_null($post_id) || defined('POST_ID')) {
             // this is a NEWS page
-            $SQL = "SELECT `link` FROM `".TABLE_PREFIX."mod_news_posts` WHERE `post_id`='".POST_ID."'";
+            $id = (defined('POST_ID')) ? POST_ID : $post_id;
+            $SQL = "SELECT `link` FROM `".TABLE_PREFIX."mod_news_posts` WHERE `post_id`='$id'";
             $link = $database->get_one($SQL);
             if ($database->is_error()) {
                 trigger_error(sprintf('[%s - %s] %s', __FUNCTION__, __LINE__, $database->get_error()), E_USER_ERROR);
@@ -210,6 +212,8 @@ class OutputFilter
      */
     public function parse($content, $parseCMS=true, &$kit_command=array())
     {
+        global $post_id;
+
         $use_alternate_parameter = false;
         $config_path = realpath(__DIR__.'/../../../../../../config/cms.json');
         if (file_exists($config_path)) {
@@ -279,7 +283,7 @@ class OutputFilter
                             'email' => (isset($_SESSION['EMAIL'])) ? $_SESSION['EMAIL'] : ''
                         ),
                         'special' => array(
-                            'post_id' => defined('POST_ID') ? POST_ID : null,
+                            'post_id' => (!is_null($post_id) || defined('POST_ID')) ? defined('POST_ID') ? POST_ID : $post_id : null,
                             'topic_id' => defined('TOPIC_ID') ? TOPIC_ID : null
                             )
                     ),
