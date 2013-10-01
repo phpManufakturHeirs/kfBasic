@@ -6,6 +6,12 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.40** - 2013-10-01
+
+* added getPageTitle() to CMS functions
+* fixed a problem getting the URL of NEWS Posts
+* added missing check for CATALOG_ACCEPT_EXTENSION
+
 **0.39** - 2013-09-25
 
 * changed handling for download of redirected Github repositories
