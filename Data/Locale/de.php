@@ -15,6 +15,8 @@ if ('á' != "\xc3\xa1") {
 }
 
 return array(
+    'CURRENCY_SYMBOL'
+        => '€',
     'DATE_FORMAT'
         => 'd.m.Y',
     'DATETIME_FORMAT'
@@ -106,6 +108,8 @@ return array(
         => 'Zeile',
     'Link transmitted'
         => 'Link übermittelt',
+    'List'
+        => 'Liste',
     'Login' =>
         'Anmelden',
     'Logout' =>
