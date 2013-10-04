@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.41** - 2013-10-04
+
+* added CURRENCY_SYMBOL to the language files
+
 **0.40** - 2013-10-01
 
 * added getPageTitle() to CMS functions

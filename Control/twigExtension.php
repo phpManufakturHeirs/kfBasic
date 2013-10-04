@@ -52,19 +52,20 @@ class twigExtension extends Twig_Extension
     public function getGlobals ()
     {
         return array(
-            'FRAMEWORK_URL' => FRAMEWORK_URL,
-            'FRAMEWORK_PATH' => FRAMEWORK_PATH,
+            'CMS_ADMIN_URL' => CMS_ADMIN_URL,
+            'CMS_MEDIA_URL' => CMS_MEDIA_URL,
+            'CMS_TYPE' => CMS_TYPE,
+            'CMS_URL' => CMS_URL,
+            'CMS_VERSION' => CMS_VERSION,
             'FRAMEWORK_MEDIA_URL' => FRAMEWORK_MEDIA_URL,
             'FRAMEWORK_MEDIA_PROTECTED_URL' => FRAMEWORK_MEDIA_PROTECTED_URL,
-            'CMS_URL' => CMS_URL,
-            'CMS_MEDIA_URL' => CMS_MEDIA_URL,
-            'CMS_ADMIN_URL' => CMS_ADMIN_URL,
-            'CMS_TYPE' => CMS_TYPE,
-            'CMS_VERSION' => CMS_VERSION,
-            'MANUFAKTUR_URL' => MANUFAKTUR_URL,
+            'FRAMEWORK_PATH' => FRAMEWORK_PATH,
+            'FRAMEWORK_URL' => FRAMEWORK_URL,
             'MANUFAKTUR_PATH' => MANUFAKTUR_PATH,
+            'MANUFAKTUR_URL' => MANUFAKTUR_URL,
+            'THIRDPARTY_PATH' => THIRDPARTY_PATH,
             'THIRDPARTY_URL' => THIRDPARTY_URL,
-            'THIRDPARTY_PATH' => THIRDPARTY_PATH
+
         );
     } // getGlobals()
 
