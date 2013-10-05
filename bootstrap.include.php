@@ -4,7 +4,7 @@
  * kitFramework::kfBasic
  *
  * @author Team phpManufaktur <team@phpmanufaktur.de>
- * @link https://addons.phpmanufaktur.de/extendedWYSIWYG
+ * @link https://kit2.phpmanufaktur.de
  * @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
  */
@@ -484,7 +484,7 @@ $app->get('/basic/list',
 // kitSEARCH
 $app->post('/kit_search/command/{command}',
     // catch all searches within kitCommands
-    'phpManufaktur\Basic\Conttrol\kitSearch\Search::exec');
+    'phpManufaktur\Basic\Control\kitSearch\Search::exec');
 
 // mount the controller factories
 $app->mount('/admin', $admin);
