@@ -9,7 +9,7 @@
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
  */
 
-namespace phpManufaktur\Basic\Control\CMS\LEPTON;
+namespace phpManufaktur\Basic\Control\CMS;
 
 use phpManufaktur\Basic\Control\CMS\WebsiteBaker\OutputFilter as WebsiteBakerOutputFilter;
 
@@ -18,5 +18,6 @@ require_once WB_PATH.'/kit2/extension/phpmanufaktur/phpManufaktur/Basic/Control/
 
 class OutputFilter extends WebsiteBakerOutputFilter
 {
-    // nothing to extend or to change
+    // nothing to extend or to change because the handling for WebsiteBaker,
+    // LEPTON and BlackCat is identical - maybe change later...
 }

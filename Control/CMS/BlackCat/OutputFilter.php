@@ -4,19 +4,19 @@
  * kitFramework::Basic
  *
  * @author Team phpManufaktur <team@phpmanufaktur.de>
- * @link https://addons.phpmanufaktur.de/extendedWYSIWYG
+ * @link https://kit2.phpmanufaktur.de
  * @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
  */
 
 namespace phpManufaktur\Basic\Control\CMS\BlackCat;
 
-use phpManufaktur\Basic\Control\kitCommand\OutputFilter as kitCommandOutputFilter;
+use phpManufaktur\Basic\Control\CMS\WebsiteBaker\OutputFilter as WebsiteBakerOutputFilter;
 
 // no autoloading at this point !!!
-require_once WB_PATH.'/kit2/extension/phpmanufaktur/phpManufaktur/Basic/Control/kitCommand/OutputFilter.php';
+require_once WB_PATH.'/kit2/extension/phpmanufaktur/phpManufaktur/Basic/Control/CMS/WebsiteBaker/OutputFilter.php';
 
-class OutputFilter extends kitCommandOutputFilter
+class OutputFilter extends WebsiteBakerOutputFilter
 {
     // nothing to extend or to change
 }
