@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.44** - 2013-10-06
+
+* fixed problems with detecting previous versions and setting namespace for LEPTON output_interface
+
 **0.43** - 2013-10-06
 
 * fixed a problem with setup archive file
