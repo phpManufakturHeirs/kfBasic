@@ -16,6 +16,12 @@ use phpManufaktur\Basic\Control\CMS\WebsiteBaker\OutputFilter as WebsiteBakerOut
 // no autoloading at this point !!!
 require_once WB_PATH.'/kit2/extension/phpmanufaktur/phpManufaktur/Basic/Control/CMS/WebsiteBaker/OutputFilter.php';
 
+/**
+ * SearchFilter for the Content Management System WebsiteBaker
+ *
+ * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+ *
+ */
 class SearchFilter
 {
     protected static $result = false;
@@ -100,7 +106,7 @@ class SearchFilter
                     'title' => $parameter['page_title'],
                     'description' => $parameter['description'],
                     'keywords' => $parameter['keywords'],
-                    'url' => WebsiteBakerOutputFilter::getURLbyPageID($parameter['page_id']),
+                    'url' => $parameter['url'],
                     'modified_when' => $parameter['modified_when'],
                     'modified_by' => $parameter['modified_by']
                 ),
@@ -165,6 +171,24 @@ class SearchFilter
     }
 
     /**
+     * Check if the given $table exists
+     *
+     * @param string $table
+     * @throws \Exception
+     * @return boolean
+     */
+    protected function tableExists($table)
+    {
+        global $database;
+
+        if (null == ($query = $database->query("SHOW TABLES LIKE '$table'"))) {
+            throw new \Exception($database->get_error());
+        }
+        return (false !== ($row = $query->fetchRow(MYSQL_ASSOC)));
+    }
+
+
+    /**
      * The search connector between WebsiteBaker, LEPTON, BlackCat and the kitCommand
      *
      * @param array $search
@@ -185,8 +209,9 @@ class SearchFilter
 
         // first step: search for kitCommands in WYSIWYG sections
         $SQL = "SELECT `section_id`, `page_id`, `content` FROM `".TABLE_PREFIX."mod_wysiwyg` WHERE `content` LIKE '%~~ % ~~%'";
-        if (null == ($query = $database->query($SQL)))
+        if (null == ($query = $database->query($SQL))) {
             throw new \Exception($database->get_error());
+        }
 
         while (false !== ($wysiwyg = $query->fetchRow(MYSQL_ASSOC))) {
 
@@ -201,14 +226,61 @@ class SearchFilter
                 'page_title' => $page['page_title'],
                 'description' => $page['description'],
                 'keywords' => $page['keywords'],
+                'url' => WebsiteBakerOutputFilter::getURLbyPageID($wysiwyg['page_id']),
                 'modified_when' => $page['modified_when'],
                 'modified_by' => $page['modified_by']
             ));
-
+            // parse the content
             $this->parseContent($wysiwyg['content'], $parameter);
         }
 
         // second step: search for kitCommands in NEWS articles
+        if ($this->tableExists(TABLE_PREFIX.'mod_news_posts')) {
+            $SQL = "SELECT * FROM `".TABLE_PREFIX."mod_news_posts` WHERE `content_long` LIKE '%~~ % ~~%' AND `active`='1'";
+            if (null == ($query = $database->query($SQL))) {
+                throw new \Exception($database->get_error());
+            }
+            while (false !== ($news = $query->fetchRow(MYSQL_ASSOC))) {
+                $parameter = $this->createParameterArray(array(
+                    'page_id' => $news['page_id'],
+                    'section_id' => $news['section_id'],
+                    'page_title' => $news['title'],
+                    'description' => strip_tags($news['content_short']),
+                    'keywords' => '',
+                    'url' => WB_URL.PAGES_DIRECTORY.$news['link'].PAGE_EXTENSION,
+                    'modified_when' => $news['posted_when'],
+                    'modified_by' => $news['posted_by']
+                ));
+                // parse the content
+                $this->parseContent($news['content_long'], $parameter);
+            }
+        }
+
+        // third step: search for kitCommands in TOPICS articles
+        if ($this->tableExists(TABLE_PREFIX.'mod_topics')) {
+            $SQL = "SELECT * FROM `".TABLE_PREFIX."mod_topics` WHERE `content_long` LIKE '%~~ % ~~%' AND `active`>'1'";
+            if (null == ($query = $database->query($SQL))) {
+                throw new \Exception($database->get_error());
+            }
+
+            global $topics_directory;
+            include WB_PATH . '/modules/topics/module_settings.php';
+
+            while (false !== ($topics = $query->fetchRow(MYSQL_ASSOC))) { echo "sfsffd";
+                $parameter = $this->createParameterArray(array(
+                    'page_id' => $topics['page_id'],
+                    'section_id' => $topics['section_id'],
+                    'page_title' => $topics['title'],
+                    'description' => $topics['description'],
+                    'keywords' => $topics['keywords'],
+                    'url' => WB_URL . $topics_directory . $topics['link'] . PAGE_EXTENSION,
+                    'modified_when' => $topics['published_when'],
+                    'modified_by' => $topics['posted_by']
+                ));
+                // parse the content
+                $this->parseContent($topics['content_long'], $parameter);
+            }
+        }
 
         return self::$result;
     }
