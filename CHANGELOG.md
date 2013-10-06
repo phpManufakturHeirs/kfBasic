@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.43** - 2013-10-06
+
+* fixed a problem with setup archive file
+
 **0.42** - 2013-10-06
 
 * Moved OutputFilter from \Basic\Control\kitCommand\OutputFilter to \Basic\Control\CMS and added compatibillity classes for the different CMS

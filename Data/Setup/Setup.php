@@ -36,7 +36,7 @@ class Setup
         if (!file_exists(CMS_PATH.'/modules/kit_framework_search/VERSION')) {
             // the VERSION file exists since kitframework_search 0.11
             $this->app['filesystem']->copy(
-                MANUFAKTUR_PATH.'/Basic/Data/Setup/Release_0.42/search.php',
+                MANUFAKTUR_PATH.'/Basic/Data/Setup/Files/Release_0.42/search.php',
                 CMS_PATH.'/modules/kit_framework_search/search.php',
                 true);
             file_put_contents(CMS_PATH.'/modules/kit_framework_search/VERSION', '0.10.1');
