@@ -161,7 +161,7 @@ class Welcome
         $catalog_items = array();
         foreach ($cat_items as $item) {
             // show only catalog items which have the accepted release status
-            if (in_array($item['release_status'], $accepted_items)) {
+            if (isset($item['release_status']) && in_array($item['release_status'], $accepted_items)) {
                 $catalog_items[] = $item;
             }
         }

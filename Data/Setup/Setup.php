@@ -33,15 +33,8 @@ class Setup
      */
     protected function release_042()
     {
-        if (!file_exists(CMS_PATH.'/modules/kit_framework_search/VERSION')) {
-            // the VERSION file exists since kitframework_search 0.11
-            $this->app['filesystem']->copy(
-                MANUFAKTUR_PATH.'/Basic/Data/Setup/Files/Release_0.42/search.php',
-                CMS_PATH.'/modules/kit_framework_search/search.php',
-                true);
-            file_put_contents(CMS_PATH.'/modules/kit_framework_search/VERSION', '0.10.1');
-            $this->app['monolog']->addInfo('BASIC Update] Changed kit_framework_search and added VERSION file');
-        }
+        $Update = new Update();
+        $Update->release_042($this->app);
     }
 
     /**

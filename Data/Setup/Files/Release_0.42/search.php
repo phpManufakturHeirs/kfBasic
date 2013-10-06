@@ -14,7 +14,7 @@ if (!defined('WB_PATH')) {
 }
 
 /**
- * Connect the CMS search with the kitFramework
+ * Connect the CMS search function with the kitFramework
  *
  * @param array $search
  * @return boolean

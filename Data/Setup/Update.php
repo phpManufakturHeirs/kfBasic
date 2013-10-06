@@ -60,17 +60,29 @@ class Update
     /**
      * Release 0.42
      */
-    protected function release_042()
+    public function release_042(Application $app)
     {
         if (!file_exists(CMS_PATH.'/modules/kit_framework_search/VERSION')) {
             // the VERSION file exists since kitframework_search 0.11
-            $this->app['filesystem']->copy(
+            $app['filesystem']->copy(
                 MANUFAKTUR_PATH.'/Basic/Data/Setup/Files/Release_0.42/search.php',
                 CMS_PATH.'/modules/kit_framework_search/search.php',
                 true);
             file_put_contents(CMS_PATH.'/modules/kit_framework_search/VERSION', '0.10.1');
-            $this->app['monolog']->addInfo('BASIC Update] Changed kit_framework_search and added VERSION file');
+            $app['monolog']->addInfo('BASIC Update] Changed kit_framework_search and added VERSION file');
         }
+        if (file_exists(CMS_PATH.'/modules/kit_framework/VERSION')) {
+            if (false === ($version = trim(file_get_contents(CMS_PATH.'/modules/kit_framework/VERSION')))) {
+                throw new \Exception('Missing kit_framework VERSION file!');
+            }
+            if (version_compare('0.28', trim($version), '<=')) {
+                $app['filesystem']->copy(
+                    MANUFAKTUR_PATH.'/Basic/Data/Setup/Files/Release_0.42/output_interface.php',
+                    CMS_PATH.'/modules/kit_framework/output_interface.php',
+                    true);
+            }
+        }
+
     }
 
     /**
@@ -83,7 +95,7 @@ class Update
         $this->app = $app;
 
         $this->release_036();
-        $this->release_042();
+        $this->release_042($app);
 
         return $app['translator']->trans('Successfull updated the extension %extension%.',
             array('%extension%' => 'Basic'));
