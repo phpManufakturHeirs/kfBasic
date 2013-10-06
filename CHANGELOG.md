@@ -6,6 +6,13 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.42** - 2013-10-06
+
+* Moved OutputFilter from \Basic\Control\kitCommand\OutputFilter to \Basic\Control\CMS and added compatibillity classes for the different CMS
+* added and activated the search function for the kitCommands
+* added search filter for NEWS and TOPICS
+* add check if a `kit_framework_search` section exists in the CMS
+
 **0.41** - 2013-10-04
 
 * added CURRENCY_SYMBOL to the language files
