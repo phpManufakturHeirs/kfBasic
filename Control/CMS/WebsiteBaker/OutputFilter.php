@@ -21,7 +21,8 @@ class OutputFilter
      * @param integer $page_id
      * @return boolean|string
      */
-    public static function getURLbyPageID($page_id) {
+    public static function getURLbyPageID($page_id)
+    {
         global $database;
         global $post_id;
 
@@ -35,7 +36,7 @@ class OutputFilter
             }
             // include TOPICS settings
             global $topics_directory;
-            include_once WB_PATH . '/modules/topics/module_settings.php';
+            include WB_PATH . '/modules/topics/module_settings.php';
             return WB_URL . $topics_directory . $link . PAGE_EXTENSION;
         }
 
