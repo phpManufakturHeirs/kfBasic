@@ -15,6 +15,7 @@ use Silex\Application;
 use phpManufaktur\Basic\Control\ExtensionRegister;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use phpManufaktur\Basic\Data\CMS\SearchSection;
 
 /**
  * Display a welcome to the kitFramework dialog
@@ -58,6 +59,11 @@ class Welcome
 
         self::$usage = $this->app['request']->get('usage', 'framework');
 
+        // check if the search section in the CMS exists
+        if (file_exists(CMS_PATH.'/modules/kit_framework_search')) {
+            $SearchSection = new SearchSection();
+            $SearchSection->addSearchSection($app);
+        }
     }
 
     /**
