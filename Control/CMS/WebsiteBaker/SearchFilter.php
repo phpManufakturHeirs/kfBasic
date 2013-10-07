@@ -266,7 +266,7 @@ class SearchFilter
             global $topics_directory;
             include WB_PATH . '/modules/topics/module_settings.php';
 
-            while (false !== ($topics = $query->fetchRow(MYSQL_ASSOC))) { echo "sfsffd";
+            while (false !== ($topics = $query->fetchRow(MYSQL_ASSOC))) {
                 $parameter = $this->createParameterArray(array(
                     'page_id' => $topics['page_id'],
                     'section_id' => $topics['section_id'],

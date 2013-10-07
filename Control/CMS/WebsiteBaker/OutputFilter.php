@@ -230,10 +230,20 @@ class OutputFilter
         //preg_match_all('/(~~ ).*( ~~)/', $content, $matches, PREG_SET_ORDER);
         preg_match_all('/(~~)( |&nbsp;)(.){3,256}( |&nbsp;)(~~)/', $content, $matches, PREG_SET_ORDER);
         foreach ($matches as $match) {
+            if (PAGE_ID < 1) {
+                // no regular page, probably the search function where we don't
+                // want to execute any kitCommand, so we remove it and continue
+                $content = str_replace($match[0], '', $content);
+                continue;
+            }
+
             $command_expression = str_ireplace("&nbsp;", ' ', $match[0]);
             // get the expression without leading and trailing ~~
             $command_string = trim(str_replace('~~', '', $command_expression));
+
             if (empty($command_string)) continue;
+
+
             // explode the string into an array by spaces
             $command_array = explode(' ', $command_string);
             // the first match is the command!
