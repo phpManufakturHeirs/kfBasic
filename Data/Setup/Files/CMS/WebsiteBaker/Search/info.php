@@ -9,10 +9,6 @@
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
  */
 
-if (!defined('WB_PATH')) {
-    exit('Can\'t access this file directly!');
-}
-
 $module_directory     = 'kit_framework_search';
 $module_name          = 'kitFramework Search';
 $module_function      = 'page';
