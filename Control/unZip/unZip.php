@@ -11,6 +11,7 @@
 namespace phpManufaktur\Basic\Control\unZip;
 
 use phpManufaktur\Basic\Control\unZip\unZipException;
+use Silex\Application;
 
 require_once MANUFAKTUR_PATH . '/Basic/Control/unZip/unZipException.php';
 
@@ -23,6 +24,7 @@ require_once MANUFAKTUR_PATH . '/Basic/Control/unZip/unZipException.php';
 class unZip
 {
 
+    protected $app = null;
     protected static $unzip_path = null;
     protected static $use_pclzip = false;
     protected $pclzip = null;
@@ -31,8 +33,10 @@ class unZip
     /**
      * Constructor for the class UnZip
      */
-    public function __construct ()
+    public function __construct(Application $app)
     {
+        $this->app = $app;
+
         // ZipArchive is the preferred method
         if (! class_exists('ZipArchive')) {
             // check if ziblib is installed ...
@@ -47,7 +51,7 @@ class unZip
         self::$unzip_path = FRAMEWORK_TEMP_PATH . '/unzip';
         // check directory and create it if necessary
         $this->checkDirectory(self::$unzip_path, true);
-    } // __construct()
+    }
 
     /**
      * Check if the desired $path exists and try to create it also with nested
@@ -57,18 +61,17 @@ class unZip
      * @param boolean $create try to create the directory
      * @throws UnZipException
      */
-    public function checkDirectory ($path, $create = true)
+    public function checkDirectory ($path, $create=true)
     {
-        if (! file_exists($path)) {
+        if (!file_exists($path)) {
             if ($create) {
-                if (! mkdir($path, 0755, true)) {
-                    throw new unZipException(sprintf("Can't create the directory %s!", $path));
-                }
-            } else {
+                $this->app['filesystem']->mkdir($path);
+            }
+            else {
                 throw new unZipException(sprintf('The directory %s does not exists!', $path));
             }
         }
-    } // checkPath()
+    }
 
     /**
      * Iterate directory tree very efficient
@@ -78,10 +81,11 @@ class unZip
      * @param sting $dir
      * @return array - directoryTree
      */
-    public static function directoryTree ($dir)
+    public static function directoryTree($dir)
     {
-        if (substr($dir, - 1) == "/")
+        if (substr($dir, - 1) == "/") {
             $dir = substr($dir, 0, - 1);
+        }
         $path = array();
         $stack = array();
         $stack[] = $dir;
@@ -94,7 +98,8 @@ class unZip
                         $current_file = "{$thisdir}/{$dircont[$i]}";
                         if (is_file($current_file)) {
                             $path[] = "{$thisdir}/{$dircont[$i]}";
-                        } elseif (is_dir($current_file)) {
+                        }
+                        elseif (is_dir($current_file)) {
                             $stack[] = $current_file;
                         }
                     }
@@ -103,40 +108,17 @@ class unZip
             }
         }
         return $path;
-    } // directoryTree()
-
-    /**
-     * Delete a directory recursivly
-     *
-     * @param string $directory_path
-     */
-    public function deleteDirectory ($directory_path)
-    {
-        if (is_dir($directory_path)) {
-            $items = scandir($directory_path);
-            foreach ($items as $item) {
-                if (($item != '.') && ($item != '..')) {
-                    if (filetype($directory_path . '/' . $item) == 'dir')
-                        $this->deleteDirectory($directory_path . '/' . $item);
-                    elseif (! unlink($directory_path . '/' . $item))
-                        throw new unZipException(sprintf('Can\'t delete the file %s.', $directory_path . '/' . $item));
-                }
-            }
-            reset($items);
-            if (! rmdir($directory_path))
-                throw new unZipException(sprintf('Can\'t delete the directory %s.', $directory_path));
-        }
-    } // deleteDirectory()
+    }
 
     /**
      * Set the path for the unzip operation
      *
      * @param string $unzip_path
      */
-    public static function setUnZipPath ($unzip_path)
+    public static function setUnZipPath($unzip_path)
     {
         self::$unzip_path = $unzip_path;
-    } // setUnZipPath()
+    }
 
     /**
      * Return the UnZip Path
@@ -146,24 +128,24 @@ class unZip
     public static function getUnZipPath ()
     {
         return self::$unzip_path;
-    } // getUnZipPath()
+    }
 
     /**
      * Return the list of the extracted files and directories
      *
      * @return array
      */
-    public static function getFileList ()
+    public static function getFileList()
     {
         return self::$file_list;
-    } // getFileList()
+    }
 
     /**
      * Create a list of the unzipped files
      *
      * @param array $list
      */
-    protected function createPclZipFileList ($list)
+    protected function createPclZipFileList($list)
     {
         $file_list = array();
         foreach ($list as $item) {
@@ -176,12 +158,12 @@ class unZip
             );
         }
         self::$file_list = $file_list;
-    } // createPclZipFileList()
+    }
 
     /**
      * Create a list of the unzipped files
      */
-    protected function createZipArchiveFileList ()
+    protected function createZipArchiveFileList()
     {
         $file_list = array();
         $list = $this->directoryTree(self::$unzip_path);
@@ -193,7 +175,7 @@ class unZip
             );
         }
         self::$file_list = $file_list;
-    } // createZipArchiveFileList()
+    }
 
     protected function createZipArchiveFileListFromPclZipList($list)
     {
@@ -217,10 +199,10 @@ class unZip
      * @throws UnZipException
      * @return array boolean
      */
-    public function extract ($zip_file)
+    public function extract($zip_file)
     {
         // delete the files and directories from the unzip path
-        $this->deleteDirectory(self::$unzip_path);
+        $this->app['filesystem']->remove(self::$unzip_path);
 
         if (self::$use_pclzip) {
             // use PclZip for decompressing
@@ -259,6 +241,6 @@ class unZip
             throw unZipException::error($e->getMessage());
         }
         return false;
-    } // extract()
+    }
 
-} // class unZip
+}

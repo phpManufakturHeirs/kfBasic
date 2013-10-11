@@ -64,7 +64,7 @@ class Updater
         $this->ExtensionRegister = new ExtensionRegister($app);
         $this->Github = new gitHub($app);
         $this->cURL = new cURL($app);
-        $this->unZIP = new unZip();
+        $this->unZIP = new unZip($app);
         $this->Welcome = new Welcome($app);
 
         self::$usage = $this->app['request']->get('usage', 'framework');
@@ -97,7 +97,7 @@ class Updater
             ));
         if ($log_message) {
             // log this message
-            $this->app['monolog']->addInfo(strip_tags($this->app['translator']->trans($message, $params, 'messages', 'en')));
+            $this->app['monolog']->addDebug(strip_tags($this->app['translator']->trans($message, $params, 'messages', 'en')));
         }
     }
 
@@ -178,7 +178,7 @@ class Updater
                         $this->checkDependencies($info['id']);
                         // ok nwo we can add the extension to the array
                         self::$extension_array[] = $info['id'];
-                        $this->app['monolog']->addInfo("Add the extension $group\\$extension is tagged as needed.");
+                        $this->app['monolog']->addDebug("Add the extension $group\\$extension is tagged as needed.");
                     }
                 }
             }
@@ -211,21 +211,21 @@ class Updater
             $info = json_decode(base64_decode($catalog['info']), true);
             $install_mode = (file_exists(FRAMEWORK_PATH.$info['path'])) ? 'updated' : 'installed';
 
-            $app['monolog']->addInfo("Start installation/update of {$info['download']['github']['organization']}//{$info['download']['github']['repository']}");
+            $app['monolog']->addDebug("Start installation/update of {$info['download']['github']['organization']}//{$info['download']['github']['repository']}");
 
             if (!$this->copyLastGithubRepository($info['download']['github']['organization'], $info['download']['github']['repository'])) {
                 // Ooops, problem copying the repo into directory
                 $this->Welcome->setMessage($this->getMessage());
                 return $this->Welcome->controllerFramework($this->app);
             }
-            $app['monolog']->addInfo("All files are copied to {$info['path']}");
+            $app['monolog']->addDebug("All files are copied to {$info['path']}");
 
             if (($install_mode == 'installed') && isset($info['setup']['install'])) {
-                $app['monolog']->addInfo("Prepare route {$info['setup']['install']} to finish installation.");
+                $app['monolog']->addDebug("Prepare route {$info['setup']['install']} to finish installation.");
                 $execute_route[] = $info['setup']['install'];
             }
             elseif (($install_mode == 'updated') && isset($info['setup']['update'])) {
-                $app['monolog']->addInfo("Prepare route {$info['setup']['update']} to finish update.");
+                $app['monolog']->addDebug("Prepare route {$info['setup']['update']} to finish update.");
                 $execute_route[] = $info['setup']['update'];
             }
             else {

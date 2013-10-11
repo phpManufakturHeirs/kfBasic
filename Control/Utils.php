@@ -507,7 +507,7 @@ class Utils
                     $translator->addResource('array', $lang_array, $lang_name);
                     return $translator;
                 }));
-                $this->app['monolog']->addInfo('Added language file: '.substr($locale_path, strlen(FRAMEWORK_PATH)).'/'.$lang_file);
+                $this->app['monolog']->addDebug('Added language file: '.substr($locale_path, strlen(FRAMEWORK_PATH)).'/'.$lang_file);
             }
         }
         catch (\Exception $e) {

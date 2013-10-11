@@ -134,7 +134,7 @@ class ExtensionCatalog
                 array('%file%' => substr($target_path, strlen(FRAMEWORK_PATH)))));
         }
         // init unZip
-        $unZip = new unZip();
+        $unZip = new unZip($this->app);
         $unZip->setUnZipPath(FRAMEWORK_TEMP_PATH.'/catalog');
         $unZip->checkDirectory($unZip->getUnZipPath());
         $unZip->extract($target_path);
