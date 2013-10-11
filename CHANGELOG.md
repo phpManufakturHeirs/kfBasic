@@ -6,6 +6,12 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.46** - 2013-10-11
+
+* moved the handling of the kitFramework Search Section from CMS Tool to BASIC
+* changed handling of monolog logger
+* changed handling of class UnZip
+
 **0.45** - 2013-10-07
 
 * fixed a foolish output of the the search filter ... 8-)
