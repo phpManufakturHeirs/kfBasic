@@ -90,14 +90,14 @@ class InstallAdminTool
 
             foreach ($files as $file) {
                 // loop through the files, replace content and write them to the desired /modules directory
-                if (file_exists(MANUFAKTUR_PATH."/Basic/Template/default/cms/setup/websitebaker/{$file}.htt")) {
-                    $content = file_get_contents(MANUFAKTUR_PATH."/Basic/Template/default/cms/setup/websitebaker/{$file}.htt");
+                if (file_exists(MANUFAKTUR_PATH."/Basic/Template/default/cms/setup/websitebaker/tool/{$file}.htt")) {
+                    $content = file_get_contents(MANUFAKTUR_PATH."/Basic/Template/default/cms/setup/websitebaker/tool/{$file}.htt");
                     file_put_contents(CMS_PATH.'/modules/'.$data['directory'].'/'.$file.'.php', str_ireplace($search, $replace, $content));
                 }
             }
 
-            if (file_exists(MANUFAKTUR_PATH."/Basic/Template/default/cms/setup/websitebaker/language.htt")) {
-                $content = file_get_contents(MANUFAKTUR_PATH."/Basic/Template/default/cms/setup/websitebaker/language.htt");
+            if (file_exists(MANUFAKTUR_PATH."/Basic/Template/default/cms/setup/websitebaker/tool/language.htt")) {
+                $content = file_get_contents(MANUFAKTUR_PATH."/Basic/Template/default/cms/setup/websitebaker/tool/language.htt");
                 // create a language directory
                 $this->app['filesystem']->mkdir(CMS_PATH.'/modules/'.$data['directory'].'/languages');
                 // loop through the languages available in the extension.json and create module descriptions for the CMS
