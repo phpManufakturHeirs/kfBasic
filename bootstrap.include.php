@@ -25,6 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Monolog\Handler\SwiftMailerHandler;
 use phpManufaktur\Basic\Control\ReCaptcha\ReCaptcha;
 use phpManufaktur\Basic\Control\Account\Account;
+use Symfony\Bridge\Monolog\Logger;
 
 // set the error handling
 ini_set('display_errors', 1);
@@ -88,7 +89,7 @@ try {
 $app['debug'] = FRAMEWORK_DEBUG;
 
 // get the filesystem into the application
-$app['filesystem'] = function  ()
+$app['filesystem'] = function()
 {
     return new Filesystem();
 };
@@ -117,9 +118,11 @@ if ($app['filesystem']->exists($log_file) && (filesize($log_file) > $framework_c
 date_default_timezone_set('Europe/Berlin');
 // register monolog
 $app->register(new Silex\Provider\MonologServiceProvider(), array(
-    'monolog.logfile' => $log_file
+    'monolog.logfile' => $log_file,
+    'monolog.level' => FRAMEWORK_DEBUG ? Logger::DEBUG : Logger::WARNING,
+    'monolog.name' => 'kitFramework'
 ));
-$app['monolog']->addInfo('MonologServiceProvider registered.');
+$app['monolog']->addDebug('MonologServiceProvider registered.');
 
 try {
     // read the CMS configuration
@@ -138,7 +141,7 @@ try {
 } catch (\Exception $e) {
     throw new \Exception('Problem setting the CMS constants!', 0, $e);
 }
-$app['monolog']->addInfo('CMS constants defined.');
+$app['monolog']->addDebug('CMS constants defined.');
 
 try {
     // read the doctrine configuration
@@ -158,7 +161,7 @@ try {
 } catch (\Exception $e) {
     throw new \Exception('Problem initilizing Doctrine!', 0, $e);
 }
-$app['monolog']->addInfo('DoctrineServiceProvider registered');
+$app['monolog']->addDebug('DoctrineServiceProvider registered');
 
 // register the session handler
 $app->register(new Silex\Provider\SessionServiceProvider(), array(
@@ -167,14 +170,14 @@ $app->register(new Silex\Provider\SessionServiceProvider(), array(
         'cookie_lifetime' => 0
     )
 ));
-$app['monolog']->addInfo('SessionServiceProvider registered.');
+$app['monolog']->addDebug('SessionServiceProvider registered.');
 
 $app->before(function ($request) {
     $request->getSession()->start();
 });
 
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
-$app['monolog']->addInfo('UrlGeneratorServiceProvider registered.');
+$app['monolog']->addDebug('UrlGeneratorServiceProvider registered.');
 
 // default language
 $locale = 'en';
@@ -210,7 +213,7 @@ $app['translator'] = $app->share($app->extend('translator', function  ($translat
 
 $app['translator']->setLocale($locale);
 
-$app['monolog']->addInfo('Translator Service registered. Added ArrayLoader to the Translator');
+$app['monolog']->addDebug('Translator Service registered. Added ArrayLoader to the Translator');
 
 // load the /Basic language files
 $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Basic/Data/Locale');
@@ -250,24 +253,24 @@ $app['twig'] = $app->share($app->extend('twig', function  ($twig, $app)
     return $twig;
 }));
 
-$app['monolog']->addInfo('TwigServiceProvider registered.');
+$app['monolog']->addDebug('TwigServiceProvider registered.');
 
 // register the Markdown service provider
 $app->register(new MarkdownServiceProvider());
 
 // register Validator Service
 $app->register(new Silex\Provider\ValidatorServiceProvider());
-$app['monolog']->addInfo('Validator Service Provider registered.');
+$app['monolog']->addDebug('Validator Service Provider registered.');
 
 // register the FormServiceProvider
 $app->register(new Silex\Provider\FormServiceProvider());
-$app['monolog']->addInfo('Form Service registered.');
+$app['monolog']->addDebug('Form Service registered.');
 
 // register the HTTP Cache Service
 $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
     'http_cache.cache_dir' => FRAMEWORK_PATH . '/temp/cache/'
 ));
-$app['monolog']->addInfo('HTTP Cache Service registered.');
+$app['monolog']->addDebug('HTTP Cache Service registered.');
 
 try {
     // register the SwiftMailer
@@ -283,7 +286,7 @@ try {
     );
     define('SERVER_EMAIL_ADDRESS', $swift_config['SERVER_EMAIL']);
     define('SERVER_EMAIL_NAME', $swift_config['SERVER_NAME']);
-    $app['monolog']->addInfo('SwiftMailer Service registered');
+    $app['monolog']->addDebug('SwiftMailer Service registered');
 
     // check the auto mailing
     if (!isset($framework_config['LOGFILE_EMAIL_ACTIVE'])) {
@@ -302,7 +305,7 @@ try {
         ->setTo($framework_config['LOGFILE_EMAIL_TO'])
         ->setBody('kitFramework errror report');
         $app['monolog']->pushHandler(new SwiftMailerHandler($app['mailer'], $message, LOGFILE_EMAIL_LEVEL));
-        $app['monolog']->addInfo('Monolog handler for SwiftMailer initialized');
+        $app['monolog']->addDebug('Monolog handler for SwiftMailer initialized');
     }
 } catch (\Exception $e) {
     throw new \Exception('Problem initializing the SwiftMailer!');
@@ -353,7 +356,7 @@ if (FRAMEWORK_SETUP) {
     $framework_config['FRAMEWORK_SETUP'] = false;
     if (!file_put_contents(FRAMEWORK_PATH. '/config/framework.json', $app['utils']->JSONFormat($framework_config)))
         throw new \Exception('Can\'t write the configuration file for the framework!');
-    $app['monolog']->addInfo('Finished kitFramework setup.');
+    $app['monolog']->addDebug('Finished kitFramework setup.');
 }
 
 

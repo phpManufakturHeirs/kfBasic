@@ -105,7 +105,7 @@ EOD;
     SET foreign_key_checks = 1;
 EOD;
             $this->app['db']->query($SQL);
-            $this->app['monolog']->addInfo("Drop table 'basic_users'", array(__METHOD__, __LINE__));
+            $this->app['monolog']->addDebug("Drop table 'basic_users'", array(__METHOD__, __LINE__));
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }

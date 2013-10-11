@@ -54,7 +54,7 @@ class FirstLogin
             ));
             if ($log_message) {
                 // log this message
-                $this->app['monolog']->addInfo(strip_tags($this->app['translator']->trans($message, $params, 'messages', 'en')));
+                $this->app['monolog']->addDebug(strip_tags($this->app['translator']->trans($message, $params, 'messages', 'en')));
             }
     }
 
