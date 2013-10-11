@@ -12,6 +12,7 @@
 namespace phpManufaktur\Basic\Data\Setup;
 
 use Silex\Application;
+use phpManufaktur\Basic\Control\CMS\InstallSearch;
 
 class Update
 {
@@ -46,14 +47,14 @@ class Update
             // add release_status
             $SQL = "ALTER TABLE `".FRAMEWORK_TABLE_PREFIX."basic_extension_catalog` ADD `release_status` VARCHAR(64) NOT NULL DEFAULT 'undefined' AFTER `release`";
             $this->app['db']->query($SQL);
-            $this->app['monolog']->addInfo('[BASIC Update] Add field `release_status` to table `basic_extension_catalog`');
+            $this->app['monolog']->addDebug('[BASIC Update] Add field `release_status` to table `basic_extension_catalog`');
         }
 
         if (!$this->columnExists(FRAMEWORK_TABLE_PREFIX.'basic_extension_register', 'release_status')) {
             // add field release_status
             $SQL = "ALTER TABLE `".FRAMEWORK_TABLE_PREFIX."basic_extension_register` ADD `release_status` VARCHAR(64) NOT NULL DEFAULT 'undefined' AFTER `release`";
             $this->app['db']->query($SQL);
-            $this->app['monolog']->addInfo('[BASIC Update] Add field `release_status` to table `basic_extension_register`');
+            $this->app['monolog']->addDebug('[BASIC Update] Add field `release_status` to table `basic_extension_register`');
         }
     }
 
@@ -69,20 +70,25 @@ class Update
                 CMS_PATH.'/modules/kit_framework_search/search.php',
                 true);
             file_put_contents(CMS_PATH.'/modules/kit_framework_search/VERSION', '0.10.1');
-            $app['monolog']->addInfo('BASIC Update] Changed kit_framework_search and added VERSION file');
+            $app['monolog']->addDebug('BASIC Update] Changed kit_framework_search and added VERSION file');
         }
         if (file_exists(CMS_PATH.'/modules/kit_framework/VERSION')) {
             if (false === ($version = trim(file_get_contents(CMS_PATH.'/modules/kit_framework/VERSION')))) {
                 throw new \Exception('Missing kit_framework VERSION file!');
             }
-            if (version_compare('0.28', trim($version), '<=')) {
+            if (version_compare('0.30', trim($version), '<=')) {
+                // update the output filter for LEPTON
                 $app['filesystem']->copy(
                     MANUFAKTUR_PATH.'/Basic/Data/Setup/Files/Release_0.42/output_interface.php',
                     CMS_PATH.'/modules/kit_framework/output_interface.php',
                     true);
+                // update the output filter for BlackCat
+                $app['filesystem']->copy(
+                    MANUFAKTUR_PATH.'/Basic/Data/Setup/Files/Release_0.42/filter/kitCommands.php',
+                    CMS_PATH.'/modules/kit_framework/filter/kitCommands.php',
+                    true);
             }
         }
-
     }
 
     /**
@@ -96,6 +102,10 @@ class Update
 
         $this->release_036();
         $this->release_042($app);
+
+        // install the search function
+        $Search = new InstallSearch($app);
+        $Search->exec();
 
         return $app['translator']->trans('Successfull updated the extension %extension%.',
             array('%extension%' => 'Basic'));

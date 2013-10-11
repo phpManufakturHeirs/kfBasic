@@ -17,6 +17,7 @@ use phpManufaktur\Basic\Data\ExtensionCatalog;
 use phpManufaktur\Basic\Data\Setting;
 use phpManufaktur\Basic\Data\ExtensionRegister;
 use phpManufaktur\Basic\Data\kitCommandParameter;
+use phpManufaktur\Basic\Control\CMS\UninstallSearch;
 
 class Uninstall
 {
@@ -47,6 +48,10 @@ class Uninstall
         // drop the table for the kitCommand parameters
         $cmdParameter = new kitCommandParameter($app);
         $cmdParameter->dropTable();
+
+        // uninstall the search function
+        $Search = new UninstallSearch($app);
+        $Search->exec();
 
         return $app['translator']->trans('Successfull uninstalled the extension %extension%.',
             array('%extension%' => 'Basic'));

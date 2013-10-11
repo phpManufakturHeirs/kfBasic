@@ -40,7 +40,31 @@ class SearchSection
                     'page_id' => $page_id,
                     'position' => $position++
                 ));
-                $app['monolog']->addInfo("Inserted a kit_framework_search section to page ID $page_id", array(__METHOD__, __LINE__));
+                $app['monolog']->addDebug("Inserted a kit_framework_search section to page ID $page_id", array(__METHOD__, __LINE__));
+            }
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Remove all existing Search Sections
+     *
+     * @param Application $app
+     * @throws \Exception
+     */
+    public function removeSearchSection(Application $app)
+    {
+        try {
+            $SQL = "SELECT `section_id`, `page_id` FROM `".CMS_TABLE_PREFIX."sections` WHERE `module`='kit_framework_search'";
+            $sections = $app['db']->fetchAll($SQL);
+            foreach ($sections as $section) {
+                // delete the search section
+                $app['db']->delete(CMS_TABLE_PREFIX.'sections', array('section_id' => $section['section_id']));
+                // loop through all records and renumber the section positions
+                $app['db']->query('SET @c:=0');
+                $SQL = "UPDATE `".CMS_TABLE_PREFIX."sections` SET `position`=(SELECT @c:=@c+1) WHERE `page_id`='".$section['page_id']."' ORDER BY `position` ASC";
+                $app['db']->query($SQL);
             }
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);

@@ -66,7 +66,7 @@ class ExtensionCatalog
 EOD;
         try {
             $this->app['db']->query($SQL);
-            $this->app['monolog']->addInfo("Created table '".self::$table_name."' for the class ExtensionCatalog");
+            $this->app['monolog']->addDebug("Created table '".self::$table_name."' for the class ExtensionCatalog");
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e->getMessage(), 0, $e);
         }
@@ -87,7 +87,7 @@ EOD;
     SET foreign_key_checks = 1;
 EOD;
             $this->app['db']->query($SQL);
-            $this->app['monolog']->addInfo("Drop table '".self::$table_name."'", array(__METHOD__, __LINE__));
+            $this->app['monolog']->addDebug("Drop table '".self::$table_name."'", array(__METHOD__, __LINE__));
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }

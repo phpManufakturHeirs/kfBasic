@@ -17,6 +17,7 @@ use phpManufaktur\Basic\Data\ExtensionCatalog;
 use phpManufaktur\Basic\Data\Setting;
 use phpManufaktur\Basic\Data\ExtensionRegister;
 use phpManufaktur\Basic\Data\kitCommandParameter;
+use phpManufaktur\Basic\Control\CMS\InstallSearch;
 
 /**
  * Setup all needed database tables and initialize the kitFramework
@@ -69,6 +70,10 @@ class Setup
 
         // maybe BASIC is installed by an older kitFrameworkCMSTool ...
         $this->release_042();
+
+        // install the search function
+        $Search = new InstallSearch($app);
+        $Search->exec();
 
         return $app['translator']->trans('Successfull installed the extension %extension%.',
             array('%extension%' => 'Basic'));
