@@ -139,7 +139,7 @@ class Basic
         // get the CMS $_POST parameters
         Basic::$POST = $this->app['request']->request->get('POST', array(), true);
         // get the preferred template
-        Basic::$preferred_template = (isset(Basic::$parameter['template'])) ? Basic::$parameter['template'] : 'default';
+        Basic::$preferred_template = (isset(Basic::$parameter['template'])) ? Basic::$parameter['template'] : FRAMEWORK_TEMPLATE_PREFERRED;
         // set the values for the frame
 
         if (null === (Basic::$frame = $this->app['request']->request->get('iFrame', null, true))) {
@@ -347,7 +347,7 @@ class Basic
      */
     public function getPreferredTemplateStyle()
     {
-        return (isset(Basic::$preferred_template)) ? Basic::$preferred_template : 'default';
+        return (isset(Basic::$preferred_template)) ? Basic::$preferred_template : FRAMEWORK_TEMPLATE_PREFERRED;
     }
 
     /**
