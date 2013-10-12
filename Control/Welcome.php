@@ -195,7 +195,7 @@ class Welcome
         $cms_string = $cms;
         $cms = json_decode(base64_decode($cms), true);
 
-        $app['request']->request->set('usage', $cms['type']);
+        $app['request']->request->set('usage', ($cms['target'] == 'cms') ? $cms['type'] : 'framework');
         $this->initWelcome($app);
 
         if (!$app['account']->checkUserIsCMSAdministrator($cms['username'])) {
