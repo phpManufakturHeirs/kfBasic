@@ -12,7 +12,7 @@
 namespace phpManufaktur\Basic\Control;
 
 use Silex\Application;
-use phpManufaktur\Basic\Control\kitCommand\OutputFilter;
+use phpManufaktur\Basic\Control\CMS\OutputFilter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use phpManufaktur\Basic\Control\JSON\JSONFormat;
