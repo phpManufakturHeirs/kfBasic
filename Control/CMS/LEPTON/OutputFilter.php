@@ -15,7 +15,7 @@ use phpManufaktur\Basic\Control\CMS\WebsiteBaker\OutputFilter as WebsiteBakerOut
 
 if (!defined('CMS_PATH')) {
     // missing CMS_PATH indicate that the output filter is called directly by the CMS, we have no autoloading at this point !!!
-    require_once LEPTON_PATH.'/kit2/extension/phpmanufaktur/phpManufaktur/Basic/Control/CMS/WebsiteBaker/OutputFilter.php';
+    require_once WB_PATH.'/kit2/extension/phpmanufaktur/phpManufaktur/Basic/Control/CMS/WebsiteBaker/OutputFilter.php';
 }
 
 class OutputFilter extends WebsiteBakerOutputFilter

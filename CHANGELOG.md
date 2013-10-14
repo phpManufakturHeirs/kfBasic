@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.49** - 2013-10-14
+
+* critical: fixed wrong path for output filter in LEPTON installations
+
 **0.48** - 2013-10-14
 
 * fixed: app['utils'] uses wrong namespace for the output filter
