@@ -6,6 +6,14 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.48** - 2013-10-14
+
+* fixed: app['utils'] uses wrong namespace for the output filter
+* add additional check for CMS_PATH to see if autoloading is enabled
+* fixed: sometimes the kitCommand BASIC class does load the 'default' template instead of the preferred template from the framework.json
+* fixed incorrect target for external call of the kitFramework
+* introduce standard template 'white', the 'default' template is changed to transparent backgrounds
+
 **0.47** - 2013-10-11
 
 * moved the handling of the kitFramework Search Section from CMS Tool to BASIC
