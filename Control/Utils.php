@@ -17,6 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use phpManufaktur\Basic\Control\JSON\JSONFormat;
 
+require_once __DIR__.'/utf-8/functions-utf8.php';
+
 /**
  * Class with usefull utils for the general usage within the kitFramework
  *
@@ -637,6 +639,17 @@ class Utils
     {
         $JSONFormat = new JSONFormat();
         return $JSONFormat->format($chunk, $already_json);
+    }
+
+    /**
+     * Solution for the Latin1 --> UTF-8 MySQL and PHP problem ...
+     *
+     * @param unknown $convert
+     * @return Ambigous <unknown, string>
+     */
+    public function utf8_entities($convert)
+    {
+        return entities_to_umlauts2($convert);
     }
 
 } // class Utils
