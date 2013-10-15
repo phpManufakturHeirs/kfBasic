@@ -13,7 +13,7 @@ namespace phpManufaktur\Basic\Control\CMS;
 
 use phpManufaktur\Basic\Control\CMS\WebsiteBaker\OutputFilter as WebsiteBakerOutputFilter;
 
-if (!defined('CMS_PATH')) {
+if (!defined('CMS_PATH') || defined('SYNCDATA_PATH')) {
     // missing CMS_PATH indicate that the output filter is called directly by the CMS, we have no autoloading at this point !!!
     require_once WB_PATH.'/kit2/extension/phpmanufaktur/phpManufaktur/Basic/Control/CMS/WebsiteBaker/OutputFilter.php';
 }
