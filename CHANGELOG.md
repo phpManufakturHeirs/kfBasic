@@ -6,6 +6,11 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.50** - 2013-10-18
+
+* extended definition check with `SYNCDATA_PATH` in OutputFilter
+* added utf8_entities() as solution for the MySQL client Latin1 -> UTF-8 problem 
+
 **0.49** - 2013-10-14
 
 * critical: fixed wrong path for output filter in LEPTON installations
