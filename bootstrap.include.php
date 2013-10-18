@@ -161,7 +161,7 @@ try {
 } catch (\Exception $e) {
     throw new \Exception('Problem initializing Doctrine!', 0, $e);
 }
-//$app['db']->query("SET NAMES 'utf8'");
+// $app['db']->query("SET NAMES 'utf8'");
 $app['monolog']->addDebug('DoctrineServiceProvider registered');
 
 // register the session handler
