@@ -66,8 +66,10 @@ class InstallSearch
             $data['removable'] = 'Y';
         }
 
-        // install the search add-on
         $Addons = new Addons($this->app);
+        // first delete probably existing entry
+        $Addons->delete($module_directory);
+        // install the search add-on
         $Addons->insert($data);
 
         // check for search section at any page
