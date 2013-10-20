@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.52** - 2014-10-20
+
+* added `parseFileForConstants()` to `$app['utils']` 
+
 **0.51** - 2013-10-18
 
 * fixed: on update the install process for the search function may cause an exception
