@@ -8,6 +8,11 @@
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 */
 
+body {
+  color: #000;
+  background-color: rgba(0,0,0,0);
+}
+
 .kitcommand {
   margin: 0;
   padding: 0;
