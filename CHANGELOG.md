@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.53** - 2014-10-24
+
+* small but important change of the default date and time formatting
+
 **0.52** - 2014-10-20
 
 * added `parseFileForConstants()` to `$app['utils']` 
