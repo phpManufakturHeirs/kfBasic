@@ -15,19 +15,6 @@ if ('á' != "\xc3\xa1") {
 }
 
 return array(
-    'CURRENCY_SYMBOL'
-        => '€',
-    'DATE_FORMAT'
-        => 'd.m.Y',
-    'DATETIME_FORMAT'
-        => 'd.m.Y H:i',
-    'DECIMAL_SEPARATOR'
-        => ',',
-    'TIME_FORMAT'
-        => 'H:i',
-    'THOUSAND_SEPARATOR'
-        => '.',
-
     'Add the extension <b>%name%</b> to the catalog.'
         => 'Die Erweiterung <b>%name%</b> wurde dem Katalog hinzugefügt.',
     'Add the extension <b>%name%</b> to the register.'

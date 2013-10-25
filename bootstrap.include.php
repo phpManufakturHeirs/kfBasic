@@ -216,11 +216,14 @@ $app['translator']->setLocale($locale);
 
 $app['monolog']->addDebug('Translator Service registered. Added ArrayLoader to the Translator');
 
-// load the /Basic language files
+// load the language files
 $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Basic/Data/Locale');
 
-// load the /Custom/Basic language files
+// load the /Custom language files
 $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Basic/Data/Locale/Custom');
+
+// load the /Metric language files
+$app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Basic/Data/Locale/Metric');
 
 // register the ReCaptcha service
 $app['recaptcha'] = $app->share(function($app) {

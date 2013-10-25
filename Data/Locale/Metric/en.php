@@ -15,13 +15,16 @@ if ('á' != "\xc3\xa1") {
 }
 
 return array(
-    'captcha-timeout'
-        => 'The solution was received after the CAPTCHA timed out.',
-    'incorrect-captcha-sol'
-        => 'The CAPTCHA solution was incorrect.',
-    'invalid-request-cookie'
-        => 'The challenge parameter of the ReCaptcha verify script was incorrect.',
-    'invalid-site-private-key'
-        => 'The private key for the ReCaptcha is invalid, please check the settings!',
-
+    'CURRENCY_SYMBOL'
+        => '$',
+    'DATE_FORMAT'
+        => 'm/d/Y',
+    'DATETIME_FORMAT'
+        => 'm/d/Y - h:i a',
+    'DECIMAL_SEPARATOR'
+        => '.',
+    'THOUSAND_SEPARATOR'
+        => ',',
+    'TIME_FORMAT'
+        => 'h:i a',
 );
