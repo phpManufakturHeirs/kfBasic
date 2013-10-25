@@ -174,8 +174,8 @@ class ReCaptcha
         // read the config file
         self::$config = $this->app['utils']->ReadConfiguration(FRAMEWORK_PATH.'/config/recaptcha.json');
         // set the values
-        self::$is_enabled = (isset(self::$config['recaptcha']['enabled'])) ? self::$config['recaptcha']['enabled'] : true;
-        self::$mailhide_is_enabled = (isset(self::$config['mailhide']['enabled'])) ? self::$config['mailhide']['enabled'] : true;
+        self::$is_enabled = (isset(self::$config['enabled']['recaptcha'])) ? self::$config['enabled']['recaptcha'] : true;
+        self::$mailhide_is_enabled = (isset(self::$config['enabled']['mailhide'])) ? self::$config['enabled']['mailhide'] : true;
         self::$private_key = (isset(self::$config['key']['recaptcha']['private'])) ? self::$config['key']['recaptcha']['private'] : null;
         self::$public_key = (isset(self::$config['key']['recaptcha']['public'])) ? self::$config['key']['recaptcha']['public'] : null;
         self::$mailhide_private_key = (isset(self::$config['key']['mailhide']['private'])) ? self::$config['key']['mailhide']['private'] : null;
