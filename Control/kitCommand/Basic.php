@@ -94,7 +94,7 @@ class Basic
                     'cms' => array(
                         'type' => 'framework',
                         'version' => null,
-                        'locale' => $this->app['locale'],
+                        'locale' => $this->app['request']->getPreferredLanguage(),
                         'page_id' => -1,
                         'page_url' => null,
                         'user' => array(
@@ -284,7 +284,7 @@ class Basic
      */
     public function getCMSlocale()
     {
-        return isset(Basic::$cms_info['locale']) ? Basic::$cms_info['locale'] : $this->app['request']->getPreferredLanguage(); //'en';
+        return isset(Basic::$cms_info['locale']) ? Basic::$cms_info['locale'] : $this->app['request']->getPreferredLanguage();
     }
 
     /**
