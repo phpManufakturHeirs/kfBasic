@@ -62,6 +62,9 @@ return array(
         => 'Treten Sie mit den Entwicklern in Kontakt und erhalten Unterstützung, erfahren Tipps sowie Tricks zu %command%!',
     'Get more information about %command%'
         => 'Erfahren Sie mehr über %command%',
+    'Goodbye'
+        => 'Auf Wiedersehen',
+
     '<p>Hello %name%,<br />you have asked to create a new password for the kitFramework hosted at %server%.</p>'
         => '<p>Hallo %name%,<br />Sie haben darum gebeten ein neues Passwort für das kitFramework auf %server% zu erhalten.</p>',
     '<p>Hello %name%,</p><p>you want to change your password, so please type in a new one, repeat it and submit the form.</p><p>If you won\'t change your password just leave this dialog.</p>'
@@ -157,6 +160,8 @@ return array(
     'Successfull updated the extension %extension%.'
         => 'Die Erweiterung %extension% wurde erfolgreich aktualisiert.',
 
+    'Thank you for using the kitFramework'
+        => 'Vielen Dank für den Einsatz des kitFramework',
     '<p>The both passwords you have typed in does not match, please try again!</p>'
         => '<p>Die beiden Passwörter die Sie eingegeben haben stimmen nicht überein, bitte versuchen Sie es noch einmal!</p>',
     'The extension with the ID %extension_id% does not exists!'

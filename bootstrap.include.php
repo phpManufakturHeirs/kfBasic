@@ -26,6 +26,9 @@ use Monolog\Handler\SwiftMailerHandler;
 use phpManufaktur\Basic\Control\ReCaptcha\ReCaptcha;
 use phpManufaktur\Basic\Control\Account\Account;
 use Symfony\Bridge\Monolog\Logger;
+use phpManufaktur\Basic\Control\CustomLogoutSuccessHandler;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 // set the error handling
 ini_set('display_errors', 1);
@@ -337,7 +340,8 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
                 return new UserProvider($app);
             }),
             'logout' => array(
-                'logout_path' => '/admin/logout'
+                'logout_path' => '/admin/logout',
+                'target_url' => '/goodbye'
             )
         )
     ),
@@ -347,8 +351,17 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     }),
     'security.access_rules' => array(
         array('^/admin', 'ROLE_ADMIN')
+    ),
+    'security.role_hierarchy' => array(
+        'ROLE_ADMIN' => array('ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH')
     )
 ));
+
+
+$app['security.authentication.logout_handler.general'] = $app->share(function () use ($app) {
+    return new CustomLogoutSuccessHandler(
+        $app['security.http_utils'], '/goodbye');
+});
 
 // register the ACCOUNT class
 $app['account'] = $app->share(function($app) {
@@ -414,6 +427,12 @@ $app->post('/login/first/cms',
 $app->post('/login/first/cms/check',
     // first login into the kitFramework
     'phpManufaktur\Basic\Control\Account\FirstLogin::controllerCheckCMSLogin');
+$app->match('/goodbye',
+    // show the default logout and bye bye message
+    'phpManufaktur\Basic\Control\GoodBye::controllerGoodBye');
+$app->get('/logout',
+    // set paremeters and redirect to /admin/logout
+    'phpManufaktur\Basic\Control\GoodBye::controllerLogout');
 
 // ADMIN ROUTES
 $admin->get('/basic/setup',
@@ -426,6 +445,10 @@ $admin->get('/basic/uninstall',
     // uninstall the BASIC extension tables (be carefull!)
     'phpManufaktur\Basic\Data\Setup\Uninstall::exec');
 
+
+$app->get('/admin',
+    // redirect to the welcome dialog
+    'phpManufaktur\Basic\Control\Welcome::controllerFramework');
 $admin->get('/',
     // redirect to the welcome dialog
     'phpManufaktur\Basic\Control\Welcome::controllerFramework');

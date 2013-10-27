@@ -30,7 +30,7 @@
       {% block user_navigation %}
         {% if isAuthenticated() %}
           <div id="user_navigation">
-            {{ getUserDisplayName() }} | <a href="{{ FRAMEWORK_URL }}/admin/account">{{ 'Account'|trans }}</a> | <a href="{{ FRAMEWORK_URL }}/admin/logout">{{ 'Logout'|trans }}</a>
+            {{ getUserDisplayName() }} | <a href="{{ FRAMEWORK_URL }}/admin/account">{{ 'Account'|trans }}</a> | <a href="{{ FRAMEWORK_URL ~ '/logout' }}">{{ 'Logout'|trans }}</a>
           </div>
         {% endif %}
       {% endblock user_navigation %}
