@@ -167,4 +167,9 @@ class Account
         $this->FrameworkUser->insertUser($data);
     }
 
+    public function isGranted($role)
+    {
+        return $this->app['security']->isGranted($role);
+    }
+
 }
