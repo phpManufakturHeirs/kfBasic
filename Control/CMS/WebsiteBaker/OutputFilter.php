@@ -216,6 +216,23 @@ class OutputFilter
     {
         global $post_id;
 
+        if (defined('LEPTON_VERSION')) {
+            $cms_type = 'LEPTON';
+            $cms_version = LEPTON_VERSION;
+        }
+        elseif (defined('CAT_VERSION')) {
+            $cms_type = 'BlackCat';
+            $cms_version = CAT_VERSION;
+        }
+        else {
+            $cms_type = 'WebsiteBaker';
+            $cms_version = WB_VERSION;
+            // fix for WB 2.8.4
+            if (($cms_version == '2.8.3') && file_exists(WB_PATH.'/setup.ini.php')) {
+                $cms_version = '2.8.4';
+            }
+        }
+
         $use_alternate_parameter = false;
         $config_path = realpath(__DIR__.'/../../../../../../config/cms.json');
         if (file_exists($config_path)) {
@@ -286,6 +303,8 @@ class OutputFilter
                 }
                 $cmd_array = array(
                     'cms' => array(
+                        'type' => $cms_type,
+                        'version' => $cms_version,
                         'locale' => strtolower(LANGUAGE),
                         'page_id' => PAGE_ID,
                         'page_url' => $this->getURLbyPageID(PAGE_ID),

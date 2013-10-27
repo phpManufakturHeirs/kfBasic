@@ -95,14 +95,16 @@ class Basic
                         'type' => 'framework',
                         'version' => null,
                         'locale' => $this->app['locale'],
-                        'url' => FRAMEWORK_URL,
-                        'path' => FRAMEWORK_PATH,
                         'page_id' => -1,
                         'page_url' => null,
                         'user' => array(
                             'id' => -1,
                             'name' => '',
                             'email' => ''
+                        ),
+                        'special' => array(
+                            'post_id' => null,
+                            'topic_id' => null
                         )
                     ),
                     'GET' => array(),
