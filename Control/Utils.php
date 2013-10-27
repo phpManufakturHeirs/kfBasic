@@ -40,8 +40,10 @@ class Utils
     public function __construct (Application $app)
     {
         $this->app = $app;
+
         // FRAMEWORK_PATH is not set at this point!
-        $proxy_file = self::sanitizePath(realpath(__DIR__.'/../../../../../config/proxy.json'));
+        $proxy_file = __DIR__.'/../../../../../config/proxy.json';
+
         if (file_exists($proxy_file)) {
             // set the proxy options
             $proxy = $this->readJSON($proxy_file);
