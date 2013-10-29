@@ -26,9 +26,8 @@ use Monolog\Handler\SwiftMailerHandler;
 use phpManufaktur\Basic\Control\ReCaptcha\ReCaptcha;
 use phpManufaktur\Basic\Control\Account\Account;
 use Symfony\Bridge\Monolog\Logger;
-use phpManufaktur\Basic\Control\CustomLogoutSuccessHandler;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
+use phpManufaktur\Basic\Control\Account\CustomLogoutSuccessHandler;
+use phpManufaktur\Basic\Control\Account\CustomAuthenticationSuccessHandler;
 
 // set the error handling
 ini_set('display_errors', 1);
@@ -357,10 +356,12 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     )
 ));
 
-
 $app['security.authentication.logout_handler.general'] = $app->share(function () use ($app) {
     return new CustomLogoutSuccessHandler(
         $app['security.http_utils'], '/goodbye');
+});
+$app['security.authentication.success_handler.general'] = $app->share(function () use ($app) {
+    return new CustomAuthenticationSuccessHandler($app['security.http_utils'], array(), $app);
 });
 
 // register the ACCOUNT class
