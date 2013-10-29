@@ -119,11 +119,11 @@ EOD;
      * @throws \Exception
      * @return boolean multitype:Ambigous mixed, unknown>
      */
-    public function selectUser ($name)
+    public function selectUser($name)
     {
         try {
             $login = strtolower(trim($name));
-            $SQL = "SELECT * FROM `" .self::$table_name. "` WHERE `username`='$login' OR `email`='$login'";
+            $SQL = "SELECT * FROM `" .self::$table_name. "` WHERE (`username`='$login' OR `email`='$login')";
             $result = $this->app['db']->fetchAssoc($SQL);
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e->getMessage(), 0, $e);

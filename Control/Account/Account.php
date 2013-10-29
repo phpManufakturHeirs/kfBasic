@@ -16,6 +16,7 @@ use Symfony\Component\Security\Core\User\User as SymfonyUser;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use phpManufaktur\Basic\Data\Security\Users as FrameworkUser;
 use phpManufaktur\Basic\Data\CMS\Users as CMSuser;
+use phpManufaktur\Basic\Data\Security\Users;
 
 class Account
 {
@@ -132,7 +133,13 @@ class Account
         $user = new SymfonyUser($username,'', $roles, true, true, true, true);
         $token = new UsernamePasswordToken($user, null, $secure_area_name, $user->getRoles());
         $this->app['security']->setToken($token);
-        $this->app['session']->set('_security_'.$secure_area_name, serialize($token) );
+        $this->app['session']->set('_security_'.$secure_area_name, serialize($token));
+        // update account
+        $data = array(
+            'last_login' => date('Y-m-d H:i:s')
+        );
+        $Users = new Users($this->app);
+        $Users->updateUser($username, $data);
     }
 
     /**
