@@ -208,7 +208,7 @@ return array(
     'Username'
         => 'Benutzername',
     'Username or email address'
-        => 'Benutzername oder E-Mail Adresse',
+        => 'Benutzername oder <nobr>E-Mail</nobr> Adresse',
 
     'View the general help for kitCommands'
         => 'Die allgemeine Hilfe zu den kitCommands anzeigen',
@@ -223,5 +223,5 @@ return array(
         'Herzlich Willkommen!',
 
     'You are not allowed to access this resource!'
-        => 'Sie sind nicht befugt auf diese Resource zuzugreifen.'
+        => 'Sie sind nicht befugt auf diese Resource zuzugreifen.',
 );

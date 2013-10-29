@@ -18,6 +18,7 @@ use phpManufaktur\Basic\Data\Setting;
 use phpManufaktur\Basic\Data\ExtensionRegister;
 use phpManufaktur\Basic\Data\kitCommandParameter;
 use phpManufaktur\Basic\Control\CMS\UninstallSearch;
+use phpManufaktur\Basic\Data\Security\AdminAction;
 
 class Uninstall
 {
@@ -48,6 +49,10 @@ class Uninstall
         // drop the table for the kitCommand parameters
         $cmdParameter = new kitCommandParameter($app);
         $cmdParameter->dropTable();
+
+        // drop AdminAction
+        $adminAction = new AdminAction($app);
+        $adminAction->dropTable();
 
         // uninstall the search function
         $Search = new UninstallSearch($app);

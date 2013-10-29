@@ -13,6 +13,7 @@ namespace phpManufaktur\Basic\Data\Setup;
 
 use Silex\Application;
 use phpManufaktur\Basic\Control\CMS\InstallSearch;
+use phpManufaktur\Basic\Data\Security\AdminAction;
 
 class Update
 {
@@ -92,6 +93,16 @@ class Update
     }
 
     /**
+     * Release 0.54
+     */
+    protected function release_054()
+    {
+        // create the AdminAction table
+        $adminAction = new AdminAction($this->app);
+        $adminAction->createTable();
+    }
+
+    /**
      * Update the database tables for the BASIC extension of the kitFramework
      *
      * @param Application $app
@@ -102,6 +113,7 @@ class Update
 
         $this->release_036();
         $this->release_042($app);
+        $this->release_054();
 
         // install the search function
         $Search = new InstallSearch($app);

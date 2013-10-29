@@ -18,6 +18,7 @@ use phpManufaktur\Basic\Data\Setting;
 use phpManufaktur\Basic\Data\ExtensionRegister;
 use phpManufaktur\Basic\Data\kitCommandParameter;
 use phpManufaktur\Basic\Control\CMS\InstallSearch;
+use phpManufaktur\Basic\Data\Security\AdminAction;
 
 /**
  * Setup all needed database tables and initialize the kitFramework
@@ -67,6 +68,10 @@ class Setup
         // create the table for the kitCommand parameters
         $cmdParameter = new kitCommandParameter($app);
         $cmdParameter->createTable();
+
+        // create the AdminAction table
+        $adminAction = new AdminAction($app);
+        $adminAction->createTable();
 
         // maybe BASIC is installed by an older kitFrameworkCMSTool ...
         $this->release_042();
