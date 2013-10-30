@@ -6,6 +6,20 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.54** - 2014-10-30
+
+* separate the METRICS from the general language files
+* fixed invalid check if *reCaptcha* is enabled
+* the new null.twig template can be used to hide a `iframe` by setting the height to zero pixel
+* bugfix: changed check for `proxy.json` to avoid problems with a opendir restriction
+* fixed: missed information about CMS type and version in the parameter array
+* improved assigning the preferred browser language to the BASIC class
+* Added a `CustomLogoutSuccessHandler` - enable a own Goodbye dialog, setting messages and redirecting to other routes after successfull logout
+* Added `CustomAuthenticationSuccessHandler` and tracking of the login for all users
+* add login tracking
+* new class `AdminAction` enable actions to change user roles with email commands a.s.o
+* improved checkLogin()
+
 **0.53** - 2014-10-24
 
 * small but important change of the default date and time formatting
