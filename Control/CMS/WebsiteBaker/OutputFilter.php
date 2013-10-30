@@ -224,13 +224,17 @@ class OutputFilter
             $cms_type = 'BlackCat';
             $cms_version = CAT_VERSION;
         }
-        else {
+        elseif (defined('WB_VERSION')) {
             $cms_type = 'WebsiteBaker';
             $cms_version = WB_VERSION;
             // fix for WB 2.8.4
             if (($cms_version == '2.8.3') && file_exists(WB_PATH.'/setup.ini.php')) {
                 $cms_version = '2.8.4';
             }
+        }
+        else {
+            $cms_type = '- unknown -';
+            $cms_version = '0.0.0';
         }
 
         $use_alternate_parameter = false;
