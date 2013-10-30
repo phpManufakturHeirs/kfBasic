@@ -112,6 +112,9 @@ return array(
     'New kitFramework release available!'
         => 'Es ist eine neue kitFramework Release verfügbar!',
 
+    'No fitting user role dectected!'
+        => 'Es wurde kein passendes Benutzerrecht gefunden',
+
     'Open this helpfile in a new window'
         => 'Diese Hilfedatei in einem neuen Fenster öffnen',
 

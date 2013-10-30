@@ -84,7 +84,8 @@ EOD;
 
     /**
      * Insert a new AdminAction record
-     * @param unknown $data
+     *
+     * @param array $data
      * @param string $action_id
      * @throws \Exception
      */
@@ -98,6 +99,43 @@ EOD;
             }
             $this->app['db']->insert(self::$table_name, $insert);
             $action_id = $this->app['db']->lastInsertId();
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Select a AdminAction by GUID
+     *
+     * @param string $guid
+     * @throws \Exception
+     * @return Ambigous <boolean, array>
+     */
+    public function selectByGUID($guid)
+    {
+        try {
+            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `guid`='$guid'";
+            $result = $this->app['db']->fetchAssoc($SQL);
+            return (isset($result['id'])) ? $result : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Update AdminAction record
+     *
+     * @param array $data
+     * @param integer $id
+     * @throws \Exception
+     */
+    public function update($data, $id)
+    {
+        try {
+            $update = array();
+            foreach ($data as $key => $value)
+                $update[$this->app['db']->quoteIdentifier($key)] = (is_string($value)) ? $this->app['utils']->sanitizeText($value) : $value;
+            $this->app['db']->update(self::$table_name, $update, array('id' => $id));
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }
