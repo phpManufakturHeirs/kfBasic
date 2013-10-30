@@ -174,9 +174,49 @@ class Account
         $this->FrameworkUser->insertUser($data);
     }
 
+    /**
+     * Check if a role is granted for the user
+     *
+     * @param string $role
+     */
     public function isGranted($role)
     {
         return $this->app['security']->isGranted($role);
+    }
+
+    /**
+     * Encode the given password for usage with the user record
+     *
+     * @param string $password
+     */
+    public function encodePassword($password)
+    {
+        return $this->FrameworkUser->encodePassword($password);
+    }
+
+    /**
+     * Update the user account data
+     *
+     * @param string $username
+     * @param array $data
+     */
+    public function updateUserData($username, $data)
+    {
+        $this->FrameworkUser->updateUser($username, $data);
+    }
+
+    /**
+     * Check the login for the given user and password, can also return the
+     * associates roles of the user as an array
+     *
+     * @param string $username
+     * @param string $password
+     * @param array reference $roles
+     * @return boolean
+     */
+    public function checkLogin($username, $password, &$roles=array())
+    {
+        return $this->FrameworkUser->checkLogin($username, $password, $roles);
     }
 
 }
