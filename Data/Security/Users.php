@@ -284,25 +284,23 @@ EOD;
      *
      * @param string $username
      * @param string $password
-     * @param array $roles
      * @throws \Exception
      * @return boolean
      */
-    public function checkLogin($username, $password, $roles=array())
+    public function checkLogin($username, $password, &$roles=array())
     {
         try {
-            $passwordEncoder = new manufakturPasswordEncoder($this->app);
-            $pass = $passwordEncoder->encodePassword($password, '');
+            $pass = $this->encodePassword($password);
             $SQL = "SELECT `roles` FROM `".self::$table_name."` WHERE (`username`='$username' OR `email`='$username') AND `password`='$pass'";
             $result = $this->app['db']->fetchAssoc($SQL);
+            if (!is_array($result) || !isset($result['roles'])) {
+                return false;
+            }
+            $roles = (strpos($result['roles'], ',')) ? explode(',', $result['roles']) : array($result['roles']);
+            return true;
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e->getMessage(), 0, $e);
         }
-        if (!is_array($result) || !isset($result['roles'])) {
-            return false;
-        }
-        $roles = explode(',', $result['roles']);
-        return true;
     }
 
     /**
@@ -318,4 +316,4 @@ EOD;
         return $passwordEncoder->encodePassword($raw, '');
     }
 
-} // class Users
+}
