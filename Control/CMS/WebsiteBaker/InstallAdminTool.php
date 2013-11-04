@@ -36,7 +36,7 @@ class InstallAdminTool
         if (!isset($extension['release']['number'])) {
             throw new \Exception('Missing the release number of the extension!');
         }
-        if (!isset($extension['vendor'])) {
+        if (!isset($extension['vendor']['name'])) {
             throw new \Exception('Missing the vendor name of the extension!');
         }
         if (!isset($extension['license'])) {
@@ -53,7 +53,7 @@ class InstallAdminTool
                 'guid' => isset($extension['guid']) ? $extension['guid'] : '',
                 'description' => $extension['description']['en']['short'],
                 'version' => $extension['release']['number'],
-                'author' => $extension['vendor'],
+                'author' => $extension['vendor']['name'],
                 'license' => $extension['license'],
                 'platform' => (CMS_TYPE == 'WebsiteBaker') ? '2.8.x' : '1.x',
                 'type' => 'module',
@@ -107,6 +107,14 @@ class InstallAdminTool
                     file_put_contents(CMS_PATH.'/modules/'.$data['directory'].'/languages/'.strtoupper($lang).'.php',
                         str_ireplace($lang_search, $lang_replace, $content));
                 }
+            }
+
+            // exists a icon for the CMS?
+            if (isset($extension['setup']['icon_path'][CMS_TYPE]) &&
+                file_exists(FRAMEWORK_PATH.$extension['setup']['icon_path'][CMS_TYPE])) {
+                // copy the icon for the CMS
+                $this->app['filesystem']->copy(FRAMEWORK_PATH.$extension['setup']['icon_path'][CMS_TYPE],
+                    CMS_PATH.'/modules/'.$data['directory'].'/'.basename($extension['setup']['icon_path'][CMS_TYPE]));
             }
 
             // commit the transaction
