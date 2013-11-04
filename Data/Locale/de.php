@@ -46,6 +46,9 @@ return array(
     'Create a new password' =>
         'Ein neues Password anlegen',
 
+    'Documentation'
+        => 'Dokumentation',
+
     'Email'
         => 'E-Mail',
     "<b>Error</b>: Can't execute the kitCommand: <i>%command%</i>"
@@ -55,6 +58,8 @@ return array(
 
     'File'
         => 'Datei',
+    'First steps'
+        => 'Erste Schritte',
     'Forgot your password?'
         => 'Passwort vergessen?',
 
@@ -94,6 +99,8 @@ return array(
     'kitFramework password reset'
         => 'kitFramework - Passwort zurücksetzen',
 
+    'License'
+        => 'Lizenz',
     'Line'
         => 'Zeile',
     'Link transmitted'
@@ -132,11 +139,15 @@ return array(
         => 'Bitte melden Sie alle auftretenden Probleme und helfen Sie mit %command% zu verbessern!',
     '<p>Please use the following link to create a new password:<br />%reset_url%</p>'
         => '<p>Bitte verwenden Sie den folgenden Link um ein neues Passwort anzulegen:<br />%reset_url%</p>',
+    'published at'
+        => 'veröffentlicht am',
 
     '<p>Regards<br />Your kitFramework team</p>'
         => '<p>Mit freundlichn Grüßen<br />Ihr kitFramework Team</p>',
     'Repeat Password'
         => 'Passwort wiederholen',
+    'Report problems'
+        => 'Fehler melden',
     'Reveal this e-mail address'
         => 'Anklicken um die vollständige E-Mail Adresse anzuzeigen',
 
@@ -162,6 +173,8 @@ return array(
         => 'Die Erweiterung %extension% wurde erfolgreich entfernt.',
     'Successfull updated the extension %extension%.'
         => 'Die Erweiterung %extension% wurde erfolgreich aktualisiert.',
+    'Support'
+        => 'Unterstützung',
 
     'Thank you for using the kitFramework'
         => 'Vielen Dank für den Einsatz des kitFramework',

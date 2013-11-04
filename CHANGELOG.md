@@ -6,6 +6,12 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.55** - 2014-11-04
+
+* extended CMS check, add '-unknown-' if check fail
+* extended `extension.json` with additional vendor information, added help and support links
+* added support for icon of the extension in the CMS backend (WebsiteBaker 2.8.4 and BlackCat)
+
 **0.54** - 2014-10-30
 
 * separate the METRICS from the general language files
