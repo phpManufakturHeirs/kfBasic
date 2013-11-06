@@ -24,13 +24,16 @@ class kitFilter
             if (!is_null($params)) {
                 $cms_parameter = json_decode(base64_decode($params), true);
             }
-            elseif (null === ($cms_parameter = $app['request']->get('cms_parameter', null))) {
-                throw new \Exception('Invalid kitFilter execution: missing the POST CMS parameter!');
+            else {
+                if (null === ($cms_parameter = $app['request']->get('cms_parameter', null))) {
+                    throw new \Exception('Invalid kitCommand execution: missing the POST CMS parameter!');
+                }
+                if (!is_array($cms_parameter)) {
+                    // we assume that the parameter value is base64 encoded
+                    $cms_parameter = json_decode(base64_decode($cms_parameter), true);
+                }
             }
-            elseif (!isset($cms_parameter['content'])) {
-                throw new \Exception('Missing the content for the filter execution');
-            }
-            elseif (isset($cms_parameter['parameter']['help'])) {
+            if (isset($cms_parameter['parameter']['help'])) {
                 // get the help function for this kitCommand
                 $subRequest = Request::create("/command/help?command=filter:$filter", 'POST', $cms_parameter);
                 // important: we dont want that app->handle() catch errors, so set the third parameter to false!
@@ -41,6 +44,7 @@ class kitFilter
                 // important: we dont want that app->handle() catch errors, so set the third parameter to false!
                 return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST, false);
             }
+
         } catch (\Exception $e) {
             if (isset($cms_parameter['cms']['locale'])) {
                 // set the locale given by the CMS

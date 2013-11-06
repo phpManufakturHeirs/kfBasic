@@ -6,13 +6,17 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
-**0.55** - 2014-11-04
+**0.56** - 2013-11-06
+
+* bugfix: kitFilter handle the CMS parameter string incorrect 
+
+**0.55** - 2013-11-04
 
 * extended CMS check, add '-unknown-' if check fail
 * extended `extension.json` with additional vendor information, added help and support links
 * added support for icon of the extension in the CMS backend (WebsiteBaker 2.8.4 and BlackCat)
 
-**0.54** - 2014-10-30
+**0.54** - 2013-10-30
 
 * separate the METRICS from the general language files
 * fixed invalid check if *reCaptcha* is enabled
@@ -26,11 +30,11 @@ kitFramework - <https://kit2.phpmanufaktur.de>
 * new class `AdminAction` enable actions to change user roles with email commands a.s.o
 * improved checkLogin()
 
-**0.53** - 2014-10-24
+**0.53** - 2013-10-24
 
 * small but important change of the default date and time formatting
 
-**0.52** - 2014-10-20
+**0.52** - 2013-10-20
 
 * added `parseFileForConstants()` to `$app['utils']` 
 
