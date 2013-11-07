@@ -54,7 +54,7 @@ class InstallAdminTool
                 'description' => $extension['description']['en']['short'],
                 'version' => $extension['release']['number'],
                 'author' => $extension['vendor']['name'],
-                'license' => $extension['license'],
+                'license' => $extension['license']['name'],
                 'platform' => (CMS_TYPE == 'WebsiteBaker') ? '2.8.x' : '1.x',
                 'type' => 'module',
                 'function' => 'tool'
