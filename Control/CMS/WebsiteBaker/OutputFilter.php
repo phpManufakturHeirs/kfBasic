@@ -350,7 +350,7 @@ class OutputFilter
                     CURLOPT_FRESH_CONNECT => true,
                     CURLOPT_RETURNTRANSFER => true,
                     CURLOPT_FORBID_REUSE => true,
-                    CURLOPT_TIMEOUT => 4,
+                    CURLOPT_TIMEOUT => 30,
                     CURLOPT_POSTFIELDS => http_build_query(array('cms_parameter' => base64_encode(json_encode($cmd_array)))),
                     CURLOPT_SSL_VERIFYHOST => false,
                     CURLOPT_SSL_VERIFYPEER => false
