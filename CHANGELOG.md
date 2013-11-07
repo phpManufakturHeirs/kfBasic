@@ -6,6 +6,11 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.57** - 2013-11-07
+
+* fixed wrong access to license name in class `InstallAdminTool`
+* cURL timeout in OutputFilter was too strong, changed to 30 seconds
+
 **0.56** - 2013-11-06
 
 * bugfix: kitFilter handle the CMS parameter string incorrect 
