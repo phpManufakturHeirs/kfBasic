@@ -130,8 +130,8 @@ $app['monolog']->addDebug('MonologServiceProvider registered.');
 try {
     // read the CMS configuration
     $cms_config = $app['utils']->readConfiguration(FRAMEWORK_PATH . '/config/cms.json');
-    // setting the CMS constants
-    define('CMS_PATH', $app['utils']->sanitizePath($cms_config['CMS_PATH']));
+    // set the CMS_PATH from FRAMEWORK_PATH because it can change at mobile installations
+    define('CMS_PATH', $app['utils']->sanitizePath(FRAMEWORK_PATH.'/../'));
     define('CMS_URL', $cms_config['CMS_URL']);
     define('CMS_MEDIA_PATH', $app['utils']->sanitizePath($cms_config['CMS_MEDIA_PATH']));
     define('CMS_MEDIA_URL', $cms_config['CMS_MEDIA_URL']);
