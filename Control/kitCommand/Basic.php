@@ -23,7 +23,7 @@ use phpManufaktur\Basic\Data\kitCommandParameter;
 class Basic
 {
     protected $app = null;
-    private static $message = '';
+    protected static $message = '';
     private static $cms_info = null;
     private static $parameter = null;
     private static $GET = null;
