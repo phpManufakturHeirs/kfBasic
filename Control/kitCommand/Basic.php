@@ -66,11 +66,16 @@ class Basic
             $GET = $this->app['request']->request->get('GET');
             foreach ($pids as $pid_name) {
                 if (!is_null($this->app['request']->request->get($pid_name))) {
-                    // read the parameter ID from the POST
+                    // read the parameter ID from POST
                     self::$parameter_id = $this->app['request']->request->get($pid_name);
                 }
                 elseif (!is_null($this->app['request']->query->get($pid_name))) {
+                    // get the parameter ID from GET
                     self::$parameter_id = $this->app['request']->query->get($pid_name);
+                }
+                elseif ((null !== ($form = $this->app['request']->request->get('form'))) && isset($form[$pid_name])) {
+                    // get the parameter ID from a form.factory POST
+                    self::$parameter_id = $form[$pid_name];
                 }
                 elseif (isset($GET[$pid_name])) {
                     // get the parameter ID from the CMS
