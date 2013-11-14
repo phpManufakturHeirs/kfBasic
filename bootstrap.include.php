@@ -524,7 +524,7 @@ $app->mount('/command', $command);
 $app->mount('/filter', $filter);
 
 $app->error(function (\Exception $e, $code) use ($app) {
-    if ($app['debug']) {
+    if ($app['debug'] && ($code != 403)) {
         // on debugging mode use the regular exception handler!
         return;
     }
