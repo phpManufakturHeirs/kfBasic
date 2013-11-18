@@ -166,7 +166,7 @@ class Basic
                     ),
                 'tracking' => (isset(Basic::$parameter['frame_tracking']) && ((strtolower(Basic::$parameter['frame_tracking']) == 'false') || (Basic::$parameter['frame_tracking'] == '0'))) ? false : true,
                 'scroll_to_id' => (isset(Basic::$parameter['frame_scroll_to_id'])) ? trim(Basic::$parameter['frame_scroll_to_id']) : ''
-                );
+            );
         }
 
         $tracking = '';
@@ -181,8 +181,9 @@ class Basic
             'keywords' => (isset(Basic::$parameter['frame_keywords'])) ? Basic::$parameter['frame_keywords'] : '',
             'robots' => (isset(Basic::$parameter['frame_robots'])) ? Basic::$parameter['frame_robots'] : 'index,follow',
             'charset' => (isset(Basic::$parameter['frame_charset'])) ? Basic::$parameter['frame_charset'] : 'UTF-8',
-            'tracking' => $tracking
-            );
+            'tracking' => $tracking,
+            'cache' => (isset(Basic::$parameter['frame_cache']) && ((Basic::$parameter['frame_cache'] == 1) || (strtolower(Basic::$parameter['frame_cache'] == 'true')))) ? true : false
+        );
 
         if (Basic::$parameter_id == -1) {
             $this->createParameterID();
