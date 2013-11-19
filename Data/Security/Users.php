@@ -199,6 +199,7 @@ EOD;
             }
             $data = array(
                 'guid' => $this->app['utils']->createGUID(),
+                'guid_status' => 'ACTIVE',
                 'guid_timestamp' => date('Y-m-d H:i:s')
             );
             $where = array(
