@@ -6,6 +6,19 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.60**
+
+* set the `CMS_PATH` from `FRAMEWORK_PATH` to avoid invalid assignments at mobile installations
+* introduce `/pattern` templates and add a pattern for the about dialog
+* BASIC get the parameter ID (PID) now also from submitted `form.factory` forms
+* changed visibility for $message to protected to enable extended classes to set messages direct without auto-formatting
+* switch off the debugging mode if the application return a 403 HTTP error
+* added new kitCommand parameter `cache[]`
+* add `createGUID()` and `getUserByGUID()` to class `Account`
+* improved the `CustomLogoutSuccessHandler` and assigned actions/forms
+* added missing `guid_status` at `createNewGUID()` to class `Users`
+* fixed a incomplete check for the license key at setup of Admin-Tools 
+
 **0.59** - 2013-11-09
 
 * changed license information and handling in `extension.json`
