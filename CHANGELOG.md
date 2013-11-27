@@ -6,6 +6,11 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.61**
+
+* introduce class `dbUtils` and share it as `$app[db.utils]`
+* added missing check to `bootstrap.php` for MySQL InnoDB
+
 **0.60**
 
 * set the `CMS_PATH` from `FRAMEWORK_PATH` to avoid invalid assignments at mobile installations
