@@ -28,6 +28,7 @@ use phpManufaktur\Basic\Control\Account\Account;
 use Symfony\Bridge\Monolog\Logger;
 use phpManufaktur\Basic\Control\Account\CustomLogoutSuccessHandler;
 use phpManufaktur\Basic\Control\Account\CustomAuthenticationSuccessHandler;
+use phpManufaktur\Basic\Data\dbUtils;
 
 // set the error handling
 ini_set('display_errors', 1);
@@ -166,6 +167,17 @@ try {
 }
 // $app['db']->query("SET NAMES 'utf8'");
 $app['monolog']->addDebug('DoctrineServiceProvider registered');
+
+// share the database utils
+$app['db.utils'] = $app->share(function($app) {
+    return new dbUtils($app);
+});
+$app['monolog']->addDebug('dbUtils registered');
+
+if (!$app['db.utils']->isInnoDBsupported()) {
+    // big problem: missing InnoDB support!
+    throw new \Exception('Missing the MySQL InnoDB support, please check your server configuration!');
+}
 
 // register the session handler
 $app->register(new Silex\Provider\SessionServiceProvider(), array(
