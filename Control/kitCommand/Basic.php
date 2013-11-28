@@ -169,11 +169,26 @@ class Basic
             );
         }
 
+        // check if scroll_to_id isset by a GET parameter of the CMS of the kitFramework
+        if (isset(Basic::$GET['frame_scroll_to_id'])) {
+            $this->setFrameScrollToID(Basic::$GET['frame_scroll_to_id']);
+        }
+        elseif (null != ($scroll_to = $this->app['request']->query->get('frame_scroll_to_id'))) {
+            $this->setFrameScrollToID($scroll_to);
+        }
+        elseif (isset(Basic::$GET['fsti'])) {
+            $this->setFrameScrollToID(Basic::$GET['fsti']);
+        }
+        elseif (null != ($scroll_to = $this->app['request']->query->get('fsti'))) {
+            $this->setFrameScrollToID($scroll_to);
+        }
+
         $tracking = '';
         if (Basic::$frame['tracking'] && file_exists(FRAMEWORK_PATH.'/config/tracking.htt')) {
             // enable the tracking for the iframe
             $tracking = file_get_contents(FRAMEWORK_PATH.'/config/tracking.htt');
         }
+
         // set the values for the page
         Basic::$page = array(
             'title' => (isset(Basic::$parameter['frame_title'])) ? Basic::$parameter['frame_title'] : '',
@@ -675,14 +690,34 @@ class Basic
         return Basic::$frame['class'];
     }
 
+    /**
+     * Set the frame_scroll_to_id parameter
+     *
+     * @param string $class_id
+     */
     public function setFrameScrollToID($class_id)
     {
         Basic::$frame['scroll_to_id'] = $class_id;
     }
 
+    /**
+     * Get the frame_scroll_to_id parameter
+     *
+     * @return string class ID
+     */
     public function getFrameScrollToID()
     {
         return Basic::$frame['scroll_to_id'];
+    }
+
+    /**
+     * Check if a frame_scroll_to_id parameter isset
+     *
+     * @return boolean
+     */
+    public function isSetFrameScrollToID()
+    {
+        return (bool) !empty(Basic::$frame['scroll_to_id']);
     }
 
     /**
