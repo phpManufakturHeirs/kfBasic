@@ -26,7 +26,7 @@ class Setting {
 
     protected $default_values = array(
         'extension_catalog_release' => '0.10',
-        'extension_catalog_update' => 'auto', // possible: auto, manual
+        'extension_catalog_update' => 'auto' // possible: auto, manual
     );
 
     /**

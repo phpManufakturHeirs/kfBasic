@@ -179,6 +179,11 @@ if (!$app['db.utils']->isInnoDBsupported()) {
     throw new \Exception('Missing the MySQL InnoDB support, please check your server configuration!');
 }
 
+if (!version_compare($app['db.utils']->getMySQLversion(), '5.0.3', '>=')) {
+    // MySQL version must be at minimum 5.0.3
+    throw new \Exception('Need at minimum MySQL version 5.0.3, please check your server configuration!');
+}
+
 // register the session handler
 $app->register(new Silex\Provider\SessionServiceProvider(), array(
     'session.storage.save_path' => FRAMEWORK_PATH . '/temp/session',
@@ -514,6 +519,9 @@ $command->post('/help',
 $command->post('/list',
     'phpManufaktur\Basic\Control\kitCommand\ListCommands::createListFrame')
     ->setOption('info', MANUFAKTUR_PATH.'/Basic/command.list.json');
+$command->post('/catalog',
+    'phpManufaktur\Basic\Control\kitCommand\Catalog::controllerCreateIFrame')
+    ->setOption('info', MANUFAKTUR_PATH.'/Basic/command.catalog.json');
 
 // BASIC responses to kitCommands
 $app->get('/basic/help/{command}',
@@ -524,6 +532,8 @@ $app->get('/basic/help/{command}/{help_file}',
 $app->get('/basic/list',
     // return a list with all available kitCommands and additional information
     'phpManufaktur\Basic\Control\kitCommand\ListCommands::getList');
+$app->get('/basic/catalog',
+    'phpManufaktur\Basic\Control\kitCommand\Catalog::controllerCatalog');
 
 // kitSEARCH
 $app->post('/kit_search/command/{command}',

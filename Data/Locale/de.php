@@ -23,9 +23,13 @@ return array(
         => 'Die Erweiterung <b>%name%</b> wurde dem Register hinzugefügt.',
     'Additional information'
         => 'Zusatzinformation',
+    'alpha'
+        => '- in Entwicklung -',
 
     'Bad credentials'
         => 'Die Angaben sind unvollständig oder ungültig!',
+    'beta'
+        => 'Beta Version',
 
     'Can\'t create the target directory for the extension!'
         => 'Konnte das Zielverzeichnis für die Extension nicht erstellen!',
@@ -43,6 +47,8 @@ return array(
         => 'Kann das Repository <b>%repository%</b> von der Organisation <b>%organization%</b> auf Github nicht lesen!',
     'captcha-timeout'
         => 'Zeitüberschreitung bei der CAPTCHA Übermittlung, bitte versuchen Sie es erneut.',
+    'commercial use only'
+        => '- nur kommerzielle Verwendung -',
     'Could not move the unzipped files to the target directory.'
         => 'Konnte die entpackten Dateien nicht in das Zielverzeichnis verschieben!',
     'Create a new password' =>
@@ -141,6 +147,8 @@ return array(
         => 'Bitte melden Sie alle auftretenden Probleme und helfen Sie mit %command% zu verbessern!',
     '<p>Please use the following link to create a new password:<br />%reset_url%</p>'
         => '<p>Bitte verwenden Sie den folgenden Link um ein neues Passwort anzulegen:<br />%reset_url%</p>',
+    'pre-release'
+        => 'Vorabversion',
     'published at'
         => 'veröffentlicht am',
 
@@ -228,6 +236,8 @@ return array(
     'Username or email address'
         => 'Benutzername oder <nobr>E-Mail</nobr> Adresse',
 
+    'Vendor'
+        => 'Anbieter',
     'View the general help for kitCommands'
         => 'Die allgemeine Hilfe zu den kitCommands anzeigen',
     'View the helpfile for %command%'
