@@ -208,6 +208,12 @@ class Basic
         $this->app['translator']->setLocale($this->getCMSlocale());
     }
 
+    /**
+     * Create a new paramter ID (PID)
+     *
+     * @param string $parameter_array
+     * @return Ambigous <integer, unknown>
+     */
     protected function createParameterID($parameter_array=null)
     {
         if (!is_array($parameter_array)) {
@@ -718,6 +724,24 @@ class Basic
     public function isSetFrameScrollToID()
     {
         return (bool) !empty(Basic::$frame['scroll_to_id']);
+    }
+
+    /**
+     * Disable the tracking for this kitCommand by removing the tracking code
+     */
+    public function disableTracking()
+    {
+        Basic::$page['tracking'] = '';
+    }
+
+    /**
+     * Check if a tracking code is existing and iFrame will be tracked
+     *
+     * @return boolean
+     */
+    public function isTracking()
+    {
+        return (!empty(Basic::$page['tracking']));
     }
 
     /**
