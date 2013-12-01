@@ -6,12 +6,20 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
-**0.61**
+**0.62** - 2013-12-01
+
+* added GET handling for the parameter frame_scroll_to_id
+* added check if the given frame_scroll_to_id exists
+* enable to name the extension logo type - by default 'jpg' will be choosen
+* improved setting of the kitCommand iFrame auto height: get the ID of the frame dynamically to prevent problems if the browser go back button is used and a new iFrame ID was generated
+* introduce the kitCommand `catalog` to show the kitFramework Catalog with detailed information
+
+**0.61** - 2013-11-27
 
 * introduce class `dbUtils` and share it as `$app[db.utils]`
 * added missing check to `bootstrap.php` for MySQL InnoDB
 
-**0.60**
+**0.60** - 2013-11-19
 
 * set the `CMS_PATH` from `FRAMEWORK_PATH` to avoid invalid assignments at mobile installations
 * introduce `/pattern` templates and add a pattern for the about dialog

@@ -19,8 +19,8 @@
   "path":"\/extension\/phpmanufaktur\/phpManufaktur\/Basic",
   "namespace":"phpManufaktur\\Basic",
   "release":{
-    "number":"0.61",
-    "date":"2013-11-27",
+    "number":"0.62",
+    "date":"2013-12-01",
     "status":"beta"
   },
   "description": {
@@ -31,9 +31,9 @@
       "url":"https:\/\/kit2.phpmanufaktur.de"
     },
     "de":{
-      "title":"Basis Funktionen und Einstellungen für das kitFramework",
+      "title":"Basis Funktionen für das kitFramework",
       "short":"Essentielle Basis Funktionen und Einstellungen für das kitFramework - fester Bestandteil des Framework, muss installiert sein.",
-      "long":"(lang) Essentielle Basis Funktionen und Einstellungen für das kitFramework - fester Bestandteil des Framework, muss installiert sein.",
+      "long":"Diese Erweiterung bildet das Herzstück des kitFramework und wird zwingend benötigt. BASIC ist u.a. für die Interaktion mit dem übergeordneten CMS verantwortlich, initialisiert alle Erweiterungen und kümmert sich um die Installation sowie Aktualisierung von Anwendungen.",
       "url":"https:\/\/kit2.phpmanufaktur.de"
     }
   },
