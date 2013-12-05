@@ -174,4 +174,25 @@ EOD;
         }
     }
 
+    /**
+     * Get the columns of the given table
+     *
+     * @param string $table
+     * @throws \Exception
+     * @return array
+     */
+    public function getColumns($table)
+    {
+        try {
+            $result = $this->app['db']->fetchAll("SHOW COLUMNS FROM `$table`");
+            $columns = array();
+            foreach ($result as $column) {
+                $columns[] = $column['Field'];
+            }
+            return $columns;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
 }
