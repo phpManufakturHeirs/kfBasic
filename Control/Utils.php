@@ -17,8 +17,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use phpManufaktur\Basic\Control\JSON\JSONFormat;
 
-require_once __DIR__.'/utf-8/functions-utf8.php';
-
 /**
  * Class with usefull utils for the general usage within the kitFramework
  *
@@ -666,6 +664,8 @@ class Utils
      */
     public function utf8_entities($convert)
     {
+        require_once __DIR__.'/utf-8/functions-utf8.php';
+
         return entities_to_umlauts2($convert);
     }
 
@@ -747,6 +747,34 @@ class Utils
             }
             return false;
         }
+    }
+
+    /**
+     * Sanitize a link or filename to a safe and clean one
+     *
+     * @param string $link
+     * @return string
+     */
+    public function sanitizeLink($link)
+    {
+        require_once __DIR__.'/utf-8/functions-utf8.php';
+
+        $link = entities_to_7bit($link);
+        // Now remove all bad characters
+        $bad = array('\'','"','`','!','@','#','$','%','^','&','*','=','+','|','/','\\',';',':',',','?');
+        $link = str_replace($bad, '', $link);
+        // replace multiple dots in filename to single dot and (multiple) dots at the end of the filename to nothing
+        $link = preg_replace(array('/\.+/', '/\.+$/'), array('.', ''), $link);
+        // Now replace spaces with page spcacer
+        $link = trim($link);
+        $link = preg_replace('/(\s)+/', '-', $link);
+        // Now convert to lower-case
+        $link = strtolower($link);
+        // If there are any weird language characters, this will protect us against possible problems they could cause
+        $link = str_replace(array('%2F', '%'), array('/', ''), urlencode($link));
+        $link = str_replace('---', '-', $link);
+        // Finally, return the cleaned string
+        return $link;
     }
 
 }
