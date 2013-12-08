@@ -119,4 +119,15 @@ class Page {
         }
         return $this->cms->getTitle($page_id, $parameter);
     }
+
+    /**
+     * Get the CMS page link list in alphabetical order
+     *
+     * @throws \Exception
+     * @return <array|boolean>
+     */
+    public function getPageLinkList()
+    {
+        return $this->cms->getPageLinkList();
+    }
 }

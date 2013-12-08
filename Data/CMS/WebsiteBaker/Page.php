@@ -16,6 +16,8 @@ use Silex\Application;
 class Page
 {
     protected $app = null;
+    protected static $pages_directory = null;
+    protected static $page_extension = null;
 
     /**
      * Constructor
@@ -25,6 +27,8 @@ class Page
     public function __construct(Application $app)
     {
         $this->app = $app;
+        self::$page_extension = $this->getPageExtension();
+        self::$pages_directory = $this->getPageDirectory();
     }
 
     /**
@@ -92,13 +96,13 @@ class Page
                 }
                 $SQL = "SELECT `link` FROM `".CMS_TABLE_PREFIX."mod_news_posts` WHERE `post_id`='".$arguments['post_id']."'";
                 $post_link = $this->app['db']->fetchColumn($SQL);
-                return CMS_URL . $this->getPageDirectory() . $post_link . $this->getPageExtension();
+                return CMS_URL . self::$pages_directory . $post_link . self::$page_extension;
             }
 
             // regular CMS page
             $SQL = "SELECT `link` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`='$page_id'";
             $page_link = $this->app['db']->fetchColumn($SQL);
-            return CMS_URL. $this->getPageDirectory(). $page_link . $this->getPageExtension();
+            return CMS_URL. self::$pages_directory. $page_link . self::$page_extension;
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }
@@ -138,6 +142,33 @@ class Page
             // regular CMS page
             $SQL = "SELECT `page_title` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`='$page_id'";
             return $this->app['db']->fetchColumn($SQL);
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Get the CMS page link list in alphabetical order
+     *
+     * @throws \Exception
+     * @return <array|boolean>
+     */
+    public function getPageLinkList()
+    {
+        try {
+            $SQL = "SELECT `page_id`, `link`, `level`, `menu_title`, `page_title`, `visibility` FROM `".CMS_TABLE_PREFIX.
+                "pages` WHERE `visibility`!='deleted' ORDER BY `link` ASC";
+            $results = $this->app['db']->fetchAll($SQL);
+            $links = array();
+            foreach ($results as $result) {
+                $link = array();
+                foreach ($result as $key => $value) {
+                    $link[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+                }
+                $link['complete_link'] = self::$pages_directory . $link['link'] . self::$page_extension;
+                $links[] = $link;
+            }
+            return (!empty($links)) ? $links : false;
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }
