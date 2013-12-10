@@ -253,7 +253,6 @@ $app['recaptcha'] = $app->share(function($app) {
 // register Twig
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.options' => array(
-        //'cache' => $app['debug'] ? false : FRAMEWORK_PATH . '/temp/cache/',
         'cache' => FRAMEWORK_CACHE ? FRAMEWORK_PATH . '/temp/cache/' : false,
         'strict_variables' => $app['debug'] ? true : false,
         'debug' => FRAMEWORK_DEBUG ? true : false,
