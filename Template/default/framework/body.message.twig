@@ -9,12 +9,13 @@
 #}
 {% extends getTemplateFile('@phpManufaktur/Basic/Template', 'framework/body.twig') %}
 {% block title %}{{ title|trans }}{% endblock %}
-{% block head %}
-  {{ parent() }}
-  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Basic/Template/default/framework/css/message.css" media="screen, projection" />
-{% endblock %}
 {% block content %}
-  <h1>{{ title|trans }}</h1>
-  {# don't translate the message within the dialog - it can not handle parameters! #}
-  {{ message }}
+  <div class="container">
+    <div class="page-header">
+      <h1>{{ title|trans }}</h1>
+    </div>
+    <div class="alert alert-info">
+      <p>{{ message }}</p>
+    </div>
+  </div>
 {% endblock %}

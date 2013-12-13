@@ -61,6 +61,7 @@ class twigExtension extends Twig_Extension
             'FRAMEWORK_MEDIA_PROTECTED_URL' => FRAMEWORK_MEDIA_PROTECTED_URL,
             'FRAMEWORK_PATH' => FRAMEWORK_PATH,
             'FRAMEWORK_URL' => FRAMEWORK_URL,
+            'LIBRARY_URL' => MANUFAKTUR_URL.'/Basic/Library',
             'MANUFAKTUR_PATH' => MANUFAKTUR_PATH,
             'MANUFAKTUR_URL' => MANUFAKTUR_URL,
             'THIRDPARTY_PATH' => THIRDPARTY_PATH,

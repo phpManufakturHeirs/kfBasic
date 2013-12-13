@@ -32,7 +32,9 @@ class forgottenPassword
     public function dialogForgottenPassword(Application $app, $message='')
     {
         $form = $app['form.factory']->createBuilder('form')
-        ->add('email', 'text', array())
+        ->add('email', 'text', array(
+            'label' => 'Email'
+        ))
         ->getForm();
         return $app['twig']->render($app['utils']->getTemplateFile(
             '@phpManufaktur/Basic/Template',
@@ -55,7 +57,10 @@ class forgottenPassword
             // invalid email
             $message = '';
             foreach ($errors as $error) {
-                $message .= sprintf('%s< br />', $error->getMessage());
+                if (!empty($message)) {
+                    $message .= '<br />';
+                }
+                $message .= $error->getMessage();
             }
             return $this->dialogForgottenPassword($app, $message);
         }

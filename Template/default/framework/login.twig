@@ -8,35 +8,39 @@
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
 {% extends getTemplateFile('@phpManufaktur/Basic/Template', 'framework/body.twig') %}
-{% block title %}
-  {{ 'kitFramework - Login'|trans }}
-{% endblock %}
-{% block head %}
-  {{ parent() }}
-  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Basic/Template/default/framework/css/login.css" media="screen, projection" />
-{% endblock %}
-{% block user_navigation %}
-  {# no user navigation at the login dialog! #}
-{% endblock %}
+{% block title %}{{ 'Login - kitFramework'|trans }}{% endblock %}
+
 {% block content %}
-  <h1>{{ 'kitFramework - Login'|trans }}</h1>
-  {% if error|length > 0 %}
-    <div class="message">{{ error|trans }}</div>
-  {% endif %}
-  {{ '<p>Please login to the kitFramework with your username or email address and the assigned password.</p><p>Your can also use your username and password for the CMS.</p>'|trans }}
-  <div class="framework_form">
+  <div class="container">
+    <div class="page-header">
+      <h1>{{ 'Login'|trans }} <small>kitFramework</small></h1>
+    </div>
+    <div class="alert alert-info">
+      {% if error|length > 0 %}
+        {{ error|trans }}
+      {% else %}
+        <p>{{ 'Please login to the kitFramework with your username or email address and the assigned password. Your can also use your username and password for the CMS.'|trans }}</p>
+      {% endif %}
+    </div>
     <form action="{{ FRAMEWORK_URL }}/admin/login_check" method="post">
-      <label for="_username" class="required">{{ 'Username or email address'|trans }}</label>
-      <input autofocus type="text" name="_username" value="{{ last_username }}" />
-      <label for="_password" class="required">{{ 'Password'|trans }}</label>
-      <input type="password" name="_password" value="" />
-      <label for="submit">&nbsp;</label>
-      <input type="submit" name="submit" value="{{ 'Login'|trans }}" />
-      <label for="password_hint">&nbsp;</label>
-      <div class="form_input forgot_password_hint">
-        <a href="{{ FRAMEWORK_URL }}/password/forgotten">{{ 'Forgot your password?'|trans }}</a>
+      <div class="row">
+        <label for="_username" class="col-lg-3 required">{{ 'Username or email address'|trans }}</label>
+        <input class="col-lg-2" autofocus type="text" name="_username" value="{{ last_username }}" />
+      </div>
+      <div class="row">
+        <label for="_password" class="col-lg-3 required">{{ 'Password'|trans }}</label>
+        <input class="col-lg-2" type="password" name="_password" value="" />
+      </div>
+      <div class="row">
+        <label class="col-lg-3" for="submit">&nbsp;</label>
+        <input class="col-lg-2" type="submit" name="submit" value="{{ 'Login'|trans }}" />
+      </div>
+      <div class="row">
+        <label class="col-lg-3" for="password_hint">&nbsp;</label>
+        <div class="col-lg-2 text-muted">
+          <a href="{{ FRAMEWORK_URL }}/password/forgotten">{{ 'Forgot your password?'|trans }}</a>
+        </div>
       </div>
     </form>
   </div>
-  <div class="clear"></div>
 {% endblock %}

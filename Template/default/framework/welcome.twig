@@ -8,77 +8,91 @@
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
 {% if usage == 'framework' %}
-    {% set template_namespace = '@phpManufaktur/Basic/Template' %}
-    {% set template_file = 'framework/body.twig' %}
+  {% set template_file = 'framework/body.twig' %}
 {% else %}
-    {% set template_namespace = '@phpManufaktur/Basic/Template' %}
-    {% set template_file = 'framework/backend.body.twig' %}
+  {% set template_file = 'framework/backend.body.twig' %}
 {% endif %}
-{% extends getTemplateFile(template_namespace, template_file) %}
+{% extends getTemplateFile('@phpManufaktur/Basic/Template', template_file) %}
 {% block title %}{{ 'kitFramework - Welcome'|trans }}{% endblock %}
-{% block head %}
-  {{ parent() }}
-  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Basic/Template/default/framework/css/welcome.css" media="screen, projection" />
-  <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
-{% endblock %}
+
 {% block content %}
-  <a name="top"></a>
-  <div id="welcome_container">
-    <div class="hint">
-      <p><i class="icon-info-sign icon-2x"></i> Bitte besuchen Sie die Seite <a href="https://kit2.phpmanufaktur.de/firststeps" target="_blank">Erste Schritte mit dem kitFramework</a> für einen Einstieg.</p>
+  <div class="container">
+    <div class="page-header">
+      <h1>kitFramework <small>Erweiterungen</small></h1>
     </div>
-    <h1>Herzlich Willkommen beim kitFramework!</h1>
-    {% if message|length > 0 %}
-      <div class="message">{{ message }}</div>
-    {% else %}
-      <div class="message"><p>Dieser Übersichtsdialog befindet sich noch im Experimentierstadium, Vorschläge und Ideen sind herzlich willkommen!</p></div>
-    {% endif %}
-    <h2>Installierte Erweiterungen</h2>
-    <p>Diese Erweiterungen sind bereits in kitFramework installiert und können verwendet werden.</p>
+    <div class="alert alert-info">
+      {% if message|length > 0 %}   
+        {{ message }}
+      {% else %}
+        <p>Dieser Übersichtsdialog befindet sich noch im Experimentierstadium, Vorschläge und Ideen sind herzlich willkommen!</p>
+        <p>Bitte besuchen Sie die Seite <a class="alert-link" href="https://kit2.phpmanufaktur.de/firststeps" target="_blank">Erste Schritte mit dem kitFramework</a> für einen Einstieg.</p>
+      {% endif %}
+    </div>
+  </div>
+  <div class="container">
+    <h2>Bereits installierte Erweiterungen</h2>
+    {% set counter = 1 %}
     {% for item in register_items %}
-      <div class="extension_container">
-        <div class="extension_image">
+      {% if counter == 1 %}
+        <div class="row">
+      {% endif %}
+      <div class="col-sm-6 col-md-3">
+        <div class="thumbnail">   
           {% if item.start_url|length > 0 %}<a href="{{ FRAMEWORK_URL }}{{ item.start_url }}?usage={{ usage }}">{% endif %}
             <img src="{% if item.logo_blob|length > 0 %}data:image/{{ item.logo_type }};charset=utf-8;base64,{{ item.logo_blob }}{% else %}{{ item.logo_url }}{% endif %}" width="{{ item.logo_width }}" height="{{ item.logo_height }}" alt="{{ item.description.title }}" />
           {% if item.start_url|length > 0 %}</a>{% endif %}
+          {% if item.update_available %}
+            <div class="caption">
+              <p><strong>{{ 'Update available!'|trans }}</strong></p>
+              <p>Release {{ item.release_available }}<br />
+                <a class="" href="{{ FRAMEWORK_URL }}/admin/updater/update/{{ item.id }}?usage={{ usage }}">Execute Update</a></p>
+            </div>
+          {% endif %}
         </div>
-        {% if item.update_available %}
-          <div class="extension_update">
-            <strong>{{ 'Update available!'|trans }}</strong><br />
-            Release {{ item.release_available }}<br />
-            <a href="{{ FRAMEWORK_URL }}/admin/updater/update/{{ item.id }}?usage={{ usage }}">Execute Update</a>
-          </div>
-        {% endif %}
-        {% if item.start_url|length > 0 %}
-          <div class="extension_start">
-            <a href="{{ FRAMEWORK_URL }}{{ item.start_url }}?usage={{ usage }}">{{ 'Execute'|trans }}</a>
-          </div>
-        {% endif %}
       </div>
-    {% endfor %}
-    <div class="clear"></div>
-    <h2>Verfügbare Erweiterungen für das kitFramework</h2>
+      {% if counter == 4 %}
+        </div>
+        {% set counter = 1 %}
+      {% else %}
+        {% set counter = counter + 1 %}
+      {% endif %}
+    {% endfor %} 
+    {% if counter != 1 %}</div>{% endif %}
+  </div>
+  <div class="container">
+    <h2>Verfügbare Erweiterungen</h2>
     <p>Diese Liste wird automatisch aktualisiert, falls über Github ein neuer <a href="https://github.com/phpManufaktur/kitFramework_Catalog" target="blank">kitFramework Katalog</a> verfügbar ist.</p>
+    
+    {% set counter = 1 %}
     {% for item in catalog_items %}
-      <div class="extension_container">
-        <div class="extension_image">
+      {% if counter == 1 %}
+        <div class="row">
+      {% endif %}
+      <div class="col-sm-6 col-md-3">
+        <div class="thumbnail">   
           <img src="data:image/{{ item.logo_type }};charset=utf-8;base64,{{ item.logo_blob }}" width="{{ item.logo_width }}" height="{{ item.logo_height }}" alt="{{ item.description.title }}" />
+          <div class="caption">
+            <p><strong>{{ item.description.title }}</strong></p>
+            <p>{{ item.description.short }}</p>
+            <p>Release {{ item.release }} <em>({{ item.date|date('d.m.Y') }})</em></p>
+            {% if item.info.download.github is defined %}
+              <p><a href="{{ FRAMEWORK_URL }}/admin/updater/install/{{ item.id }}?usage={{ usage }}">Install</a></p>
+            {% endif %}
+          </div>
         </div>
-        <div class="extension_title">{{ item.description.title }}</div>
-        <div class="extension_description">{{ item.description.short }}</div>
-        <div class="extension_release">Release {{ item.release }} <em>({{ item.date|date('d.m.Y') }})</em></div>
-        {% if item.info.download.github is defined %}
-          <p><a href="{{ FRAMEWORK_URL }}/admin/updater/install/{{ item.id }}?usage={{ usage }}">Install</a></p>
-        {% endif %}
       </div>
-    {% endfor %}
-    <div class="clear"></div>
-    <div class="extension_scan_directories">
-      <a href="{{ scan_extensions }}#top">{{ 'Scan for installed extensions'|trans }}</a>
-    </div>
-    <div class="extension_scan_catalog">
-      <a href="{{ scan_catalog }}#top">{{ 'Scan the online catalog for available extensions'|trans }}</a>
-    </div>
-
+      {% if counter == 4 %}
+        </div>
+        {% set counter = 1 %}
+      {% else %}
+        {% set counter = counter + 1 %}
+      {% endif %}
+    {% endfor %} 
+    {% if counter != 1 %}</div>{% endif %}
+  </div>
+  <div class="container">
+    <h2>Datenabgleich</h2>
+    <p><span class="glyphicon glyphicon-eye-open"></span> <a href="{{ scan_extensions }}#top">{{ 'Scan for installed extensions'|trans }}</a></p>
+    <p><span class="glyphicon glyphicon-cloud-download"></span> <a href="{{ scan_catalog }}#top">{{ 'Scan the online catalog for available extensions'|trans }}</a></p>    
   </div>
 {% endblock %}

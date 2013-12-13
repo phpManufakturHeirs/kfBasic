@@ -8,40 +8,66 @@
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     {% block head %}
       <title>{% block title %}{% endblock %}</title>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-      <meta name="robots" content="noindex,nofollow" />
+      <meta http-equiv="Content-Type" content="{% block content_type %}text/html; charset=UTF-8{% endblock content_type %}"/>
+      <meta name="robots" content="{% block robots %}noindex,nofollow{% endblock robots %}" />
       <meta name="description" content="{% block description %}{% endblock %}" />
       <meta name="keywords" content="{% block keywords %}{% endblock %}" />
-      <meta name=”content-language” content=”de” />
+      <meta name=”content-language” content=”{% block content_language %}de{% endblock content_language %}” />
+      <meta name="viewport" content="{% block viewport %}width=device-width, initial-scale=1.0{% endblock viewport %}">
       {% block stylesheet %}
-      <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Basic/Template/default/framework/css/body.css" media="screen, projection" />
+        {# Bootstrap #}
+        <link href="{{ LIBRARY_URL }}/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+        <link href="{{ LIBRARY_URL }}/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Basic/Template/default/framework/css/framework.css" media="screen, projection" />
       {% endblock stylesheet %}
       {% block jquery %}
-      {% endblock %}
+        {# 
+          jQuery will be loaded at the footer in block footer_jquery! 
+          HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries
+          WARNING: Respond.js doesn't work if you view the page via file:// 
+        #}
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+          <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+      {% endblock jquery %}
       <link rel="shortcut icon" type="image/x-icon" href="{{ MANUFAKTUR_URL }}/Basic/Template/default/framework/image/favicon.ico" />
     {% endblock head %}
   </head>
   <body>
-    <div id="framework_body">
-      {% block user_navigation %}
-        {% if isAuthenticated() %}
-          <div id="user_navigation">
-            {{ getUserDisplayName() }} | <a href="{{ FRAMEWORK_URL }}/admin/account">{{ 'Account'|trans }}</a> | <a href="{{ FRAMEWORK_URL ~ '/logout' }}">{{ 'Logout'|trans }}</a>
+    {% block user_navigation %}  
+      <header class="navbar navbar-default navbar-fixed-top" role="navigation"> 
+        <div class="container">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="https://kit2.phpmanufaktur.de" target="_blank" title="kitFramework"><i class="fa fa-puzzle-piece"></i></a>
           </div>
-        {% endif %}
-      {% endblock user_navigation %}
-      <div id="framework_content">
-        {% block content %}{% endblock %}
-      </div>
-      <div id="framework_footer">
-        {% block footer %}
-          <a href="https://kit2.phpmanufaktur.de" target="_blank" class="framework_img"></a>
-        {% endblock footer %}
+          {% if isAuthenticated() %}
+            <ul class="nav navbar-nav navbar-right">
+              <li class="navbar-text">{{ getUserDisplayName() }}</li>
+              <li><a href="{{ FRAMEWORK_URL }}/admin/account" title="{{ 'Account'|trans }}"><span class="glyphicon glyphicon-user"></span></a></li>
+              <li><a href="{{ FRAMEWORK_URL ~ '/logout' }}" title="{{ 'Logout'|trans }}"><span class="glyphicon glyphicon-log-out"></span></a></li>
+            </ul>
+          {% endif %}
+        </div>
+      </header>      
+    {% endblock user_navigation %}
+    <div id="content_wrap">
+      {% block content %}{% endblock %}
+    </div>
+    
+    <div id="content_footer">
+      <div class="container">
+        <p class="text-muted"><a href="https://kit2.phpmanufaktur.de" target="_blank"><i class="fa fa-puzzle-piece"></i> kitFramework</a> is released under <a href="https://raw.github.com/phpManufaktur/kitFramework/master/LICENSE.md" target="_blank">MIT license</a> - &copy; {{ 'now'|date('Y') }} by <a href="https://phpmanufaktur.de" target="_blank">phpManufaktur</a></p>
       </div>
     </div>
+    {% block footer %}
+      {% block footer_jquery %}
+        <script src="{{ LIBRARY_URL }}/jquery/jquery/1.10.2/jquery.min.js"></script>
+      {% endblock footer_jquery %}      
+    {% endblock footer %}
   </body>
 </html>

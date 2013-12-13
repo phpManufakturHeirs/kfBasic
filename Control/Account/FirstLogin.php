@@ -73,7 +73,9 @@ class FirstLogin
         ->add('username', 'hidden', array(
             'data' => self::$user['username']
         ))
-        ->add('password', 'password')
+        ->add('password', 'password', array(
+            'label' => 'Password'
+        ))
         ->add('email', 'hidden', array(
             'data' => self::$user['email']
         ))

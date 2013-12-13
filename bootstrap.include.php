@@ -126,6 +126,7 @@ $app->register(new Silex\Provider\MonologServiceProvider(), array(
     'monolog.level' => FRAMEWORK_DEBUG ? Logger::DEBUG : Logger::WARNING,
     'monolog.name' => 'kitFramework'
 ));
+
 $app['monolog']->addDebug('MonologServiceProvider registered.');
 
 try {

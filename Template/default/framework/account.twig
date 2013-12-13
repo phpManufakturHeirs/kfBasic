@@ -8,13 +8,14 @@
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
 {% extends getTemplateFile('@phpManufaktur/Basic/Template', 'framework/body.twig') %}
-{% block title %}{{ 'kitFramework - Admin'|trans }}{% endblock %}
-{% block head %}
-  {{ parent() }}
-  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Basic/Template/default/framework/css/account.css" media="screen, projection" />
-{% endblock %}
+{% block title %}{{ 'kitFramework - Account'|trans }}{% endblock %}
 {% block content %}
-  <div class="admin_container">
-    {{ 'Account not implemented yet!'|trans }}
+  <div class="container">
+    <div class="page-header">
+      <h1>Benutzerkonto <small>kitFramework</small></h1>
+    </div>
+    <div class="alert alert-warning">
+      <p>Die Verwaltung der Benutzerkonten ist noch nicht implementiert!</p>
+    </div>
   </div>
 {% endblock %}

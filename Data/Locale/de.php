@@ -15,6 +15,8 @@ if ('á' != "\xc3\xa1") {
 }
 
 return array(
+    'Access denied'
+        => 'Zugriff verweigert',
     'Account'
         => 'Konto',
     'Add the extension <b>%name%</b> to the catalog.'
@@ -85,8 +87,8 @@ return array(
     'Help'
         => 'Hilfe',
 
-    '<p>If you have forgotten your password, you can order a link to create a new one.</p><p>Please type in the email address assigned to your account and submit the form.</p>'
-        => '<p>Falls Sie Ihr Passwort vergessen haben, können Sie einen Link anfordern um ein neues Passwort zu erstellen.</p><p>Bitte tragen Sie die E-Mail Adresse ein, die ihrem Konto zugeordnet ist und übermitteln Sie das Formular.</p>',
+    'If you have forgotten your password, you can order a link to create a new one. Please type in the email address assigned to your account and submit the form.'
+        => 'Falls Sie Ihr Passwort vergessen haben, können Sie einen Link anfordern um ein neues Passwort zu erstellen. Bitte tragen Sie die E-Mail Adresse ein, die ihrem Konto zugeordnet ist und übermitteln Sie das Formular.',
     '<p>If you have not asked to create a new password, just do nothing. The link above is valid only for 24 hours and your actual password has not changed now.</p>'
         => '<p>Falls Sie kein neues Passwort angefordert haben, ignorieren Sie diese E-Mail bitte. Der o.a. Link ist lediglich für 24 Stunden gültig und ihr aktuelles Passwort wurde nicht geändert.</p>',
     'incorrect-captcha-sol'
@@ -141,8 +143,8 @@ return array(
         => 'Bitte prüfen Sie den angegebenen Benutzernamen sowie das Passwort und versuchen Sie es erneut!',
     'Please <a href="%link%" target="_blank">comment this help</a> to improve the kitCommand <b>%command%</b>.'
         => 'Bitte <a href="%link%" target="_blank">kommentieren und ergänzen Sie diese Hilfe</a> um das kitCommand <b>%command%</b> zu verbessern.',
-    '<p>Please login to the kitFramework with your username or email address and the assigned password.</p><p>Your can also use your username and password for the CMS.</p>'
-        => '<p>Bitte melden Sie sich am kitFramework mit Ihrem Benutzernamen oder Ihrer E-Mail Adresse und Ihrem Passwort an.</p><p>Sie können sich auch mit Ihrem Benutzernamen und Passwort für das CMS anmelden.</p>',
+    'Please login to the kitFramework with your username or email address and the assigned password. Your can also use your username and password for the CMS.'
+        => 'Bitte melden Sie sich am kitFramework mit Ihrem Benutzernamen oder Ihrer E-Mail Adresse und Ihrem Passwort an. Sie können sich auch mit Ihrem Benutzernamen und Passwort für das CMS anmelden.',
     'Please report all issues and help to improve %command%!'
         => 'Bitte melden Sie alle auftretenden Probleme und helfen Sie mit %command% zu verbessern!',
     '<p>Please use the following link to create a new password:<br />%reset_url%</p>'
@@ -220,8 +222,8 @@ return array(
         => 'Für das kitCommand <b>%command%</b> ist keine Hilfe verfügbar.',
     "This link enable you to change your password once within 24 hours."
         => "Dieser Link ermöglicht es Ihnen, ihr Passwort einmal innerhalb von 24 Stunden zu ändern.",
-    '<p>This value is not a valid email address.</p>'
-        => '<p>Es wurde keine gültige E-Mail Adresse übergeben!</p>',
+    'This value is not a valid email address.'
+        => 'Es wurde keine gültige E-Mail Adresse übergeben!',
 
     'Unknown user'
         => 'Unbekannter Benutzer',
