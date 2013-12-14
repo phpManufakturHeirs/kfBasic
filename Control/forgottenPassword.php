@@ -175,7 +175,7 @@ class forgottenPassword
                 'framework/password.set.twig'),
             array(
                 'form' => $form->createView(),
-                'message' => $app['translator']->trans('<p>Hello %name%,</p><p>you want to change your password, so please type in a new one, repeat it and submit the form.</p><p>If you won\'t change your password just leave this dialog.</p>',
+                'message' => $app['translator']->trans('Hello %name%, you want to change your password, so please type in a new one, repeat it and submit the form. If you won\'t change your password just leave this dialog.',
                     array('%name%' => $user['displayname']))
                 )
             );
@@ -187,11 +187,11 @@ class forgottenPassword
 
         if ($form['password']['first'] != $form['password']['second']) {
             // the passwords does not match
-            $message = $app['translator']->trans('<p>The both passwords you have typed in does not match, please try again!</p>');
+            $message = $app['translator']->trans('The both passwords you have typed in does not match, please try again!');
         }
         elseif ($app['utils']->passwordStrength($form['password']['first']) < 3) {
             // the password is not strength enough
-            $message = $app['translator']->trans('<p>The password you have typed in is not strength enough.</p><p>Please choose a password at minimun 8 characters long, containing lower and uppercase characters, numbers and special chars. Spaces are not allowed.</p>');
+            $message = $app['translator']->trans('The password you have typed in is not strength enough. Please choose a password at minimun 8 characters long, containing lower and uppercase characters, numbers and special chars. Spaces are not allowed.');
         }
         else {
             // change the password and prompt info
@@ -208,7 +208,7 @@ class forgottenPassword
                 'framework/body.message.twig'),
                 array('title' => 'Password changed',
                     'message' => $app['translator']->trans(
-                        '<p>The password for the kitFramework was successfull changed.</p><p>You can now <a href="%login%">login using the new password</a>.</p>',
+                        'The password for the kitFramework was successfull changed. You can now <a href="%login%">login using the new password</a>.',
                         array('%login%' => FRAMEWORK_URL.'/login'))
                 ));
         }
