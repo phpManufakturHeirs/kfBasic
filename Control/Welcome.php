@@ -64,6 +64,9 @@ class Welcome
             $SearchSection = new SearchSection();
             $SearchSection->addSearchSection($app);
         }
+
+        // set the locale from the CMS locale
+        $app['translator']->setLocale($app['session']->get('CMS_LOCALE', 'en'));
     }
 
     /**
