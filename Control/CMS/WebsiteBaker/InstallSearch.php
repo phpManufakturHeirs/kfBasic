@@ -29,6 +29,9 @@ class InstallSearch
         // remove probably existing directory
         $this->app['filesystem']->remove(CMS_PATH.'/modules/kit_framework_search');
 
+        // wait a moment ...
+        sleep(1);
+
         if (!file_exists(CMS_PATH.'/modules/kit_framework_search')) {
             // create the directory
             $this->app['filesystem']->mkdir(CMS_PATH.'/modules/kit_framework_search');

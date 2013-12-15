@@ -27,6 +27,8 @@ return array(
         => 'Zusatzinformation',
     'alpha'
         => '- in Entwicklung -',
+    'Available extensions'
+        => 'Verfügbare Erweiterungen',
 
     'Bad credentials'
         => 'Die Angaben sind unvollständig oder ungültig!',
@@ -56,6 +58,8 @@ return array(
     'Create a new password' =>
         'Ein neues Password anlegen',
 
+    'Data replication'
+        => 'Datenableich',
     'Documentation'
         => 'Dokumentation',
 

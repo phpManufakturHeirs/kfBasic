@@ -8,6 +8,7 @@
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
 <!DOCTYPE html>
+{% spaceless %}
 <html lang="en">
   <head>
     {% block head %}
@@ -18,6 +19,7 @@
       <meta name="keywords" content="{% block keywords %}{% endblock keywords %}" />
       <meta name=”content-language” content=”{% block content_language %}de{% endblock content_language %}” />
       <meta name="viewport" content="{% block viewport %}width=device-width, initial-scale=1.0{% endblock viewport %}">
+      <meta name="generator" content="kitFramework (https://kit2.phpmanufaktur.de)" />
       {% block stylesheet %}
         {# Bootstrap #}
         <link href="{{ LIBRARY_URL }}/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
@@ -51,11 +53,13 @@
         if (typeof 'jQuery' !== 'undefined') {
           $(document).ready(function() {
             {# setting the iFrame height dynamically by the height of the inbounded document #}
-            var content_height = $('#content').height() + {{ iframe_add_height|default(30) }} + "px";
-            parent.document.getElementById("kitframework_iframe").style.height = content_height;
+            var frame_id = window.frameElement.getAttribute('id');
+            var content_height = $('#content').height() + {{ iframe_add_height|default(30) }} + "px";             
+            parent.document.getElementById(frame_id).style.height = content_height;
           });
         }
       </script>
     {% endblock footer %}
   </body>
-</html>      
+</html>     
+{% endspaceless %}

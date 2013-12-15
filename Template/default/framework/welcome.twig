@@ -23,13 +23,16 @@
     <div class="alert alert-info">
       {% if message|length > 0 %}   
         {{ message }}
-      {% else %}
+      {% elseif app.translator.locale == 'de' %}
         <p>Dieser Übersichtsdialog befindet sich noch im Experimentierstadium, Vorschläge und Ideen sind herzlich willkommen!</p>
         <p>Bitte besuchen Sie die Seite <a class="alert-link" href="https://kit2.phpmanufaktur.de/firststeps" target="_blank">Erste Schritte mit dem kitFramework</a> für einen Einstieg.</p>
+      {% else %}
+        <p>This overview dialog is just in progress and experimental, your suggestions and ideas are welcome!</p>
+        <p>Please visit the introduction <a class="alert-link" href="https://kit2.phpmanufaktur.de/firststeps" target="_blank">Erste Schritte mit dem kitFramework</a> (in german language) for the first steps.</p>
       {% endif %}
     </div>
     
-    <h2>Bereits installierte Erweiterungen</h2>
+    <h2>{{ 'Installed extensions'|trans }}</h2>
     
     <div class="hidden-md hidden-sm hidden-xs">
       {# LARGE DEVICE #}
@@ -82,8 +85,12 @@
       {% endfor %} 
     </div>
     
-    <h2>Verfügbare Erweiterungen</h2>
-    <p>Diese Liste wird automatisch aktualisiert, falls über Github ein neuer <a href="https://github.com/phpManufaktur/kitFramework_Catalog" target="blank">kitFramework Katalog</a> verfügbar ist.</p>
+    <h2>{{ 'Available extensions'|trans }}</h2>
+    {% if app.translator.locale == 'de' %}
+      <p>Diese Liste wird automatisch aktualisiert, falls über Github ein neuer <a href="https://github.com/phpManufaktur/kitFramework_Catalog" target="blank">kitFramework Katalog</a> verfügbar ist.</p>
+    {% else %}
+      <p>The list of available extensions will be automatically updated if a new <a href="https://github.com/phpManufaktur/kitFramework_Catalog" target="blank">kitFramework catalog</a> is avaiable from Github.</p>
+    {% endif %}
   
     <div class="hidden-md hidden-sm hidden-xs">
       {# LARGE DEVICE #}
@@ -136,8 +143,8 @@
       {% endfor %} 
     </div>
     
-    <h2>Datenabgleich</h2>
-    <p><span class="glyphicon glyphicon-eye-open"></span> <a href="{{ scan_extensions }}#top">{{ 'Scan for installed extensions'|trans }}</a></p>
-    <p><span class="glyphicon glyphicon-cloud-download"></span> <a href="{{ scan_catalog }}#top">{{ 'Scan the online catalog for available extensions'|trans }}</a></p>    
+    <h2>{{ 'Data replication'|trans }}</h2>
+    <p><span class="glyphicon glyphicon-eye-open"></span>&nbsp;<a href="{{ scan_extensions }}#top">{{ 'Scan for installed extensions'|trans }}</a></p>
+    <p><span class="glyphicon glyphicon-cloud-download"></span>&nbsp;<a href="{{ scan_catalog }}#top">{{ 'Scan the online catalog for available extensions'|trans }}</a></p>    
   </div>
 {% endblock %}

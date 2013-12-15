@@ -103,6 +103,21 @@ class Update
     }
 
     /**
+     * Release 0.63
+     */
+    protected function release_063()
+    {
+        $version = file_get_contents(CMS_PATH.'/modules/kit_framework/VERSION');
+        if (version_compare(trim($version), '0.36', '<=')) {
+            // copy a new tool.php to the CMS
+            $this->app['filesystem']->copy(
+                MANUFAKTUR_PATH.'/Basic/Data/Setup/Files/Release_0.63/tool.php',
+                CMS_PATH.'/modules/kit_framework/tool.php',
+                true);
+        }
+    }
+
+    /**
      * Update the database tables for the BASIC extension of the kitFramework
      *
      * @param Application $app
@@ -114,6 +129,7 @@ class Update
         $this->release_036();
         $this->release_042($app);
         $this->release_054();
+        $this->release_063();
 
         // install the search function
         $Search = new InstallSearch($app);

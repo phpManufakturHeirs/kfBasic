@@ -16,6 +16,7 @@ use phpManufaktur\Basic\Control\ExtensionRegister;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use phpManufaktur\Basic\Data\CMS\SearchSection;
+use phpManufaktur\Basic\Control\CMS\InstallSearch;
 
 /**
  * Display a welcome to the kitFramework dialog
@@ -58,6 +59,12 @@ class Welcome
         $app['filesystem']->copy(MANUFAKTUR_PATH.'/Basic/Control/Updater/Updater.php', MANUFAKTUR_PATH.'/Updater/Updater.php', true);
 
         self::$usage = $this->app['request']->get('usage', 'framework');
+
+        // check if the search addon is installed
+        if (!file_exists(CMS_PATH.'/modules/kit_framework_search')) {
+            $InstallSearch = new InstallSearch($app);
+            $InstallSearch->exec();
+        }
 
         // check if the search section in the CMS exists
         if (file_exists(CMS_PATH.'/modules/kit_framework_search')) {
@@ -177,7 +184,6 @@ class Welcome
             'framework/welcome.twig'),
             array(
                 'usage' => self::$usage,
-                'iframe_add_height' => '300',
                 'catalog_items' => $catalog_items,
                 'register_items' => $register_items,
                 'message' => $this->getMessage(),

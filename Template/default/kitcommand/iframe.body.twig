@@ -30,6 +30,7 @@
       <meta name="robots" content="{% block robots %}{{ basic.page.robots|default('index,follow') }}{% endblock %}" />
       <meta name="description" content="{% block description %}{{ basic.page.description|default('') }}{% endblock %}" />
       <meta name="keywords" content="{% block keywords %}{{ basic.page.keywords|default('') }}{% endblock %}" />
+      <meta name="generator" content="kitFramework (https://kit2.phpmanufaktur.de)" />
       {% block stylesheet %}
         <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Basic/Template/default/kitcommand/css/kitcommand.css" media="screen, projection" />
       {% endblock stylesheet %}
