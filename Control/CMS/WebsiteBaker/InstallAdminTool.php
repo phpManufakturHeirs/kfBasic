@@ -49,7 +49,6 @@ class InstallAdminTool
 
             $data = array(
                 'name' => $extension['name'],
-                'name_lower' => strtolower($extension['name']),
                 'directory' => 'kit_framework_'.strtolower(trim($extension['name'])),
                 'guid' => isset($extension['guid']) ? $extension['guid'] : '',
                 'description' => $extension['description']['en']['short'],
@@ -103,8 +102,8 @@ class InstallAdminTool
                 $this->app['filesystem']->mkdir(CMS_PATH.'/modules/'.$data['directory'].'/languages');
                 // loop through the languages available in the extension.json and create module descriptions for the CMS
                 foreach ($extension['description'] as $lang => $lang_array) {
-                    $lang_search = array('{NAME}', '{AUTHOR}', '{DESCRIPTION}');
-                    $lang_replace = array($data['name'], $data['author'], $lang_array['short']);
+                    $lang_search = array('{NAME}', '{NAME_LOWER}', '{AUTHOR}', '{DESCRIPTION}');
+                    $lang_replace = array($data['name'], strtolower($data['name']), $data['author'], $lang_array['short']);
                     file_put_contents(CMS_PATH.'/modules/'.$data['directory'].'/languages/'.strtoupper($lang).'.php',
                         str_ireplace($lang_search, $lang_replace, $content));
                 }
