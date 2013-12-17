@@ -6,6 +6,22 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.63** - 2013-12-17
+
+* add isTracking() and disableTracking()
+* introduce LIBRARY
+* added jQuery 1.10.2
+* added jQuery 2.0.3
+* added jQuery Migrate 1.2.1
+* added jQuery UI 1.10.3
+* added jQuery TagEdit 1.5.1
+* added jQuery Timepicker 1.4.3
+* added Bootstrap 2.3.2
+* added Bootstrap 3.0.3
+* added Font Awesome 3.2.1
+* added Font Awesome 4.0.3
+* changed BASIC backend and kitFramework catalog to responsive Bootstrap 3
+
 **0.62** - 2013-12-01
 
 * added GET handling for the parameter frame_scroll_to_id
