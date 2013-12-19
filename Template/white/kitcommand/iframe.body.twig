@@ -9,7 +9,7 @@
 #}
 <!DOCTYPE html>
 {% spaceless %}
-<html>  
+<html>
   <head>
     {% block head %}
       {% if (basic.frame is defined and basic.frame.redirect.active) %}
@@ -52,6 +52,10 @@
               parent.document.getElementById("{{ basic.frame.id }}").style.height = content_height;
               {% if basic.frame.scroll_to_id|length > 0 %}
                 document.getElementById('{{ basic.frame.scroll_to_id }}').scrollIntoView(true);
+              {% endif %}
+              {% if basic.page.page_title and (basic.page.title|length > 0) %}
+                {# set the page title of the parent dynamically #}
+                parent.document.title = '{{ basic.page.title }}';
               {% endif %}
             });
           }
