@@ -15,7 +15,7 @@
       {% if (basic.frame is defined and basic.frame.redirect.active) %}
         {# catch the iframe content into the CMS if the URL is executed external #}
         <script type="text/javascript">
-          if (top.location == self.location) { alert('xx');
+          if (top.location == self.location) { 
             document.location.replace("{{ basic.cms.page_url }}{% if basic.frame.redirect.route|length > 0 %}?redirect={{ basic.frame.redirect.route }}{% endif %}");
           }
         </script>
@@ -35,7 +35,7 @@
         <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Basic/Template/default/kitcommand/css/kitcommand.css" media="screen, projection" />
       {% endblock stylesheet %}
       {% block jquery %}
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script type="text/javascript" src="{{ LIBRARY_URL }}/jquery/jquery/1.10.2/jquery.min.js"></script>
       {% endblock jquery %}
     {% endblock head %}
   </head>
