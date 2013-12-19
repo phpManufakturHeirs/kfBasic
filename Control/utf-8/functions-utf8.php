@@ -279,7 +279,7 @@ function charset_to_utf8($str, $charset_in='utf-8', $decode_entities=true) {
  *                 String is unchanged in case of error.
  * @author thorn
  */
-function utf8_to_charset($str, $charset_out=DEFAULT_CHARSET) {
+function utf8_to_charset($str, $charset_out='UTF-8') {
     global $utf8_to_iso_8859_2, $utf8_to_iso_8859_3, $utf8_to_iso_8859_4, $utf8_to_iso_8859_5, $utf8_to_iso_8859_6, $utf8_to_iso_8859_7, $utf8_to_iso_8859_8, $utf8_to_iso_8859_9, $utf8_to_iso_8859_10, $utf8_to_iso_8859_11;
     $charset_out = strtoupper($charset_out);
     $wrong_ISO8859 = false;
@@ -387,8 +387,8 @@ function entities_to_7bit($str) {
  * &gt; &lt; &apos; &quot; &#039; &nbsp;
  * @author thorn
  */
-function entities_to_umlauts2($string, $charset_out=DEFAULT_CHARSET) {
-    $string = charset_to_utf8($string, DEFAULT_CHARSET, true);
+function entities_to_umlauts2($string, $charset_out='UTF-8') {
+    $string = charset_to_utf8($string, 'UTF-8', true);
     //if(utf8_check($string)) // this check is to much time-consuming (this may fail only if AddDefaultCharset is set)
     $string = utf8_to_charset($string, $charset_out);
     return ($string);
@@ -400,7 +400,7 @@ function entities_to_umlauts2($string, $charset_out=DEFAULT_CHARSET) {
  * Will convert a string in $charset_in encoding to a pure ASCII string with HTML-entities.
  * @author thorn
  */
-function umlauts_to_entities2($string, $charset_in=DEFAULT_CHARSET) {
+function umlauts_to_entities2($string, $charset_in='UTF-8') {
     $string = charset_to_utf8($string, $charset_in, false);
     //if(utf8_check($string)) // this check is to much time-consuming (this may fail only if AddDefaultCharset is set)
     $string = utf8_fast_umlauts_to_entities($string, false);
