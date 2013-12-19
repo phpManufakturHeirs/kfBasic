@@ -13,9 +13,9 @@
   <head>
     {% block head %}
       {% if (basic.frame is defined and basic.frame.redirect.active) %}
-        {# catch the iframe content into the CMS if the URL is executed external #}
+        {# catch the iframe content into the CMS if the URL is executed from outside (direct access) #}
         <script type="text/javascript">
-          if (top.location == self.location) { 
+          if (top.location === self.location) { 
             document.location.replace("{{ basic.cms.page_url }}{% if basic.frame.redirect.route|length > 0 %}?redirect={{ basic.frame.redirect.route }}{% endif %}");
           }
         </script>
