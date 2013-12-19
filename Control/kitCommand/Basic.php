@@ -197,7 +197,8 @@ class Basic
             'robots' => (isset(Basic::$parameter['frame_robots'])) ? Basic::$parameter['frame_robots'] : 'index,follow',
             'charset' => (isset(Basic::$parameter['frame_charset'])) ? Basic::$parameter['frame_charset'] : 'UTF-8',
             'tracking' => $tracking,
-            'cache' => (isset(Basic::$parameter['frame_cache']) && ((Basic::$parameter['frame_cache'] == 1) || (strtolower(Basic::$parameter['frame_cache'] == 'true')))) ? true : false
+            'cache' => (isset(Basic::$parameter['frame_cache']) && ((Basic::$parameter['frame_cache'] == 1) || (strtolower(Basic::$parameter['frame_cache']) == 'true'))) ? true : false,
+            'page_title' => (isset(Basic::$parameter['page_title']) && ((Basic::$parameter['page_title'] == 0) || (strtolower(Basic::$parameter['page_title']) == 'false'))) ? false : true
         );
 
         if (Basic::$parameter_id == -1) {
