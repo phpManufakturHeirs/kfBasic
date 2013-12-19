@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.65** - 2013-12-19
+
+* added general kitCommand parameter `page_title[]`
+
 **0.64** - 2013-12-17
 
 * fixed a bug installing Admin-Tools in the CMS
