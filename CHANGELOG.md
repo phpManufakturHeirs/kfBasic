@@ -6,6 +6,11 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.66** - 2013-12-19
+
+* added missing support for `page_title[]` in white layout
+* added missing charset definition in UTF-8 support
+
 **0.65** - 2013-12-19
 
 * added general kitCommand parameter `page_title[]`
