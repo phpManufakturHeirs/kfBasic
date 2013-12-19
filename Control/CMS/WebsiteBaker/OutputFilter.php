@@ -303,7 +303,7 @@ class OutputFilter
                 // parse() is executed for the CMS content!
                 if (!$css_loaded) {
                     // load the kitCommand default CSS file
-                    $this->load_css_file($content, 'basic', '/kitcommand/css/kitcommand.css', 'default');
+                    $this->load_css_file($content, 'basic', '/kitcommand/css/kitcommand.min.css', 'default');
                 }
                 $cmd_array = array(
                     'cms' => array(
