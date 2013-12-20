@@ -17,7 +17,7 @@
       <meta name="robots" content="{% block robots %}noindex,nofollow{% endblock robots %}" />
       <meta name="description" content="{% block description %}{% endblock %}" />
       <meta name="keywords" content="{% block keywords %}{% endblock %}" />
-      <meta name=”content-language” content=”{% block content_language %}{% if app.translator.locale == 'de' %}de{% else %}en{% endif %}{% endblock content_language %}” />
+      <meta name=”language” content=”{% block content_language %}{% if app.translator.locale == 'de' %}de{% else %}en{% endif %}{% endblock content_language %}” />
       <meta name="viewport" content="{% block viewport %}width=device-width, initial-scale=1.0{% endblock viewport %}" />
       <meta name="generator" content="kitFramework (https://kit2.phpmanufaktur.de)" />
       {% block stylesheet %}
@@ -63,13 +63,13 @@
       {% block content %}{% endblock %}
     </div>
     
-         
+    
+    {% block footer_jquery %}
+      <script type="text/javascript" src="{{ LIBRARY_URL }}/jquery/jquery/1.10.2/jquery.min.js"></script>
+      <script type="text/javascript" src="{{ LIBRARY_URL }}/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    {% endblock footer_jquery %}
     {% block footer %}
-      {# files for the footer #}
-      {% block footer_jquery %}
-        <script type="text/javascript" src="{{ LIBRARY_URL }}/jquery/jquery/1.10.2/jquery.min.js"></script>
-        <script type="text/javascript" src="{{ LIBRARY_URL }}/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-      {% endblock footer_jquery %} 
+      {# files for the footer #}       
     {% endblock footer %}
   </body>
 </html>
