@@ -61,12 +61,12 @@ class twigExtension extends Twig_Extension
             'FRAMEWORK_MEDIA_PROTECTED_URL' => FRAMEWORK_MEDIA_PROTECTED_URL,
             'FRAMEWORK_PATH' => FRAMEWORK_PATH,
             'FRAMEWORK_URL' => FRAMEWORK_URL,
+            'FRAMEWORK_TEMPLATES' => explode(',', FRAMEWORK_TEMPLATES),
             'LIBRARY_URL' => MANUFAKTUR_URL.'/Basic/Library',
             'MANUFAKTUR_PATH' => MANUFAKTUR_PATH,
             'MANUFAKTUR_URL' => MANUFAKTUR_URL,
             'THIRDPARTY_PATH' => THIRDPARTY_PATH,
-            'THIRDPARTY_URL' => THIRDPARTY_URL,
-
+            'THIRDPARTY_URL' => THIRDPARTY_URL
         );
     } // getGlobals()
 
@@ -87,7 +87,8 @@ class twigExtension extends Twig_Extension
             'reCaptcha' => new \Twig_Function_Method($this, 'reCaptcha'),
             'reCaptchaIsActive' => new \Twig_Function_Method($this, 'reCaptchaIsActive'),
             'mailHide' => new \Twig_Function_Method($this, 'mailHide'),
-            'mailHideIsActive' => new \Twig_Function_Method($this, 'mailHideIsActive')
+            'mailHideIsActive' => new \Twig_Function_Method($this, 'mailHideIsActive'),
+            'fileExists' => new \Twig_Function_Method($this, 'fileExists')
         );
     }
 
@@ -207,6 +208,17 @@ class twigExtension extends Twig_Extension
     public function MailHideIsActive()
     {
         return $this->app['recaptcha']->MailHideIsActive();
+    }
+
+    /**
+     * Check if the given file exists
+     *
+     * @param string $file absolute path
+     * @return boolean
+     */
+    public function fileExists($file)
+    {
+        return file_exists($file);
     }
 
 } // class twigExtension
