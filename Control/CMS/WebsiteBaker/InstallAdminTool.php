@@ -75,6 +75,7 @@ class InstallAdminTool
             }
 
             $data['EXTENSION_ROUTE'] = $extension_route;
+            $data['NAME_LOWER'] = strtolower($data['name']);
 
             $this->app['filesystem']->mkdir(CMS_PATH.'/modules/'.$data['directory']);
 
@@ -92,6 +93,7 @@ class InstallAdminTool
                 // loop through the files, replace content and write them to the desired /modules directory
                 if (file_exists(MANUFAKTUR_PATH."/Basic/Template/default/cms/setup/websitebaker/tool/{$file}.htt")) {
                     $content = file_get_contents(MANUFAKTUR_PATH."/Basic/Template/default/cms/setup/websitebaker/tool/{$file}.htt");
+
                     file_put_contents(CMS_PATH.'/modules/'.$data['directory'].'/'.$file.'.php', str_ireplace($search, $replace, $content));
                 }
             }
@@ -102,8 +104,8 @@ class InstallAdminTool
                 $this->app['filesystem']->mkdir(CMS_PATH.'/modules/'.$data['directory'].'/languages');
                 // loop through the languages available in the extension.json and create module descriptions for the CMS
                 foreach ($extension['description'] as $lang => $lang_array) {
-                    $lang_search = array('{NAME}', '{NAME_LOWER}', '{AUTHOR}', '{DESCRIPTION}');
-                    $lang_replace = array($data['name'], strtolower($data['name']), $data['author'], $lang_array['short']);
+                    $lang_search = array('{NAME}', '{AUTHOR}', '{DESCRIPTION}');
+                    $lang_replace = array($data['name'], $data['author'], $lang_array['short']);
                     file_put_contents(CMS_PATH.'/modules/'.$data['directory'].'/languages/'.strtoupper($lang).'.php',
                         str_ireplace($lang_search, $lang_replace, $content));
                 }
