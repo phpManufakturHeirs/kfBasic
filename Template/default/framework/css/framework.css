@@ -13,20 +13,28 @@ body {
   height: 100%;
 }
 
-a {
-  text-decoration: none;
-}
-a:link,
-a:visited {
+.manufaktur {
   color: #da251d;
-  background-color: transparent;
-  text-decoration: none;
 }
-a:hover,
-a:active {
-  color: #da251d;
-  background-color: transparent;
-  text-decoration: underline;
+a.manufaktur
+.manufaktur a {
+  text-decoration: none !important;
+}
+a:link.manufaktur,
+.manufaktur a:link,
+a:visited.manufaktur,
+.manufaktur a:visited {
+  color: #da251d !important;
+  background-color: transparent !important;
+  text-decoration: none !important;
+}
+a:hover.manufaktur,
+.manufaktur a:hover,
+a:active.manufaktur,
+.manufaktur a:active {
+  color: #da251d !important;
+  background-color: transparent !important;
+  text-decoration: underline !important;
 }
 
 #content_wrap {
@@ -46,9 +54,6 @@ code {
   font-size: 80%;
 }
 
-.manufaktur {
-  color: #da251d;
-}
 
 label {
   margin: 0 0 15px 0;
@@ -71,4 +76,7 @@ label.required:after {
 .navbar-brand {
   width: auto;
   font-size: 12px;
+}
+.navbar-brand {
+  font-size: 14px;
 }

@@ -17,7 +17,7 @@
       <meta name="robots" content="{% block robots %}noindex,nofollow{% endblock robots %}" />
       <meta name="description" content="{% block description %}{% endblock %}" />
       <meta name="keywords" content="{% block keywords %}{% endblock %}" />
-      <meta name=”language” content=”{% block content_language %}{% if app.translator.locale == 'de' %}de{% else %}en{% endif %}{% endblock content_language %}” />
+      <meta name="language" content="{% block content_language %}{% if app.translator.locale == 'de' %}de{% else %}en{% endif %}{% endblock content_language %}" />
       <meta name="viewport" content="{% block viewport %}width=device-width, initial-scale=1.0{% endblock viewport %}" />
       <meta name="generator" content="kitFramework (https://kit2.phpmanufaktur.de)" />
       {% block stylesheet %}
@@ -42,20 +42,28 @@
   </head>
   <body>
     {% block user_navigation %}  
-      <header class="navbar navbar-default" role="navigation"> 
+      <nav class="navbar navbar-default" role="navigation"> 
         <div class="container">
           <div class="navbar-header">
-            <a class="navbar-brand" href="https://kit2.phpmanufaktur.de" target="_blank" title="kitFramework"><i class="fa fa-puzzle-piece"></i>&nbsp;kitFramework - &copy; {{ 'now'|date('Y') }} by phpManufaktur</a>
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand manufaktur" href="https://kit2.phpmanufaktur.de" target="_blank" title="kitFramework - &copy {{ 'now'|date('Y') }} by phpManufaktur"><i class="fa fa-puzzle-piece"></i></a>
           </div>
           {% if isAuthenticated() %}
+          <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
               <li class="navbar-text">{{ getUserDisplayName() }}</li>
-              <li class="navbar-link"><a href="{{ FRAMEWORK_URL }}/admin/account" title="{{ 'Account'|trans }}"><span class="glyphicon glyphicon-user"></span></a></li>
-              <li class="navbar-link"><a href="{{ FRAMEWORK_URL ~ '/logout' }}" title="{{ 'Logout'|trans }}"><span class="glyphicon glyphicon-log-out"></span></a></li>
+              <li class="navbar-link"><a class="manufaktur" href="{{ FRAMEWORK_URL }}/admin/account" title="{{ 'Account'|trans }}"><span class="glyphicon glyphicon-user"></span></a></li>
+              <li class="navbar-link"><a class="manufaktur" href="{{ FRAMEWORK_URL ~ '/logout' }}" title="{{ 'Logout'|trans }}"><span class="glyphicon glyphicon-log-out"></span></a></li>
             </ul>
+          </div>
           {% endif %}
         </div>
-      </header>      
+      </nav>      
     {% endblock user_navigation %}
     <div id="content_wrap">
       {# add a hint at all dialogs which must be redesigned for Bootstrap ... #}
