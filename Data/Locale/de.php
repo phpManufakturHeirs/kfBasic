@@ -49,6 +49,8 @@ return array(
         => 'Kann die Datei <b>%file%</b> nicht öffnen!',
     "Can't read the the %repository% from %organization% at Github!"
         => 'Kann das Repository <b>%repository%</b> von der Organisation <b>%organization%</b> auf Github nicht lesen!',
+    'Cancel'
+        => 'Abbruch',
     'captcha-timeout'
         => 'Zeitüberschreitung bei der CAPTCHA Übermittlung, bitte versuchen Sie es erneut.',
     'commercial use only'
