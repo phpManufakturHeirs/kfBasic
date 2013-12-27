@@ -6,6 +6,14 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.67** - 2013-12-27
+
+* added missing jQuery *.map files to the library
+* add Twig function `fileExists()`
+* add Twig global array `FRAMEWORK_TEMPLATES`
+* Introduce class `Alert` as Basic pattern (Bootstrap 3)
+* added bootstrap pattern for formatted groups of checkboxes and radiobuttons
+
 **0.66** - 2013-12-19
 
 * added missing support for `page_title[]` in white layout
