@@ -1,6 +1,6 @@
 {% set route_check = app.request.get('_route')|split('_') %}
 {% if route_check|length > 2 %}
-  {% if route_check.2 in ['confirmationlog','event','wincalc'] %}
+  {% if route_check.2 in ['confirmationlog','wincalc'] %}
   <div class="pending_bootstrap">
     {{ 'This dialog is waiting for a responsive redesign using Bootstrap 3 ...'|trans }}
   </div>
