@@ -61,7 +61,7 @@ class Page {
      */
     public function getPageDirectory()
     {
-        $this->cms->getPageDirectory();
+        return $this->cms->getPageDirectory();
     }
 
     /**
