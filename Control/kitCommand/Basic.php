@@ -13,6 +13,7 @@ namespace phpManufaktur\Basic\Control\kitCommand;
 
 use Silex\Application;
 use phpManufaktur\Basic\Data\kitCommandParameter;
+use phpManufaktur\Basic\Control\Pattern\Alert;
 
 /**
  * The elementary basic class for all kitCommands
@@ -20,9 +21,8 @@ use phpManufaktur\Basic\Data\kitCommandParameter;
  * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
  *
  */
-class Basic
+class Basic extends Alert
 {
-    protected $app = null;
     protected static $message = '';
     private static $cms_info = null;
     private static $parameter = null;
@@ -55,7 +55,8 @@ class Basic
      */
     protected function initParameters(Application $app, $parameter_id=-1)
     {
-        $this->app = $app;
+        parent::initialize($app);
+
         // set the given parameter ID
         self::$parameter_id = $parameter_id;
 
@@ -388,6 +389,7 @@ class Basic
     public function getBasicSettings()
     {
         return array(
+            'alert' => $this->getAlert(),
             'message' => $this->getMessage(),
             'cms' => Basic::$cms_info,
             'frame' => Basic::$frame,
