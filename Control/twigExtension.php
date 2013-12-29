@@ -89,9 +89,20 @@ class twigExtension extends Twig_Extension
             'mailHide' => new \Twig_Function_Method($this, 'mailHide'),
             'mailHideIsActive' => new \Twig_Function_Method($this, 'mailHideIsActive'),
             'fileExists' => new \Twig_Function_Method($this, 'fileExists')
+
         );
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see Twig_Extension::getFilters()
+     */
+    public function getFilters()
+    {
+        return array(
+            'ellipsis' => new \Twig_Filter_Method($this, 'filterEllipsis')
+        );
+    }
 
     /**
      * Check if the user is authenticated
@@ -219,6 +230,29 @@ class twigExtension extends Twig_Extension
     public function fileExists($file)
     {
         return file_exists($file);
+    }
+
+    /**
+     * Ellipsis function - shorten the given $text to $length at the nearest
+     * space and add three dots at the end ...
+     *
+     * @param string $text
+     * @param number $length
+     * @param boolean $striptags remove HTML tags by default
+     * @return string
+     */
+    public function filterEllipsis($text, $length=100, $striptags=true) {
+        if ($striptags) {
+            $text = strip_tags($text);
+        }
+        if (empty($text)) {
+            return '';
+        }
+        $text = $text." ";
+        $text = substr($text, 0, $length);
+        $text = substr($text, 0, strrpos($text,' '));
+        $text = $text." ...";
+        return $text;
     }
 
 } // class twigExtension
