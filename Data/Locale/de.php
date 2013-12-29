@@ -146,6 +146,8 @@ return array(
     'No fitting user role dectected!'
         => 'Es wurde kein passendes Benutzerrecht gefunden',
 
+    'Oooops, missing the alert which should be prompted here ... '
+        => 'Hoppla, da fehlt die Meldung die hier eigentlich angezeigt werden sollte ...',
     'Open this helpfile in a new window'
         => 'Diese Hilfedatei in einem neuen Fenster öffnen',
 
@@ -212,6 +214,8 @@ return array(
         => 'Die Datei %file% existiert nicht im Gist %gist_id%',
     'The extension.json of <b>%name%</b> does not contain all definitions, check GUID, Group and Release!'
         => 'Die Beschreibungsdatei extension.json für die Erweiterung <b>%name%</b> enthält nicht alle Definitionen, prüfen Sie <i>GUID</i>, <i>Group</i> und <i>Release</i>!',
+    'The parameter <code>%parameter%[%value%]</code> for the kitCommand <code>~~ %command% ~~</code> is unknown, please check the parameter and the given value!'
+        => 'Der Parameter <code>%parameter%[%value%]</code> für das kitCommand <code>~~ %command% ~~</code> ist nicht bekannt oder übergibt einen ungültigen Wert, bitte prüfen Sie Ihre Eingabe!',
     'The password for the kitFramework was successfull changed. You can now <a href="%login%">login using the new password</a>.'
         => 'Ihr Passwort für das kitFramework wurde erfolgreich geändert.<br />Sie können sich jetzt <a href="%login%">mit Ihrem neuen Passwort anmelden</a>.',
     'The password you have typed in is not strength enough. Please choose a password at minimun 8 characters long, containing lower and uppercase characters, numbers and special chars. Spaces are not allowed.'
