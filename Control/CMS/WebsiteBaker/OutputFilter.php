@@ -204,6 +204,49 @@ class OutputFilter
     }
 
     /**
+     * Set the CMS page header with information from the kitCommand
+     *
+     * @param string $command name of the kitCommand
+     * @param integer $id identifier needed by the kitCommand
+     * @param string reference $content the CMS page content
+     */
+    protected function setPageHeader($command, $id, &$content)
+    {
+        if (false !== ($header_json = @file_get_contents(WB_URL.'/kit2/command/'.$command.'/getheader/id/'.$id))) {
+            if (null !== ($header = json_decode($header_json, true))) {
+                $doc = new \DOMDocument;
+                // no error reporting here!
+                @$doc->loadHTML($content);
+
+                $changed = false;
+
+                if (isset($header['title']) && !empty($header['title'])) {
+                    $titles = $doc->getElementsByTagName('title');
+                    $titles->item(0)->nodeValue = $header['title'];
+                    $changed = true;
+                }
+
+                $metas = $doc->getElementsByTagName('meta');
+                foreach ($metas as $meta) {
+                    if ((strtolower($meta->getAttribute('name')) == 'description')  &&
+                        (isset($header['description']) && !empty($header['description']))) {
+                        $meta->setAttribute('content', $header['description']);
+                        $changed = true;
+                    }
+                    if ((strtolower($meta->getAttribute('name')) == 'keywords') &&
+                        (isset($header['keywords']) && !empty($header['keywords']))) {
+                        $meta->setAttribute('content', $header['keywords']);
+                        $changed = true;
+                    }
+                }
+                if ($changed) {
+                    $content = $doc->saveHTML();
+                }
+            }
+        }
+    }
+
+    /**
      * Execute the content filter for the kitFramework.
      * Extract CMS parameters like type, version, path, url, id of the calling
      * page and other, additional routes all parameters of a kitCommand and all
@@ -366,7 +409,24 @@ class OutputFilter
                     $content = $response;
                 }
                 else {
-                    $content = str_replace($command_expression, $response, $content);
+                    // replace the kitCommand
+                    $search = str_replace('[', '\[', $command_expression);
+                    if (preg_match('%<[^>\/]+>\s*'.$search.'\s*<\/[^>]+>%si', $content, $matches)) {
+                        // also remove the tags around the kitCommand expression!
+                        $content = str_replace($matches[0], $response, $content);
+                    }
+                    else {
+                        // only replace the kitCommand
+                        $content = str_replace($command_expression, $response, $content);
+                    }
+                    // set CMS page header?
+                    if ((isset($_GET['command']) && (strtolower($_GET['command'] == $command))) &&
+                        (isset($_GET['set_header']) && (is_numeric($_GET['set_header']) && ($_GET['set_header'] > 0)))) {
+                        $this->setPageHeader($command, $_GET['set_header'], $content);
+                    }
+                    elseif (isset($params['set_header']) && (is_numeric($params['set_header']) && ($params['set_header'] > 0))) {
+                        $this->setPageHeader($command, $params['set_header'], $content);
+                    }
                 }
             }
             else {
