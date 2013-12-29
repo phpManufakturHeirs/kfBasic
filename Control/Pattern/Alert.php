@@ -62,19 +62,26 @@ class Alert
 
     /**
      * Set an alert.
-     * Alerts of type alert-warning or alert-danger will be logged.
+     *
+     * Alerts of type alert-warning will be logged as DEBUG,
+     * alerts of type alert-danger will be logged as ERROR.
+     * If $debug all other alerts will be logged as DEBUG.
      *
      * @param string $alert the alert to display
      * @param array $params parameters for translation
      * @param string $type alert-success, alert-info, alert-warning or alert-danger
      * @param string $debug if true the alert will be also logged
+     * @param array $debug_info additional debugging information
      */
-    public function setAlert($alert, $params=array(), $type=self::ALERT_TYPE_INFO, $debug=false)
+    public function setAlert($alert, $params=array(), $type=self::ALERT_TYPE_INFO, $debug=false, $debug_info=array())
     {
         $this->setAlertType($type);
 
-        if ($debug || in_array($type, array(self::ALERT_TYPE_WARNING, self::ALERT_TYPE_DANGER))) {
-            $this->app['monolog']->addDebug(strip_tags($this->app['translator']->trans($alert, $params, 'messages', 'en')));
+        if ($type == self::ALERT_TYPE_DANGER) {
+            $this->app['monolog']->addError(strip_tags($this->app['translator']->trans($alert, $params, 'messages', 'en')), $debug_info);
+        }
+        elseif ($debug || ($type == self::ALERT_TYPE_WARNING)) {
+            $this->app['monolog']->addDebug(strip_tags($this->app['translator']->trans($alert, $params, 'messages', 'en')), $debug_info);
         }
 
         try {
@@ -205,5 +212,22 @@ class Alert
     public function getAlertTemplate()
     {
         return self::$alert_template;
+    }
+
+    /**
+     * Prompt the active Alert(s) using the BASIC Bootstrap template alert.twig
+     *
+     * @return rendered alert template
+     */
+    public function promptAlert()
+    {
+        if (!$this->isAlert()) {
+            $this->setAlert('Oooops, missing the alert which should be prompted here ... ', array(), self::ALERT_TYPE_WARNING);
+        }
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template', 'kitcommand/bootstrap/alert.twig'),
+            array(
+                'basic' => $this->getBasicSettings()
+            ));
     }
 }
