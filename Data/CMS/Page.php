@@ -130,4 +130,30 @@ class Page {
     {
         return $this->cms->getPageLinkList();
     }
+
+    /**
+     * Get the page ID by the given page link
+     *
+     * @param string $link
+     * @throws \Exception
+     * @return Ambigous <boolean, integer>
+     */
+    public function getPageIDbyPageLink($link)
+    {
+        return $this->cms->getPageIDbyPageLink($link);
+    }
+
+    /**
+     * Check if the given kitCommand exists at the page ID
+     *
+     * @param string $command
+     * @param integer $page_id
+     * @throws \Exception
+     * @return boolean
+     */
+    public function existsCommandAtPageID($command, $page_id)
+    {
+        return $this->cms->existsCommandAtPageID($command, $page_id);
+    }
+
 }

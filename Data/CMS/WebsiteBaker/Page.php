@@ -174,4 +174,41 @@ class Page
         }
     }
 
+    /**
+     * Get the page ID by the given page link
+     *
+     * @param string $link
+     * @throws \Exception
+     * @return Ambigous <boolean, integer>
+     */
+    public function getPageIDbyPageLink($link)
+    {
+        try {
+            $SQL = "SELECT `page_id` FROM `".CMS_TABLE_PREFIX."pages` WHERE `link`='$link'";
+            $result = $this->app['db']->fetchColumn($SQL);
+            return ($result > 0) ? $result : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Check if the given kitCommand exists at the page ID
+     *
+     * @param string $command
+     * @param integer $page_id
+     * @throws \Exception
+     * @return boolean
+     */
+    public function existsCommandAtPageID($command, $page_id)
+    {
+        try {
+            $SQL = "SELECT `section_id` FROM `".CMS_TABLE_PREFIX."mod_wysiwyg` WHERE `page_id`='$page_id' AND `content` LIKE '%~~ $command %'";
+            $result = $this->app['db']->fetchColumn($SQL);
+            return ($result > 0);
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
 }
