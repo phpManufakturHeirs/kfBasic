@@ -66,8 +66,24 @@ class Account
             // user not found!
             return 'ANONYMOUS';
         }
-        $display_name = (isset($user_data['displayname']) && ! empty($user_data['displayname'])) ? $user_data['displayname'] : $user_data['username'];
-        return $display_name;
+        return (isset($user_data['displayname']) && ! empty($user_data['displayname'])) ? $user_data['displayname'] : $user_data['username'];
+    }
+
+    /**
+     * Return the displayname for the given username from the database, if the
+     * username not exists, the function will return 'ANONYMOUS' as displayname.
+     *
+     * @param string $username
+     * @return string
+     */
+    public function getDisplayNameByUsername($username)
+    {
+        // get the user record
+        if (false === ($user_data = $this->FrameworkUser->selectUser($username))) {
+            // user not found!
+            return 'ANONYMOUS';
+        }
+        return (isset($user_data['displayname']) && ! empty($user_data['displayname'])) ? $user_data['displayname'] : $user_data['username'];
     }
 
     /**
