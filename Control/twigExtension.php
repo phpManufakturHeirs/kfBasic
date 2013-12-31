@@ -248,10 +248,13 @@ class twigExtension extends Twig_Extension
         if (empty($text)) {
             return '';
         }
-        $text = $text." ";
+        $start_length = strlen($text);
+        $text .= ' ';
         $text = substr($text, 0, $length);
-        $text = substr($text, 0, strrpos($text,' '));
-        $text = $text." ...";
+        $text = substr($text, 0, strrpos($text, ' '));
+        if ($start_length > strlen($text)) {
+            $text .= ' ...';
+        }
         return $text;
     }
 
