@@ -211,4 +211,22 @@ class Page
         }
     }
 
+    /**
+     * Return the language code for the given page ID
+     *
+     * @param integer $page_id
+     * @throws \Exception
+     * @return Ambigous <boolean, string>
+     */
+    public function getPageLanguage($page_id)
+    {
+        try {
+            $SQL = "SELECT `language` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`='$page_id'";
+            $result = $this->app['db']->fetchColumn($SQL);
+            return (strlen($result) == 2) ? $result : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
 }

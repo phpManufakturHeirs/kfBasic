@@ -156,4 +156,15 @@ class Page {
         return $this->cms->existsCommandAtPageID($command, $page_id);
     }
 
+    /**
+     * Return the language code for the given page ID
+     *
+     * @param integer $page_id
+     * @throws \Exception
+     * @return Ambigous <boolean, string>
+     */
+    public function getPageLanguage($page_id)
+    {
+        return $this->cms->getPageLanguage($page_id);
+    }
 }
