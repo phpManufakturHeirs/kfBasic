@@ -83,6 +83,10 @@
                 {# set the page title of the parent dynamically #}
                 parent.document.title = '{{ basic.page.title }}';
               {% endif %}
+              if ($('.container').hasClass('alert')) {
+                {# enable the bootstrap close button for alerts #}
+                $('.alert').alert();
+              }  
             });
           }
         </script>
