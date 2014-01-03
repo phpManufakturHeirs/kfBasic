@@ -204,6 +204,63 @@ class OutputFilter
     }
 
     /**
+     * Load a specified file from the BASIC library
+     *
+     * @param string $content
+     * @param string $value command value, comma separated relative paths
+     */
+    protected function load_library_files(&$content, $value)
+    {
+        $files = array();
+        if (strpos($value, ',')) {
+            $array = explode(',', $value);
+            foreach ($array as $file) {
+                $file = trim($file);
+                if ($file[0] == '/') {
+                    $file = substr($file, 1);
+                }
+                $files[] = $file;
+            }
+        }
+        else {
+            $value = trim($value);
+            if ($value[0] == '/') {
+                $value = substr($value. 1);
+            }
+            $files[] = $value;
+        }
+        // reverse the array to get the correct loading order ...
+        $files = array_reverse($files);
+
+        $library_url = WB_URL.'/kit2/extension/phpmanufaktur/phpManufaktur/Basic/Library/';
+        foreach ($files as $file) {
+            if (file_exists(WB_PATH.'/kit2/extension/phpmanufaktur/phpManufaktur/Basic/Library/'.$file)) {
+                $extension = pathinfo($file, PATHINFO_EXTENSION);
+                if ($extension == 'js') {
+                    if (false !== (stripos($content, '<!-- kitFramework:JS -->'))) {
+                        $replace = '<!-- kitFramework:JS -->'."\n".'<script src="'.$library_url.$file.'" type="text/javascript"></script>';
+                        $content = str_ireplace('<!-- kitFramework:JS -->', $replace, $content);
+                    }
+                    else {
+                        $replace = '<!-- kitFramework:JS -->'."\n".'<script src="'.$library_url.$file.'" type="text/javascript"></script>'."\n".'</head>';
+                        $content = str_ireplace('</head>', $replace, $content);
+                    }
+                }
+                elseif ($extension == 'css') {
+                    if (false !== (stripos($content, '<!-- kitFramework:CSS -->'))) {
+                        $replace = '<!-- kitFramework:CSS -->'."\n".'<link rel="stylesheet" type="text/css" href="'.$library_url.$file.'" media="all" />';
+                        $content = str_ireplace('<!-- kitFramework:CSS -->', $replace, $content);
+                    }
+                    else {
+                        $replace = '<!-- kitFramework:CSS -->'."\n".'<link rel="stylesheet" type="text/css" href="'.$library_url.$file.'" media="all" />'."\n".'</head>';
+                        $content = str_ireplace('</head>', $replace, $content);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * Set the CMS page header with information from the kitCommand
      *
      * @param string $command name of the kitCommand
@@ -339,6 +396,10 @@ class OutputFilter
                         if ($this->checkLoadFile($content, $command, $key, $value) && ($key == 'css')) {
                             $css_loaded = true;
                         }
+                    }
+                    elseif ($key == 'library') {
+                        // load files from the library
+                        $this->load_library_files($content, $value);
                     }
                 }
             }
