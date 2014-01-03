@@ -247,14 +247,13 @@ class twigExtension extends Twig_Extension
     protected function resampleImage($image_path, $image_type, $origin_width, $origin_height, $new_image_path, $new_width, $new_height) {
 
         switch ($image_type) {
-            case IMG_GIF:
+            case IMAGETYPE_GIF:
                 $origin_image = imagecreatefromgif($image_path);
                 break;
-            case IMG_JPEG:
-            case IMG_JPG:
+            case IMAGETYPE_JPEG:
                 $origin_image = imagecreatefromjpeg($image_path);
                 break;
-            case IMG_PNG:
+            case IMAGETYPE_PNG:
                 $origin_image = imagecreatefrompng($image_path);
                 break;
             default :
@@ -282,20 +281,21 @@ class twigExtension extends Twig_Extension
 
         // Generate the file, and rename it to $newfilename
         switch ($image_type) {
-            case IMG_GIF:
+            case IMAGETYPE_GIF:
                 imagegif($new_image, $new_image_path);
                 break;
-            case IMG_JPEG:
-            case IMG_JPG:
+            case IMAGETYPE_JPEG:
                 // static setting for the JPEG Quality
                 imagejpeg($new_image, $new_image_path, 90);
                 break;
-            case IMG_PNG:
+            case IMAGETYPE_PNG:
                 imagepng($new_image, $new_image_path);
                 break;
         }
 
         $this->app['filesystem']->chmod($new_image_path, 0644);
+
+        $this->app['filesystem']->touch($new_image_path, filemtime($image_path));
     }
 
     /**
@@ -307,9 +307,10 @@ class twigExtension extends Twig_Extension
      * @param integer $max_height of the image in pixel
      * @param string $parent_path FRAMEWORK_PATH by default
      * @param string $parent_url FRAMEWORK_URL by default
-     * @return array with src, width and height
+     * @param boolean $cache by default cache the file
+     * @return array with src, width, height and path
      */
-    public function image($relative_image_path, $max_width=null, $max_height=null, $parent_path=FRAMEWORK_PATH, $parent_url=FRAMEWORK_URL)
+    public function image($relative_image_path, $max_width=null, $max_height=null, $parent_path=FRAMEWORK_PATH, $parent_url=FRAMEWORK_URL, $cache=true)
     {
         $relative_image_path = $this->app['utils']->sanitizePath($relative_image_path);
         if ($relative_image_path[0] != '/') {
@@ -342,12 +343,24 @@ class twigExtension extends Twig_Extension
                 $percent = (int) ($max_width / ($width / 100));
                 $new_width = $max_width;
                 $new_height = (int) (($height / 100) * $percent);
+                if (!is_null($max_height) && ($new_height > $max_height)) {
+                    // set a new image height
+                    $percent = (int) ($max_height / ($height/100));
+                    $new_height = $max_height;
+                    $new_width = (int) (($width / 109) * $percent);
+                }
             }
             else {
                 // set a new image height
                 $percent = (int) ($max_height / ($height/100));
                 $new_height = $max_height;
                 $new_width = (int) (($width / 109) * $percent);
+                if (!is_null($max_width) && ($new_width > $max_width)) {
+                    // set a new image width
+                    $percent = (int) ($max_width / ($width / 100));
+                    $new_width = $max_width;
+                    $new_height = (int) (($height / 100) * $percent);
+                }
             }
 
             // create a new filename
@@ -359,11 +372,14 @@ class twigExtension extends Twig_Extension
             $tweak_path = FRAMEWORK_PATH.'/media/twig';
             $tweak_url = FRAMEWORK_URL.'/media/twig';
 
-            if (!$this->app['filesystem']->exists($tweak_path.$new_relative_image_path)) {
+            if (!$cache || !$this->app['filesystem']->exists($tweak_path.$new_relative_image_path) ||
+                (filemtime($tweak_path.$new_relative_image_path) != filemtime($parent_path.$relative_image_path))) {
+                // create a resampled image
                 $this->resampleImage($parent_path.$relative_image_path, $type, $width, $height, $tweak_path.$new_relative_image_path, $new_width, $new_height);
             }
 
             return array(
+                'path' => $twek_path.$new_relative_image_path,
                 'src' => $tweak_url.$new_relative_image_path,
                 'width' => $new_width,
                 'height' => $new_height
@@ -372,6 +388,7 @@ class twigExtension extends Twig_Extension
         else {
             // nothing to do ...
             return array(
+                'path' => $parent_path.$relative_image_path,
                 'src' => $parent_url.$relative_image_path,
                 'width' => $width,
                 'height' => $height
