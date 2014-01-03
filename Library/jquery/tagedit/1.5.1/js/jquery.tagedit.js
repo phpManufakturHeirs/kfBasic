@@ -478,7 +478,7 @@
 						autocompleteURL += '?';
 					}
 					autocompleteURL += 'term=' + value;
-					$.ajax({
+          $.ajax({
 						async: false,
 						url: autocompleteURL,
 						dataType: 'json',
