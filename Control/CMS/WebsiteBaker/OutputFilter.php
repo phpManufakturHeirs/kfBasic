@@ -349,7 +349,7 @@ class OutputFilter
         $kit_command = array();
         $load_css = array();
         //preg_match_all('/(~~ ).*( ~~)/', $content, $matches, PREG_SET_ORDER);
-        preg_match_all('/(~~)( |&nbsp;)(.){3,256}( |&nbsp;)(~~)/', $content, $matches, PREG_SET_ORDER);
+        preg_match_all('/(~~)( |&nbsp;)(.){3,512}( |&nbsp;)(~~)/', $content, $matches, PREG_SET_ORDER);
         foreach ($matches as $match) {
             if (PAGE_ID < 1) {
                 // no regular page, probably the search function where we don't
