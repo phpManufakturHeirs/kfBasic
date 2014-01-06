@@ -56,7 +56,7 @@ class Image
         $new_image = imagecreatetruecolor($new_width, $new_height);
 
         // Check if this image is PNG or GIF, then set if Transparent
-        if (($image_type == IMG_GIF) or ($image_type == IMG_PNG)) {
+        if (($image_type == IMAGETYPE_GIF) or ($image_type == IMAGETYPE_PNG)) {
             imagealphablending($new_image, false);
             imagesavealpha($new_image, true);
             $transparent = imagecolorallocatealpha($new_image, 255, 255, 255, 127);
@@ -135,14 +135,14 @@ class Image
                     // set a new image height
                     $percent = (int) ($max_height / ($image_height/100));
                     $new_height = $max_height;
-                    $new_width = (int) (($image_width / 109) * $percent);
+                    $new_width = (int) (($image_width / 100) * $percent);
                 }
             }
             else {
                 // set a new image height
                 $percent = (int) ($max_height / ($image_height/100));
                 $new_height = $max_height;
-                $new_width = (int) (($image_width / 109) * $percent);
+                $new_width = (int) (($image_width / 100) * $percent);
                 if (!is_null($max_width) && ($new_width > $max_width)) {
                     // set a new image width
                     $percent = (int) ($max_width / ($image_width / 100));
