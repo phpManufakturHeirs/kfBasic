@@ -17,25 +17,16 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class Search
 {
-    public function exec(Application $app, $command, $params=null)
+    public function exec(Application $app, $command)
     {
         try {
-            if (!is_null($params)) {
-                $cms_parameter = json_decode(base64_decode($params), true);
-            }
-            else {
-                if (null === ($cms_parameter = $app['request']->get('cms_parameter', null))) {
-                    throw new \Exception('Invalid kitCommand execution: missing the POST CMS parameter!');
-                }
-                if (!is_array($cms_parameter)) {
-                    // we assume that the parameter value is base64 encoded
-                    $cms_parameter = json_decode(base64_decode($cms_parameter), true);
-                }
-            }
-
-            $subRequest = Request::create('/search/command/'.$command, 'POST', $cms_parameter);
+            $subRequest = Request::create('/search/command/'.$command, 'POST', array(
+                'search' => $app['request']->get('search'),
+                'cms' => $app['request']->get('cms'),
+                'parameter' => $app['request']->get('parameter')
+            ));
             // important: we dont want that app->handle() catch errors, so set the third parameter to false!
-            $result = $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST, false);
+            return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST, false);
         } catch (\Exception $e) {
             // no search for this kitCommand found or error while executing
             $result = array(
@@ -44,8 +35,7 @@ class Search
                     'text' => $e->getMessage()
                 )
             );
-            $result = base64_encode(json_encode($result));
+            return $app->json($result);
         }
-        return $result;
     }
 }
