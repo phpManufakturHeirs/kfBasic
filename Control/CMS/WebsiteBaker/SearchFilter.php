@@ -35,7 +35,7 @@ class SearchFilter
      * @param string $command
      * @param string $param_str Base64 and JSON encoded parameters
      */
-    protected function execCurl($command, $param_str)
+    protected function execCurl($command, $parameter)
     {
         $options = array(
             CURLOPT_POST => true,
@@ -45,7 +45,7 @@ class SearchFilter
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_FORBID_REUSE => true,
             CURLOPT_TIMEOUT => 4,
-            CURLOPT_POSTFIELDS => http_build_query(array('cms_parameter' => $param_str)),
+            CURLOPT_POSTFIELDS => http_build_query($parameter),
             CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_SSL_VERIFYPEER => false
         );
@@ -57,7 +57,7 @@ class SearchFilter
         }
         curl_close($ch);
 
-        $response = json_decode(base64_decode($response), true);
+        $response = json_decode($response, true);
 
         if (isset($response['search']) && $response['search']['success']) {
             // continue only with search results
@@ -73,6 +73,24 @@ class SearchFilter
             );
             if (print_excerpt2($item, self::$search)) {
                 self::$result = true;
+            }
+        }
+        elseif (isset($response['search_results'])) {
+            // the kitCommand return a array of results
+            foreach ($response['search_results'] as $search) {
+                $item = array(
+                    'page_link' => isset($search['search']['page']['url']) ? $search['search']['page']['url'] : self::$search['page_link'],
+                    'page_title' => isset($search['search']['page']['title']) ? $search['search']['page']['title'] : self::$search['page_title'],
+                    'page_description' => isset($search['search']['page']['description']) ? $search['search']['page']['description'] : self::$search['page_description'],
+                    'page_modified_when' => isset($search['search']['page']['modified_when']) ? $search['search']['page']['modified_when'] : self::$search['page_modified_when'],
+                    'page_modified_by' => isset($search['search']['page']['modified_by']) ? $search['search']['page']['modified_by'] : self::$search['page_modified_by'],
+                    'text' => isset($search['search']['text']) ? $search['search']['text'] : '',
+                    'pic_link' => isset($search['search']['image_link']) ? $search['search']['image_link'] : '',
+                    'max_excerpt_num' => isset($search['max_excerpt']) ? $search['max_excerpt'] : self::$search['default_max_excerpt']
+                );
+                if (print_excerpt2($item, self::$search)) {
+                    self::$result = true;
+                }
             }
         }
     }
@@ -164,9 +182,7 @@ class SearchFilter
                 continue;
             }
             $parameter['parameter'] = $params;
-            $parameter_string = base64_encode(json_encode($parameter));
-            // execute the search
-            $this->execCurl($command, $parameter_string);
+            $this->execCurl($command, $parameter);
         }
     }
 
