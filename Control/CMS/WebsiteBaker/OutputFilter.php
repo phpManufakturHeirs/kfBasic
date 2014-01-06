@@ -471,10 +471,10 @@ class OutputFilter
                 }
                 else {
                     // replace the kitCommand
-                    $search = str_replace('[', '\[', $command_expression);
-                    if (preg_match('%<[^>\/]+>\s*'.$search.'\s*<\/[^>]+>%si', $content, $matches)) {
+                    $search = str_replace(array('[','|'), array('\[','\|'), $command_expression);
+                    if (preg_match('%<[^>\/]+>\s*'.$search.'\s*<\/[^>]+>%si', $content, $hits)) {
                         // also remove the tags around the kitCommand expression!
-                        $content = str_replace($matches[0], $response, $content);
+                        $content = str_replace($hits[0], $response, $content);
                     }
                     else {
                         // only replace the kitCommand
