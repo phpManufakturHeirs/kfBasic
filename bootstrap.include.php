@@ -29,6 +29,7 @@ use Symfony\Bridge\Monolog\Logger;
 use phpManufaktur\Basic\Control\Account\CustomLogoutSuccessHandler;
 use phpManufaktur\Basic\Control\Account\CustomAuthenticationSuccessHandler;
 use phpManufaktur\Basic\Data\dbUtils;
+use phpManufaktur\Basic\Control\Image;
 
 // set the error handling
 ini_set('display_errors', 1);
@@ -105,8 +106,9 @@ $directories = array(
 );
 
 // check the needed temporary directories and create them if needed
-if (! $app['filesystem']->exists($directories))
+if (!$app['filesystem']->exists($directories)) {
     $app['filesystem']->mkdir($directories);
+}
 
 if (!isset($framework_config['LOGFILE_MAX_SIZE'])) {
     // set the default value for the logfile size
@@ -246,10 +248,17 @@ $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Basic/Data/Locale/Custom');
 // load the /Metric language files
 $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Basic/Data/Locale/Metric');
 
-// register the ReCaptcha service
+// share the ReCaptcha service
 $app['recaptcha'] = $app->share(function($app) {
     return new ReCaptcha($app);
 });
+$app['monolog']->addDebug('Share the reCaptcha Service');
+
+// share the Image Tools
+$app['image'] = $app->share(function($app) {
+    return new Image($app);
+});
+$app['monolog']->addDebug('Share the Image Tools');
 
 // register Twig
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
