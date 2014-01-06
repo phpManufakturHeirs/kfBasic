@@ -6,6 +6,21 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.68** - 2014-01-06
+
+* add `ellipsis` filter to Twig 
+* the output filter can now set header information (title, description, keywords) for a kitCommand - need GET or parameter `set_header` with a ID, calls `kit2/command/{kitcommand}/getheader/id/{id}` to get JSON with header information
+* class Alert can now directly prompt Alerts (using Bootstrap 3 iframe) setAlert() can now retrieve additional debug information for logging
+* added `getPageIDbyPageLink()` and `existsCommandAtPageID()`
+* add `getPageLanguage()`
+* added Twig function `image()` which return the image dimension and can re-sample the given image (imageTweak base function)
+* add general kitCommand parameter `library[]` which enable to load `.js` and `.css` files from the BASIC library
+* changed the handling for the CMS search filter
+* kitCommands and kitFilter now always log and report occuring errors via monolog and email (if configured)
+* changed the JSON handling for the search function
+* share the Image class systemwide
+* added class(es) to get the CMS system settings
+
 **0.67** - 2013-12-27
 
 * added missing jQuery *.map files to the library
