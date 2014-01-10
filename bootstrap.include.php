@@ -47,6 +47,12 @@ $app['utils'] = $app->share(function($app) {
     return new Utils($app);
 });
 
+// get the filesystem into the application
+$app['filesystem'] = function()
+{
+    return new Filesystem();
+};
+
 try {
     // check for the framework configuration file
     $framework_config = $app['utils']->readConfiguration(realpath(BOOTSTRAP_PATH . '/config/framework.json'));
@@ -78,6 +84,20 @@ try {
         $framework_config['DEBUG'] : false);
     define('FRAMEWORK_CACHE', (isset($framework_config['CACHE'])) ?
         $framework_config['CACHE'] : true);
+
+    if ($app['filesystem']->exists(MANUFAKTUR_PATH.'/Library/Library')) {
+        define('LIBRARY_PATH', MANUFAKTUR_PATH.'/Library/Library');
+        define('LIBRARY_URL', MANUFAKTUR_URL.'/Library/Library');
+    }
+    else {
+        define('LIBRARY_PATH', MANUFAKTUR_PATH.'/Basic/Library');
+        define('LIBRARY_URL', MANUFAKTUR_URL.'/Basic/Library');
+    }
+
+    if ($app['filesystem']->exists(MANUFAKTUR_PATH.'/Library/Extension')) {
+        define('EXTENSION_PATH', MANUFAKTUR_PATH.'/Library/Extension');
+    }
+
     define('CATALOG_ACCEPT_EXTENSION', isset($framework_config['CATALOG_ACCEPT_EXTENSION']) ?
         implode(',', $framework_config['CATALOG_ACCEPT_EXTENSION']) :
         implode(',', array('beta','pre-release','release')));
@@ -92,12 +112,6 @@ try {
 
 // debug mode
 $app['debug'] = FRAMEWORK_DEBUG;
-
-// get the filesystem into the application
-$app['filesystem'] = function()
-{
-    return new Filesystem();
-};
 
 $directories = array(
     FRAMEWORK_PATH . '/logfile',
@@ -287,6 +301,7 @@ $app['twig'] = $app->share($app->extend('twig', function  ($twig, $app)
 }));
 
 $app['monolog']->addDebug('TwigServiceProvider registered.');
+
 
 // register the Markdown service provider
 $app->register(new MarkdownServiceProvider());

@@ -40,6 +40,29 @@ class Setup
     }
 
     /**
+     * Check the namespaces autoloader to enable the LIBRARY functions
+     *
+     * @param Application $app
+     */
+    public function checkAutoloadNamespaces(Application $app)
+    {
+        // check the autoload_namespaces
+        $framework_version = file_get_contents(FRAMEWORK_PATH.'/VERSION');
+        if (version_compare($framework_version, '0.27', '<=') &&
+            !$app['filesystem']->exists(FRAMEWORK_PATH.'/framework/composer/autoload_namespaces.php.bak')) {
+            $app['filesystem']->copy(
+                FRAMEWORK_PATH.'/framework/composer/autoload_namespaces.php',
+                FRAMEWORK_PATH.'/framework/composer/autoload_namespaces.php.bak'
+            );
+            $app['filesystem']->copy(
+                MANUFAKTUR_PATH.'/Basic/Data/Setup/Files/Release_0.69/framework/composer/autoload_namespaces.php',
+                FRAMEWORK_PATH.'/framework/composer/autoload_namespaces.php'
+            );
+            $app['monolog']->addDebug('Replaced /framework/composer/autoload_namespace.php to enable autoloading from the LIBRARY');
+        }
+    }
+
+    /**
      * Create the database tables for the BASIC extension of the kitFramework
      *
      * @param Application $app
@@ -47,6 +70,9 @@ class Setup
     public function exec(Application $app)
     {
         $this->app = $app;
+
+        // check the autoload namespaces
+        $this->checkAutoloadNamespaces($app);
 
         // create the framework user table
         $users = new Users($app);
