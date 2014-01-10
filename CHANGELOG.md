@@ -6,6 +6,16 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.69** - 2014-01-10
+
+* add CMS user `select()` and some missing comments
+* added `IMAGE` `getSupportedImageTypes()`
+* added `IMAGE getMimeType()`
+* Moved ellipsis function from `Twig` to `UTILS`
+* added handling for HTML formatted ellipsis (need `LIBRARY htmlpurifier`)
+* add CMS function `getPageLinkByPageID()`
+* introduce namespace autoloading by the new `LIBRARY` - setup/update will change the kitFramework autoloader to enable this feature
+
 **0.68** - 2014-01-06
 
 * add `ellipsis` filter to Twig 
