@@ -167,4 +167,16 @@ class Page {
     {
         return $this->cms->getPageLanguage($page_id);
     }
+
+    /**
+     * Return the page link for the given page ID
+     *
+     * @param integer $page_id
+     * @throws \Exception
+     * @return Ambigous <boolean, string>
+     */
+    public function getPageLinkByPageID($page_id)
+    {
+        return $this->cms->getPageLinkByPageID($page_id);
+    }
 }

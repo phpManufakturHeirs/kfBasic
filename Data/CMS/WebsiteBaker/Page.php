@@ -229,4 +229,22 @@ class Page
         }
     }
 
+    /**
+     * Return the page link for the given page ID
+     *
+     * @param integer $page_id
+     * @throws \Exception
+     * @return Ambigous <boolean, string>
+     */
+    public function getPageLinkByPageID($page_id)
+    {
+        try {
+            $SQL = "SELECT `link` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`='$page_id'";
+            $result = $this->app['db']->fetchColumn($SQL);
+            return (strlen($result) > 0) ? $result : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
 }
