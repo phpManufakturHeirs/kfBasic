@@ -17,10 +17,41 @@ use Symfony\Component\Filesystem\Exception\IOException;
 class Image
 {
     protected $app = null;
+    protected static $supported_image_types = array(
+        IMAGETYPE_GIF,
+        IMAGETYPE_JPEG,
+        IMAGETYPE_PNG
+    );
 
+    /**
+     * Constructor
+     *
+     * @param Application $app
+     */
     public function __construct(Application $app)
     {
         $this->app = $app;
+    }
+
+    /**
+     * Return the supported IMAGETYE_XX constants
+     *
+     * @return array
+     */
+    public function getSupportedImageTypes()
+    {
+        return self::$supported_image_types;
+    }
+
+    /**
+     * Get the MIME type for the given IMAGETYPE_XX constant
+     *
+     * @param integer $image_type constant
+     * @return string
+     */
+    public function getMimeType($image_type)
+    {
+        return image_type_to_mime_type($image_type);
     }
 
     /**
