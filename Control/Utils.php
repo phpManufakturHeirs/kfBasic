@@ -40,7 +40,7 @@ class Utils
         $this->app = $app;
 
         // FRAMEWORK_PATH is not set at this point!
-        $proxy_file = __DIR__.'/../../../../../config/proxy.json';
+        $proxy_file = BOOTSTRAP_PATH.'/config/proxy.json';
 
         if (file_exists($proxy_file)) {
             // set the proxy options
@@ -777,4 +777,68 @@ class Utils
         return $link;
     }
 
+    /**
+     * Ellipsis function - shorten the given $text to $length at the nearest
+     * space and add three dots at the end ...
+     *
+     * @param string $text
+     * @param number $length
+     * @param boolean $striptags remove HTML tags by default
+     * @param boolean $htmlpurifier use HTML Purifier (false by default, ignored if striptags=true)
+     * @return string
+     */
+    public function Ellipsis($text, $length=100, $striptags=true, $htmlpurifier=false) {
+        if ($striptags) {
+            $text = strip_tags($text);
+        }
+        if (empty($text)) {
+            return '';
+        }
+        $start_length = strlen($text);
+        $text .= ' ';
+        $text = substr($text, 0, $length);
+        $text = substr($text, 0, strrpos($text, ' '));
+
+        if (!$striptags && $htmlpurifier) {
+            if (file_exists(BOOTSTRAP_PATH.'/extension/phpmanufaktur/phpManufaktur/Library/Extension/htmlpurifier/latest/library/HTMLPurifier.auto.php')) {
+                require_once BOOTSTRAP_PATH.'/extension/phpmanufaktur/phpManufaktur/Library/Extension/htmlpurifier/latest/library/HTMLPurifier.auto.php';
+                $config = \HTMLPurifier_Config::createDefault();
+                $purifier = new \HTMLPurifier($config);
+                $text = $purifier->purify($text);
+
+                $DOM = new \DOMDocument;
+
+                // enable internal error handling
+                libxml_use_internal_errors(true);
+
+                // enshure the correct encoding of the content
+                $encoding_str = '<?xml encoding="UTF-8">';
+                if (!$DOM->loadHTML($encoding_str.$text)) {
+                    // on error still return the $text
+                    return $text;
+                }
+                libxml_clear_errors();
+
+                $xpath = new \DOMXPath($DOM);
+                $textNodes = $xpath->query('//text()');
+                $lastTextNode = $textNodes->item($textNodes->length - 1);
+                $lastTextNode->nodeValue .= ' ...';
+
+                // we want only the <body> content of the document!
+                $newDom = new \DOMDocument;
+                $body = $DOM->getElementsByTagName('body')->item(0);
+                foreach ($body->childNodes as $child){
+                    $newDom->appendChild($newDom->importNode($child, true));
+                }
+                $text = $newDom->saveHTML();
+            }
+            else {
+                $text .= ' ...';
+            }
+        }
+        elseif ($start_length > strlen($text)) {
+            $text .= ' ...';
+        }
+        return $text;
+    }
 }

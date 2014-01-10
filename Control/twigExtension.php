@@ -62,7 +62,7 @@ class twigExtension extends Twig_Extension
             'FRAMEWORK_PATH' => FRAMEWORK_PATH,
             'FRAMEWORK_URL' => FRAMEWORK_URL,
             'FRAMEWORK_TEMPLATES' => explode(',', FRAMEWORK_TEMPLATES),
-            'LIBRARY_URL' => MANUFAKTUR_URL.'/Basic/Library',
+            'LIBRARY_URL' => LIBRARY_URL,
             'MANUFAKTUR_PATH' => MANUFAKTUR_PATH,
             'MANUFAKTUR_URL' => MANUFAKTUR_URL,
             'THIRDPARTY_PATH' => THIRDPARTY_PATH,
@@ -317,23 +317,11 @@ class twigExtension extends Twig_Extension
      * @param string $text
      * @param number $length
      * @param boolean $striptags remove HTML tags by default
+     * @param boolean $htmlpurifier use HTML Purifier (false by default, ignored if striptags=true)
      * @return string
      */
-    public function filterEllipsis($text, $length=100, $striptags=true) {
-        if ($striptags) {
-            $text = strip_tags($text);
-        }
-        if (empty($text)) {
-            return '';
-        }
-        $start_length = strlen($text);
-        $text .= ' ';
-        $text = substr($text, 0, $length);
-        $text = substr($text, 0, strrpos($text, ' '));
-        if ($start_length > strlen($text)) {
-            $text .= ' ...';
-        }
-        return $text;
+    public function filterEllipsis($text, $length=100, $striptags=true, $htmlpurifier=false) {
+        return $this->app['utils']->Ellipsis($text, $length, $striptags, $htmlpurifier);
     }
 
 }
