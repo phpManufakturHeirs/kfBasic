@@ -792,9 +792,8 @@ class Utils
             // enable internal error handling
             libxml_use_internal_errors(true);
 
-            // enshure the correct encoding of the content
-            $encoding_str = '<?xml encoding="UTF-8">';
-            if (!$DOM->loadHTML($encoding_str.$text)) {
+            // need a hack to properly handle UTF-8 encoding
+            if (!$DOM->loadHTML(mb_convert_encoding($text, 'HTML-ENTITIES', "UTF-8"))) {
                 // on error still return the $text
                 return $text;
             }
@@ -805,13 +804,9 @@ class Utils
             $lastTextNode = $textNodes->item($textNodes->length - 1);
             $lastTextNode->nodeValue .= ' ...';
 
-            // we want only the <body> content of the document!
-            $newDom = new \DOMDocument;
-            $body = $DOM->getElementsByTagName('body')->item(0);
-            foreach ($body->childNodes as $child){
-                $newDom->appendChild($newDom->importNode($child, true));
-            }
-            $text = $newDom->saveHTML();
+            $XPath = new \DOMXPath($DOM);
+            // get only the body tag with its contents, then trim the body tag itself to get only the original content
+            $text = mb_substr($DOM->saveXML($XPath->query('//body')->item(0)), 6, -7, "UTF-8");
         }
         elseif ($start_length > strlen($text)) {
             $text .= ' ...';
