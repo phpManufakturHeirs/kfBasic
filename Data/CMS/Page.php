@@ -179,4 +179,14 @@ class Page {
     {
         return $this->cms->getPageLinkByPageID($page_id);
     }
+
+    /**
+     * Get the TOPICS directory if this addon is installed
+     *
+     * @return string|boolean
+     */
+    public function getTopicsDirectory()
+    {
+        return $this->cms->getTopicsDirectory();
+    }
 }

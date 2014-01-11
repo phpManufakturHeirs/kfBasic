@@ -64,6 +64,24 @@ class Page
     }
 
     /**
+     * Get the TOPICS directory if this addon is installed
+     *
+     * @return string|boolean
+     */
+    public function getTopicsDirectory()
+    {
+        if ($this->app['filesystem']->exists(CMS_PATH . '/modules/topics/module_settings.php')) {
+            ob_start();
+                require_once(CMS_PATH.'/config.php');
+                global $topics_directory;
+                include_once CMS_PATH . '/modules/topics/module_settings.php';
+            ob_end_clean();
+            return $topics_directory;
+        }
+        return false;
+    }
+
+    /**
      * Get the URL of the given page ID. If arguments 'topic_id' or 'post_id'
      * the function will return the URL for the given TOPICS or NEWS article
      *
@@ -77,15 +95,12 @@ class Page
         try {
             if (isset($arguments['topic_id']) && !is_null($arguments['topic_id'])) {
                 // indicate a TOPICS page
-                if (!file_exists(CMS_PATH . '/modules/topics/module_settings.php')) {
+                if (false === ($topics_directory = $this->getTopicsDirectory())) {
                     throw new \Exception('A TOPIC_ID was submitted, but the TOPICS addon is not installed at the parent CMS!');
                 }
                 // indicate a TOPICS page
                 $SQL = "SELECT `link` FROM `".CMS_TABLE_PREFIX."mod_topics` WHERE `topic_id`='".$arguments['topic_id']."'";
                 $topic_link = $this->app['db']->fetchColumn($SQL);
-                // include TOPICS settings
-                global $topics_directory;
-                include_once CMS_PATH . '/modules/topics/module_settings.php';
                 return CMS_URL . $topics_directory . $topic_link . $this->getPageExtension();
             }
 
