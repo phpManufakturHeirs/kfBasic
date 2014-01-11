@@ -17,6 +17,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use phpManufaktur\Basic\Control\JSON\JSONFormat;
 
+// EXTENSION_PATH is not initialized yet use the full path!
+if (file_exists(BOOTSTRAP_PATH.'/extension/phpmanufaktur/phpManufaktur/Library/Extension/htmlpurifier/latest/library/HTMLPurifier.auto.php')) {
+    require_once BOOTSTRAP_PATH.'/extension/phpmanufaktur/phpManufaktur/Library/Extension/htmlpurifier/latest/library/HTMLPurifier.auto.php';
+}
+
 /**
  * Class with usefull utils for the general usage within the kitFramework
  *
@@ -89,7 +94,7 @@ class Utils
             $item = self::sanitizeText($item);
         }
         return $item;
-    } // sanitizeVariable()
+    }
 
     /**
      * Sanitize a text variable and prepare it for saving in a MySQL record
@@ -99,34 +104,10 @@ class Utils
      */
     public static function sanitizeText ($text)
     {
-        $search = array(
-            "<",
-            ">",
-            "\"",
-            "'",
-            "\\",
-            "\x00",
-            "\n",
-            "\r",
-            "'",
-            '"',
-            "\x1a"
-        );
-        $replace = array(
-            "&lt;",
-            "&gt;",
-            "&quot;",
-            "&#039;",
-            "\\\\",
-            "\\0",
-            "\\n",
-            "\\r",
-            "\'",
-            '\"',
-            "\\Z"
-        );
+        $search = array("<",">","\"","'","\\","\x00","\n","\r","'",'"',"\x1a");
+        $replace = array("&lt;","&gt;","&quot;","&#039;","\\\\","\\0","\\n","\\r","\'",'\"',"\\Z");
         return str_replace($search, $replace, $text);
-    } // sanitizeText()
+    }
 
     /**
      * Unsanitize a text variable and prepare it for output
@@ -137,19 +118,9 @@ class Utils
     public static function unsanitizeText($text)
     {
         $text = stripcslashes($text);
-        $text = str_replace(array(
-            "&lt;",
-            "&gt;",
-            "&quot;",
-            "&#039;"
-        ), array(
-            "<",
-            ">",
-            "\"",
-            "'"
-        ), $text);
+        $text = str_replace(array("&lt;","&gt;","&quot;","&#039;"), array("<",">","\"","'"), $text);
         return $text;
-    } // unsanitizeText()
+    }
 
     /**
      * Generate a globally unique identifier (GUID)
@@ -173,7 +144,7 @@ class Utils
         } else {
             return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x', mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0x0fff) | 0x4000, mt_rand(0, 0x3fff) | 0x8000, mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff));
         }
-    } // createGUID()
+    }
 
     /**
      * Check a password for length, chars, special chars and return a strength
@@ -240,7 +211,7 @@ class Utils
         $strength = floor($strength / 10 + 1);
 
         return $strength;
-    } // passwordStrength()
+    }
 
     /**
      * Create a password
@@ -350,21 +321,27 @@ class Utils
     {
         if ($byte < 1024) {
             $result = round($byte, 2) . ' Byte';
-        } elseif ($byte >= 1024 and $byte < pow(1024, 2)) {
+        }
+        elseif ($byte >= 1024 and $byte < pow(1024, 2)) {
             $result = round($byte / 1024, 2) . ' KB';
-        } elseif ($byte >= pow(1024, 2) and $byte < pow(1024, 3)) {
+        }
+        elseif ($byte >= pow(1024, 2) and $byte < pow(1024, 3)) {
             $result = round($byte / pow(1024, 2), 2) . ' MB';
-        } elseif ($byte >= pow(1024, 3) and $byte < pow(1024, 4)) {
+        }
+        elseif ($byte >= pow(1024, 3) and $byte < pow(1024, 4)) {
             $result = round($byte / pow(1024, 3), 2) . ' GB';
-        } elseif ($byte >= pow(1024, 4) and $byte < pow(1024, 5)) {
+        }
+        elseif ($byte >= pow(1024, 4) and $byte < pow(1024, 5)) {
             $result = round($byte / pow(1024, 4), 2) . ' TB';
-        } elseif ($byte >= pow(1024, 5) and $byte < pow(1024, 6)) {
+        }
+        elseif ($byte >= pow(1024, 5) and $byte < pow(1024, 6)) {
             $result = round($byte / pow(1024, 5), 2) . ' PB';
-        } elseif ($byte >= pow(1024, 6) and $byte < pow(1024, 7)) {
+        }
+        elseif ($byte >= pow(1024, 6) and $byte < pow(1024, 7)) {
             $result = round($byte / pow(1024, 6), 2) . ' EB';
         }
         return $result;
-    } // bytes2string()
+    }
 
     /**
      * fixes a path by removing //, /../ and other things
@@ -404,7 +381,7 @@ class Utils
         }
 
         return $new_path;
-    } // sanitizePath()
+    }
 
 
     /**
@@ -485,7 +462,7 @@ class Utils
         }
         // return the configuration array
         return $config;
-    } // readConfiguration()
+    }
 
     /**
      * Alias for readConfiguration()
@@ -530,7 +507,7 @@ class Utils
         catch (\Exception $e) {
             throw new \Exception(sprintf('Error scanning the /Locale directory %s.', $locale_path));
         }
-    } // addLanguageFiles()
+    }
 
     /**
      * Copy a file, or recursively copy a folder and its contents
@@ -765,7 +742,7 @@ class Utils
         $link = str_replace($bad, '', $link);
         // replace multiple dots in filename to single dot and (multiple) dots at the end of the filename to nothing
         $link = preg_replace(array('/\.+/', '/\.+$/'), array('.', ''), $link);
-        // Now replace spaces with page spcacer
+        // Now replace spaces with page spacer
         $link = trim($link);
         $link = preg_replace('/(\s)+/', '-', $link);
         // Now convert to lower-case
@@ -791,50 +768,50 @@ class Utils
         if ($striptags) {
             $text = strip_tags($text);
         }
+
+        // remove leading and trailing spaces
+        $text = trim($text);
+
         if (empty($text)) {
+            // nothing to do ...
             return '';
         }
+
         $start_length = strlen($text);
         $text .= ' ';
         $text = substr($text, 0, $length);
         $text = substr($text, 0, strrpos($text, ' '));
 
-        if (!$striptags && $htmlpurifier) {
-            if (file_exists(BOOTSTRAP_PATH.'/extension/phpmanufaktur/phpManufaktur/Library/Extension/htmlpurifier/latest/library/HTMLPurifier.auto.php')) {
-                require_once BOOTSTRAP_PATH.'/extension/phpmanufaktur/phpManufaktur/Library/Extension/htmlpurifier/latest/library/HTMLPurifier.auto.php';
-                $config = \HTMLPurifier_Config::createDefault();
-                $purifier = new \HTMLPurifier($config);
-                $text = $purifier->purify($text);
+        if (!$striptags && $htmlpurifier && class_exists('HTMLPurifier')) {
+            $config = \HTMLPurifier_Config::createDefault();
+            $purifier = new \HTMLPurifier($config);
+            $text = $purifier->purify($text);
 
-                $DOM = new \DOMDocument;
+            $DOM = new \DOMDocument;
 
-                // enable internal error handling
-                libxml_use_internal_errors(true);
+            // enable internal error handling
+            libxml_use_internal_errors(true);
 
-                // enshure the correct encoding of the content
-                $encoding_str = '<?xml encoding="UTF-8">';
-                if (!$DOM->loadHTML($encoding_str.$text)) {
-                    // on error still return the $text
-                    return $text;
-                }
-                libxml_clear_errors();
-
-                $xpath = new \DOMXPath($DOM);
-                $textNodes = $xpath->query('//text()');
-                $lastTextNode = $textNodes->item($textNodes->length - 1);
-                $lastTextNode->nodeValue .= ' ...';
-
-                // we want only the <body> content of the document!
-                $newDom = new \DOMDocument;
-                $body = $DOM->getElementsByTagName('body')->item(0);
-                foreach ($body->childNodes as $child){
-                    $newDom->appendChild($newDom->importNode($child, true));
-                }
-                $text = $newDom->saveHTML();
+            // enshure the correct encoding of the content
+            $encoding_str = '<?xml encoding="UTF-8">';
+            if (!$DOM->loadHTML($encoding_str.$text)) {
+                // on error still return the $text
+                return $text;
             }
-            else {
-                $text .= ' ...';
+            libxml_clear_errors();
+
+            $xpath = new \DOMXPath($DOM);
+            $textNodes = $xpath->query('//text()');
+            $lastTextNode = $textNodes->item($textNodes->length - 1);
+            $lastTextNode->nodeValue .= ' ...';
+
+            // we want only the <body> content of the document!
+            $newDom = new \DOMDocument;
+            $body = $DOM->getElementsByTagName('body')->item(0);
+            foreach ($body->childNodes as $child){
+                $newDom->appendChild($newDom->importNode($child, true));
             }
+            $text = $newDom->saveHTML();
         }
         elseif ($start_length > strlen($text)) {
             $text .= ' ...';
