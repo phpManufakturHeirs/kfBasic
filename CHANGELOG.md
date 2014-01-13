@@ -6,6 +6,13 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.70** - 2014-01-13
+
+* changed check for and loading of `HTMLPurifier`
+* added `getTopicsDirectory()` to the CMS functions
+* changed `DOM` handling within the `Ellipsis()` function
+* added parameter `$order_by` and `$oder_direction` to `getPageLinkList()`
+
 **0.69** - 2014-01-10
 
 * add CMS user `select()` and some missing comments
