@@ -163,16 +163,22 @@ class Page
     }
 
     /**
-     * Get the CMS page link list in alphabetical order
+     * Get the CMS page link list in alphabetical order for the given field and direction
      *
+     * @param string $order_by the field to order by
+     * @param string $order_direction the order direction ASC or DESC
      * @throws \Exception
      * @return <array|boolean>
      */
-    public function getPageLinkList()
+    public function getPageLinkList($order_by='link', $order_direction='ASC')
     {
         try {
+            if (!in_array($order_by, array('link','menu_title','page_title'))) {
+                $order_by = 'link';
+            }
+            $order_direction = ($order_direction == 'DESC') ? 'DESC' : 'ASC';
             $SQL = "SELECT `page_id`, `link`, `level`, `menu_title`, `page_title`, `visibility` FROM `".CMS_TABLE_PREFIX.
-                "pages` WHERE `visibility`!='deleted' ORDER BY `link` ASC";
+                "pages` WHERE `visibility`!='deleted' ORDER BY `$order_by` $order_direction";
             $results = $this->app['db']->fetchAll($SQL);
             $links = array();
             foreach ($results as $result) {

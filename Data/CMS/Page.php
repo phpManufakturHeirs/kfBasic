@@ -121,14 +121,16 @@ class Page {
     }
 
     /**
-     * Get the CMS page link list in alphabetical order
+     * Get the CMS page link list in alphabetical order for the given field and direction
      *
+     * @param string $order_by the field to order by
+     * @param string $order_direction the order direction ASC or DESC
      * @throws \Exception
      * @return <array|boolean>
      */
-    public function getPageLinkList()
+    public function getPageLinkList($order_by='link', $order_direction='ASC')
     {
-        return $this->cms->getPageLinkList();
+        return $this->cms->getPageLinkList($order_by, $order_direction);
     }
 
     /**
