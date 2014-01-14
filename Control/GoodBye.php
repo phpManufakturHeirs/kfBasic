@@ -24,7 +24,7 @@ class GoodBye extends Basic
     public function controllerLogout(Application $app)
     {
         $parameters = $app['request']->query->all();
-        $parameter_str = !empty($parameters) ? '?'.http_build_query($parameters) : '';
+        $parameter_str = !empty($parameters) ? '?'.http_build_query($parameters, '', '&') : '';
         return $app->redirect(FRAMEWORK_URL."/admin/logout$parameter_str");
     }
 
@@ -41,7 +41,7 @@ class GoodBye extends Basic
             // redirect to the given route or URL
             $parameters = $app['request']->query->all();
             unset($parameters['redirect']);
-            $parameter_str = !empty($parameters) ? '?'.http_build_query($parameters) : '';
+            $parameter_str = !empty($parameters) ? '?'.http_build_query($parameters, '', '&') : '';
             return $app->redirect(FRAMEWORK_URL.$redirect.$parameter_str);
         }
 

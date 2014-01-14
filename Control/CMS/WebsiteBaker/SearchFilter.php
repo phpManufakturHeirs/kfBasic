@@ -45,7 +45,7 @@ class SearchFilter
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_FORBID_REUSE => true,
             CURLOPT_TIMEOUT => 4,
-            CURLOPT_POSTFIELDS => http_build_query($parameter),
+            CURLOPT_POSTFIELDS => http_build_query($parameter, '', '&'),
             CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_SSL_VERIFYPEER => false
         );
