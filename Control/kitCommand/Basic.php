@@ -93,7 +93,8 @@ class Basic extends Alert
         $cmdParameter = new kitCommandParameter($this->app);
 
         if (is_null($this->app['request']->request->get('cms'))) {
-            if (self::$parameter_id == '-1') {
+            if ((self::$parameter_id == '-1') ||
+                (false === ($params = $cmdParameter->selectParameter(self::$parameter_id)))) {
                 // create a default parameter array for the FRAMEWORK
                 //throw new \Exception('Need at least CMS POST parameters or a parameter ID!');
                 $params = array(
@@ -121,9 +122,9 @@ class Basic extends Alert
                     'iFrame' => null
                 );
             }
-            elseif (false === ($params = $cmdParameter->selectParameter(self::$parameter_id))) {
-                throw new \Exception('Can not get the data for parameter ID '.self::$parameter_id);
-            }
+            //elseif (false === ($params = $cmdParameter->selectParameter(self::$parameter_id))) {
+            //    throw new \Exception('Can not get the data for parameter ID '.self::$parameter_id);
+            //}
             $this->app['request']->request->set('cms', $params['cms']);
             $this->app['request']->request->set('parameter', $params['parameter']);
             $this->app['request']->request->set('GET', $params['GET']);
