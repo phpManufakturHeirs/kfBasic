@@ -6,6 +6,11 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.71** - 2014-01-16
+
+* changed handling for a missing parameter ID
+* prevent problems with usage of `http_build_query()` if SERVER has not set  `arg-separator.output`
+* 
 **0.70** - 2014-01-13
 
 * changed check for and loading of `HTMLPurifier`
