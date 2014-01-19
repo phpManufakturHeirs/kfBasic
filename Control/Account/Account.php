@@ -115,6 +115,27 @@ class Account
     }
 
     /**
+     * Return a arry with all possible entry points for the authenticated user
+     *
+     * @return array
+     */
+    public function getUserRolesEntryPoints()
+    {
+        // get all available entry points
+        $entry_points = $this->app['security.role_entry_points'];
+
+        $points = array();
+        foreach ($entry_points as $role => $point) {
+            // check to which entry points the user is allowed to access
+            if ($this->isGranted($role)) {
+                $points[$role] = $point;
+            }
+        }
+        ksort($points);
+        return $points;
+    }
+
+    /**
      * Check if the given CMS user has administrator privileges at the CMS
      *
      * @param string $username
