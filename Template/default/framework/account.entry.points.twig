@@ -1,0 +1,43 @@
+{#
+  kitFramework
+
+  @author Team phpManufaktur <team@phpmanufaktur.de>
+  @link https://kit2.phpmanufaktur.de
+  @link https://github.com/phpManufaktur/kitFramework/wiki
+  @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+  @license MIT License (MIT) http://www.opensource.org/licenses/MIT
+#}
+{% if usage == 'framework' %}
+  {% set template_file = 'framework/body.twig' %}
+{% else %}
+  {% set template_file = 'framework/backend.body.twig' %}
+{% endif %}
+{% extends getTemplateFile('@phpManufaktur/Basic/Template', template_file) %}
+{% block title %}{{ 'kitFramework - Welcome'|trans }}{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="page-header">
+      <h1>kitFramework <small>{{ 'Entry points'|trans }}</small></h1>
+    </div>
+    
+    {{ alert }}
+    
+    <div class="row">
+      {% for entry in entry_points %}
+        <div class="col-sm-4 col-md-2">
+          <div class="thumbnail">
+            <a href="{{ FRAMEWORK_URL ~ entry.route ~ '?usage=' ~ usage }}"><img class="img-rounded img-responsive" src="{{ entry.icon.url }}" alt="{{ entry.name }}" /></a>
+            <div class="caption">
+              <p><strong>{{ entry.name }}</strong></p>
+              {% if entry.info|length > 0 %}
+                <p>{{ entry.info|trans }}</p>
+              {% endif %}
+              <p><a href="{{ FRAMEWORK_URL ~ entry.route ~ '?usage=' ~ usage }}" class="btn btn-primary" role="button">{{ 'Execute'|trans }}</a></p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock content %}

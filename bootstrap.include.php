@@ -15,8 +15,8 @@ use Symfony\Component\HttpKernel\Debug\ErrorHandler;
 use Symfony\Component\HttpKernel\Debug\ExceptionHandler;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Translation\Loader\ArrayLoader;
-use phpManufaktur\Basic\Control\UserProvider;
-use phpManufaktur\Basic\Control\manufakturPasswordEncoder;
+use phpManufaktur\Basic\Control\Account\UserProvider;
+use phpManufaktur\Basic\Control\Account\manufakturPasswordEncoder;
 use phpManufaktur\Basic\Control\twigExtension;
 use phpManufaktur\Basic\Control\Utils;
 use phpManufaktur\Basic\Data\Setup\Setup;
@@ -395,8 +395,19 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     ),
     'security.role_hierarchy' => array(
         'ROLE_ADMIN' => array('ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH')
+    ),
+    'security.role_entry_points' => array(
+        'ROLE_ADMIN' => array(
+            'route' => '/admin/welcome',
+            'name' => 'Extensions',
+            'info' => '',
+            'icon' => array(
+                'path' => FRAMEWORK_PATH.'/framework.jpg',
+                'url' => FRAMEWORK_URL.'/framework.jpg'
+            )
+        )
     )
-));
+ ));
 
 $app['security.authentication.logout_handler.general'] = $app->share(function () use ($app) {
     return new CustomLogoutSuccessHandler(
@@ -445,25 +456,24 @@ foreach ($scan_paths as $scan_path) {
 
 // GENERAL ROUTES for the kitFramework
 
-$app->get('/', function() use($app) {
-    // redirect to the protected welcome dialog
-    return $app->redirect(FRAMEWORK_URL.'/admin/welcome');
-});
+$app->get('/',
+    'phpManufaktur\Basic\Control\Account\RoleEntryPoints::ControllerRoleEntryPoints');
+
 $app->get('/login',
     // the general login dialog
-    'phpManufaktur\Basic\Control\Login::exec');
+    'phpManufaktur\Basic\Control\Account\Login::exec');
 $app->get('/password/forgotten',
     // password forgotten?
-    'phpManufaktur\Basic\Control\forgottenPassword::dialogForgottenPassword');
+    'phpManufaktur\Basic\Control\Account\forgottenPassword::dialogForgottenPassword');
 $app->post('password/reset',
     // create a new password
-    'phpManufaktur\Basic\Control\forgottenPassword::dialogResetPassword');
+    'phpManufaktur\Basic\Control\Account\forgottenPassword::dialogResetPassword');
 $app->post('/password/retype',
     // confirm the new password
-    'phpManufaktur\Basic\Control\forgottenPassword::dialogRetypePassword');
+    'phpManufaktur\Basic\Control\Account\forgottenPassword::dialogRetypePassword');
 $app->get('/password/create/{guid}',
     // confirm the link the create a new password
-    'phpManufaktur\Basic\Control\forgottenPassword::dialogCreatePassword');
+    'phpManufaktur\Basic\Control\Account\forgottenPassword::dialogCreatePassword');
 $app->post('/login/first/cms',
     // first login into the framework from the CMS backend
     'phpManufaktur\Basic\Control\Account\FirstLogin::controllerCMSLogin');
@@ -472,10 +482,10 @@ $app->post('/login/first/cms/check',
     'phpManufaktur\Basic\Control\Account\FirstLogin::controllerCheckCMSLogin');
 $app->match('/goodbye',
     // show the default logout and bye bye message
-    'phpManufaktur\Basic\Control\GoodBye::controllerGoodBye');
+    'phpManufaktur\Basic\Control\Account\GoodBye::controllerGoodBye');
 $app->get('/logout',
-    // set paremeters and redirect to /admin/logout
-    'phpManufaktur\Basic\Control\GoodBye::controllerLogout');
+    // set parameters and redirect to /admin/logout
+    'phpManufaktur\Basic\Control\Account\GoodBye::controllerLogout');
 
 // ADMIN ROUTES
 $admin->get('/basic/setup',
@@ -490,14 +500,14 @@ $admin->get('/basic/uninstall',
 
 
 $app->get('/admin',
-    // redirect to the welcome dialog
-    'phpManufaktur\Basic\Control\Welcome::controllerFramework');
+    // redirect to the role entry points
+    'phpManufaktur\Basic\Control\Account\RoleEntryPoints::ControllerRoleEntryPoints');
 $admin->get('/',
-    // redirect to the welcome dialog
-    'phpManufaktur\Basic\Control\Welcome::controllerFramework');
+    // redirect to the role entry points
+    'phpManufaktur\Basic\Control\Account\RoleEntryPoints::ControllerRoleEntryPoints');
 $admin->get('/account',
     // user account dialog
-    'phpManufaktur\Basic\Control\Account::exec');
+    'phpManufaktur\Basic\Control\Account\Dialog\Account::exec');
 $admin->get('/welcome',
     // the general welcome dialog
     'phpManufaktur\Basic\Control\Welcome::controllerFramework');
