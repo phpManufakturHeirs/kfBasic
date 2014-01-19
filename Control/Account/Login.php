@@ -8,7 +8,8 @@
  * @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
  */
-namespace phpManufaktur\Basic\Control;
+
+namespace phpManufaktur\Basic\Control\Account;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;

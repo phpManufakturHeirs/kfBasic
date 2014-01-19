@@ -11,7 +11,7 @@
 
 namespace phpManufaktur\Basic\Data\Security;
 
-use phpManufaktur\Basic\Control\manufakturPasswordEncoder;
+use phpManufaktur\Basic\Control\Account\manufakturPasswordEncoder;
 use Silex\Application;
 
 /**

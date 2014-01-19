@@ -9,7 +9,7 @@
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
  */
 
-namespace phpManufaktur\Basic\Control;
+namespace phpManufaktur\Basic\Control\Account;
 
 use Symfony\Component\Security\Core\Encoder\BasePasswordEncoder;
 use phpManufaktur\Basic\Data\CMS\Users as cmsUsers;
@@ -90,12 +90,11 @@ class manufakturPasswordEncoder extends BasePasswordEncoder
         // ok - the user exists and the password is correct
         $this->app['monolog']->addDebug("encoded: $encoded - raw: $raw - ");
 
-        $Utils = new Utils($this->app);
         $frameworkUsers = new frameworkUsers($this->app);
         $data = array(
             'username' => $user['username'],
             'email' => $user['email'],
-            'displayname' => $Utils->unsanitizeText($user['display_name']),
+            'displayname' => $this->app['utils']->unsanitizeText($user['display_name']),
             'password' => $this->encodePassword($raw, $salt),
             'roles' => $isAdmin ? 'ROLE_ADMIN' : 'ROLE_USER'
         );
