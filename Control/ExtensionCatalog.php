@@ -11,13 +11,13 @@
 
 namespace phpManufaktur\Basic\Control;
 
-use Silex\Application;
 use phpManufaktur\Basic\Control\gitHub\gitHub;
 use phpManufaktur\Basic\Control\cURL\cURL;
 use phpManufaktur\Basic\Control\unZip\unZip;
 use phpManufaktur\Basic\Data\ExtensionCatalog as Catalog;
 use phpManufaktur\Basic\Data\Setting;
 use phpManufaktur\Basic\Data\ExtensionRegister as Register;
+use phpManufaktur\Basic\Control\Pattern\Alert;
 
 /**
  * Get the catalog with all for the kitFramework available extensions from GitHub
@@ -25,57 +25,8 @@ use phpManufaktur\Basic\Data\ExtensionRegister as Register;
  * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
  *
  */
-class ExtensionCatalog
+class ExtensionCatalog extends Alert
 {
-
-    protected $app = null;
-    protected static $message = '';
-
-    /**
-     * Constructor
-     *
-     * @param Application $app
-     */
-    public function __construct(Application $app)
-    {
-        $this->app = $app;
-    }
-
-    /**
-     * @return the $message
-     */
-    public function getMessage ()
-    {
-        return self::$message;
-    }
-
-    public function setMessage($message, $params=array())
-    {
-        self::$message .= $this->app['twig']->render($this->app['utils']->getTemplateFile(
-            '@phpManufaktur/Basic/Template',
-            'framework/message.twig'),
-        array(
-            'message' => $this->app['translator']->trans($message, $params)
-        ));
-    }
-
-    /**
-     * Check if a message is active
-     *
-     * @return boolean
-     */
-    public function isMessage()
-    {
-        return !empty(self::$message);
-    }
-
-    /**
-     * Clear the existing message(s)
-     */
-    public function clearMessage()
-    {
-        self::$message = '';
-    }
 
     /**
      * Search for the first subdirectory below the given path
@@ -117,7 +68,8 @@ class ExtensionCatalog
         $Setting = new Setting($this->app);
         $last_release = $Setting->select('extension_catalog_release');
         if (\version_compare($release, $last_release, '>')) {
-            $this->setMessage("actual: $last_release, online: $release (online is newer, we'll update!)");
+            $this->setAlert('Actual catalog information: %last_release%, online: %release% (online is newer, we will update!)',
+                array('%last_release%' => $last_release, '%release%' => $release), self::ALERT_TYPE_INFO);
         }
         else {
             // nothing to do!
@@ -157,14 +109,16 @@ class ExtensionCatalog
                                 try {
                                     $framework = $this->app['utils']->readConfiguration($file['file_path']);
                                 } catch (\Exception $e) {
-                                    $this->setMessage('Can not read the information file for the kitFramework!');
+                                    $this->setAlert('Can not read the information file for the kitFramework!',
+                                        array(), self::ALERT_TYPE_WARNING);
                                 }
                                 if (file_exists(FRAMEWORK_PATH.'/framework.json') && isset($framework['release']['number'])) {
                                     // check if a new kitFramework release is available
                                     $actual_framework = $this->app['utils']->readConfiguration(FRAMEWORK_PATH.'/framework.json');
                                     if (version_compare($framework['release']['number'], $actual_framework['release']['number'], '>')) {
                                         // the framework version has changed!
-                                        $this->setMessage('New kitFramework release available!');
+                                        $this->setAlert('New kitFramework release available!',
+                                            array(), self::ALERT_TYPE_INFO);
                                     }
                                 }
                             }
@@ -176,13 +130,13 @@ class ExtensionCatalog
                                 try {
                                     $target = $this->app['utils']->readConfiguration($file['file_path']);
                                 } catch (\Exception $e) {
-                                    $this->setMessage('Can not read the extension.json for %name%!<br />Error message: %error%',
-                                        array('%name%' => $name, '%error%' => $e->getMessage()));
+                                    $this->setAlert('Can not read the extension.json for %name%!<br />Error message: %error%',
+                                        array('%name%' => $name, '%error%' => $e->getMessage()), self::ALERT_TYPE_WARNING);
                                     break;
                                 }
                                 if (!isset($target['guid']) || !isset($target['group']) || !isset($target['release']['number'])) {
-                                    $this->setMessage('The extension.json of <b>%name%</b> does not contain all definitions, check GUID, Group and Release!',
-                                        array('%name%' => $name));
+                                    $this->setAlert('The extension.json of <b>%name%</b> does not contain all definitions, check GUID, Group and Release!',
+                                        array('%name%' => $name), self::ALERT_TYPE_WARNING);
                                     break;
                                 }
                                 $path = substr($file['file_path'], 0, strrpos($file['file_path'], '/')+1);
@@ -227,14 +181,14 @@ class ExtensionCatalog
                                 if (null === ($id = $catalog->selectIDbyGUID($data['guid']))) {
                                     // insert as new record
                                     $id = $catalog->insert($data);
-                                    $this->setMessage('Add the extension <b>%name%</b> to the catalog.',
-                                        array('%name%' => $data['name']));
+                                    $this->setAlert('Add the extension <b>%name%</b> to the catalog.',
+                                        array('%name%' => $data['name']), self::ALERT_TYPE_SUCCESS);
                                 }
                                 else {
                                     // update the existing record
                                     $catalog->update($id, $data);
-                                    $this->setMessage('Updated the catalog data for <b>%name%</b>.',
-                                        array('%name%' => $data['name']));
+                                    $this->setAlert('Updated the catalog data for <b>%name%</b>.',
+                                        array('%name%' => $data['name']), self::ALERT_TYPE_SUCCESS);
                                 }
                             }
                             break;

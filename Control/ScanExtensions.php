@@ -12,8 +12,9 @@
 namespace phpManufaktur\Basic\Control;
 
 use Silex\Application;
+use phpManufaktur\Basic\Control\Pattern\Alert;
 
-class ScanExtensions
+class ScanExtensions extends Alert
 {
     public function exec(Application $app)
     {
@@ -21,11 +22,9 @@ class ScanExtensions
         $register->scanDirectories(ExtensionRegister::GROUP_PHPMANUFAKTUR);
         $register->scanDirectories(ExtensionRegister::GROUP_THIRDPARTY);
         $Welcome = new Welcome($app);
-        if ($register->isMessage()) {
-            $Welcome->setMessage($register->getMessage());
-        }
-        else {
-            $Welcome->setMessage('Successfull scanned the kitFramework for installed extensions.');
+        if (!$register->isAlert()) {
+            $Welcome->setAlert('Successfull scanned the kitFramework for installed extensions.',
+                array(), self::ALERT_TYPE_SUCCESS);
         }
         return $Welcome->controllerFramework($app);
     }

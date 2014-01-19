@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use phpManufaktur\Basic\Data\CMS\SearchSection;
 use phpManufaktur\Basic\Control\CMS\InstallSearch;
+use phpManufaktur\Basic\Control\Pattern\Alert;
 
 /**
  * Display a welcome to the kitFramework dialog
@@ -24,24 +25,10 @@ use phpManufaktur\Basic\Control\CMS\InstallSearch;
  * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
  *
  */
-class Welcome
+class Welcome extends Alert
 {
 
-    protected $app = null;
-    protected static $message = null;
     protected static $usage = 'framework';
-
-    /**
-     * Constructor
-     *
-     * @param Application $app
-     */
-    public function __construct(Application $app=null)
-    {
-        if (!is_null($app)) {
-            $this->initWelcome($app);
-        }
-    }
 
     /**
      * Initialize the Welcome dialog
@@ -50,7 +37,7 @@ class Welcome
      */
     protected function initWelcome(Application $app)
     {
-        $this->app = $app;
+        $this->initialize($app);
 
         // grant that the updater is installed in the separated directory and is actual
         if (!file_exists(MANUFAKTUR_PATH.'/Updater')) {
@@ -77,55 +64,6 @@ class Welcome
     }
 
     /**
-     * @return the $message
-     */
-    public function getMessage()
-    {
-        return self::$message;
-    }
-
-    /**
-     * Set a message. Messages are chained and will be translated with the given
-     * parameters. If $log_message = true, the message will also logged to the
-     * kitFramework logfile.
-     *
-     * @param string $message
-     * @param array $params
-     * @param boolean $log_message
-     */
-    public function setMessage($message, $params=array(), $log_message=false)
-    {
-        self::$message .= $this->app['twig']->render($this->app['utils']->getTemplateFile(
-            '@phpManufaktur/Basic/Template',
-            'framework/message.twig'),
-            array(
-                'message' => $this->app['translator']->trans($message, $params)
-            ));
-        if ($log_message) {
-            // log this message
-            $this->app['monolog']->addDebug(strip_tags($this->app['translator']->trans($message, $params, 'messages', 'en')));
-        }
-    }
-
-    /**
-     * Check if a message is active
-     *
-     * @return boolean
-     */
-    public function isMessage()
-    {
-        return !empty(self::$message);
-    }
-
-    /**
-     * Clear the existing message(s)
-     */
-    public function clearMessage()
-    {
-        self::$message = '';
-    }
-
-    /**
      * Execute the welcome dialog. This is the main procedure, this dialog will
      * be also executed from inside the CMS after automatic authentication with
      * the controllerCMS()
@@ -137,12 +75,12 @@ class Welcome
 
         if (null !== ($install = $app['session']->get('FINISH_INSTALLATION', null))) {
             // get the messages from the installation
-            self::$message = $install['message'];
+            $this->setAlertUnformatted($install['message']);
             foreach ($install['execute_route'] as $route) {
                 // execute the install & update routes
                 $subRequest = Request::create($route, 'GET', array('usage' => self::$usage));
                 $response = $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
-                $this->setMessage($response->getContent());
+                $this->setAlert($response->getContent(), array(), self::ALERT_TYPE_INFO);
             }
             // remove the session
             $app['session']->remove('FINISH_INSTALLATION');
@@ -150,20 +88,14 @@ class Welcome
             $register = new ExtensionRegister($app);
             $register->scanDirectories(ExtensionRegister::GROUP_PHPMANUFAKTUR);
             $register->scanDirectories(ExtensionRegister::GROUP_THIRDPARTY);
-            if ($register->isMessage()) {
-                $this->setMessage($register->getMessage());
-            }
         }
 
         $catalog = new ExtensionCatalog($app);
 
         try {
             $catalog->getOnlineCatalog();
-            if ($catalog->isMessage()) {
-                $this->setMessage($catalog->getMessage());
-            }
         } catch (\Exception $e) {
-            $this->setMessage($e->getMessage());
+            $this->setAlert($e->getMessage(), array(), self::ALERT_TYPE_WARNING);
         }
 
         $accepted_items = explode(',', CATALOG_ACCEPT_EXTENSION);
@@ -186,7 +118,7 @@ class Welcome
                 'usage' => self::$usage,
                 'catalog_items' => $catalog_items,
                 'register_items' => $register_items,
-                'message' => $this->getMessage(),
+                'alert' => $this->getAlert(),
                 'scan_extensions' => FRAMEWORK_URL.'/admin/scan/extensions?usage='.self::$usage,
                 'scan_catalog' => FRAMEWORK_URL.'/admin/scan/catalog?usage='.self::$usage
             ));
@@ -209,10 +141,15 @@ class Welcome
 
         if (!$app['account']->checkUserIsCMSAdministrator($cms['username'])) {
             // the user is no CMS Administrator, deny access!
-            return $app['twig']->render($app['utils']->getTemplateFile(
-                '@phpManufaktur/Basic/Template',
-                'framework/admins.only.twig'),
-                array('usage' => self::$usage));
+            $this->setAlert('Sorry, but only Administrators are allowed to access this kitFramework extension.',
+                array(), self::ALERT_TYPE_WARNING);
+            return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+                '@phpManufaktur/Basic/Template', 'framework/alert.twig'),
+                array(
+                    'usage' => self::$usage,
+                    'title' => 'Access denied',
+                    'alert' => $this->getAlert()
+                ));
         }
 
         if (!$app['account']->checkUserHasFrameworkAccount($cms['username'])) {

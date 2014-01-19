@@ -11,9 +11,9 @@
 
 namespace phpManufaktur\Basic\Control;
 
-use Silex\Application;
 use phpManufaktur\Basic\Data\ExtensionRegister as Register;
 use phpManufaktur\Basic\Data\ExtensionCatalog as Catalog;
+use phpManufaktur\Basic\Control\Pattern\Alert;
 
 /**
  * Check for installed extensions and read the information from extension.json
@@ -22,60 +22,20 @@ use phpManufaktur\Basic\Data\ExtensionCatalog as Catalog;
  * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
  *
  */
-class ExtensionRegister
+class ExtensionRegister extends Alert
 {
     protected $app = null;
-    protected static $table_name = null;
-    protected static $message = '';
 
     const GROUP_PHPMANUFAKTUR = 'phpManufaktur';
     const GROUP_THIRDPARTY = 'thirdParty';
 
-    public function __construct(Application $app)
-    {
-        $this->app = $app;
-        self::$table_name = FRAMEWORK_TABLE_PREFIX.'basic_extension_register';
-    }
-
     /**
-     * @return the $message
-     */
-    public function getMessage ()
-    {
-        return self::$message;
-    }
-
-    /**
-     * @param string $message
-     */
-    public function setMessage($message, $params=array())
-    {
-        self::$message .= $this->app['twig']->render($this->app['utils']->getTemplateFile(
-            '@phpManufaktur/Basic/Template',
-            'framework/message.twig'),
-        array(
-            'message' => $this->app['translator']->trans($message, $params)
-        ));
-    }
-
-    /**
-     * Check if a message is active
-     *
+     * Check the given $path and $group for a installed extension
+     * @param string $path
+     * @param string $group
+     * @param string reference $extension
      * @return boolean
      */
-    public function isMessage()
-    {
-        return !empty(self::$message);
-    }
-
-    /**
-     * Clear the existing message(s)
-     */
-    public function clearMessage()
-    {
-        self::$message = '';
-    }
-
     protected function checkDirectory($path, $group, &$extension='')
     {
         $extension = '';
@@ -83,13 +43,14 @@ class ExtensionRegister
             try {
                 $target = $this->app['utils']->readConfiguration($path.'/extension.json');
             } catch (\Exception $e) {
-                $this->setMessage('Can not read the extension.json in %directory%!<br />Error message: %error%',
-                    array('%directory%' => substr($path.'/extension.json', strlen(FRAMEWORK_PATH)), '%error%' => $e->getMessage()));
-                return false;
+                $this->setAlert('Can not read the extension.json in %directory%!<br />Error message: %error%',
+                    array('%directory%' => substr($path.'/extension.json', strlen(FRAMEWORK_PATH)), '%error%' => $e->getMessage()),
+                    self::ALERT_TYPE_WARNING);
+
             }
             if (!isset($target['guid']) || !isset($target['release']['number'])) {
-                $this->setMessage('The extension.json of <b>%name%</b> does not contain all definitions, check GUID, Group and Release!',
-                    array('%name%' => $group));
+                $this->setAlert('The extension.json of <b>%name%</b> does not contain all definitions, check GUID, Group and Release!',
+                    array('%name%' => $group), self::ALERT_TYPE_WARNING);
                 return false;
             }
             if (file_exists($path.'/extension.jpg') || file_exists($path.'/extension.png')) {
@@ -116,14 +77,14 @@ class ExtensionRegister
                 // insert as new record
                 $data['date_installed'] = date('Y-m-d');
                 $id = $register->insert($data);
-                $this->setMessage('Add the extension <b>%name%</b> to the register.',
-                    array('%name%' => $data['name']));
+                $this->setAlert('Add the extension <b>%name%</b> to the register.',
+                    array('%name%' => $data['name']), self::ALERT_TYPE_SUCCESS);
             }
             else {
                 // update the existing record
                 $register->update($id, $data);
-                $this->setMessage('Updated the register data for <b>%name%</b>.',
-                    array('%name%' => $data['name']));
+                $this->setAlert('Updated the register data for <b>%name%</b>.',
+                    array('%name%' => $data['name']), self::ALERT_TYPE_SUCCESS);
             }
             $extension = $data['name'];
             return true;
@@ -131,6 +92,11 @@ class ExtensionRegister
         return false;
     }
 
+    /**
+     * Scan all extension directories for the given $group
+     *
+     * @param string $group
+     */
     public function scanDirectories($group=self::GROUP_PHPMANUFAKTUR)
     {
         $checkedExtensions = array();
@@ -162,6 +128,11 @@ class ExtensionRegister
         }
     }
 
+    /**
+     * Check the kitFramework for installed extensions
+     *
+     * @return array
+     */
     public function getInstalledExtensions()
     {
         $register = new Register($this->app);
