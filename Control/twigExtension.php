@@ -80,6 +80,7 @@ class twigExtension extends Twig_Extension
         return array(
             'isAuthenticated' => new \Twig_Function_Method($this, 'isAuthenticated'),
             'getUserDisplayName' => new \Twig_Function_Method($this, 'getUserDisplayName'),
+            'getUserRolesEntryPoints' => new \Twig_Function_Method($this, 'getUserRolesEntryPoints'),
             'template_file' => new \Twig_Function_Method($this, 'template_file'),
             'getTemplateFile' => new \Twig_Function_Method($this, 'getTemplateFile'),
             'kitCommandParser' => new \Twig_Function_Method($this, 'kitCommandParser'),
@@ -123,6 +124,16 @@ class twigExtension extends Twig_Extension
     function getUserDisplayName()
     {
         return $this->app['account']->getDisplayName();
+    }
+
+    /**
+     * Get the User Roles Entry Points as array
+     *
+     * @return array
+     */
+    function getUserRolesEntryPoints()
+    {
+        return $this->app['account']->getUserRolesEntryPoints();
     }
 
     /**
