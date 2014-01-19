@@ -127,6 +127,18 @@ class Update
     }
 
     /**
+     * Release 0.72
+     */
+    protected function release_072()
+    {
+        if (!$this->columnExists(FRAMEWORK_TABLE_PREFIX.'basic_users', 'status')) {
+            $SQL = "ALTER TABLE `".FRAMEWORK_TABLE_PREFIX."basic_users` ADD `status` ENUM ('ACTIVE','LOCKED') NOT NULL DEFAULT 'ACTIVE' AFTER `guid_status`";
+            $this->app['db']->query($SQL);
+            $this->app['monolog']->addDebug('[BASIC Update] Add field `status` to table `basic_users`');
+        }
+    }
+
+    /**
      * Update the database tables for the BASIC extension of the kitFramework
      *
      * @param Application $app
@@ -140,6 +152,7 @@ class Update
         $this->release_054();
         $this->release_063();
         $this->release_069();
+        $this->release_072();
 
         // install the search function
         $Search = new InstallSearch($app);

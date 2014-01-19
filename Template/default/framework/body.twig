@@ -63,13 +63,13 @@
                     <a href="#" class="dropdown-toggle manufaktur" data-toggle="dropdown"><span class="glyphicon glyphicon-road"></span> <b class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu">                    
                       {% for point in entrypoints %}
-                        <li class="navbar-link"><a href="{{ FRAMEWORK_URL ~ point.route ~ '?usage=' ~ usage }}" title="{{ point.info }}">{{ point.name }}</a></li>
+                        <li class="navbar-link"><a href="{{ FRAMEWORK_URL ~ point.route }}" title="{{ point.info }}">{{ point.name }}</a></li>
                       {% endfor %}
                     </ul>
                   </li>
                 {% endif %}
-                <li class="navbar-link"><a class="manufaktur" href="{{ FRAMEWORK_URL ~ '/user/account?usage=' ~ usage }}" title="{{ 'Account'|trans }}"><span class="glyphicon glyphicon-user"></span></a></li>
-                <li class="navbar-link"><a class="manufaktur" href="{{ FRAMEWORK_URL ~ '/logout?usage=' ~ usage }}" title="{{ 'Logout'|trans }}"><span class="glyphicon glyphicon-log-out"></span></a></li>
+                <li class="navbar-link"><a class="manufaktur" href="{{ FRAMEWORK_URL ~ '/user/account' }}" title="{{ 'Account'|trans }}"><span class="glyphicon glyphicon-user"></span></a></li>
+                <li class="navbar-link"><a class="manufaktur" href="{{ FRAMEWORK_URL ~ '/logout' }}" title="{{ 'Logout'|trans }}"><span class="glyphicon glyphicon-log-out"></span></a></li>
               </ul>
             </div>
           {% endif %}

@@ -32,6 +32,8 @@ return array(
 
     'Bad credentials'
         => 'Die Angaben sind unvollständig oder ungültig!',
+    'Be aware: Changing your email address and/or username may influence the data records of kitFramework extensions - please contact the webmaster in these cases.'
+        => 'Bitte beachten Sie: Eine Änderung Ihres Benutzernamen und/oder Ihrer E-Mail Adresse beeinflusst eventuell die mit Ihnen verbundenen Datensätze bei den verschiedenen kitFramework Anwendungen. Bitte informieren Sie in diesen Fällen den Webmaster.',
     'beta'
         => 'Beta Version',
 
@@ -62,6 +64,8 @@ return array(
 
     'Data replication'
         => 'Datenableich',
+    'Displayname'
+        => 'Angezeigter Name',
     'Documentation'
         => 'Dokumentation',
 
@@ -161,6 +165,8 @@ return array(
         => 'Passwort',
     'Password changed'
         => 'Passwort geändert',
+    'Password_repeat'
+        => 'Passwort wiederholen',
     'Please check the username and password and try again!'
         => 'Bitte prüfen Sie den angegebenen Benutzernamen sowie das Passwort und versuchen Sie es erneut!',
     'Please <a href="%link%" target="_blank">comment this help</a> to improve the kitCommand <b>%command%</b>.'
@@ -214,8 +220,12 @@ return array(
 
     'Thank you for using the kitFramework'
         => 'Vielen Dank für den Einsatz des kitFramework',
+    'The account was not changed.'
+        => 'Das Benutzerkonto wurde nicht verändert.',
     'The both passwords you have typed in does not match, please try again!'
         => 'Die beiden Passwörter die Sie eingegeben haben stimmen nicht überein, bitte versuchen Sie es noch einmal!',
+    'The email address %email% is already used by another account!'
+        => 'Die E-Mail Adresse %email% wird bereits von einem anderen Benutzerkonto verwendet!',
     'The extension with the ID %extension_id% does not exists!'
         => 'Die Erweiterung mit der ID %extension_id% existiert nicht!',
     'The file %file% does not exists in Gist %gist_id%!'
@@ -248,6 +258,8 @@ return array(
         => 'Für das kitCommand <b>%command%</b> ist keine Hilfe verfügbar.',
     "This link enable you to change your password once within 24 hours."
         => "Dieser Link ermöglicht es Ihnen, ihr Passwort einmal innerhalb von 24 Stunden zu ändern.",
+    'The username %username% is already in use, please select another one!'
+        => 'Der Benutzername %username% wird bereits verwendet, bitte wählen Sie einen anderen Benutzernamen.',
     'This value is not a valid email address.'
         => 'Es wurde keine gültige E-Mail Adresse übergeben!',
 
@@ -284,4 +296,6 @@ return array(
 
     'You are not allowed to access this resource!'
         => 'Sie sind nicht befugt auf diese Resource zuzugreifen.',
+    'Your account was succesfull updated.'
+        => 'Ihr Benutzerkonto wurde erfolgreich geändert.',
 );

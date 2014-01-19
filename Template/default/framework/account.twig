@@ -4,7 +4,7 @@
   @author Team phpManufaktur <team@phpmanufaktur.de>
   @link https://kit2.phpmanufaktur.de
   @link https://github.com/phpManufaktur/kitFramework/wiki
-  @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+  @copyright 2014 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
 {% extends getTemplateFile('@phpManufaktur/Basic/Template', 'framework/body.twig') %}
@@ -12,10 +12,25 @@
 {% block content %}
   <div class="container">
     <div class="page-header">
-      <h1>Benutzerkonto <small>kitFramework</small></h1>
+      <h1>{{ 'Account'|trans }} <small>kitFramework</small></h1>
     </div>
-    <div class="alert alert-warning">
-      <p>Die Verwaltung der Benutzerkonten ist noch nicht implementiert!</p>
-    </div>
+    
+    {{ alert }}
+    
+    {% if alert|length < 1 %}
+      {% include '@phpManufaktur/Basic/Template/default/pattern/bootstrap/alert.twig'
+        with {type:'alert-warning',content:'Be aware: Changing your email address and/or username may influence the data records of kitFramework extensions - please contact the webmaster in these cases.'|trans} only %}
+    {% endif %}
+    
+    {% form_theme form '@phpManufaktur/Basic/Template/default/framework/form.fields.horizontal.twig' %}
+    
+    <form class="form-horizontal" action="{{ FRAMEWORK_URL ~ action ~ '?usage=' ~ usage }}" method="post" role="form">
+      {{ form_widget(form) }}
+      <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-6">
+          <button type="submit" class="btn btn-default">{{ 'Submit'|trans }}</button>
+        </div>
+      </div>
+    </form>
   </div>
 {% endblock %}

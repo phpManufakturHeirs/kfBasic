@@ -532,7 +532,9 @@ $admin->get('updater/update/{extension_id}',
 // USER routes
 $user->get('/account',
     // user account dialog
-    'phpManufaktur\Basic\Control\Account\Dialog\Account::exec');
+    'phpManufaktur\Basic\Control\Account\Dialog\Account::ControllerAccountEdit');
+$user->post('/account/edit/check',
+    'phpManufaktur\Basic\Control\Account\Dialog\Account::ControllerAccountEditCheck');
 
 
 $app->get('/welcome/cms/{cms}',
@@ -599,12 +601,14 @@ $app->error(function (\Exception $e, $code) use ($app) {
         case 404:
             // the requested page could not be found
             $message = $app['twig']->render($app['utils']->getTemplateFile(
-                '@phpManufaktur/Basic/Template', 'framework/error.404.twig'));
+                '@phpManufaktur/Basic/Template', 'framework/error.404.twig'),
+                array('usage' => $app['request']->get('usage', 'framework')));
             break;
         case 403:
             // access denied
             $message = $app['twig']->render($app['utils']->getTemplateFile(
-                '@phpManufaktur/Basic/Template', 'framework/error.403.twig'));
+                '@phpManufaktur/Basic/Template', 'framework/error.403.twig'),
+                array('usage' => $app['request']->get('usage', 'framework')));
             break;
         default:
             // general error message
@@ -617,7 +621,8 @@ $app->error(function (\Exception $e, $code) use ($app) {
                         'short' => substr($e->getMessage(), 0, stripos($e->getMessage(), 'Stack trace:'))
                     ),
                     'file' => substr($app['utils']->sanitizePath($e->getFile()), strlen(FRAMEWORK_PATH)),
-                    'line' => $e->getLine()
+                    'line' => $e->getLine(),
+                    'usage' => $app['request']->get('usage', 'framework')
                 ));
             break;
     }

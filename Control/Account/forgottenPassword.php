@@ -47,7 +47,7 @@ class forgottenPassword extends Alert
         $this->initialize($app);
 
         $form = $app['form.factory']->createBuilder('form')
-        ->add('email', 'text', array(
+        ->add('email', 'email', array(
             'label' => 'Email'
         ))
         ->getForm();

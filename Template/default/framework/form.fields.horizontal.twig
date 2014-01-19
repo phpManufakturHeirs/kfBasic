@@ -1,0 +1,35 @@
+{#
+  kitFramework
+
+  @author Team phpManufaktur <team@phpmanufaktur.de>
+  @link https://kit2.phpmanufaktur.de
+  @link https://github.com/phpManufaktur/kitFramework/wiki
+  @copyright 2014 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+  @license MIT License (MIT) http://www.opensource.org/licenses/MIT
+#}
+
+{% block text_row %}
+  {% set type = 'text' %}
+  {{ block('form_row_simple') }}
+{% endblock %}
+
+{% block password_row %}
+  {% set type = 'password' %}
+  {{ block('form_row_simple') }}
+{% endblock %}
+
+{% block email_row %}
+  {% set type = 'email' %}
+  {{ block('form_row_simple') }}
+{% endblock %}
+
+{% block form_row_simple %}
+  <div class="form-group">
+    <label for="{{ id }}" class="col-sm-3 control-label{{ required ? ' required' : '' }}">
+      {% if label is defined and label|length > 0 %}{{ label|trans }}{% else %}{{ name|capitalize|trans }}{% endif %}
+    </label>
+    <div class="col-sm-6">
+      <input type="{{ type }}" class="form-control" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+    </div>
+  </div>
+{% endblock %}

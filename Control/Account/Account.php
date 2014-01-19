@@ -150,11 +150,26 @@ class Account
     /**
      * Check if the user has as account at the kitFramework
      *
-     * @param string $username
+     * @param string $username check username and/or email address
+     * @param integer $ignore_id if set, ignore the user account with this ID
+     * @return boolean
      */
-    public function checkUserHasFrameworkAccount($username)
+    public function checkUserHasFrameworkAccount($username, $ignore_id=null)
     {
-        return $this->FrameworkUser->existsUser($username);
+        return $this->FrameworkUser->existsUser($username, $ignore_id);
+    }
+
+    /**
+     * Check if the given displayname is already in use
+     *
+     * @param string $displayname
+     * @param integer $ignore_id don't check the given user ID
+     * @throws \Exception
+     * @return boolean
+     */
+    public function existsDisplayName($displayname, $ignore_id=null)
+    {
+        return $this->FrameworkUser->existsDisplayName($displayname, $ignore_id);
     }
 
     /**
@@ -238,6 +253,18 @@ class Account
     public function updateUserData($username, $data)
     {
         $this->FrameworkUser->updateUser($username, $data);
+    }
+
+    /**
+     * Update a user account by the given user ID
+     *
+     * @param integer $id
+     * @param array $data
+     * @throws \Exception
+     */
+    public function updateUserDataByID($id, $data)
+    {
+        $this->FrameworkUser->updateUserByID($id, $data);
     }
 
     /**
