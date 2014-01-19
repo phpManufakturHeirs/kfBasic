@@ -391,7 +391,8 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
         return new manufakturPasswordEncoder($app);
     }),
     'security.access_rules' => array(
-        array('^/admin', 'ROLE_ADMIN')
+        array('^/admin', 'ROLE_ADMIN'),
+        array('^/user', 'ROLE_USER')
     ),
     'security.role_hierarchy' => array(
         'ROLE_ADMIN' => array('ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH')
@@ -406,6 +407,10 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
                 'url' => FRAMEWORK_URL.'/framework.jpg'
             )
         )
+    ),
+    'security.roles_provided' => array(
+        'ROLE_USER',
+        'ROLE_ADMIN'
     )
  ));
 
@@ -433,6 +438,8 @@ if (FRAMEWORK_SETUP) {
 
 // ADMIN
 $admin = $app['controllers_factory'];
+// USER
+$user = $app['controllers_factory'];
 // kitCOMMAND
 $command = $app['controllers_factory'];
 // kitFilter
@@ -505,9 +512,6 @@ $app->get('/admin',
 $admin->get('/',
     // redirect to the role entry points
     'phpManufaktur\Basic\Control\Account\RoleEntryPoints::ControllerRoleEntryPoints');
-$admin->get('/account',
-    // user account dialog
-    'phpManufaktur\Basic\Control\Account\Dialog\Account::exec');
 $admin->get('/welcome',
     // the general welcome dialog
     'phpManufaktur\Basic\Control\Welcome::controllerFramework');
@@ -524,6 +528,12 @@ $admin->get('updater/install/{catalog_id}',
 $admin->get('updater/update/{extension_id}',
     // update a extension
     'phpManufaktur\Updater\Updater::controllerUpdateExtension');
+
+// USER routes
+$user->get('/account',
+    // user account dialog
+    'phpManufaktur\Basic\Control\Account\Dialog\Account::exec');
+
 
 $app->get('/welcome/cms/{cms}',
     // the welcome dialog is called by the CMS backend
@@ -576,6 +586,7 @@ $app->post('/kit_search/command/{command}',
 
 // mount the controller factories
 $app->mount('/admin', $admin);
+$app->mount('/user', $user);
 $app->mount('/command', $command);
 $app->mount('/filter', $filter);
 
@@ -612,6 +623,7 @@ $app->error(function (\Exception $e, $code) use ($app) {
     }
     return new Response($message);
 });
+
 
 if (FRAMEWORK_DEBUG || !FRAMEWORK_CACHE) {
     // don't use cache

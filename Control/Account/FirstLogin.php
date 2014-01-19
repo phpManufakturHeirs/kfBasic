@@ -11,6 +11,7 @@
 
 namespace phpManufaktur\Basic\Control\Account;
 
+use Silex\Application;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -75,7 +76,7 @@ class FirstLogin extends Alert
      */
     public function controllerCMSLogin(Application $app)
     {
-        $this->app = $app;
+        $this->initialize($app);
 
         if (null === (self::$redirect = $app['request']->request->get('redirect', null))) {
             throw new \Exception('Missing the POST parameter `redirect`');
@@ -116,7 +117,7 @@ class FirstLogin extends Alert
      */
     public function controllerCheckCMSLogin(Application $app)
     {
-        $this->app = $app;
+        $this->initialize($app);
 
         $form = $this->getLoginForm($app);
         $form->bind($app['request']);

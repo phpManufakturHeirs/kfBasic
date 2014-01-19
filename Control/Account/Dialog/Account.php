@@ -12,18 +12,33 @@
 namespace phpManufaktur\Basic\Control\Account\Dialog;
 
 use Silex\Application;
+use phpManufaktur\Basic\Control\Pattern\Alert;
 
-class Account
+class Account extends Alert
 {
+    protected static $usage = null;
+
+    /**
+     * Initialize the class
+     *
+     * @param Application $app
+     */
+    protected function initialize(Application $app) {
+        parent::initialize($app);
+        self::$usage = $app['request']->get('usage', 'framework');
+    }
+
     /**
      * Return the Account dialog
      */
     public function exec(Application $app)
     {
         return $app['twig']->render($app['utils']->getTemplateFile(
-            '@phpManufaktur/Basic/Template',
-            'framework/account.twig'),
-            array());
+            '@phpManufaktur/Basic/Template', 'framework/account.twig'),
+            array(
+                'usage' => self::$usage,
+                'alert' => $this->getAlert()
+            ));
     }
 
 }

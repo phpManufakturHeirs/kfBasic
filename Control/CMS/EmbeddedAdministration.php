@@ -11,7 +11,6 @@
 
 namespace phpManufaktur\Basic\Control\CMS;
 
-use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use phpManufaktur\Basic\Control\Pattern\Alert;

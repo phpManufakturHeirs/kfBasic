@@ -111,6 +111,8 @@ return array(
         => 'Installieren',
     'Installed extensions'
         => 'Installierte Erweiterungen',
+    'Insufficient user role'
+        => 'Ungenügende Zugangsberechtigung',
     'invalid-request-cookie'
         => 'Ungültige ReCaptcha Anfrage',
     'invalid-site-private-key'

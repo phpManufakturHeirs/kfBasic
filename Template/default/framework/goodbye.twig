@@ -19,31 +19,13 @@
     <div class="page-header">
       <h1>{{ 'Goodbye'|trans }} <small>kitFramework</small></h1>
     </div>
-    <div class="alert alert-info">
-      {% if message|length > 0 %}
-        {{ message|trans }}
-      {% else %}
-        <p>{{ 'Thank you for using the kitFramework'|trans }}</p>
-        <p><a href="{{ FRAMEWORK_URL ~ '/login' }}">{{ 'Login'|trans }}</a></p>  
-      {% endif %}
-    </div>
-  </div>
-{% endblock %}
-
-
-
-
-{#% block content %}
-
-
-
-  <h2>{{ 'Goodbye'|trans }}</h2>    
-  <div class="logout">
-    {% if message|length > 0 %}
-      {{ message|trans }}
-    {% else %}
-        <p>{{ 'Thank you for using the kitFramework'|trans }}</p>
-        <p><a href="{{ FRAMEWORK_URL ~ '/login' }}">{{ 'Login'|trans }}</a></p>  
+    
+    {{ alert }}
+    
+    {% if alert|length < 1 %}
+      {% include '@phpManufaktur/Basic/Template/default/pattern/bootstrap/alert.twig' 
+        with {content:'Thank you for using the kitFramework'|trans} only %}
+      <p><a href="{{ FRAMEWORK_URL ~ '/login' }}">{{ 'Login'|trans }}</a></p>
     {% endif %}
   </div>
-{% endblock content %#}
+{% endblock %}

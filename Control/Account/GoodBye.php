@@ -44,13 +44,15 @@ class GoodBye extends Basic
             $parameter_str = !empty($parameters) ? '?'.http_build_query($parameters, '', '&') : '';
             return $app->redirect(FRAMEWORK_URL.$redirect.$parameter_str);
         }
-
+        if (null != ($msg = $app['request']->query->get('message'))) {
+            $this->setAlert($msg, array(), self::ALERT_TYPE_INFO);
+        }
         return $app['twig']->render($app['utils']->getTemplateFile(
-            '@phpManufaktur/Basic/Template',
-            'framework/goodbye.twig'), array(
+            '@phpManufaktur/Basic/Template', 'framework/goodbye.twig'),
+            array(
                 'basic' => $this->getBasicSettings(),
-                'message' => $app['request']->query->get('message')
-            )
-        );
+                'alert' => $this->getAlert(),
+                'usage' => $app['request']->get('usage', 'framework')
+            ));
     }
 }
