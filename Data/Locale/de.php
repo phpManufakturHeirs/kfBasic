@@ -67,10 +67,14 @@ return array(
 
     'Email'
         => 'E-Mail',
+    'Entry points'
+        => 'Zugangspunkte',
     "<b>Error</b>: Can't execute the kitCommand: <i>%command%</i>"
         => '<b>Fehler</b>: Das kitCommand <i>%command%</i> konnte nicht ausgeführt werden.',
     'Error executing the kitCommand <b>%command%</b>'
         => 'Bei der Ausführung des kitCommand <b>%command%</b> ist ein Fehler aufgetreten',
+    'Execute'
+        => 'Ausführen',
     'Execute Update'
         => 'Aktualisierung durchführen',
     'Extensions'
@@ -189,6 +193,8 @@ return array(
         => 'Ihre Berechtigung ist nicht ausreichend, nur Administratoren dürfen das kitFramework CMS Tool verwenden.',
     'Sorry, but the submitted GUID is invalid. Please contact the webmaster.'
         => 'Die übermittelte GUID ist ungültig. Bitte nehmen Sie mit dem Webmaster Kontakt auf.',
+    'Sorry, but you are not allowed to access any entry point!'
+        => 'Sie sind leider nicht berechtigt auf einen der kitFramework Zugangspunkte zuzugreifen.',
     'Submit'
         => 'Übermitteln',
     'Successfull installed the extension %extension%.'
@@ -271,6 +277,8 @@ return array(
         => 'Wir haben Ihnen einen Link an Ihre E-Mail Adresse %email% gesendet.',
     'Welcome' =>
         'Herzlich Willkommen!',
+    'Welcome back, %user%! Please select the entry point you want to use.'
+        => 'Herzlich willkommen, %user%! Bitte wählen Sie den gewünschten Zugangspunkt.',
 
     'You are not allowed to access this resource!'
         => 'Sie sind nicht befugt auf diese Resource zuzugreifen.',
