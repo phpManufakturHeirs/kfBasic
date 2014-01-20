@@ -273,11 +273,12 @@ EOD;
     {
         try {
             $update = array();
-            foreach ($data as $key => $value)
+            foreach ($data as $key => $value) {
                 if (($key == 'id') || ($key == 'timestamp') || ($key == 'last_login')) {
                     continue;
                 }
                 $update[$key] = (is_string($value)) ? $this->app['utils']->sanitizeText($value) : $value;
+            }
             $this->app['db']->update(self::$table_name, $update, array('id' => $id));
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e->getMessage(), 0, $e);
