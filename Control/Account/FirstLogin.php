@@ -42,7 +42,8 @@ class FirstLogin extends Alert
             'data' => self::$user['username']
         ))
         ->add('password', 'password', array(
-            'label' => 'Password'
+            'label' => 'Password',
+            'attr' => array('autofocus' => 'autofocus')
         ))
         ->add('email', 'hidden', array(
             'data' => self::$user['email']
