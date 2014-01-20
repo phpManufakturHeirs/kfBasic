@@ -399,12 +399,23 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     ),
     'security.role_entry_points' => array(
         'ROLE_ADMIN' => array(
-            'route' => '/admin/welcome',
-            'name' => 'Extensions',
-            'info' => '',
-            'icon' => array(
-                'path' => FRAMEWORK_PATH.'/framework.jpg',
-                'url' => FRAMEWORK_URL.'/framework.jpg'
+            array(
+                'route' => '/admin/welcome',
+                'name' => 'Extensions',
+                'info' => 'Install, update or remove kitFramework Extensions',
+                'icon' => array(
+                    'path' => '/framework.jpg',
+                    'url' => FRAMEWORK_URL.'/framework.jpg'
+                )
+            ),
+            array(
+                'route' => '/admin/accounts',
+                'name' => 'Accounts',
+                'info' => 'Access to kitFramework User Accounts',
+                'icon' => array(
+                    'path' => '/extension/phpmanufaktur/phpManufaktur/Basic/Template/default/framework/image/user-accounts.jpg',
+                    'url' => MANUFAKTUR_URL.'/Basic/Template/default/framework/image/user-accounts.jpg'
+                )
             )
         )
     ),
@@ -506,9 +517,6 @@ $admin->get('/basic/uninstall',
     'phpManufaktur\Basic\Data\Setup\Uninstall::exec');
 
 
-$app->get('/admin',
-    // redirect to the role entry points
-    'phpManufaktur\Basic\Control\Account\RoleEntryPoints::ControllerRoleEntryPoints');
 $admin->get('/',
     // redirect to the role entry points
     'phpManufaktur\Basic\Control\Account\RoleEntryPoints::ControllerRoleEntryPoints');
@@ -522,12 +530,15 @@ $admin->get('/scan/catalog',
     // scan for available extensions from Github
     'phpManufaktur\Basic\Control\ScanCatalog::exec');
 
-$admin->get('updater/install/{catalog_id}',
+$admin->get('/updater/install/{catalog_id}',
     // install a extension
     'phpManufaktur\Updater\Updater::controllerInstallExtension');
-$admin->get('updater/update/{extension_id}',
+$admin->get('/updater/update/{extension_id}',
     // update a extension
     'phpManufaktur\Updater\Updater::controllerUpdateExtension');
+
+$admin->get('/accounts',
+    'phpManufaktur\Basic\Control\Account\Dialog\AccountAdmin::ControllerAccountList');
 
 // USER routes
 $user->get('/account',

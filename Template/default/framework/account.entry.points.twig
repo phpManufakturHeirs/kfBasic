@@ -23,21 +23,70 @@
     
     {{ alert }}
     
-    <div class="row">
-      {% for entry in entry_points %}
-        <div class="col-sm-4 col-md-2">
-          <div class="thumbnail">
-            <a href="{{ FRAMEWORK_URL ~ entry.route ~ '?usage=' ~ usage }}"><img class="img-rounded img-responsive" src="{{ entry.icon.url }}" alt="{{ entry.name }}" /></a>
-            <div class="caption">
-              <p><strong>{{ entry.name }}</strong></p>
-              {% if entry.info|length > 0 %}
-                <p>{{ entry.info|trans }}</p>
-              {% endif %}
-              <p><a href="{{ FRAMEWORK_URL ~ entry.route ~ '?usage=' ~ usage }}" class="btn btn-primary" role="button">{{ 'Execute'|trans }}</a></p>
+    <div class="hidden-md hidden-sm hidden-xs">
+      {# DESKTOP VIEW #}
+      {% set counter = 1 %}
+      {% for roles in entry_points %}
+        {% for entry in roles %}
+          {% if counter == 1 %}
+            <div class="row">
+          {% endif %}    
+          <div class="col-lg-2">
+            {% include '@phpManufaktur/Basic/Template/default/framework/account.entry.points.item.twig' %}
+          </div>    
+          {% if counter == 6 %}
             </div>
-          </div>
-        </div>
+            {% set counter = 1 %}
+          {% else %}
+            {% set counter = counter + 1 %}
+          {% endif %}    
+        {% endfor %}
       {% endfor %}
+      {% if counter != 1 %}</div>{% endif %}
     </div>
-  </div>
+    
+    <div class="hidden-lg hidden-xs hidden-sm">
+      {# TABLET VIEW #}
+      {% set counter = 1 %}
+      {% for roles in entry_points %}
+        {% for entry in roles %}
+          {% if counter == 1 %}
+            <div class="row">
+          {% endif %}    
+          <div class="col-md-3">
+            {% include '@phpManufaktur/Basic/Template/default/framework/account.entry.points.item.twig' %}
+          </div>    
+          {% if counter == 4 %}
+            </div>
+            {% set counter = 1 %}
+          {% else %}
+            {% set counter = counter + 1 %}
+          {% endif %}    
+        {% endfor %}
+      {% endfor %}
+      {% if counter != 1 %}</div>{% endif %}
+    </div>
+    
+    <div class="hidden-lg hidden-md">
+      {# SMARTPHONE VIEW #}
+      {% set counter = 1 %}
+      {% for roles in entry_points %}
+        {% for entry in roles %}
+          {% if counter == 1 %}
+            <div class="row">
+          {% endif %}    
+          <div class="col-xs-6">
+            {% include '@phpManufaktur/Basic/Template/default/framework/account.entry.points.item.twig' %}
+          </div>    
+          {% if counter == 2 %}
+            </div>
+            {% set counter = 1 %}
+          {% else %}
+            {% set counter = counter + 1 %}
+          {% endif %}    
+        {% endfor %}
+      {% endfor %}
+      {% if counter != 1 %}</div>{% endif %}
+    </div>
+    
 {% endblock content %}

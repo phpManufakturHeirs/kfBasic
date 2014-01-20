@@ -125,10 +125,12 @@ class Account
         $entry_points = $this->app['security.role_entry_points'];
 
         $points = array();
-        foreach ($entry_points as $role => $point) {
+        foreach ($entry_points as $role => $entries) {
             // check to which entry points the user is allowed to access
             if ($this->isGranted($role)) {
-                $points[$role] = $point;
+                foreach ($entries as $entry) {
+                    $points[$role][] = $entry;
+                }
             }
         }
         ksort($points);

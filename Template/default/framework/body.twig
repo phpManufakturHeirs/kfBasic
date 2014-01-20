@@ -60,10 +60,21 @@
                 {% set entrypoints = getUserRolesEntryPoints() %}
                 {% if entrypoints|length > 1 %}
                   <li class="dropdown">
-                    <a href="#" class="dropdown-toggle manufaktur" data-toggle="dropdown"><span class="glyphicon glyphicon-road"></span> <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle manufaktur" data-toggle="dropdown" title="{{ 'Entry points'|trans }}"><span class="glyphicon glyphicon-road"></span> <b class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu">                    
-                      {% for point in entrypoints %}
-                        <li class="navbar-link"><a href="{{ FRAMEWORK_URL ~ point.route }}" title="{{ point.info }}">{{ point.name }}</a></li>
+                      {% for roles in entrypoints %}
+                        {% for point in roles %}
+                          {% set img = image(point.icon.path, 20, 20) %}
+                          <li class="navbar-link">
+                            <span class="pull-left">
+                              <img class="img-responsive" src="{{ img.src }}" alt="{{ point.name }}" height="20" />
+                            </span>&nbsp;&nbsp;
+                            <span>
+                              <a href="{{ FRAMEWORK_URL ~ point.route }}" title="{{ point.info|trans }}">{{ point.name }}</a>
+                            </span>
+                            <div class="height-5 clearfix"></div>
+                          </li>
+                        {% endfor %}
                       {% endfor %}
                     </ul>
                   </li>

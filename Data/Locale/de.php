@@ -17,6 +17,8 @@ if ('á' != "\xc3\xa1") {
 return array(
     'Access denied'
         => 'Zugriff verweigert',
+    'Access to kitFramework User Accounts'
+        => 'Zugriff auf die kitFramework Benutzerkonten',
     'Account'
         => 'Konto',
     'Add the extension <b>%name%</b> to the catalog.'
@@ -113,6 +115,8 @@ return array(
         => 'Der übermittelte CAPTCHA ist nicht korrekt.',
     'Install'
         => 'Installieren',
+    'Install, update or remove kitFramework Extensions'
+        => 'Installieren, aktualisieren oder entfernen Sie kitFramework Erweiterungen',
     'Installed extensions'
         => 'Installierte Erweiterungen',
     'Insufficient user role'

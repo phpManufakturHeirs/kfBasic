@@ -44,7 +44,7 @@ class RoleEntryPoints extends Alert
         elseif (count($entry_points) == 1) {
             // reset() returns the first entry of the array
             $point = reset($entry_points);
-            $subRequest = Request::create($point['route'], 'GET',
+            $subRequest = Request::create($point[0]['route'], 'GET',
                 array('usage' => $this->app['request']->get('usage', 'framework')));
             return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
         }

@@ -85,3 +85,10 @@ label.required:after {
 .navbar-brand {
   font-size: 14px;
 }
+
+.height-5 {
+  min-height: 5px;
+}
+.height-15 {
+  min-height: 15px;
+}
