@@ -351,7 +351,7 @@ class OutputFilter
         //preg_match_all('/(~~ ).*( ~~)/', $content, $matches, PREG_SET_ORDER);
         preg_match_all('/(~~)( |&nbsp;)(.){3,512}( |&nbsp;)(~~)/', $content, $matches, PREG_SET_ORDER);
         foreach ($matches as $match) {
-            if (PAGE_ID < 1) {
+            if (defined('PAGE_ID') && (PAGE_ID < 1)) {
                 // no regular page, probably the search function where we don't
                 // want to execute any kitCommand, so we remove it and continue
                 $content = str_replace($match[0], '', $content);
