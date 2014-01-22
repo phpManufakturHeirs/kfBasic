@@ -36,12 +36,13 @@ class RoleEntryPoints extends Alert
 
         // get all entry points for this user
         $entry_points = $app['account']->getUserRolesEntryPoints();
+        $count = count($entry_points, COUNT_RECURSIVE);
 
-        if (count($entry_points) < 1) {
+        if ($count < 1) {
             // the user is not allowed to access any entry point!
             $this->setAlert('Sorry, but you are not allowed to access any entry point!', array(), self::ALERT_TYPE_WARNING);
         }
-        elseif (count($entry_points) == 1) {
+        elseif ($count < 14) {
             // reset() returns the first entry of the array
             $point = reset($entry_points);
             $subRequest = Request::create($point[0]['route'], 'GET',
