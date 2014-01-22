@@ -6,11 +6,20 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.72** - 2014-01-22
+
+* moved all Account classes from /control to /control/account
+* add `getUserRolesEntryPoints()` to class `account`
+* added dropdown menu with all for the user available entry points to the admin and user backend
+* added handling for the entry points
+* implemented user account dialog
+* added admin account control and handling functions: view, create, edit, update and delete - send account information to user etc.
+
 **0.71** - 2014-01-16
 
 * changed handling for a missing parameter ID
 * prevent problems with usage of `http_build_query()` if SERVER has not set  `arg-separator.output`
-* 
+
 **0.70** - 2014-01-13
 
 * changed check for and loading of `HTMLPurifier`
