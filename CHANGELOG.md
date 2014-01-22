@@ -6,6 +6,11 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.73** - 2014-01-22 
+
+* fixed checking for entry points
+* added cleanup for Release 0.72
+
 **0.72** - 2014-01-22
 
 * moved all Account classes from /control to /control/account

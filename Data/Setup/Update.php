@@ -136,6 +136,23 @@ class Update
             $this->app['db']->query($SQL);
             $this->app['monolog']->addDebug('[BASIC Update] Add field `status` to table `basic_users`');
         }
+        $files = array(
+            '/Basic/Control/Account.php',
+            '/Basic/Control/forgottenPassword.php',
+            '/Basic/Control/Goodbye.php',
+            '/Basic/Control/Login.php',
+            '/Basic/Control/manufakturPasswordEncoder.php',
+            '/Basic/Control/UserProvider.php',
+            '/Basic/Template/default/framework/admins.only.twig',
+            '/Basic/Template/default/framework/body.message.twig'
+        );
+        foreach ($files as $file) {
+            // remove no longer needed directories and files
+            if ($this->app['filesystem']->exists(MANUFAKTUR_PATH.$file)) {
+                $this->app['filesystem']->remove(MANUFAKTUR_PATH.$file);
+                $this->app['monolog']->addInfo(sprintf('[Event Update] Removed file or directory %s', $file));
+            }
+        }
     }
 
     /**
