@@ -137,6 +137,17 @@ class Account
         return $points;
     }
 
+    public function getAvailableRoles()
+    {
+        $roles = call_user_func_array('array_merge', $this->app['security.role_hierarchy']);
+        if (!in_array('ROLE_ADMIN', $roles)) {
+            $roles[] = 'ROLE_ADMIN';
+        }
+        unset($roles[array_search('ROLE_ALLOWED_TO_SWITCH', $roles)]);
+        sort($roles);
+        return $roles;
+    }
+
     /**
      * Check if the given CMS user has administrator privileges at the CMS
      *
@@ -214,7 +225,7 @@ class Account
      * @param array|string $roles
      * @param string $displayname
      */
-    public function createAccount($username, $email, $password, $roles, $displayname='')
+    public function createAccount($username, $email, $password, $roles, $displayname='', &$id=-1)
     {
         $data = array(
             'username' => $username,
@@ -223,7 +234,7 @@ class Account
             'displayname' => ($displayname != '') ? $displayname : $username,
             'roles' => $roles
         );
-        $this->FrameworkUser->insertUser($data);
+        return $this->FrameworkUser->insertUser($data, $id);
     }
 
     /**

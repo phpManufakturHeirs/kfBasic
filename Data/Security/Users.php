@@ -113,6 +113,21 @@ EOD;
     }
 
     /**
+     * Delete the record with the given ID
+     *
+     * @param integer $id
+     * @throws \Exception
+     */
+    public function delete($id)
+    {
+        try {
+            $this->app['db']->delete(self::$table_name, array('id' => $id));
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
      * Select a User record from the given $name where $name can be the login name
      * or the email address of the user
      *
@@ -141,6 +156,28 @@ EOD;
     } // selectUser()
 
     /**
+     * Select a user record by the given ID
+     *
+     * @param integer $id
+     * @throws \Exception
+     * @return boolean|array FALSE if the record not exists
+     */
+    public function select($id)
+    {
+        try {
+            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `id`=$id";
+            $result = $this->app['db']->fetchAssoc($SQL);
+            $user = array();
+            foreach ($result as $key => $value) {
+                $user[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+            }
+            return (isset($user['id'])) ? $user : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e->getMessage(), 0, $e);
+        }
+    }
+
+    /**
      * Insert a new User into the table.
      * Create a GUID if none exists.
      *
@@ -148,7 +185,7 @@ EOD;
      * @param integer $user_id
      * @throws \Exception
      */
-    public function insertUser ($data, $user_id = -1)
+    public function insertUser ($data, &$user_id = -1)
     {
         try {
             if (! isset($data['username']) || ! isset($data['email']) || ! isset($data['password']) || ! isset($data['roles']))
@@ -166,6 +203,7 @@ EOD;
             // insert a new record
             $this->app['db']->insert(self::$table_name, $data);
             $user_id = $this->app['db']->lastInsertId();
+            return $user_id;
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e->getMessage(), 0, $e);
         }
@@ -362,6 +400,56 @@ EOD;
     {
         $passwordEncoder = new manufakturPasswordEncoder($this->app);
         return $passwordEncoder->encodePassword($raw, $salt);
+    }
+
+    /**
+     * Return the number of records of the user table
+     *
+     * @return integer
+     * @throws \Exception
+     */
+    public function count()
+    {
+        try {
+            $SQL = "SELECT COUNT(*) FROM `".self::$table_name."`";
+            return $this->app['db']->fetchColumn($SQL);
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    public function selectList($limit_from, $rows_per_page, $columns, $order_by=null, $order_direction='ASC')
+    {
+        try {
+            $SQL = "SELECT * FROM `".self::$table_name."`";
+            if (is_array($order_by) && !empty($order_by)) {
+                $SQL .= " ORDER BY ";
+                $start = true;
+                foreach ($order_by as $by) {
+                    if (!$start) {
+                        $SQL .= ", ";
+                    }
+                    else {
+                        $start = false;
+                    }
+                    $SQL .= "$by";
+                }
+                $SQL .= " $order_direction";
+            }
+            $SQL .= " LIMIT $limit_from, $rows_per_page";
+            $results = $this->app['db']->fetchAll($SQL);
+            $accounts = array();
+            foreach ($results as $result) {
+                $account = array();
+                foreach ($columns as $column) {
+                    $account[$column] = (is_string($result[$column])) ? $this->app['utils']->unsanitizeText($result[$column]) : $result[$column];
+                }
+                $accounts[] = $account;
+            }
+            return $accounts;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
     }
 
 }

@@ -56,7 +56,8 @@ class Account extends Alert
             'data' => isset($data['id']) ? $data['id'] : -1
         ))
         ->add('username', 'text', array(
-            'data' => isset($data['username']) ? $data['username'] : ''
+            'data' => isset($data['username']) ? $data['username'] : '',
+            'read_only' => !$this->app['account']->isGranted('ROLE_ADMIN')
         ))
         ->add('email', 'email', array(
             'data' => isset($data['email']) ? $data['email'] : ''
@@ -209,6 +210,11 @@ class Account extends Alert
         return $this->renderAccountForm($form);
     }
 
+    /**
+     * Check changes of the account and update the record if needed
+     *
+     * @param Application $app
+     */
     public function ControllerAccountEditCheck(Application $app)
     {
         $this->initialize($app);

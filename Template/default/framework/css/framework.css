@@ -69,6 +69,7 @@ label.required:after {
   background-color: transparent;
   font-weight: bold;
 }
+
 .pending_bootstrap {
   margin: 0 0 20px 0;
   padding:10px;

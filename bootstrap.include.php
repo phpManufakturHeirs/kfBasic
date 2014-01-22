@@ -383,6 +383,10 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
             'logout' => array(
                 'logout_path' => '/admin/logout',
                 'target_url' => '/goodbye'
+            ),
+            'switch_user' => array(
+                'parameter' => '_switch_user',
+                'role' => 'ROLE_ALLOWED_TO_SWITCH'
             )
         )
     ),
@@ -395,7 +399,10 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
         array('^/user', 'ROLE_USER')
     ),
     'security.role_hierarchy' => array(
-        'ROLE_ADMIN' => array('ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH')
+        'ROLE_ADMIN' => array(
+            'ROLE_USER',
+            'ROLE_ALLOWED_TO_SWITCH'
+        )
     ),
     'security.role_entry_points' => array(
         'ROLE_ADMIN' => array(
@@ -409,7 +416,7 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
                 )
             ),
             array(
-                'route' => '/admin/accounts',
+                'route' => '/admin/accounts/list',
                 'name' => 'Accounts',
                 'info' => 'Access to kitFramework User Accounts',
                 'icon' => array(
@@ -537,8 +544,22 @@ $admin->get('/updater/update/{extension_id}',
     // update a extension
     'phpManufaktur\Updater\Updater::controllerUpdateExtension');
 
-$admin->get('/accounts',
-    'phpManufaktur\Basic\Control\Account\Dialog\AccountAdmin::ControllerAccountList');
+$admin->get('/accounts/list/{page}',
+    'phpManufaktur\Basic\Control\Account\Dialog\AccountAdminList::ControllerAccountList')
+    ->value('page', 1);
+$admin->get('/accounts/edit/{id}',
+    'phpManufaktur\Basic\Control\Account\Dialog\AccountAdminEdit::ControllerAccountEdit')
+    ->value('id', -1);
+$admin->post('/accounts/edit/check',
+    'phpManufaktur\Basic\Control\Account\Dialog\AccountAdminEdit::ControllerAccountEditCheck');
+
+// Switch user to show the roles assigned to the user
+$app->get('/switched/user/roles/id/{id}',
+    'phpManufaktur\Basic\Control\Account\Dialog\SwitchedUserRoles::ControllerSwitchedUserRoles')
+    ->value('id', -1);
+$app->get('/switched/user/roles/id/{id}/exit',
+    'phpManufaktur\Basic\Control\Account\Dialog\SwitchedUserRoles::ControllerSwitchedUserRolesExit')
+    ->value('id', -1);
 
 // USER routes
 $user->get('/account',

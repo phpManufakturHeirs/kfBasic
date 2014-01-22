@@ -20,7 +20,9 @@ return array(
     'Access to kitFramework User Accounts'
         => 'Zugriff auf die kitFramework Benutzerkonten',
     'Account'
-        => 'Konto',
+        => 'Benutzerkonto',
+    'Accounts'
+        => 'Benutzerkonten',
     'Add the extension <b>%name%</b> to the catalog.'
         => 'Die Erweiterung <b>%name%</b> wurde dem Katalog hinzugefügt.',
     'Add the extension <b>%name%</b> to the register.'
@@ -34,8 +36,12 @@ return array(
 
     'Bad credentials'
         => 'Die Angaben sind unvollständig oder ungültig!',
-    'Be aware: Changing your email address and/or username may influence the data records of kitFramework extensions - please contact the webmaster in these cases.'
-        => 'Bitte beachten Sie: Eine Änderung Ihres Benutzernamen und/oder Ihrer E-Mail Adresse beeinflusst eventuell die mit Ihnen verbundenen Datensätze bei den verschiedenen kitFramework Anwendungen. Bitte informieren Sie in diesen Fällen den Webmaster.',
+    'Be aware: Changing the email address or username may influence kitFramework extensions which are using the account data to identify users.'
+        => 'Bitte beachen Sie: Änderungen der E-Mail Adresse oder des Benutzernamen können sich auf kitFramework Anwendungen auswirken, die Daten der Benutzerkonten zur Identifizierung der Nutzer verwenden.',
+    'Be aware: Changing your email address may influence kitFramework extensions which are using the account data to identify you - please contact the webmaster in these cases. The username can only be changed by the administrator.'
+        => 'Bitte beachten Sie: Eine Änderung Ihrer E-Mail Adresse beeinflusst eventuell die mit Ihnen verbundenen Datensätze bei den verschiedenen kitFramework Anwendungen. Bitte informieren Sie in diesen Fällen den Webmaster. Der Benutzername kann nur durch einen Administrator geändert werden.',
+    'Be aware: You are now authenticated as user <b>%username%</b>!'
+        => 'Vorsicht! Sie sind momentan als der Benutzer <b>%username%</b> angemeldet!',
     'beta'
         => 'Beta Version',
 
@@ -61,11 +67,15 @@ return array(
         => '- nur kommerzielle Verwendung -',
     'Could not move the unzipped files to the target directory.'
         => 'Konnte die entpackten Dateien nicht in das Zielverzeichnis verschieben!',
+    'Create a new account'
+        => 'Ein neues Benutzerkonto anlegen',
     'Create a new password' =>
         'Ein neues Password anlegen',
 
     'Data replication'
         => 'Datenableich',
+    'Delete this account irrevocable'
+        => 'Benutzerkonto unwiderruflich löschen',
     'Displayname'
         => 'Angezeigter Name',
     'Documentation'
@@ -137,6 +147,8 @@ return array(
     'kitFramework password reset'
         => 'kitFramework - Passwort zurücksetzen',
 
+    'Last_login'
+        => 'Letzte Anmeldung',
     'License'
         => 'Lizenz',
     'Line'
@@ -169,7 +181,7 @@ return array(
         => 'Passwort',
     'Password changed'
         => 'Passwort geändert',
-    'Password_repeat'
+    'Password repeat'
         => 'Passwort wiederholen',
     'Please check the username and password and try again!'
         => 'Bitte prüfen Sie den angegebenen Benutzernamen sowie das Passwort und versuchen Sie es erneut!',
@@ -186,6 +198,8 @@ return array(
     'published at'
         => 'veröffentlicht am',
 
+    'Real active user roles'
+        => 'Tatsächlich aktive Anwenderrechte',
     'Regards, Your kitFramework team'
         => 'Mit freundlichen Grüßen<br />Ihr kitFramework Team',
     'Repeat Password'
@@ -194,11 +208,21 @@ return array(
         => 'Fehler melden',
     'Reveal this e-mail address'
         => 'Anklicken um die vollständige E-Mail Adresse anzuzeigen',
+    'Role'
+        => 'Benutzerrecht, Rolle',
+    'Roles'
+        => 'Benutzerrechte, Rollen',
 
     'Scan for installed extensions'
         => 'Nach installierten Erweiterungen suchen',
     'Scan the online catalog for available extensions'
         => 'Den online Katalog nach verfügbaren Erweiterungen durchsuchen',
+    'Send account info to the user'
+        => 'Dem Benutzer eine Kontoinformation zusenden',
+    'Send a account information to the user %name%'
+        => 'Dem Benutzer %name% wurde eine Kontoinformation zugesendet.',
+    'Send email (only if the password has changed)'
+        => 'Zugangsdaten senden (nur wenn das Passwort geändert wurde)',
     'Show a list of all installed kitCommands'
         => 'Eine Liste mit den installierten kitCommands anzeigen',
     'Sorry, but only Administrators are allowed to access this kitFramework extension.'
@@ -209,6 +233,8 @@ return array(
         => 'Sie sind leider nicht berechtigt auf einen der kitFramework Zugangspunkte zuzugreifen.',
     'Submit'
         => 'Übermitteln',
+    'Successfull created a account for the user %name%.'
+        => 'Für den Benutzer %name% wurde ein Konto eingerichtet.',
     'Successfull installed the extension %extension%.'
         => 'Die Erweiterung %extension% wurde erfolgreich installiert.',
     'Successfull scanned the kitFramework for installed extensions.'
@@ -221,11 +247,23 @@ return array(
         => 'Die Erweiterung %extension% wurde erfolgreich aktualisiert.',
     'Support'
         => 'Unterstützung',
+    'Switch back to the administration of this user account'
+        => 'Zur Verwaltung dieses Benutzerkontos zurückkehren',
+    'Switch to this user to see the real active roles'
+        => 'Zu diesem Anwender umschalten um die aktiven Rechte zu sehen',
 
     'Thank you for using the kitFramework'
         => 'Vielen Dank für den Einsatz des kitFramework',
+    'The account for the user %name% was successfull deleted.'
+        => 'Das Benutzerkonto für %name% wurde gelöscht.',
     'The account was not changed.'
         => 'Das Benutzerkonto wurde nicht verändert.',
+    'The account was succesfull updated.'
+        => 'Das Benutzerkontor wurde aktualisiert',
+    'The account with the ID %id% does not exists!'
+        => 'Das Benutzerkonto mit der ID %id% existiert nicht!',
+    'The account with the username or email address %name% does not exists!'
+        => 'Es existiert kein Benutzerkonto für den Benutzername oder die E-Mail Adresse %name%!',
     'The both passwords you have typed in does not match, please try again!'
         => 'Die beiden Passwörter die Sie eingegeben haben stimmen nicht überein, bitte versuchen Sie es noch einmal!',
     'The email address %email% is already used by another account!'
@@ -234,6 +272,8 @@ return array(
         => 'Die Erweiterung mit der ID %extension_id% existiert nicht!',
     'The file %file% does not exists in Gist %gist_id%!'
         => 'Die Datei %file% existiert nicht im Gist %gist_id%',
+    'The form seems to be compromitted, can not check the data!'
+        => 'Das Formular scheint kompromitiert worden zu sein, kann die Daten nicht ändern!',
     'The extension.json of <b>%name%</b> does not contain all definitions, check GUID, Group and Release!'
         => 'Die Beschreibungsdatei extension.json für die Erweiterung <b>%name%</b> enthält nicht alle Definitionen, prüfen Sie <i>GUID</i>, <i>Group</i> und <i>Release</i>!',
     'The parameter <code>%parameter%[%value%]</code> for the kitCommand <code>~~ %command% ~~</code> is unknown, please check the parameter and the given value!'
@@ -262,8 +302,14 @@ return array(
         => 'Für das kitCommand <b>%command%</b> ist keine Hilfe verfügbar.',
     "This link enable you to change your password once within 24 hours."
         => "Dieser Link ermöglicht es Ihnen, ihr Passwort einmal innerhalb von 24 Stunden zu ändern.",
+    'The ROLE_USER is needed if you want enable the user to access and change his own account. The ROLE_ADMIN is the highest available role and grant access to really everything.'
+        => 'Das Recht ROLE_USER ist erforderlich um einem Benutzer Zugriff auf sein Konto zu ermöglichen. Das Recht ROLE_ADMIN ist das höchste verfügbare Recht und garantiert einen uneingeschränkten Zugriff auf alle Funktionen des kitFramework.',
     'The username %username% is already in use, please select another one!'
         => 'Der Benutzername %username% wird bereits verwendet, bitte wählen Sie einen anderen Benutzernamen.',
+    'There are no roles assigned to this user.'
+        => 'Diesem Benutzer sind keine Rechte zugewiesen',
+    'This user are assigned %count% roles.'
+        => 'Diesem Benutzer sind insgesamt <b>%count%</b> Rechte zugewiesen.',
     'This value is not a valid email address.'
         => 'Es wurde keine gültige E-Mail Adresse übergeben!',
 
@@ -277,10 +323,13 @@ return array(
         => 'Die Registrierdaten für die Erweiterung <b>%name%</b> wurden aktualisiert.',
     'Use <code>~~ help ~~</code> to view the general help file for the kitCommands.'
         => 'Verwenden Sie <code>~~ help ~~</code> um sich die allgemeine Hilfe zu den kitCommands anzeigen zu lassen.',
+    'User roles may depend from others and can be set or extended dynamically by the kitFramework extensions. To see the roles really associated to this account if the user is authenticated use the "switch to" button.'
+        => 'Benutzerrechte können von einander abhängig sein und dynamisch durch kitFramework Anwendungen erweitert werden. Um die Benutzerrechte zu sehen, die tatsächlich einem angemeldeten Anwender zugewiesen sind nutzen Sie bitte die Funktion "Zum Anwender umschalten".',
     'Username'
         => 'Benutzername',
     'Username or email address'
         => 'Benutzername oder <nobr>E-Mail</nobr> Adresse',
+
 
     'Vendor'
         => 'Anbieter',
