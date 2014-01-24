@@ -6,6 +6,13 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.74** - 2014-01-24
+
+* fixed counting of role entry points
+* added missing check if `PAGE_ID` is defined in parent CMS
+* changed handling to get the TOPICS directory - no longer try to include the `module_settings.php`
+* changed paths for Bootstrap and Font-Awesome from fixed version to 'latest'
+
 **0.73** - 2014-01-22 
 
 * fixed checking for entry points
