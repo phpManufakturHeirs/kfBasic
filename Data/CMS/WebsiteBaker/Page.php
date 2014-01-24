@@ -71,12 +71,21 @@ class Page
     public function getTopicsDirectory()
     {
         if ($this->app['filesystem']->exists(CMS_PATH . '/modules/topics/module_settings.php')) {
-            ob_start();
-                require_once(CMS_PATH.'/config.php');
-                global $topics_directory;
-                include_once CMS_PATH . '/modules/topics/module_settings.php';
-            ob_end_clean();
-            return $topics_directory;
+            if (!$this->app['filesystem']->exists(FRAMEWORK_PATH.'/config/cms/module/topics.json')) {
+                $config = array(
+                    'topics' => array(
+                        'directory' => '/topics/'
+                    )
+                );
+                $this->app['filesystem']->mkdir(FRAMEWORK_PATH.'/config/cms/module');
+                if (!file_put_contents(FRAMEWORK_PATH.'/config/cms/module/topics.json', $this->app['utils']->JSONFormat($config))) {
+                    // can't create the config file
+                    $error = error_get_last();
+                    throw new \Exception($error);
+                }
+            }
+            $topics = $this->app['utils']->readJSON(FRAMEWORK_PATH.'/config/cms/module/topics.json');
+            return $this->getPageDirectory().$topics['topics']['directory'];
         }
         return false;
     }
