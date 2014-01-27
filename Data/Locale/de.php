@@ -73,7 +73,7 @@ return array(
         'Ein neues Password anlegen',
 
     'Data replication'
-        => 'Datenableich',
+        => 'Datenabgleich',
     'Delete this account irrevocable'
         => 'Benutzerkonto unwiderruflich löschen',
     'Displayname'
