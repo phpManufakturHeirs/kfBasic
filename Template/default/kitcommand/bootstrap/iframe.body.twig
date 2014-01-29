@@ -15,15 +15,15 @@
       {% if (basic.frame is defined and basic.frame.redirect.active) %}
         {# catch the iframe content into the CMS if the URL is executed from outside (direct access) #}
         <script type="text/javascript">
-          if (top.location === self.location) { 
+          if (top.location === self.location) {
             document.location.replace("{{ basic.cms.page_url }}{% if basic.frame.redirect.route|length > 0 %}?redirect={{ basic.frame.redirect.route }}{% endif %}");
           }
         </script>
       {% endif %}
-      {% if not basic.page.cache %}  
+      {% if not basic.page.cache %}
         <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
         <meta http-equiv="Pragma" content="no-cache" />
-        <meta http-equiv="Expires" content="0" />  
+        <meta http-equiv="Expires" content="0" />
       {% endif %}
       <title>{% block title %}{% endblock %}</title>
       <meta http-equiv="Content-Type" content="{% block content_type %}text/html; charset=UTF-8{% endblock content_type %}"/>
@@ -35,15 +35,15 @@
       <meta name="generator" content="kitFramework (https://kit2.phpmanufaktur.de)" />
       {% block stylesheet %}
         {# Bootstrap #}
-        <link rel="stylesheet" type="text/css" href="{{ LIBRARY_URL }}/bootstrap/latest/css/bootstrap.min.css" />
-        <link  rel="stylesheet" type="text/css"href="{{ LIBRARY_URL }}/font-awesome/latest/css/font-awesome.min.css" />
+        <link rel="stylesheet" type="text/css" href="{{ LIBRARY_URL }}/bootstrap/3.0.3/css/bootstrap.min.css" />
+        <link  rel="stylesheet" type="text/css"href="{{ LIBRARY_URL }}/font-awesome/4.0.3/css/font-awesome.min.css" />
         <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Basic/Template/default/kitcommand/bootstrap/css/kitcommand.min.css" media="screen, projection" />
       {% endblock stylesheet %}
       {% block jquery %}
-        {# 
-          jQuery will be loaded at the footer in block footer_jquery! 
+        {#
+          jQuery will be loaded at the footer in block footer_jquery!
           HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries
-          WARNING: Respond.js doesn't work if you view the page via file:// 
+          WARNING: Respond.js doesn't work if you view the page via file://
         #}
         <!--[if lt IE 9]>
           <script type="text/javascript" src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -56,13 +56,13 @@
   <body>
     {# place the .container around the content block #}
     <div class="container">
-      {% block content %}        
+      {% block content %}
         {{ basic.alert }}
       {% endblock content %}
-    </div>    
+    </div>
     {% block footer_jquery %}
       <script type="text/javascript" src="{{ LIBRARY_URL }}/jquery/jquery/1.10.2/jquery.min.js"></script>
-      <script type="text/javascript" src="{{ LIBRARY_URL }}/bootstrap/latest/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="{{ LIBRARY_URL }}/bootstrap/3.0.3/js/bootstrap.min.js"></script>
     {% endblock footer_jquery %}
     {% block footer %}
       {% if basic.frame is defined and basic.frame.auto %}
@@ -71,7 +71,7 @@
             $(document).ready(function() {
               {# setting the iFrame height dynamically by the height of the inbounded document #}
               var frame_id = window.frameElement.getAttribute('id');
-              var content_height = $('.container').height() + {{ basic.frame.add|default(20) }} + {{ iframe_add_height|default(0) }} + "px";              
+              var content_height = $('.container').height() + {{ basic.frame.add|default(20) }} + {{ iframe_add_height|default(0) }} + "px";
               parent.document.getElementById(frame_id).style.height = content_height;
               {% if basic.frame.scroll_to_id|length > 0 %}
                 {# execute scrollIntoView() only if the ID exists! #}
@@ -86,7 +86,7 @@
               if ($('.container').hasClass('alert')) {
                 {# enable the bootstrap close button for alerts #}
                 $('.alert').alert();
-              }  
+              }
             });
           }
         </script>

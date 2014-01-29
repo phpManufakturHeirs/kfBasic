@@ -18,8 +18,8 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use phpManufaktur\Basic\Control\JSON\JSONFormat;
 
 // EXTENSION_PATH is not initialized yet use the full path!
-if (file_exists(BOOTSTRAP_PATH.'/extension/phpmanufaktur/phpManufaktur/Library/Extension/htmlpurifier/latest/library/HTMLPurifier.auto.php')) {
-    require_once BOOTSTRAP_PATH.'/extension/phpmanufaktur/phpManufaktur/Library/Extension/htmlpurifier/latest/library/HTMLPurifier.auto.php';
+if (file_exists(BOOTSTRAP_PATH.'/extension/phpmanufaktur/phpManufaktur/Library/Extension/htmlpurifier/4.6.0/library/HTMLPurifier.auto.php')) {
+    require_once BOOTSTRAP_PATH.'/extension/phpmanufaktur/phpManufaktur/Library/Extension/htmlpurifier/4.6.0/library/HTMLPurifier.auto.php';
 }
 
 /**
