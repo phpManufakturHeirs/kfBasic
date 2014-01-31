@@ -150,8 +150,22 @@ class Update
             // remove no longer needed directories and files
             if ($this->app['filesystem']->exists(MANUFAKTUR_PATH.$file)) {
                 $this->app['filesystem']->remove(MANUFAKTUR_PATH.$file);
-                $this->app['monolog']->addInfo(sprintf('[Event Update] Removed file or directory %s', $file));
+                $this->app['monolog']->addInfo(sprintf('[BASIC Update] Removed file or directory %s', $file));
             }
+        }
+    }
+
+    /**
+     * Release 0.76
+     */
+    protected function release_076()
+    {
+        if (!$this->app['filesystem']->exists(CMS_PATH.'/modules/kit_framework/framework_info.php')) {
+            $this->app['filesystem']->copy(
+                MANUFAKTUR_PATH.'/Basic/Data/Setup/Files/Release_0.76/framework_info.php',
+                CMS_PATH.'/modules/kit_framework/framework_info.php');
+            $this->app['monolog']->addDebug(sprintf('[BASIC Update] Copy file %s to %s',
+                'framework_info.php', CMS_PATH.'/modules/kit_framework/'));
         }
     }
 
@@ -170,6 +184,7 @@ class Update
         $this->release_063();
         $this->release_069();
         $this->release_072();
+        $this->release_076();
 
         // install the search function
         $Search = new InstallSearch($app);

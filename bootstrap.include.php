@@ -581,6 +581,8 @@ $app->post('/kit_filter/{filter}',
     'phpManufaktur\Basic\Control\kitFilter\kitFilter::exec');
 $app->post('/kit_filter/{filter}/{params}',
     'phpManufaktur\Basic\Control\kitFilter\kitFilter::exec');
+$app->post('kit_filter/exists/{filter}',
+    'phpManufaktur\Basic\Control\kitFilter\ExistsFilter::ControllerExistsFilter');
 
 $filter->post('/mailhide',
     'phpManufaktur\Basic\Control\kitFilter\MailHide::exec')
@@ -591,6 +593,8 @@ $app->post('/kit_command/{command}',
     'phpManufaktur\Basic\Control\kitCommand\kitCommand::exec');
 $app->post('/kit_command/{command}/{params}',
     'phpManufaktur\Basic\Control\kitCommand\kitCommand::exec');
+$app->post('/command/exists/{command}',
+    'phpManufaktur\Basic\Control\kitCommand\ExistsCommand::ControllerExistsCommand');
 $command->post('/help',
     'phpManufaktur\Basic\Control\kitCommand\Help::createHelpFrame')
     ->setOption('info', MANUFAKTUR_PATH.'/Basic/command.help.json');
