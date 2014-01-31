@@ -523,7 +523,8 @@ $admin->get('/basic/uninstall',
     // uninstall the BASIC extension tables (be carefull!)
     'phpManufaktur\Basic\Data\Setup\Uninstall::exec');
 
-
+$app->get('/admin',
+    'phpManufaktur\Basic\Control\Account\RoleEntryPoints::ControllerRoleEntryPoints');
 $admin->get('/',
     // redirect to the role entry points
     'phpManufaktur\Basic\Control\Account\RoleEntryPoints::ControllerRoleEntryPoints');
