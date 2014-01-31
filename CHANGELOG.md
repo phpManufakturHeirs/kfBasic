@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.76** - 2014-01-31
+
+* added functions for use in the CMS: `kitFramework_isInstalled()`, `kitFramework_isCommandAvailable()`, `kitFramework_isFilterAvailable()`
+
 **0.75** - 2014-01-29
 
 * switch back to usage of exact version to load libraries instead of using 'latest' - causes to many problems
