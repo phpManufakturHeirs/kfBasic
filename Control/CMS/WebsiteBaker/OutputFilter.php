@@ -463,7 +463,7 @@ class OutputFilter
                 curl_setopt_array($ch, $options);
 
                 if (false === ($response = curl_exec($ch))) {
-                    trigger_error(curl_error($ch));
+                    trigger_error(curl_error($ch), E_USER_ERROR);
                 }
                 curl_close($ch);
                 if ($kit_filter && !key_exists('help', $params)) {
