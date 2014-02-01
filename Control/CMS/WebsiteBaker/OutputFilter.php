@@ -304,6 +304,51 @@ class OutputFilter
     }
 
     /**
+     * Update or create meta tags
+     *
+     * @param string $meta_name the name of the meta tag
+     * @param string $meta_content the content (value) of the meta tag
+     * @param string reference $content
+     * @return boolean
+     */
+    protected function setMetaTag($meta_name, $meta_content, &$content)
+    {
+        $DOM = new \DOMDocument;
+
+        // enable internal error handling
+        libxml_use_internal_errors(true);
+        if (!$DOM->loadHTML($content)) {
+            // on error still return false
+            return false;
+        }
+        libxml_clear_errors();
+
+        $changed = false;
+
+        $metas = $DOM->getElementsByTagName('meta');
+        foreach ($metas as $meta) {
+            if (strtolower($meta->getAttribute('name')) == $meta_name) {
+                // update the existing meta tag
+                $meta->setAttribute('content', $meta_content);
+                $changed = true;
+                break;
+            }
+        }
+
+        if (!$changed) {
+            // create a new meta tag
+            $meta = $DOM->createElement('meta');
+            $meta->setAttribute('name', $meta_name);
+            $meta->setAttribute('content', $meta_content);
+            $head = $DOM->getElementsByTagName('head')->item(0);
+            $head->appendChild($meta);
+        }
+
+        $content = $DOM->saveHTML();
+        return true;
+    }
+
+    /**
      * Execute the content filter for the kitFramework.
      * Extract CMS parameters like type, version, path, url, id of the calling
      * page and other, additional routes all parameters of a kitCommand and all
@@ -338,17 +383,21 @@ class OutputFilter
         }
 
         $use_alternate_parameter = false;
-        $config_path = realpath(__DIR__.'/../../../../../../config/cms.json');
+        $add_meta_generator = true;
+        $config_path = WB_PATH.'/kit2/config/cms.json';
+
         if (file_exists($config_path)) {
             $config = json_decode(file_get_contents($config_path), true);
             if (isset($config['OUTPUT_FILTER']['METHOD']) && ($config['OUTPUT_FILTER']['METHOD'] == 'ALTERNATE')) {
                 $use_alternate_parameter = true;
             }
+            if (isset($config['OUTPUT_FILTER']['GENERATOR'])) {
+                $add_meta_generator = $config['OUTPUT_FILTER']['GENERATOR'];
+            }
         }
 
         $kit_command = array();
         $load_css = array();
-        //preg_match_all('/(~~ ).*( ~~)/', $content, $matches, PREG_SET_ORDER);
         preg_match_all('/(~~)( |&nbsp;)(.){3,512}( |&nbsp;)(~~)/', $content, $matches, PREG_SET_ORDER);
         foreach ($matches as $match) {
             if (defined('PAGE_ID') && (PAGE_ID < 1)) {
@@ -411,6 +460,17 @@ class OutputFilter
                 $response = str_replace($simulate_expression, '', $command_expression);
                 $content = str_replace($command_expression, $response, $content);
                 continue;
+            }
+
+            if (isset($params['robots'])) {
+                // create or update the robots meta tag
+                $this->setMetaTag('robots', $params['robots'], $content);
+            }
+
+            if ($add_meta_generator && (!isset($params['generator']) || (isset($params['generator']) &&
+                (($params['generator'] == 1) || (strtolower($params['generator']) == 'true'))))) {
+                // create the generator meta tag
+                $this->setMetaTag('generator', 'kitFramework (https://kit2.phpmanufaktur.de)', $content);
             }
 
             if ($parseCMS) {
