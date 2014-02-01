@@ -403,6 +403,16 @@ class OutputFilter
                     }
                 }
             }
+
+            if (isset($params['simulate'])) {
+                // this is a simulated kitCommand - remove "simulate[]" from the command expression and do nothing else
+                $simulate_expression = substr($command_expression, stripos($command_expression, 'simulate['));
+                $simulate_expression = substr($simulate_expression, 0, strpos($simulate_expression, ']')+2);
+                $response = str_replace($simulate_expression, '', $command_expression);
+                $content = str_replace($command_expression, $response, $content);
+                continue;
+            }
+
             if ($parseCMS) {
                 // parse() is executed for the CMS content!
                 if (!$css_loaded) {
@@ -451,11 +461,12 @@ class OutputFilter
                     CURLOPT_POST => true,
                     CURLOPT_HEADER => false,
                     CURLOPT_URL => $command_url,
-                    CURLOPT_FRESH_CONNECT => true,
+                    //CURLOPT_FRESH_CONNECT => true,
                     CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_FORBID_REUSE => true,
+                    //CURLOPT_FORBID_REUSE => true,
                     CURLOPT_TIMEOUT => 30,
-                    CURLOPT_POSTFIELDS => http_build_query(array('cms_parameter' => base64_encode(json_encode($cmd_array)))),
+                    //CURLOPT_POSTFIELDS => http_build_query(array('cms_parameter' => base64_encode(json_encode($cmd_array)))),
+                    CURLOPT_POSTFIELDS => http_build_query(array('cms_parameter' => $cmd_array)),
                     CURLOPT_SSL_VERIFYHOST => false,
                     CURLOPT_SSL_VERIFYPEER => false
                 );
