@@ -82,7 +82,7 @@ class kitFrameworkInfo
 
     public function isFilterAvailable($filter)
     {
-        $result = $this->Query(WB_URL.'/kit2/kit_filter/exists/'.$filter);
+        $result = $this->Query(WB_URL.'/kit2/filter/exists/'.$filter);
         return (isset($result['filter_exists'])) ? $result['filter_exists'] : false;
     }
 
