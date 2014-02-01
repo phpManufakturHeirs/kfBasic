@@ -238,6 +238,11 @@ class Updater
             'message' => $this->getMessage(),
             'execute_route' => $execute_route
         ));
+
+        // at this point we clear the Twig Cache to avoid problems
+        $app['twig']->clearCacheFiles();
+        $app['monolog']->addDebug('Finish the installation and update process: clear the Twig Cache Files');
+
         // use redirect to enable a application reload and autoload of the new extensions
         return $app->redirect(FRAMEWORK_URL.'/admin/welcome?usage='.self::$usage);
     }
