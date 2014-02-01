@@ -37,6 +37,7 @@ class kitCommand
                 (strtolower($cms_parameter['parameter']['cache']) == 'false'))) {
                 // clear the Twig cache
                 $app['twig']->clearCacheFiles();
+                $app['monolog']->addDebug('Clear Twig Cache Files!');
             }
             if (isset($cms_parameter['parameter']['help'])) {
                 // get the help function for this kitCommand
