@@ -582,7 +582,7 @@ $app->post('/kit_filter/{filter}',
     'phpManufaktur\Basic\Control\kitFilter\kitFilter::exec');
 $app->post('/kit_filter/{filter}/{params}',
     'phpManufaktur\Basic\Control\kitFilter\kitFilter::exec');
-$app->post('kit_filter/exists/{filter}',
+$app->post('/filter/exists/{filter}',
     'phpManufaktur\Basic\Control\kitFilter\ExistsFilter::ControllerExistsFilter');
 
 $filter->post('/mailhide',
