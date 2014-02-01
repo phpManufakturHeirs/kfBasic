@@ -234,6 +234,9 @@ class Basic extends Alert
 
         $cmdParameter = new kitCommandParameter($this->app);
 
+        // cleanup the command parameter table!
+        $cmdParameter->cleanup();
+
         if (false === ($para = $cmdParameter->selectParameter($link))) {
             // create a new parameter record
             $data = array(
