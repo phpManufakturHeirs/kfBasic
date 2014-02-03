@@ -460,16 +460,19 @@ class OutputFilter
                 $simulate_expression = substr($command_expression, stripos($command_expression, 'simulate['));
                 $simulate_expression = substr($simulate_expression, 0, strpos($simulate_expression, ']')+2);
                 $response = str_replace($simulate_expression, '', $command_expression);
+                $response = sprintf('<var class="kitcommand-expression" title="Don\'t copy this expression - '.
+                    'it contains HTML tags to prevent it from execution!"><span class="disrupt">~</span>%s</var>',
+                    substr($response, 1));
                 $content = str_replace($command_expression, $response, $content);
                 continue;
             }
 
-            if (isset($params['robots'])) {
+            if (isset($params['robots']) && $parseCMS) {
                 // create or update the robots meta tag
                 $this->setMetaTag('robots', $params['robots'], $content);
             }
 
-            if ($add_meta_generator && (!isset($params['generator']) || (isset($params['generator']) &&
+            if ($add_meta_generator && $parseCMS && (!isset($params['generator']) || (isset($params['generator']) &&
                 (($params['generator'] == 1) || (strtolower($params['generator']) == 'true'))))) {
                 // create the generator meta tag
                 $this->setMetaTag('generator', 'kitFramework (https://kit2.phpmanufaktur.de)', $content);
@@ -528,7 +531,7 @@ class OutputFilter
                     //CURLOPT_FORBID_REUSE => true,
                     CURLOPT_TIMEOUT => 30,
                     //CURLOPT_POSTFIELDS => http_build_query(array('cms_parameter' => base64_encode(json_encode($cmd_array)))),
-                    CURLOPT_POSTFIELDS => http_build_query(array('cms_parameter' => $cmd_array)),
+                    CURLOPT_POSTFIELDS => http_build_query(array('cms_parameter' => $cmd_array), '', '&'),
                     CURLOPT_SSL_VERIFYHOST => false,
                     CURLOPT_SSL_VERIFYPEER => false
                 );
