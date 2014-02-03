@@ -6,6 +6,17 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.77** - 2014-02-03
+
+* added missing route for `/admin` (without ending slash)
+* add the general kitCommand parameter `simulate[]` to avoid the execution of the kitCommand and to show the command expression, without the parameter `simulate[]`
+* fixed a routing typo for `isFilterAvailable()`
+* now every extension update clear the Twig Cache Files at finishing the installation/update of extensions
+* automatically remove kitCommand Parameter entries (PID) which are older than 48 hours
+* add debug info if the Twig Cache is cleared by a kitCommand with parameter `cache[0]`
+* added `setMetaTag()` to the OutputFilter to process meta tags i.e. for robots or generator
+* The library is moved to the separate kfLibrary - removed the old files from the BASIC extension
+
 **0.76** - 2014-01-31
 
 * added functions for use in the CMS: `kitFramework_isInstalled()`, `kitFramework_isCommandAvailable()`, `kitFramework_isFilterAvailable()`
