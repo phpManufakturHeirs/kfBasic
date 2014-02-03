@@ -232,9 +232,10 @@ class OutputFilter
         // reverse the array to get the correct loading order ...
         $files = array_reverse($files);
 
-        $library_url = WB_URL.'/kit2/extension/phpmanufaktur/phpManufaktur/Basic/Library/';
+        $library_url = WB_URL.'/kit2/extension/phpmanufaktur/phpManufaktur/Library/Library/';
+
         foreach ($files as $file) {
-            if (file_exists(WB_PATH.'/kit2/extension/phpmanufaktur/phpManufaktur/Basic/Library/'.$file)) {
+            if (file_exists(WB_PATH.'/kit2/extension/phpmanufaktur/phpManufaktur/Library/Library/'.$file)) {
                 $extension = pathinfo($file, PATHINFO_EXTENSION);
                 if ($extension == 'js') {
                     if (false !== (stripos($content, '<!-- kitFramework:JS -->'))) {
@@ -384,7 +385,8 @@ class OutputFilter
 
         $use_alternate_parameter = false;
         $add_meta_generator = true;
-        $config_path = WB_PATH.'/kit2/config/cms.json';
+
+        $config_path = realpath(__DIR__.'/../../../../../../../../kit2/config/cms.json');
 
         if (file_exists($config_path)) {
             $config = json_decode(file_get_contents($config_path), true);
