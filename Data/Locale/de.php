@@ -169,6 +169,8 @@ return array(
     'New kitFramework release available!'
         => 'Es ist eine neue kitFramework Release verfügbar!',
 
+    'NO'
+        => 'Nein',
     'No fitting user role dectected!'
         => 'Es wurde kein passendes Benutzerrecht gefunden',
 
@@ -268,6 +270,8 @@ return array(
         => 'Die beiden Passwörter die Sie eingegeben haben stimmen nicht überein, bitte versuchen Sie es noch einmal!',
     'The email address %email% is already used by another account!'
         => 'Die E-Mail Adresse %email% wird bereits von einem anderen Benutzerkonto verwendet!',
+    'The email address %email% is invalid!'
+        => 'Die E-Mail Adresse %email% ist ungültig, bitte prüfen Sie Ihre Eingabe!',
     'The extension with the ID %extension_id% does not exists!'
         => 'Die Erweiterung mit der ID %extension_id% existiert nicht!',
     'The file %file% does not exists in Gist %gist_id%!'
@@ -347,6 +351,8 @@ return array(
     'Welcome back, %user%! Please select the entry point you want to use.'
         => 'Herzlich willkommen, %user%! Bitte wählen Sie den gewünschten Zugangspunkt.',
 
+    'YES'
+        => 'Ja',
     'You are not allowed to access this resource!'
         => 'Sie sind nicht befugt auf diese Resource zuzugreifen.',
     'Your account was succesfull updated.'
