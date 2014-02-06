@@ -305,6 +305,65 @@ class OutputFilter
     }
 
     /**
+     * Set a canonical link in header of the current page
+     *
+     * @param string $command kitCommand which need the link
+     * @param integer $id identifier to submit to the kitCommand
+     * @param string reference $content
+     * @return boolean
+     */
+    protected function setCanonicalLink($command, $id, &$content)
+    {
+        if (filter_var($id, FILTER_VALIDATE_INT) && (false !== ($header_json = @file_get_contents(WB_URL.'/kit2/command/'.$command.'/canonical/id/'.$id)))) {
+            // $id is an integer so we let the kitCommand create the link
+            $header = json_decode($header_json, true);
+            $canonical_url = $header['canonical_url'];
+        }
+        elseif (filter_var($id, FILTER_VALIDATE_URL)) {
+            // the $id is a URL, so we use this
+            $canonical_url = (!parse_url($id, PHP_URL_SCHEME)) ? 'http://'.$id : $id;
+        }
+        else {
+            // no valid $id ...
+            return false;
+        }
+
+        $DOM = new \DOMDocument;
+
+        // enable internal error handling
+        libxml_use_internal_errors(true);
+        if (!$DOM->loadHTML($content)) {
+            // on error still return false
+            return false;
+        }
+        libxml_clear_errors();
+
+        $changed = false;
+
+        $links = $DOM->getElementsByTagName('link');
+        foreach ($links as $link) {
+            if (strtolower($link->getAttribute('rel')) == 'canonical') {
+                // update the existing link tag
+                $link->setAttribute('url', $canonical_url);
+                $changed = true;
+                break;
+            }
+        }
+
+        if (!$changed) {
+            // create a new link tag
+            $link = $DOM->createElement('link');
+            $link->setAttribute('rel', 'canonical');
+            $link->setAttribute('url', $canonical_url);
+            $head = $DOM->getElementsByTagName('head')->item(0);
+            $head->appendChild($link);
+        }
+
+        $content = $DOM->saveHTML();
+        return true;
+    }
+
+    /**
      * Update or create meta tags
      *
      * @param string $meta_name the name of the meta tag
@@ -563,6 +622,14 @@ class OutputFilter
                     }
                     elseif (isset($params['set_header']) && (is_numeric($params['set_header']) && ($params['set_header'] > 0))) {
                         $this->setPageHeader($command, $params['set_header'], $content);
+                    }
+                    // set a canonical link?
+                    if ((isset($_GET['command']) && (strtolower($_GET['command'] == $command))) &&
+                        (isset($_GET['canonical']))) {
+                        $this->setCanonicalLink($command, $_GET['canonical'], $content);
+                    }
+                    elseif (isset($params['canonical'])) {
+                        $this->setCanonicalLink($command, $params['canonical'], $content);
                     }
                 }
             }
