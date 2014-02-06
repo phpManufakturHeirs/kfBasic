@@ -40,6 +40,9 @@
   "require":{
     "framework": {
       "release":"0.27"
+    },
+    "Library":{
+        "release":"0.15"
     }
   },
   "setup":{
