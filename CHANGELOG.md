@@ -6,6 +6,12 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.78** - 2014-02-06
+
+* no further support for the additional /white template!
+* added CSS Formatting to the kitCommand Parameter `simulate[]` Replacement
+* Added support for canonical links, use parameter `canonical[]` in kitCommands
+
 **0.77** - 2014-02-03
 
 * added missing route for `/admin` (without ending slash)
