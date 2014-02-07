@@ -23,7 +23,6 @@ use phpManufaktur\Basic\Control\Pattern\Alert;
  */
 class Basic extends Alert
 {
-    protected static $message = '';
     private static $cms_info = null;
     private static $parameter = null;
     private static $GET = null;
@@ -394,7 +393,7 @@ class Basic extends Alert
     {
         return array(
             'alert' => $this->getAlert(),
-            'message' => $this->getMessage(),
+            'message' => $this->getAlert(),
             'cms' => Basic::$cms_info,
             'frame' => Basic::$frame,
             'page' => Basic::$page,
@@ -404,11 +403,16 @@ class Basic extends Alert
     }
 
     /**
+     * Return a message
+     *
      * @return the $message
+     * @deprecated use getAlert() instead!
      */
     public function getMessage()
     {
-        return Basic::$message;
+        $debug = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        $this->app['monolog']->addDebug('getMessage() is deprecated, use getAlert() instead!', array($debug));
+        return $this->getAlert();
     }
 
     /**
@@ -419,38 +423,38 @@ class Basic extends Alert
      * @param string $message
      * @param array $params
      * @param boolean $log_message
+     * @deprecated use setAlert() instead!
      */
     public function setMessage($message, $params=array(), $log_message=false)
     {
-        Basic::$message .= $this->app['twig']->render($this->app['utils']->getTemplateFile(
-            '@phpManufaktur/Basic/Template',
-            'kitcommand/iframe.message.twig',
-            self::$preferred_template),
-            array(
-                'message' => $this->app['translator']->trans($message, $params)
-            ));
-        if ($log_message) {
-            // log this message
-            $this->app['monolog']->addDebug(strip_tags($this->app['translator']->trans($message, $params, 'messages', 'en')));
-        }
+        $debug = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        $this->app['monolog']->addDebug('setMessage() is deprecated, use setAlert() instead!', array($debug));
+        $this->setAlert($message, $params, self::ALERT_TYPE_INFO, array(), $log_message);
     }
 
     /**
      * Check if a message is active
      *
      * @return boolean
+     * @deprecated use isAlert() instead!
      */
     public function isMessage()
     {
-        return !empty(Basic::$message);
+        $debug = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        $this->app['monolog']->addDebug('isMessage() is deprecated, use isAlert() instead!', array($debug));
+        return $this->isAlert();
     }
 
     /**
      * Clear the existing message(s)
+     *
+     * @deprecated use clearAlert() instead!
      */
     public function clearMessage()
     {
-        Basic::$message = '';
+        $debug = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        $this->app['monolog']->addDebug('clearMessage() is deprecated, use clearAlert() instead!', array($debug));
+        $this->clearAlert();
     }
 
     /**

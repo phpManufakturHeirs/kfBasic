@@ -19,6 +19,7 @@ use phpManufaktur\Basic\Control\unZip\unZip;
 use phpManufaktur\Basic\Control\Welcome;
 use phpManufaktur\Basic\Data\ExtensionCatalog;
 use phpManufaktur\Basic\Data\ExtensionRegister;
+use phpManufaktur\Basic\Control\Pattern\Alert;
 
 
 /**
@@ -32,10 +33,9 @@ use phpManufaktur\Basic\Data\ExtensionRegister;
  * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
  *
  */
-class Updater
+class Updater extends Alert
 {
     protected $app = null;
-    protected static $message;
     protected $ExtensionCatalog = null;
     protected $ExtensionRegister = null;
     protected $Github = null;
@@ -68,55 +68,6 @@ class Updater
         $this->Welcome = new Welcome($app);
 
         self::$usage = $this->app['request']->get('usage', 'framework');
-    }
-
-    /**
-     * @return the $message
-     */
-    public function getMessage()
-    {
-        return self::$message;
-    }
-
-    /**
-     * Set a message. Messages are chained and will be translated with the given
-     * parameters. If $log_message = true, the message will also logged to the
-     * kitFramework logfile.
-     *
-     * @param string $message
-     * @param array $params
-     * @param boolean $log_message
-     */
-    public function setMessage($message, $params=array(), $log_message=false)
-    {
-        self::$message .= $this->app['twig']->render($this->app['utils']->getTemplateFile(
-            '@phpManufaktur/Basic/Template',
-            'framework/message.twig'),
-            array(
-                'message' => $this->app['translator']->trans($message, $params)
-            ));
-        if ($log_message) {
-            // log this message
-            $this->app['monolog']->addDebug(strip_tags($this->app['translator']->trans($message, $params, 'messages', 'en')));
-        }
-    }
-
-    /**
-     * Check if a message is active
-     *
-     * @return boolean
-     */
-    public function isMessage()
-    {
-        return !empty(self::$message);
-    }
-
-    /**
-     * Clear the existing message(s)
-     */
-    public function clearMessage()
-    {
-        self::$message = '';
     }
 
     /**
@@ -215,7 +166,7 @@ class Updater
 
             if (!$this->copyLastGithubRepository($info['download']['github']['organization'], $info['download']['github']['repository'])) {
                 // Ooops, problem copying the repo into directory
-                $this->Welcome->setMessage($this->getMessage());
+                $this->Welcome->setAlertUnformatted($this->getAlert());
                 return $this->Welcome->controllerFramework($this->app);
             }
             $app['monolog']->addDebug("All files are copied to {$info['path']}");
@@ -229,13 +180,13 @@ class Updater
                 $execute_route[] = $info['setup']['update'];
             }
             else {
-                $this->setMessage("Successfull $install_mode the extension %extension%.",
-                    array('%extension%' => $info['name']));
+                $this->setAlert("Successfull $install_mode the extension %extension%.",
+                    array('%extension%' => $info['name']), self::ALERT_TYPE_SUCCESS);
             }
         }
 
         $app['session']->set('FINISH_INSTALLATION', array(
-            'message' => $this->getMessage(),
+            'message' => $this->getAlert(),
             'execute_route' => $execute_route
         ));
 
@@ -260,8 +211,8 @@ class Updater
     {
         $release = null;
         if (false === ($tag_url = $this->Github->getLastRepositoryZipUrl($organization, $repository, $release))) {
-            $this->setMessage("Can't read the the %repository% from %organization% at Github!",
-                array('%repository%' => $repository, '%organization%' => $organization), true);
+            $this->setAlert("Can't read the the %repository% from %organization% at Github!",
+                array('%repository%' => $repository, '%organization%' => $organization), self::ALERT_TYPE_WARNING);
             return false;
         }
 
@@ -270,8 +221,8 @@ class Updater
 
         // repository.zip is in temp directory
         if (!file_exists($target_path)) {
-            $this->setMessage("Can't open the file <b>%file%</b>!",
-                array('%file%' => substr($target_path, strlen(FRAMEWORK_PATH))), true);
+            $this->setAlert("Can't open the file <b>%file%</b>!",
+                array('%file%' => substr($target_path, strlen(FRAMEWORK_PATH))), self::ALERT_TYPE_WARNING);
             return false;
         }
 
@@ -280,13 +231,14 @@ class Updater
         $this->unZIP->extract($target_path);
         $files = $this->unZIP->getFileList();
         if (null === ($subdirectory = $this->getFirstSubdirectory($this->unZIP->getUnZipPath()))) {
-            $this->setMessage('The received repository has an unexpected directory structure!', array(), true);
+            $this->setAlert('The received repository has an unexpected directory structure!', array(), self::ALERT_TYPE_WARNING);
             return false;
         }
         $source_directory = $this->unZIP->getUnZipPath().'/'.$subdirectory;
         $extension = $this->app['utils']->readConfiguration($source_directory.'/extension.json');
         if (!isset($extension['path'])) {
-            $this->setMessage('The received extension.json does not specifiy the path of the extension!', array(), true);
+            $this->setAlert('The received extension.json does not specifiy the path of the extension!', array(), self::ALERT_TYPE_WARNING);
+            return false;
         }
         $target_directory = FRAMEWORK_PATH.$extension['path'];
 
@@ -312,14 +264,14 @@ class Updater
         $this->initUpdater($app);
 
         if (false === ($extension = $this->ExtensionRegister->select($extension_id))) {
-            $this->Welcome->setMessage('The extension with the ID %extension_id% does not exists!',
-                array('%extension_id%' => $extension_id), true);
+            $this->Welcome->setAlert('The extension with the ID %extension_id% does not exists!',
+                array('%extension_id%' => $extension_id), self::ALERT_TYPE_WARNING);
             return $this->Welcome->controllerFramework($app);
         }
 
         if (false === ($catalog_id = $this->ExtensionCatalog->selectIDbyGUID($extension['guid']))) {
-            $this->Welcome->setMessage('There exists no catalog entry for the extension %name% with the GUID %guid%.',
-                array('%name%' => $extension['name'], '%guid%' => $extension['guid']), true);
+            $this->Welcome->setAlert('There exists no catalog entry for the extension %name% with the GUID %guid%.',
+                array('%name%' => $extension['name'], '%guid%' => $extension['guid']), self::ALERT_TYPE_WARNING);
             return $this->Welcome->controllerFramework($app);
         }
         // ok - we have the catalog number and can execute the update/installation
