@@ -6,6 +6,14 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.79** - 2014-02-10
+
+* added missing dependency for the library
+* changed Updater to extend class `Alert` 
+* in class `Basic` the message functions are now marked as deprecated
+* fixed a small bug in kitCommand `list`
+* changed kitFramework iFrame body to Bootstrap 3.1.0
+
 **0.78** - 2014-02-06
 
 * no further support for the additional /white template!
