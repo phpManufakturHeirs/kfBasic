@@ -10,7 +10,7 @@
 
 body {
   color: #000;
-  background-color: rgba(255,255,255,0.0);
+  background-color: transparent;
 }
 
 .kitcommand {
@@ -78,6 +78,8 @@ iframe.kitcommand {
   margin: 0;
   padding: 0;
   border: none;
+  color: #363636;
+  background-color: transparent;
 }
 
 .kitcommand.list {
