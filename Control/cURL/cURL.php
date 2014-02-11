@@ -40,6 +40,8 @@ class cURL {
     public function Download ($source_url, $target_path, &$info = array())
     {
         try {
+            // time limit for cURL operation
+            set_time_limit(180);
 
             // first try to get the redirected URL
             $ch = curl_init();
