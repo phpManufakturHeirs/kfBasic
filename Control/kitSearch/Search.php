@@ -38,4 +38,23 @@ class Search
             return $app->json($result);
         }
     }
+
+    public function SearchEnabled(Application $app)
+    {
+        $kitCommands = array();
+        // get an iterator through all kitFramework routes
+        $patterns = $app['routes']->getIterator();
+        // walk through the routing objects
+        foreach ($patterns as $pattern) {
+            $match = $pattern->getPattern();
+            // we are searching for all matching kitCommands, starting with '/search/command/'
+            if (strpos($match, '/search/command/') !== false) {
+
+                $command = substr($match, strlen('/search/command/'));
+                $kitCommands[] = $command;
+            }
+        }
+        $result = array('commands' => $kitCommands);
+        return $app->json($result);
+    }
 }

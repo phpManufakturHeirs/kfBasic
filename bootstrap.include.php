@@ -616,6 +616,8 @@ $app->get('/basic/catalog',
 $app->post('/kit_search/command/{command}',
     // catch all searches within kitCommands
     'phpManufaktur\Basic\Control\kitSearch\Search::exec');
+$app->get('/kit_search_enabled',
+    'phpManufaktur\Basic\Control\kitSearch\Search::SearchEnabled');
 
 // mount the controller factories
 $app->mount('/admin', $admin);

@@ -27,6 +27,7 @@ class SearchFilter
     protected static $result = false;
     protected static $search = null;
     protected static $search_words = null;
+    protected static $search_commands = null;
 
     /**
      * Execute the search function of the given $command.
@@ -41,9 +42,7 @@ class SearchFilter
             CURLOPT_POST => true,
             CURLOPT_HEADER => false,
             CURLOPT_URL => WB_URL."/kit2/kit_search/command/$command",
-            CURLOPT_FRESH_CONNECT => true,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_FORBID_REUSE => true,
             CURLOPT_TIMEOUT => 4,
             CURLOPT_POSTFIELDS => http_build_query($parameter, '', '&'),
             CURLOPT_SSL_VERIFYHOST => false,
@@ -58,7 +57,6 @@ class SearchFilter
         curl_close($ch);
 
         $response = json_decode($response, true);
-
         if (isset($response['search']) && $response['search']['success']) {
             // continue only with search results
             $item = array(
@@ -93,6 +91,32 @@ class SearchFilter
                 }
             }
         }
+    }
+
+    /**
+     * In the first step get the kitCommands which support a search function
+     * to avoid overhead
+     *
+     */
+    protected function getCommandsWithSearchFunction()
+    {
+        $options = array(
+            CURLOPT_HEADER => false,
+            CURLOPT_URL => WB_URL."/kit2/kit_search_enabled",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 4,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_SSL_VERIFYPEER => false
+        );
+        $ch = curl_init();
+        curl_setopt_array($ch, $options);
+
+        if (false === ($response = curl_exec($ch))) {
+            trigger_error(curl_error($ch));
+        }
+        curl_close($ch);
+        $response = json_decode($response, true);
+        self::$search_commands = (isset($response['commands'])) ? $response['commands'] : array();
     }
 
     /**
@@ -156,6 +180,10 @@ class SearchFilter
             $command_array = explode(' ', $command_string);
             // the first match is the command!
             $command = strtolower(trim($command_array[0]));
+            if (!in_array($command, self::$search_commands)) {
+                // this kitCommand does not support a search ...
+                continue;
+            }
             // delete the command from array
             unset($command_array[0]);
             // get the parameter string
@@ -218,6 +246,8 @@ class SearchFilter
         self::$result = false;
         self::$search = $search;
         self::$search_words = array();
+
+        $this->getCommandsWithSearchFunction();
 
         foreach (self::$search['search_url_array'] as $word) {
             self::$search_words[] = strip_tags($word);
@@ -297,7 +327,6 @@ class SearchFilter
                 $this->parseContent($topics['content_long'], $parameter);
             }
         }
-
         return self::$result;
     }
 }
