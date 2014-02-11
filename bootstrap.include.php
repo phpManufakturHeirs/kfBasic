@@ -85,14 +85,8 @@ try {
     define('FRAMEWORK_CACHE', (isset($framework_config['CACHE'])) ?
         $framework_config['CACHE'] : true);
 
-    if ($app['filesystem']->exists(MANUFAKTUR_PATH.'/Library/Library')) {
-        define('LIBRARY_PATH', MANUFAKTUR_PATH.'/Library/Library');
-        define('LIBRARY_URL', MANUFAKTUR_URL.'/Library/Library');
-    }
-    else {
-        define('LIBRARY_PATH', MANUFAKTUR_PATH.'/Basic/Library');
-        define('LIBRARY_URL', MANUFAKTUR_URL.'/Basic/Library');
-    }
+    define('LIBRARY_PATH', MANUFAKTUR_PATH.'/Library/Library');
+    define('LIBRARY_URL', MANUFAKTUR_URL.'/Library/Library');
 
     if ($app['filesystem']->exists(MANUFAKTUR_PATH.'/Library/Extension')) {
         define('EXTENSION_PATH', MANUFAKTUR_PATH.'/Library/Extension');

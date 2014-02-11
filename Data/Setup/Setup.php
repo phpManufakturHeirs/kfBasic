@@ -14,11 +14,13 @@ namespace phpManufaktur\Basic\Data\Setup;
 use Silex\Application;
 use phpManufaktur\Basic\Data\Security\Users;
 use phpManufaktur\Basic\Data\ExtensionCatalog;
+use phpManufaktur\Basic\Control\ExtensionCatalog as ExtensionCatalogControl;
 use phpManufaktur\Basic\Data\Setting;
 use phpManufaktur\Basic\Data\ExtensionRegister;
 use phpManufaktur\Basic\Data\kitCommandParameter;
 use phpManufaktur\Basic\Control\CMS\InstallSearch;
 use phpManufaktur\Basic\Data\Security\AdminAction;
+use phpManufaktur\Updater\Updater;
 
 /**
  * Setup all needed database tables and initialize the kitFramework
@@ -105,6 +107,27 @@ class Setup
         // install the search function
         $Search = new InstallSearch($app);
         $Search->exec();
+
+        // We need the online catalog for further actions
+        $ExtensionCatalogControl = new ExtensionCatalogControl($app);
+        $ExtensionCatalogControl->getOnlineCatalog();
+        $app['monolog']->addDebug('[BASIC Setup] Got the online catalog from Github');
+
+        If (!$app['filesystem']->exists(MANUFAKTUR_PATH.'/Library')) {
+            // missing the library
+            if (false !== ($extension = $catalog->selectByGroupAndName('phpManufaktur', 'Library'))) {
+                // grant that the updater is installed in the separated directory and is actual
+                if (!file_exists(MANUFAKTUR_PATH.'/Updater')) {
+                    $app['filesystem']->mkdir(MANUFAKTUR_PATH.'/Updater');
+                }
+                $app['filesystem']->copy(MANUFAKTUR_PATH.'/Basic/Control/Updater/Updater.php', MANUFAKTUR_PATH.'/Updater/Updater.php', true);
+
+                $Updater = new Updater();
+                // install the Library
+                $Updater->controllerInstallExtension($app, $extension['id'], false);
+                $Updater->clearAlert();
+            }
+        }
 
         return $app['translator']->trans('Successfull installed the extension %extension%.',
             array('%extension%' => 'Basic'));

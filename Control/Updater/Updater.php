@@ -57,17 +57,19 @@ class Updater extends Alert
      *
      * @param Application $app
      */
-    protected function initUpdater(Application $app)
+    protected function initUpdater(Application $app, $redirect=true)
     {
-        $this->app = $app;
+        $this->initialize($app);
+
         $this->ExtensionCatalog = new ExtensionCatalog($app);
         $this->ExtensionRegister = new ExtensionRegister($app);
         $this->Github = new gitHub($app);
         $this->cURL = new cURL($app);
         $this->unZIP = new unZip($app);
-        $this->Welcome = new Welcome($app);
-
-        self::$usage = $this->app['request']->get('usage', 'framework');
+        if ($redirect) {
+            $this->Welcome = new Welcome($app);
+            self::$usage = $this->app['request']->get('usage', 'framework');
+        }
     }
 
     /**
@@ -143,9 +145,9 @@ class Updater extends Alert
      * @param integer $catalog_id
      * @throws \Exception
      */
-    public function controllerInstallExtension(Application $app, $catalog_id)
+    public function controllerInstallExtension(Application $app, $catalog_id, $redirect=true)
     {
-        $this->initUpdater($app);
+        $this->initUpdater($app, $redirect);
 
         // check the dependencies for this extension
         $this->checkDependencies($catalog_id);
@@ -194,8 +196,13 @@ class Updater extends Alert
         $app['twig']->clearCacheFiles();
         $app['monolog']->addDebug('Finish the installation and update process: clear the Twig Cache Files');
 
-        // use redirect to enable a application reload and autoload of the new extensions
-        return $app->redirect(FRAMEWORK_URL.'/admin/welcome?usage='.self::$usage);
+        if ($redirect) {
+            // use redirect to enable a application reload and autoload of the new extensions
+            return $app->redirect(FRAMEWORK_URL.'/admin/welcome?usage='.self::$usage);
+        }
+        else {
+            return true;
+        }
     }
 
     /**
