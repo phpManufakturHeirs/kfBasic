@@ -205,8 +205,9 @@ class SearchFilter
                 $params[$key] = $value;
             }
             if ((isset($params['search']) && ((strtolower($params['search']) == 'false') || ($params['search'] == 0))) ||
-                (isset($params['help']))) {
+                (isset($params['help'])) || isset($params['canonical'])) {
                 // the search function is disabled or user try to search in the help function, continue ...
+                // also ignore duplicate content marked with 'canonical'
                 continue;
             }
             $parameter['parameter'] = $params;
