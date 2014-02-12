@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.81** - 2014-02-12
+
+* improved performance for search in kitCommands
+
 **0.80** - 2014-02-11
 
 * fixed dependencies while first initialization, download and configure missing `Library`
