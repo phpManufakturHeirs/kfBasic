@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.82** - 2014-02-16
+
+* added function `humanize()` to global class `Utils`
+
 **0.81** - 2014-02-12
 
 * improved performance for search in kitCommands
