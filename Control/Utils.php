@@ -813,4 +813,20 @@ class Utils
         }
         return $text;
     }
+
+    /**
+     * Makes a technical name human readable.
+     *
+     * Sequences of underscores are replaced by single spaces. The first letter
+     * of the resulting string is capitalized, while all other letters are
+     * turned to lowercase.
+     *
+     * @param string $text The text to humanize.
+     * @return string The humanized text.
+     */
+    public function humanize($text)
+    {
+        return ucfirst(trim(strtolower(preg_replace('/[_\s]+/', ' ', $text))));
+    }
+
 }
