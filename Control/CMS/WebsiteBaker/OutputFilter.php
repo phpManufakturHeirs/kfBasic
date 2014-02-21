@@ -14,6 +14,21 @@ namespace phpManufaktur\Basic\Control\CMS\WebsiteBaker;
 
 class OutputFilter
 {
+
+    // these CSS files will be ignored at file comparison
+    protected static $css_ignore = array(
+        'editor.css',
+        'frontend.css',
+        'ie.css',
+        'media.css',
+        'print.css',
+        'screen.css',
+        'style.css',
+        'template.css',
+        'theme.css',
+        'view.css'
+    );
+
     /**
      * Get the URL of the submitted PAGE_ID - check for special pages like
      * TOPICS and/or NEWS and return the URL of the TOPIC/NEW page if active
@@ -21,7 +36,7 @@ class OutputFilter
      * @param integer $page_id
      * @return boolean|string
      */
-    public static function getURLbyPageID($page_id)
+    protected static function getURLbyPageID($page_id)
     {
         global $database;
         global $post_id;
@@ -62,6 +77,58 @@ class OutputFilter
     }
 
     /**
+     * Load a CSS file with DOM
+     *
+     * @param string reference $content
+     * @param string $css_url
+     * @return boolean
+     */
+    protected function domLoadCSS(&$content, $css_url)
+    {
+        $css_file = basename($css_url);
+
+        // create DOM
+        $DOM = new \DOMDocument;
+        // enable internal error handling for the DOM
+        libxml_use_internal_errors(true);
+        if (!$DOM->loadHTML($content)) {
+            // on error still return false
+            return false;
+        }
+        libxml_clear_errors();
+
+        $load_css = true;
+
+        $links = $DOM->getElementsByTagName('link');
+        foreach ($links as $link) {
+            if ($link->getAttribute('rel') == 'stylesheet') {
+                $link_url = $link->getAttribute('href');
+                $basename = basename($link_url);
+                if (($link_url == $css_url) ||
+                    (!in_array(strtolower($basename), self::$css_ignore) && ($basename == $css_file))) {
+                    // this CSS file is already loaded
+                    $load_css = false;
+                    break;
+                }
+            }
+        }
+
+        if ($load_css) {
+            // create a new link tag for the CSS file
+            $link = $DOM->createElement('link');
+            $link->setAttribute('rel', 'stylesheet');
+            $link->setAttribute('type', 'text/css');
+            $link->setAttribute('media', 'all');
+            $link->setAttribute('href', $css_url);
+            $head = $DOM->getElementsByTagName('head')->item(0);
+            $head->appendChild($link);
+            $content = $DOM->saveHTML();
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Try to load a CSS file from the specified directory
      *
      * @param string reference $content
@@ -89,22 +156,62 @@ class OutputFilter
                 if (is_dir($path.'/'.$scan_file) && (strtolower($scan_file) == $directory)) {
                     $css_path = "$path/$scan_file/Template/$template/$css_file";
                     if (file_exists($css_path)) {
-                        // ok - the CSS file exist, now we load it
+                        // build the URL
                         $css_url = WB_URL.substr($css_path, strlen(WB_PATH));
-                        if (false !== (stripos($content, '<!-- kitFramework:CSS -->'))) {
-                            $replace = '<!-- kitFramework:CSS -->'."\n".'<link rel="stylesheet" type="text/css" href="'.$css_url.'" media="all" />';
-                            $content = str_ireplace('<!-- kitFramework:CSS -->', $replace, $content);
-                        }
-                        else {
-                            $replace = '<!-- kitFramework:CSS -->'."\n".'<link rel="stylesheet" type="text/css" href="'.$css_url.'" media="all" />'."\n".'</head>';
-                            $content = str_ireplace('</head>', $replace, $content);
-                        }
-                        return true;
+                        return $this->domLoadCSS($content, $css_url);
                     }
                 }
             }
         }
         // no CSS file loaded
+        return false;
+    }
+
+    /**
+     * Load a JavaScript or jQuery file with DOM
+     *
+     * @param string reference $content
+     * @param string $js_url
+     * @return boolean
+     */
+    protected function domLoadJS(&$content, $js_url)
+    {
+        $load_js = true;
+        $js_file = basename($js_url);
+
+        // create DOM
+        $DOM = new \DOMDocument;
+        // enable internal error handling for the DOM
+        libxml_use_internal_errors(true);
+        if (!$DOM->loadHTML($content)) {
+            // on error still return false
+            return false;
+        }
+        libxml_clear_errors();
+
+        $scripts = $DOM->getElementsByTagName('script');
+        foreach ($scripts as $script) {
+            if ($script->getAttribute('type') == 'text/javascript') {
+                $script_url = $script->getAttribute('src');
+                $basename = basename($script_url);
+                if (($script_url == $js_url) || ($basename == $js_file)) {
+                    // this CSS file is already loaded
+                    $load_css = false;
+                    break;
+                }
+            }
+        }
+
+        if ($load_js) {
+            // create a new link tag for the CSS file
+            $script = $DOM->createElement('script');
+            $script->setAttribute('type', 'text/javascript');
+            $script->setAttribute('src', $js_url);
+            $head = $DOM->getElementsByTagName('head')->item(0);
+            $head->appendChild($script);
+            $content = $DOM->saveHTML();
+            return true;
+        }
         return false;
     }
 
@@ -137,16 +244,8 @@ class OutputFilter
                     $js_path = "$path/$scan_file/Template/$template/$js_file";
                     if (file_exists($js_path)) {
                         // ok - the JS file exist, now we load it
-                        $css_url = WB_URL.substr($js_path, strlen(WB_PATH));
-                        if (false !== (stripos($content, '<!-- kitFramework:JS -->'))) {
-                            $replace = '<!-- kitFramework:JS -->'."\n".'<script src="'.$css_url.'" type="text/javascript"></script>';
-                            $content = str_ireplace('<!-- kitFramework:JS -->', $replace, $content);
-                        }
-                        else {
-                            $replace = '<!-- kitFramework:JS -->'."\n".'<script src="'.$css_url.'" type="text/javascript"></script>'."\n".'</head>';
-                            $content = str_ireplace('</head>', $replace, $content);
-                        }
-                        return true;
+                        $js_url = WB_URL.substr($js_path, strlen(WB_PATH));
+                        return $this->domLoadJS($content, $js_url);
                     }
                 }
             }
@@ -238,24 +337,10 @@ class OutputFilter
             if (file_exists(WB_PATH.'/kit2/extension/phpmanufaktur/phpManufaktur/Library/Library/'.$file)) {
                 $extension = pathinfo($file, PATHINFO_EXTENSION);
                 if ($extension == 'js') {
-                    if (false !== (stripos($content, '<!-- kitFramework:JS -->'))) {
-                        $replace = '<!-- kitFramework:JS -->'."\n".'<script src="'.$library_url.$file.'" type="text/javascript"></script>';
-                        $content = str_ireplace('<!-- kitFramework:JS -->', $replace, $content);
-                    }
-                    else {
-                        $replace = '<!-- kitFramework:JS -->'."\n".'<script src="'.$library_url.$file.'" type="text/javascript"></script>'."\n".'</head>';
-                        $content = str_ireplace('</head>', $replace, $content);
-                    }
+                    $this->domLoadJS($content, $library_url.$file);
                 }
                 elseif ($extension == 'css') {
-                    if (false !== (stripos($content, '<!-- kitFramework:CSS -->'))) {
-                        $replace = '<!-- kitFramework:CSS -->'."\n".'<link rel="stylesheet" type="text/css" href="'.$library_url.$file.'" media="all" />';
-                        $content = str_ireplace('<!-- kitFramework:CSS -->', $replace, $content);
-                    }
-                    else {
-                        $replace = '<!-- kitFramework:CSS -->'."\n".'<link rel="stylesheet" type="text/css" href="'.$library_url.$file.'" media="all" />'."\n".'</head>';
-                        $content = str_ireplace('</head>', $replace, $content);
-                    }
+                    $this->domLoadCSS($content, $library_url.$file);
                 }
             }
         }
@@ -585,11 +670,8 @@ class OutputFilter
                     CURLOPT_POST => true,
                     CURLOPT_HEADER => false,
                     CURLOPT_URL => $command_url,
-                    //CURLOPT_FRESH_CONNECT => true,
                     CURLOPT_RETURNTRANSFER => true,
-                    //CURLOPT_FORBID_REUSE => true,
                     CURLOPT_TIMEOUT => 30,
-                    //CURLOPT_POSTFIELDS => http_build_query(array('cms_parameter' => base64_encode(json_encode($cmd_array)))),
                     CURLOPT_POSTFIELDS => http_build_query(array('cms_parameter' => $cmd_array), '', '&'),
                     CURLOPT_SSL_VERIFYHOST => false,
                     CURLOPT_SSL_VERIFYPEER => false
