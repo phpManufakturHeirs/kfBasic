@@ -116,6 +116,8 @@ return array(
         => 'Hallo %name%,<br />Sie möchten Ihr Passwort ändern, bitte geben Sie das neue Passwort ein, wiederholen Sie es zur Sicherheit und schicken Sie das Formular ab.<br />Falls Sie Ihr Passwort nicht ändern möchten, verlassen Sie bitte einfach diesen Dialog.',
     'Help'
         => 'Hilfe',
+    "o'clock"
+        => 'Uhr',
 
     'If you have forgotten your password, you can order a link to create a new one. Please type in the email address assigned to your account and submit the form.'
         => 'Falls Sie Ihr Passwort vergessen haben, können Sie einen Link anfordern um ein neues Passwort zu erstellen. Bitte tragen Sie die E-Mail Adresse ein, die ihrem Konto zugeordnet ist und übermitteln Sie das Formular.',
