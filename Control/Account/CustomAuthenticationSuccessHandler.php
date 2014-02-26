@@ -45,8 +45,9 @@ class CustomAuthenticationSuccessHandler extends DefaultAuthenticationSuccessHan
         $data = array(
             'last_login' => date('Y-m-d H:i:s')
         );
-        $Users = new Users($this->app);
-        $Users->updateUser($user->getUsername(), $data);
+        // save the last login of the user
+        $this->app['aacount']->updateUser($user->getUsername(), $data);
+
         return $this->httpUtils->createRedirectResponse($request, $this->determineTargetUrl($request));
     }
 }
