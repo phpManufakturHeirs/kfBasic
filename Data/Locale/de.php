@@ -23,6 +23,8 @@ return array(
         => 'Benutzerkonto',
     'Accounts'
         => 'Benutzerkonten',
+    'Actual SMTP Settings'
+        => 'Aktuelle SMTP Einstellungen',
     'Add the extension <b>%name%</b> to the catalog.'
         => 'Die Erweiterung <b>%name%</b> wurde dem Katalog hinzugefügt.',
     'Add the extension <b>%name%</b> to the register.'
@@ -300,6 +302,8 @@ return array(
         => 'Die übermittelte GUID ist abgelaufen und nicht länger gültig.<br />Bitte <a href="%password_forgotten%">fordern Sie einen neuen Link an</a>.',
     'The submitted GUID was already used and is no longer valid.<br />Please <a href="%password_forgotten%">order a new link</a>.'
         => 'Die übermittelte GUID wurde bereits verwendet und ist nicht mehr gültig.<br />Bitte <a href="%password_forgotten%">fordern Sie einen neuen Link an</a>.',
+    'The test mail to %email% was successfull send.'
+        => 'Die Test E-Mail wurde erfolgreich an %email% versendet!',
     'There exists no catalog entry for the extension %name% with the GUID %guid%.'
         => 'Es existiert kein Katalog Eintrag für die Erweiterung %name% mit der GUID %guid%.',
     'There exists no user with the submitted email address.'

@@ -548,6 +548,10 @@ $admin->get('/accounts/edit/{id}',
 $admin->post('/accounts/edit/check',
     'phpManufaktur\Basic\Control\Account\Dialog\AccountAdminEdit::ControllerAccountEditCheck');
 
+// send a testmail
+$admin->get('/test/mail',
+    'phpManufaktur\Basic\Control\Test\Mail::Controller');
+
 // Switch user to show the roles assigned to the user
 $app->get('/switched/user/roles/id/{id}',
     'phpManufaktur\Basic\Control\Account\Dialog\SwitchedUserRoles::ControllerSwitchedUserRoles')
