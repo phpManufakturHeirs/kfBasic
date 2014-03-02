@@ -48,8 +48,7 @@ $app['utils'] = $app->share(function($app) {
 });
 
 // get the filesystem into the application
-$app['filesystem'] = function()
-{
+$app['filesystem'] = function() {
     return new Filesystem();
 };
 
@@ -118,23 +117,22 @@ if (!$app['filesystem']->exists($directories)) {
     $app['filesystem']->mkdir($directories);
 }
 
-if (!isset($framework_config['LOGFILE_MAX_SIZE'])) {
-    // set the default value for the logfile size
-    $framework_config['LOGFILE_MAX_SIZE'] = 2 * 1024 * 1024; // 2 MB;
-}
-
-$log_file = FRAMEWORK_PATH . '/logfile/kit2.log';
-if ($app['filesystem']->exists($log_file) && (filesize($log_file) > $framework_config['LOGFILE_MAX_SIZE'])) {
-    $app['filesystem']->remove(FRAMEWORK_PATH . '/logfile/kit2.log.bak');
-    $app['filesystem']->rename($log_file, FRAMEWORK_PATH . '/logfile/kit2.log.bak');
-}
-
+// set the default timezone to avoid problems
 date_default_timezone_set('Europe/Berlin');
+
 // register monolog
 $app->register(new Silex\Provider\MonologServiceProvider(), array(
-    'monolog.logfile' => $log_file,
+    'monolog.logfile' => FRAMEWORK_PATH.'/logfile/framework.log',
     'monolog.level' => FRAMEWORK_DEBUG ? Logger::DEBUG : Logger::WARNING,
-    'monolog.name' => 'kitFramework'
+    'monolog.name' => 'kitFramework',
+    'monolog.maxfiles' => isset($framework_config['LOGFILE_ROTATE_MAXFILES']) ? $framework_config['LOGFILE_ROTATE_MAXFILES'] : 10
+));
+$app['monolog']->popHandler();
+$app['monolog']->pushHandler(new Monolog\Handler\RotatingFileHandler(
+    $app['monolog.logfile'],
+    $app['monolog.maxfiles'],
+    $app['monolog.level'],
+    false
 ));
 
 $app['monolog']->addDebug('MonologServiceProvider registered.');
