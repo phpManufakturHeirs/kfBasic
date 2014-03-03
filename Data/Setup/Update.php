@@ -170,6 +170,16 @@ class Update
     }
 
     /**
+     * Release 0.84
+     */
+    protected function release_084()
+    {
+        // /logfile/kit2.log and /logfile/kit2.log.bak are no longer used
+        $this->app['filesystem']->remove(FRAMEWORK_PATH.'/logfile/kit2.log');
+        $this->app['filesystem']->remove(FRAMEWORK_PATH.'/logfile/kit2.log.bak');
+    }
+
+    /**
      * Update the database tables for the BASIC extension of the kitFramework
      *
      * @param Application $app
@@ -185,6 +195,7 @@ class Update
         $this->release_069();
         $this->release_072();
         $this->release_076();
+        $this->release_084();
 
         // install the search function
         $Search = new InstallSearch($app);
