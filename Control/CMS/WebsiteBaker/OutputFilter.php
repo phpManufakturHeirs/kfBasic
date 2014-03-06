@@ -36,7 +36,7 @@ class OutputFilter
      * @param integer $page_id
      * @return boolean|string
      */
-    protected static function getURLbyPageID($page_id)
+    public static function getURLbyPageID($page_id)
     {
         global $database;
         global $post_id;
