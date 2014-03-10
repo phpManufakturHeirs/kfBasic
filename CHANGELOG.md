@@ -6,6 +6,15 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.84** - 2014-03-10
+
+* changed account handling in the custom `AuthenticationSuccessHandler`
+* add a email test via `http://<yourdomain.tld>/kit2/admin/test/mail`
+* introduce daily rotate of framework logfile instead of rotating by size
+* update remove the old kit2 logfiles
+* bugfix: function `getURLbyPageID()` must be public!
+* fixed a hard typo which causes problems at directly login in kitFramework
+
 **0.83** - 2014-02-24
 
 * improved the output filter to avoid duplicate loading of CSS and JS files
