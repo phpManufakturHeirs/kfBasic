@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.85** - 2014-03-17
+
+* added weekday and month names translations
+
 **0.84** - 2014-03-10
 
 * changed account handling in the custom `AuthenticationSuccessHandler`
