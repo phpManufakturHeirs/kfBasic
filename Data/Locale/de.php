@@ -15,6 +15,8 @@ if ('á' != "\xc3\xa1") {
 }
 
 return array(
+    'Abort'
+        => 'Abbruch',
     'Access denied'
         => 'Zugriff verweigert',
     'Access to kitFramework User Accounts'
@@ -33,6 +35,10 @@ return array(
         => 'Zusatzinformation',
     'alpha'
         => '- in Entwicklung -',
+    'April'
+        => 'April',
+    'August'
+        => 'August',
     'Available extensions'
         => 'Verfügbare Erweiterungen',
 
@@ -76,6 +82,8 @@ return array(
 
     'Data replication'
         => 'Datenabgleich',
+    'December'
+        => 'Dezember',
     'Delete this account irrevocable'
         => 'Benutzerkonto unwiderruflich löschen',
     'Displayname'
@@ -98,12 +106,18 @@ return array(
     'Extensions'
         => 'Erweiterungen',
 
+    'February'
+        => 'Februar',
     'File'
         => 'Datei',
     'First steps'
         => 'Erste Schritte',
+    'For the event with the ID %event_id% is no recurring defined.'
+        => 'Für die Veranstaltung mit der ID %event_id% ist keine Wiederholung festgelegt.',
     'Forgot your password?'
         => 'Passwort vergessen?',
+    'Friday'
+        => 'Freitag',
 
     'Get in touch with the developers, receive support, tipps and tricks for %command%!'
         => 'Treten Sie mit den Entwicklern in Kontakt und erhalten Unterstützung, erfahren Tipps sowie Tricks zu %command%!',
@@ -142,6 +156,13 @@ return array(
     'Issues'
         => 'Mängel',
 
+    'January'
+        => 'Januar',
+    'July'
+        => 'Juli',
+    'June'
+        => 'Juni',
+
     'kitFramework - Create new password'
         => 'kitFramework - Neues Passwort anlegen',
     'kitFramework - Login'
@@ -166,18 +187,28 @@ return array(
     'Logout' =>
         'Abmelden',
 
+    'March'
+        => 'März',
+    'May'
+        => 'Mai',
     'Message'
         => 'Mitteilung',
+    'Monday'
+        => 'Montag',
     'more information about <b>%command%</b> ...'
         => 'mehr Informationen über <b>%command%</b> ...',
     'New kitFramework release available!'
         => 'Es ist eine neue kitFramework Release verfügbar!',
+    'November'
+        => 'November',
 
     'NO'
         => 'Nein',
     'No fitting user role dectected!'
         => 'Es wurde kein passendes Benutzerrecht gefunden',
 
+    'October'
+        => 'Oktober',
     'Oooops, missing the alert which should be prompted here ... '
         => 'Hoppla, da fehlt die Meldung die hier eigentlich angezeigt werden sollte ...',
     'Open this helpfile in a new window'
@@ -208,8 +239,12 @@ return array(
         => 'Tatsächlich aktive Anwenderrechte',
     'Regards, Your kitFramework team'
         => 'Mit freundlichen Grüßen<br />Ihr kitFramework Team',
+    'Repeat by pattern, i.e. at the last tuesday of the month'
+        => 'Nach einem Muster, z.B. am letzten Donnerstag im Monat',
     'Repeat Password'
         => 'Passwort wiederholen',
+    'Repeat sequently at day x of month'
+        => 'Regelmäßig am Tag x des Monats',
     'Report problems'
         => 'Fehler melden',
     'Reveal this e-mail address'
@@ -219,16 +254,24 @@ return array(
     'Roles'
         => 'Benutzerrechte, Rollen',
 
+    'Saturday'
+        => 'Samstag',
     'Scan for installed extensions'
         => 'Nach installierten Erweiterungen suchen',
     'Scan the online catalog for available extensions'
         => 'Den online Katalog nach verfügbaren Erweiterungen durchsuchen',
+    'Select day'
+        => 'Wochentag auswählen',
+    'Select pattern'
+        => 'Muster auswählen',
     'Send account info to the user'
         => 'Dem Benutzer eine Kontoinformation zusenden',
     'Send a account information to the user %name%'
         => 'Dem Benutzer %name% wurde eine Kontoinformation zugesendet.',
     'Send email (only if the password has changed)'
         => 'Zugangsdaten senden (nur wenn das Passwort geändert wurde)',
+    'September'
+        => 'September',
     'Show a list of all installed kitCommands'
         => 'Eine Liste mit den installierten kitCommands anzeigen',
     'Sorry, but only Administrators are allowed to access this kitFramework extension.'
@@ -251,6 +294,8 @@ return array(
         => 'Die Erweiterung %extension% wurde erfolgreich entfernt.',
     'Successfull updated the extension %extension%.'
         => 'Die Erweiterung %extension% wurde erfolgreich aktualisiert.',
+    'Sunday'
+        => 'Sonntag',
     'Support'
         => 'Unterstützung',
     'Switch back to the administration of this user account'
@@ -322,6 +367,10 @@ return array(
         => 'Diesem Benutzer sind insgesamt <b>%count%</b> Rechte zugewiesen.',
     'This value is not a valid email address.'
         => 'Es wurde keine gültige E-Mail Adresse übergeben!',
+    'Thursday'
+        => 'Donnerstag',
+    'Tuesday'
+        => 'Dienstag',
 
     'Unknown user'
         => 'Unbekannter Benutzer',
@@ -352,6 +401,12 @@ return array(
 
     'We have send a link to your email address %email%.'
         => 'Wir haben Ihnen einen Link an Ihre E-Mail Adresse %email% gesendet.',
+    'Wednesday'
+        => 'Mittwoch',
+    'Weekday'
+        => 'Wochentag',
+    'Weekdays'
+        => 'Wochentage',
     'Welcome' =>
         'Herzlich Willkommen!',
     'Welcome back, %user%! Please select the entry point you want to use.'
