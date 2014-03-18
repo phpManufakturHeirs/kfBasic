@@ -28,6 +28,7 @@
       <title>{% block title %}{{ basic.page.title|default('') }}{% endblock title %}</title>
       <meta http-equiv="Content-Type" content="text/html; charset={{ basic.page.charset|default('UTF-8') }}"/>
       <meta name="robots" content="{% block robots %}{{ basic.page.robots|default('index,follow') }}{% endblock %}" />
+      {% block canonical %}{% endblock %}
       <meta name="description" content="{% block description %}{{ basic.page.description|default('') }}{% endblock %}" />
       <meta name="keywords" content="{% block keywords %}{{ basic.page.keywords|default('') }}{% endblock %}" />
       <meta name="generator" content="kitFramework (https://kit2.phpmanufaktur.de)" />
