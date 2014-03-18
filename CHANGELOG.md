@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.86** - 2014-03-18
+
+* **SEO**: added block for `canonical` links to the kitCommand `iframe.body.twig` variants
+
 **0.85** - 2014-03-17
 
 * added weekday and month names translations
