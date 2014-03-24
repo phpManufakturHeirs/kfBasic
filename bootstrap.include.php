@@ -202,10 +202,6 @@ $app->register(new Silex\Provider\SessionServiceProvider(), array(
 ));
 $app['monolog']->addDebug('SessionServiceProvider registered.');
 
-$app->before(function ($request) {
-    $request->getSession()->start();
-});
-
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app['monolog']->addDebug('UrlGeneratorServiceProvider registered.');
 
