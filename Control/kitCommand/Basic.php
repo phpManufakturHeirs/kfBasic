@@ -208,6 +208,11 @@ class Basic extends Alert
 
         // set the locale from the CMS locale
         $this->app['translator']->setLocale($this->getCMSlocale());
+
+        if ((Basic::$cms_info['user']['id'] > 0) && !empty(Basic::$cms_info['user']['name'])) {
+            // set a session with the active CMS user name
+            $this->app['session']->set('CMS_USERNAME', Basic::$cms_info['user']['name']);
+        }
     }
 
     /**
