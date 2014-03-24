@@ -6,6 +6,14 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.87** - 2014-03-24
+
+* added `getPageVisibilityByPageID()`
+* the OutputFilter now also return the CMS page visibility (public, hidden, private, registered or none)
+* BASIC set session var `CMS_USERNAME` if the CMS user is authenticated
+* removed manual session start from `bootstrap.include.php`
+* added CMS Authentication function
+
 **0.86** - 2014-03-18
 
 * **SEO**: added block for `canonical` links to the kitCommand `iframe.body.twig` variants
