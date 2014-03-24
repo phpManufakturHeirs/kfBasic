@@ -97,10 +97,6 @@ class Catalog extends Basic
     public function controllerCatalog(Application $app)
     {
         $this->initParameters($app);
-/*echo "<pre>";
-print_r(self::$catalog);
-echo "</pre>";
-*/
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
             '@phpManufaktur/Basic/Template',
             'kitcommand/catalog.twig'),
