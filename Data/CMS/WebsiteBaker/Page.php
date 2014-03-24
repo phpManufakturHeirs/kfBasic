@@ -277,4 +277,22 @@ class Page
         }
     }
 
+    /**
+     * Get the visibility of the given CMS page ID
+     *
+     * @param integer $page_id
+     * @throws \Exception
+     * @return Ambigous <boolean, string> FALSE if page not exists, otherwise 'public','hidden','registered','private' or 'none'
+     */
+    public function getPageVisibilityByPageID($page_id)
+    {
+        try {
+            $SQL = "SELECT `visibility` FROM `".CMS_TABLE_PREFIX."pages` WHERE `page_id`=$page_id";
+            $result = $this->app['db']->fetchColumn($SQL);
+            return (strlen($result) > 0) ? strtolower($result) : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
 }

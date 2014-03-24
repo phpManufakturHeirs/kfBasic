@@ -191,4 +191,16 @@ class Page {
     {
         return $this->cms->getTopicsDirectory();
     }
+
+    /**
+     * Get the visibility of the given CMS page ID
+     *
+     * @param integer $page_id
+     * @throws \Exception
+     * @return Ambigous <boolean, string> FALSE if page not exists, otherwise 'public','hidden','registered','private' or 'none'
+     */
+    public function getPageVisibilityByPageID($page_id)
+    {
+        return $this->cms->getPageVisibilityByPageID($page_id);
+    }
 }
