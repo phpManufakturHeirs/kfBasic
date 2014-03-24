@@ -77,6 +77,20 @@ class OutputFilter
     }
 
     /**
+     * Get the visibility (public, hidden, private, registered or none) for the
+     * given $page_id
+     *
+     * @param integer $page_id
+     */
+    public static function getPageVisibility($page_id)
+    {
+        global $database;
+
+        $SQL = "SELECT `visibility` FROM `".TABLE_PREFIX."pages` WHERE `page_id`=$page_id";
+        return $database->get_one($SQL);
+    }
+
+    /**
      * Load a CSS file with DOM
      *
      * @param string reference $content
@@ -635,6 +649,7 @@ class OutputFilter
                         'locale' => strtolower(LANGUAGE),
                         'page_id' => PAGE_ID,
                         'page_url' => $this->getURLbyPageID(PAGE_ID),
+                        'page_visibility' => $this->getPageVisibility(PAGE_ID),
                         'user' => array(
                             'id' => (isset($_SESSION['USER_ID'])) ? $_SESSION['USER_ID'] : -1,
                             'name' => (isset($_SESSION['USERNAME'])) ? $_SESSION['USERNAME'] : '',
@@ -666,6 +681,7 @@ class OutputFilter
                         $command_url = WB_URL.'/kit2/kit_filter/'.$command.'/'.base64_encode(json_encode($cmd_array));
                     }
                 }
+
                 $options = array(
                     CURLOPT_POST => true,
                     CURLOPT_HEADER => false,
@@ -676,6 +692,14 @@ class OutputFilter
                     CURLOPT_SSL_VERIFYHOST => false,
                     CURLOPT_SSL_VERIFYPEER => false
                 );
+                if (!isset($_SESSION['KIT2_COOKIE_FILE']) || !file_exists($_SESSION['KIT2_COOKIE_FILE'])) {
+                    $_SESSION['KIT2_COOKIE_FILE'] = WB_PATH.'/kit2/temp/session/'.uniqid('outputfilter_');
+                    $options[CURLOPT_COOKIEJAR] = $_SESSION['KIT2_COOKIE_FILE'];
+                }
+                else {
+                    $options[CURLOPT_COOKIEFILE] = $_SESSION['KIT2_COOKIE_FILE'];
+                }
+
                 $ch = curl_init();
                 curl_setopt_array($ch, $options);
 
