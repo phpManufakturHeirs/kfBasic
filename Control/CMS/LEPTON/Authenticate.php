@@ -9,4 +9,4 @@
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
  */
 
-require_once '../WebsiteBaker/Authenticate.php';
+require_once __DIR__.'/../WebsiteBaker/Authenticate.php';

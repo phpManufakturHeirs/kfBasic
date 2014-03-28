@@ -10,4 +10,4 @@
  */
 
 // actual need only the WebsiteBaker implementation
-require_once '/WebsiteBaker/Authenticate.php';
+require_once __DIR__.'/WebsiteBaker/Authenticate.php';
