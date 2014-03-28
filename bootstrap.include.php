@@ -61,7 +61,7 @@ try {
     define('FRAMEWORK_PATH', $app['utils']->sanitizePath(BOOTSTRAP_PATH));
     define('FRAMEWORK_TEMP_PATH', isset($framework_config['FRAMEWORK_TEMP_PATH']) ?
         $framework_config['FRAMEWORK_TEMP_PATH'] : FRAMEWORK_PATH . '/temp');
-    define('FRAMEWORK_TEMP_URL', isset($framwework_config['FRAMEWORK_TEMP_URL']) ?
+    define('FRAMEWORK_TEMP_URL', isset($framework_config['FRAMEWORK_TEMP_URL']) ?
         $framework_config['FRAMEWORK_TEMP_URL'] : FRAMEWORK_URL . '/temp');
     define('FRAMEWORK_TEMPLATES', isset($framework_config['FRAMEWORK_TEMPLATES']) ?
         implode(',', $framework_config['FRAMEWORK_TEMPLATES']) : 'default');
@@ -102,7 +102,6 @@ try {
 } catch (\Exception $e) {
     throw new \Exception('Problem setting the framework constants!', 0, $e);
 }
-
 // debug mode
 $app['debug'] = FRAMEWORK_DEBUG;
 
