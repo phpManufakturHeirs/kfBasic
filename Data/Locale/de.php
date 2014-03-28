@@ -15,6 +15,9 @@ if ('á' != "\xc3\xa1") {
 }
 
 return array(
+    '- please select -'
+        => '- bitte auswählen -',
+
     'Abort'
         => 'Abbruch',
     'Access denied'
