@@ -55,6 +55,7 @@ class twigExtension extends Twig_Extension
             'CMS_ADMIN_URL' => CMS_ADMIN_URL,
             'CMS_MEDIA_URL' => CMS_MEDIA_URL,
             'CMS_TYPE' => CMS_TYPE,
+            'CMS_PATH' => CMS_PATH,
             'CMS_URL' => CMS_URL,
             'CMS_VERSION' => CMS_VERSION,
             'FRAMEWORK_MEDIA_URL' => FRAMEWORK_MEDIA_URL,
