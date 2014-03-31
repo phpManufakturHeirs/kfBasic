@@ -201,8 +201,15 @@ class ExtensionCatalog extends Alert
         return true;
     }
 
-    public function getAvailableExtensions()
+    /**
+     * Get the available extensions for this kitFramework installation
+     *
+     * @param string $locale default = 'en'
+     * @return array
+     */
+    public function getAvailableExtensions($locale='en')
     {
+        $locale = strtolower($locale);
         $catalog = new Catalog($this->app);
         $items = $catalog->selectAll();
 
@@ -217,13 +224,13 @@ class ExtensionCatalog extends Alert
             $data = $item;
             $info = json_decode(base64_decode($item['info']), true);
             $data['info'] = $info;
-            if (isset($info['description'][$this->app['locale']])) {
+            if (isset($info['description'][$locale])) {
                 // description for the actual locale is available
                 $description = array(
-                    'title' => isset($info['description'][$this->app['locale']]['title']) ? $info['description'][$this->app['locale']]['title'] : '',
-                    'short' => isset($info['description'][$this->app['locale']]['short']) ? $info['description'][$this->app['locale']]['short'] : '',
-                    'long' => isset($info['description'][$this->app['locale']]['long']) ? $info['description'][$this->app['locale']]['long'] : '',
-                    'url' => isset($info['description'][$this->app['locale']]['url']) ? $info['description'][$this->app['locale']]['url'] : ''
+                    'title' => isset($info['description'][$locale]['title']) ? $info['description'][$locale]['title'] : '',
+                    'short' => isset($info['description'][$locale]['short']) ? $info['description'][$locale]['short'] : '',
+                    'long' => isset($info['description'][$locale]['long']) ? $info['description'][$locale]['long'] : '',
+                    'url' => isset($info['description'][$locale]['url']) ? $info['description'][$locale]['url'] : ''
                 );
             }
             else {
@@ -235,6 +242,7 @@ class ExtensionCatalog extends Alert
                     'url' => isset($info['description']['en']['url']) ? $info['description']['en']['url'] : ''
                 );
             }
+
             $data['description'] = $description;
             $result[] = $data;
         }

@@ -99,7 +99,7 @@ class Welcome extends Alert
         }
 
         $accepted_items = explode(',', CATALOG_ACCEPT_EXTENSION);
-        $cat_items = $catalog->getAvailableExtensions();
+        $cat_items = $catalog->getAvailableExtensions($app['translator']->getLocale());
         $catalog_items = array();
         foreach ($cat_items as $item) {
             // show only catalog items which have the accepted release status
