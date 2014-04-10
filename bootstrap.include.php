@@ -289,10 +289,6 @@ $app['twig'] = $app->share($app->extend('twig', function  ($twig, $app)
 
 $app['monolog']->addDebug('TwigServiceProvider registered.');
 
-
-// register the Markdown service provider
-$app->register(new MarkdownServiceProvider());
-
 // register Validator Service
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 $app['monolog']->addDebug('Validator Service Provider registered.');

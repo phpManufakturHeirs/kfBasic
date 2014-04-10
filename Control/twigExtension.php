@@ -91,7 +91,8 @@ class twigExtension extends Twig_Extension
             'mailHide' => new \Twig_Function_Method($this, 'mailHide'),
             'mailHideIsActive' => new \Twig_Function_Method($this, 'mailHideIsActive'),
             'fileExists' => new \Twig_Function_Method($this, 'fileExists'),
-            'image' => new \Twig_Function_Method($this, 'image')
+            'image' => new \Twig_Function_Method($this, 'image'),
+            'markdown' => new \Twig_Function_Method($this, 'functionMarkdown')
         );
     }
 
@@ -102,7 +103,8 @@ class twigExtension extends Twig_Extension
     public function getFilters()
     {
         return array(
-            'ellipsis' => new \Twig_Filter_Method($this, 'filterEllipsis')
+            'ellipsis' => new \Twig_Filter_Method($this, 'filterEllipsis'),
+            'markdown' => new \Twig_Filter_Method($this, 'filterMarkdown')
         );
     }
 
@@ -336,5 +338,26 @@ class twigExtension extends Twig_Extension
         return $this->app['utils']->Ellipsis($text, $length, $striptags, $htmlpurifier);
     }
 
+    /**
+     * Return the given markdown $text as HTML
+     *
+     * @param string $text
+     * @param boolean $extra
+     */
+    public function filterMarkdown($text, $extra=true)
+    {
+        return $this->app['markdown']->html($text, $extra, false);
+    }
+
+    /**
+     * Return the given markdown $text as HTML
+     *
+     * @param string $text
+     * @param boolean $extra
+     */
+    public function functionMarkdown($text, $extra)
+    {
+        return $this->app['markdown']->html($text, $extra, false);
+    }
 }
 
