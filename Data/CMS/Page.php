@@ -83,7 +83,7 @@ class Page {
                 $parameter['topic_id'] = $command_parameter['cms']['special']['topic_id'];
             }
             if (isset($command_parameter['cms']['special']['post_id'])) {
-                $parameter['topic_id'] = $command_parameter['cms']['special']['post_id'];
+                $parameter['post_id'] = $command_parameter['cms']['special']['post_id'];
             }
         }
         else {
