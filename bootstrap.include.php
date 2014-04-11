@@ -20,7 +20,6 @@ use phpManufaktur\Basic\Control\Account\manufakturPasswordEncoder;
 use phpManufaktur\Basic\Control\twigExtension;
 use phpManufaktur\Basic\Control\Utils;
 use phpManufaktur\Basic\Data\Setup\Setup;
-use Nicl\Silex\MarkdownServiceProvider;
 use Symfony\Component\HttpFoundation\Response;
 use Monolog\Handler\SwiftMailerHandler;
 use phpManufaktur\Basic\Control\ReCaptcha\ReCaptcha;
@@ -271,7 +270,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
     )
 ));
 
-// set namespaces for phpManufaktur, thirdParty, framework and CMS template
+// set namespaces for phpManufaktur and thirdParty
 $app['twig.loader.filesystem']->addPath(MANUFAKTUR_PATH, 'phpManufaktur');
 $app['twig.loader.filesystem']->addPath(THIRDPARTY_PATH, 'thirdParty');
 // IMPORTANT: define these namespaces also in phpManufaktur\Basic\Control\Utils\templateFile()
