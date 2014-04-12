@@ -17,16 +17,71 @@ if ('á' != "\xc3\xa1") {
 }
 
 return array(
+    'April'
+        => 'April',
+    'August'
+        => 'August',
+
     'CURRENCY_SYMBOL'
         => '€',
+
     'DATE_FORMAT'
         => 'd.m.Y',
     'DATETIME_FORMAT'
         => 'd.m.Y H:i',
+    'December'
+        => 'Dezember',
     'DECIMAL_SEPARATOR'
         => ',',
+
+    'February'
+        => 'Februar',
+    'Friday'
+        => 'Freitag',
+
+    'January'
+        => 'Januar',
+    'July'
+        => 'Juli',
+    'June'
+        => 'Juni',
+
+    'March'
+        => 'März',
+    'May'
+        => 'Mai',
+    'Monday'
+        => 'Montag',
+
+    'November'
+        => 'November',
+
+    "o'clock"
+        => 'Uhr',
+    'October'
+        => 'Oktober',
+
+    'Saturday'
+        => 'Samstag',
+    'September'
+        => 'September',
+    'Sunday'
+        => 'Sonntag',
+
     'TIME_FORMAT'
         => 'H:i',
     'THOUSAND_SEPARATOR'
         => '.',
+    'Thursday'
+        => 'Donnerstag',
+    'Tuesday'
+        => 'Dienstag',
+
+    'Wednesday'
+        => 'Mittwoch',
+    'Weekday'
+        => 'Wochentag',
+    'Weekdays'
+        => 'Wochentage',
+
 );

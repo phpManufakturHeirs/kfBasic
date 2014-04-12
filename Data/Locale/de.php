@@ -38,10 +38,6 @@ return array(
         => 'Zusatzinformation',
     'alpha'
         => '- in Entwicklung -',
-    'April'
-        => 'April',
-    'August'
-        => 'August',
     'Available extensions'
         => 'Verfügbare Erweiterungen',
 
@@ -85,8 +81,6 @@ return array(
 
     'Data replication'
         => 'Datenabgleich',
-    'December'
-        => 'Dezember',
     'Delete this account irrevocable'
         => 'Benutzerkonto unwiderruflich löschen',
     'Displayname'
@@ -109,8 +103,6 @@ return array(
     'Extensions'
         => 'Erweiterungen',
 
-    'February'
-        => 'Februar',
     'File'
         => 'Datei',
     'First steps'
@@ -119,8 +111,6 @@ return array(
         => 'Für die Veranstaltung mit der ID %event_id% ist keine Wiederholung festgelegt.',
     'Forgot your password?'
         => 'Passwort vergessen?',
-    'Friday'
-        => 'Freitag',
 
     'Get in touch with the developers, receive support, tipps and tricks for %command%!'
         => 'Treten Sie mit den Entwicklern in Kontakt und erhalten Unterstützung, erfahren Tipps sowie Tricks zu %command%!',
@@ -135,8 +125,6 @@ return array(
         => 'Hallo %name%,<br />Sie möchten Ihr Passwort ändern, bitte geben Sie das neue Passwort ein, wiederholen Sie es zur Sicherheit und schicken Sie das Formular ab.<br />Falls Sie Ihr Passwort nicht ändern möchten, verlassen Sie bitte einfach diesen Dialog.',
     'Help'
         => 'Hilfe',
-    "o'clock"
-        => 'Uhr',
 
     'If you have forgotten your password, you can order a link to create a new one. Please type in the email address assigned to your account and submit the form.'
         => 'Falls Sie Ihr Passwort vergessen haben, können Sie einen Link anfordern um ein neues Passwort zu erstellen. Bitte tragen Sie die E-Mail Adresse ein, die ihrem Konto zugeordnet ist und übermitteln Sie das Formular.',
@@ -158,13 +146,6 @@ return array(
         => 'Der private Schlüssel für den ReCaptcha Service ist ungültig, prüfen Sie die Einstellungen!',
     'Issues'
         => 'Mängel',
-
-    'January'
-        => 'Januar',
-    'July'
-        => 'Juli',
-    'June'
-        => 'Juni',
 
     'kitFramework - Create new password'
         => 'kitFramework - Neues Passwort anlegen',
@@ -190,28 +171,18 @@ return array(
     'Logout' =>
         'Abmelden',
 
-    'March'
-        => 'März',
-    'May'
-        => 'Mai',
     'Message'
         => 'Mitteilung',
-    'Monday'
-        => 'Montag',
     'more information about <b>%command%</b> ...'
         => 'mehr Informationen über <b>%command%</b> ...',
     'New kitFramework release available!'
         => 'Es ist eine neue kitFramework Release verfügbar!',
-    'November'
-        => 'November',
 
     'NO'
         => 'Nein',
     'No fitting user role dectected!'
         => 'Es wurde kein passendes Benutzerrecht gefunden',
 
-    'October'
-        => 'Oktober',
     'Oooops, missing the alert which should be prompted here ... '
         => 'Hoppla, da fehlt die Meldung die hier eigentlich angezeigt werden sollte ...',
     'Open this helpfile in a new window'
@@ -257,8 +228,6 @@ return array(
     'Roles'
         => 'Benutzerrechte, Rollen',
 
-    'Saturday'
-        => 'Samstag',
     'Scan for installed extensions'
         => 'Nach installierten Erweiterungen suchen',
     'Scan the online catalog for available extensions'
@@ -273,8 +242,6 @@ return array(
         => 'Dem Benutzer %name% wurde eine Kontoinformation zugesendet.',
     'Send email (only if the password has changed)'
         => 'Zugangsdaten senden (nur wenn das Passwort geändert wurde)',
-    'September'
-        => 'September',
     'Show a list of all installed kitCommands'
         => 'Eine Liste mit den installierten kitCommands anzeigen',
     'Sorry, but only Administrators are allowed to access this kitFramework extension.'
@@ -297,8 +264,6 @@ return array(
         => 'Die Erweiterung %extension% wurde erfolgreich entfernt.',
     'Successfull updated the extension %extension%.'
         => 'Die Erweiterung %extension% wurde erfolgreich aktualisiert.',
-    'Sunday'
-        => 'Sonntag',
     'Support'
         => 'Unterstützung',
     'Switch back to the administration of this user account'
@@ -370,10 +335,6 @@ return array(
         => 'Diesem Benutzer sind insgesamt <b>%count%</b> Rechte zugewiesen.',
     'This value is not a valid email address.'
         => 'Es wurde keine gültige E-Mail Adresse übergeben!',
-    'Thursday'
-        => 'Donnerstag',
-    'Tuesday'
-        => 'Dienstag',
 
     'Unknown user'
         => 'Unbekannter Benutzer',
@@ -404,12 +365,6 @@ return array(
 
     'We have send a link to your email address %email%.'
         => 'Wir haben Ihnen einen Link an Ihre E-Mail Adresse %email% gesendet.',
-    'Wednesday'
-        => 'Mittwoch',
-    'Weekday'
-        => 'Wochentag',
-    'Weekdays'
-        => 'Wochentage',
     'Welcome' =>
         'Herzlich Willkommen!',
     'Welcome back, %user%! Please select the entry point you want to use.'
