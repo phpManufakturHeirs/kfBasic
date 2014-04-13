@@ -144,7 +144,7 @@ class Page
     public function getTitle($page_id, $arguments=null)
     {
         try {
-            if (isset($arguments['topic_id']) && !is_null($arguments['topic_id'])) {
+            if (isset($arguments['topic_id']) && !is_null($arguments['topic_id']) && ($arguments['topic_id'] > 0)) {
                 // indicate a TOPICS page
                 if (!file_exists(CMS_PATH . '/modules/topics/module_settings.php')) {
                     throw new \Exception('A TOPIC_ID was submitted, but the TOPICS addon is not installed at the parent CMS!');
@@ -154,7 +154,7 @@ class Page
                 return $this->app['db']->fetchColumn($SQL);
             }
 
-            if (isset($arguments['post_id']) && !is_null($arguments['post_id'])) {
+            if (isset($arguments['post_id']) && !is_null($arguments['post_id']) && ($arguments['post_id'] > 0)) {
                 // indicate a NEWS page
                 if (!file_exists(CMS_PATH. '/modules/news/info.php')) {
                     throw new \Exception('A POST_ID was submitted, but the NEWS addon is not installed at the parent CMS!');
