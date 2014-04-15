@@ -29,6 +29,7 @@ use phpManufaktur\Basic\Control\Account\CustomLogoutSuccessHandler;
 use phpManufaktur\Basic\Control\Account\CustomAuthenticationSuccessHandler;
 use phpManufaktur\Basic\Data\dbUtils;
 use phpManufaktur\Basic\Control\Image;
+use phpManufaktur\Basic\Control\MarkdownFunctions;
 
 // set the error handling
 ini_set('display_errors', 1);
@@ -242,11 +243,11 @@ $app['monolog']->addDebug('Translator Service registered. Added ArrayLoader to t
 // load the language files
 $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Basic/Data/Locale');
 
-// load the /Custom language files
-$app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Basic/Data/Locale/Custom');
-
 // load the /Metric language files
 $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Basic/Data/Locale/Metric');
+
+// load the /Custom language files
+$app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Basic/Data/Locale/Custom');
 
 // share the ReCaptcha service
 $app['recaptcha'] = $app->share(function($app) {
@@ -259,6 +260,12 @@ $app['image'] = $app->share(function($app) {
     return new Image($app);
 });
 $app['monolog']->addDebug('Share the Image Tools');
+
+// Markdown Parser
+$app['markdown'] = $app->share(function($app) {
+    return new MarkdownFunctions($app);
+});
+$app['monolog']->addDebug('Share the Markdown Functions');
 
 // register Twig
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
