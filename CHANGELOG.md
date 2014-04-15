@@ -6,6 +6,16 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.88** - 2014-04-15
+
+* fixed path for the CMS Authenticate classes
+* added CMS_PATH also for the Twig Templates
+* fixed a problem in language dependency
+* fixed a strong typo: used `topic_id` instead of `post_id`
+* Changed the markup parser handling for the twig template engine
+* moved month- and week names to /Metric/de.php
+* extended check for POST_ID and TOPIC_ID
+
 **0.87** - 2014-03-24
 
 * added `getPageVisibilityByPageID()`
