@@ -41,7 +41,7 @@ class OutputFilter
         global $database;
         global $post_id;
 
-        if (defined('TOPIC_ID')) {
+        if (defined('TOPIC_ID') && (TOPIC_ID > 0)) {
             // this is a TOPICS page
             $SQL = "SELECT `link` FROM `".TABLE_PREFIX."mod_topics` WHERE `topic_id`='".TOPIC_ID."'";
             $link = $database->get_one($SQL);
@@ -55,7 +55,7 @@ class OutputFilter
             return WB_URL . $topics_directory . $link . PAGE_EXTENSION;
         }
 
-        if (!is_null($post_id) || defined('POST_ID')) {
+        if (!is_null($post_id) || (defined('POST_ID') && (POST_ID > 0))) {
             // this is a NEWS page
             $id = (defined('POST_ID')) ? POST_ID : $post_id;
             $SQL = "SELECT `link` FROM `".TABLE_PREFIX."mod_news_posts` WHERE `post_id`='$id'";
