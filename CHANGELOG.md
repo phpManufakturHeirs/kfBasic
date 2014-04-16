@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.89** - 2014-04-16
+
+* Bugfix: extended check for `TOPIC_ID` and `POST_ID` in OutputFilter
+
 **0.88** - 2014-04-15
 
 * fixed path for the CMS Authenticate classes
