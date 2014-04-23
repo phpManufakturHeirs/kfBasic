@@ -500,6 +500,10 @@ class OutputFilter
             $meta->setAttribute('name', $meta_name);
             $meta->setAttribute('content', $meta_content);
             $head = $DOM->getElementsByTagName('head')->item(0);
+            if (!is_object($head)) {
+                // problem initializing - leave here and just return false
+                return false;
+            }
             $head->appendChild($meta);
         }
 
