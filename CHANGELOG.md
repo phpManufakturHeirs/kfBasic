@@ -6,6 +6,11 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.90** - 2014-04-28
+
+* solved problem with exceeded download limit at Github
+* added check to prevent access to non-initialized DOM Object in Output Filter
+
 **0.89** - 2014-04-16
 
 * Bugfix: extended check for `TOPIC_ID` and `POST_ID` in OutputFilter
