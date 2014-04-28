@@ -8,7 +8,7 @@
  * @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
  */
-
+$starttime = microtime();
 require_once realpath(BOOTSTRAP_PATH.'/framework/autoload.php');
 
 use Symfony\Component\HttpKernel\Debug\ErrorHandler;
@@ -30,6 +30,7 @@ use phpManufaktur\Basic\Control\Account\CustomAuthenticationSuccessHandler;
 use phpManufaktur\Basic\Data\dbUtils;
 use phpManufaktur\Basic\Control\Image;
 use phpManufaktur\Basic\Control\MarkdownFunctions;
+use Symfony\Component\Finder\Finder;
 
 // set the error handling
 ini_set('display_errors', 1);
@@ -240,14 +241,24 @@ $app['translator']->setLocale($locale);
 
 $app['monolog']->addDebug('Translator Service registered. Added ArrayLoader to the Translator');
 
-// load the language files
-$app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Basic/Data/Locale');
-
-// load the /Metric language files
-$app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Basic/Data/Locale/Metric');
-
-// load the /Custom language files
-$app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Basic/Data/Locale/Custom');
+// load the language files for all extensions
+$locales = new Finder();
+$locales->name('*.php')->in(array(
+    MANUFAKTUR_PATH.'/Basic/Data/Locale/Metric',
+    MANUFAKTUR_PATH.'/*/Data/Locale',
+    THIRDPARTY_PATH.'/*/Data/Locale',
+    MANUFAKTUR_PATH.'/*/Data/Locale/Custom',
+));
+$locales->depth('== 0');
+foreach ($locales as $locale) {
+    // add the locale resource file
+    $app['translator'] = $app->share($app->extend('translator', function ($translator) use ($locale) {
+        $lang_array = include_once $locale->getRealpath();
+        $translator->addResource('array', $lang_array, $locale->getBasename('.php'));
+        return $translator;
+    }));
+    $app['monolog']->addDebug('Added language file: '.$locale->getRealpath());
+}
 
 // share the ReCaptcha service
 $app['recaptcha'] = $app->share(function($app) {
@@ -452,21 +463,14 @@ $command = $app['controllers_factory'];
 // kitFilter
 $filter = $app['controllers_factory'];
 
-// loop through /phpManufaktur and /thirdParty to include bootstrap extensions
-$scan_paths = array(MANUFAKTUR_PATH, THIRDPARTY_PATH);
-foreach ($scan_paths as $scan_path) {
-    $entries = scandir($scan_path);
-    foreach ($entries as $entry) {
-        if (is_dir($scan_path . '/' . $entry)) {
-            if (file_exists($scan_path . '/' . $entry . '/bootstrap.include.php')) {
-                // don't load the Basic bootstrap again
-                if ($entry == 'Basic') continue;
-                // include the bootstrap extension
-                include_once $scan_path . '/' . $entry . '/bootstrap.include.php';
-            }
-        }
-    }
+// loop through /phpManufaktur and /thirdParty to include all bootstrap.include.php files
+$bootstraps = new Finder();
+$bootstraps->name('bootstrap.include.php')->in(array(MANUFAKTUR_PATH, THIRDPARTY_PATH))->exclude('Basic');
+$bootstraps->depth('< 2');
+foreach ($bootstraps as $bootstrap) {
+    include_once $bootstrap->getRealpath();
 }
+
 
 // GENERAL ROUTES for the kitFramework
 
