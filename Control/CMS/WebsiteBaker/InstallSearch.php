@@ -42,6 +42,17 @@ class InstallSearch
             MANUFAKTUR_PATH.'/Basic/Data/Setup/Files/CMS/WebsiteBaker/Search',
             CMS_PATH.'/modules/kit_framework_search');
 
+        // initialize the needed variables
+        $module_directory = null;
+        $module_name = null;
+        $module_description = null;
+        $module_function = null;
+        $module_version = null;
+        $module_platform = null;
+        $module_author = null;
+        $module_license = null;
+        $module_guid = null;
+
         // include the info.php to get the actual information
         include_once MANUFAKTUR_PATH.'/Basic/Data/Setup/Files/CMS/WebsiteBaker/Search/info.php';
 
