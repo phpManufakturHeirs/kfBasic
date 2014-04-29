@@ -486,6 +486,8 @@ class Utils
      */
     function addLanguageFiles($locale_path)
     {
+        $this->app['monolog']->addDebug('The function addLanguageFiles() is deprecrated, all locales will be loaded automatically!',
+            array(__METHOD__, __LINE__, 'Locale: '.$locale_path));
         return true;
     }
 
