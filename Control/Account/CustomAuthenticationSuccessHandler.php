@@ -15,7 +15,6 @@ use Symfony\Component\Security\Http\Authentication\DefaultAuthenticationSuccessH
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use phpManufaktur\Basic\Data\Security\Users;
 use Silex\Application;
 
 class CustomAuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
