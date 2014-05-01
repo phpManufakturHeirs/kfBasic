@@ -242,13 +242,28 @@ $app['translator']->setLocale($locale);
 $app['monolog']->addDebug('Translator Service registered. Added ArrayLoader to the Translator');
 
 // load the language files for all extensions
+$extensions = new Finder();
+$extensions->directories()->in(array(MANUFAKTUR_PATH, THIRDPARTY_PATH));
+$extensions->depth('== 0');
+
+$search = array(MANUFAKTUR_PATH.'/Basic/Data/Locale/Metric');
+
+// first add the existing regular locale directories
+foreach ($extensions as $extension) {
+    if ($app['filesystem']->exists($extension->getRealpath().'/Data/Locale')) {
+        $search[] = $extension->getRealpath().'/Data/Locale';
+    }
+}
+// at least add the existing custom locale directories
+foreach ($extensions as $extension) {
+    if ($app['filesystem']->exists($extension->getRealpath().'/Data/Locale/Custom')) {
+        $search[] = $extension->getRealpath().'/Data/Locale/Custom';
+    }
+}
+
 $locales = new Finder();
-$locales->name('*.php')->in(array(
-    MANUFAKTUR_PATH.'/Basic/Data/Locale/Metric',
-    MANUFAKTUR_PATH.'/*/Data/Locale',
-    THIRDPARTY_PATH.'/*/Data/Locale',
-    MANUFAKTUR_PATH.'/*/Data/Locale/Custom',
-));
+$locales->name('*.php')->in($search);
+
 $locales->depth('== 0');
 foreach ($locales as $locale) {
     // add the locale resource file
