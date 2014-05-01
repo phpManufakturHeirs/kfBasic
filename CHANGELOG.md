@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.92** - 2014-05-01
+
+* bugfix for a problem loading the locale files by BASIC (stumbled if missing a third party extension)
+
 **0.91** - 2014-04-30
 
 * BASIC is now loading *all* locale files, the function `$app['utils']->addLanguageFiles()` is no longer needed and marked as deprecated
