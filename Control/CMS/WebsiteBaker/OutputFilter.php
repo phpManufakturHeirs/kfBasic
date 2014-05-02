@@ -135,6 +135,10 @@ class OutputFilter
             $link->setAttribute('media', 'all');
             $link->setAttribute('href', $css_url);
             $head = $DOM->getElementsByTagName('head')->item(0);
+            if (!is_object($head)) {
+                // problem initializing - leave here and just return false
+                return false;
+            }
             $head->appendChild($link);
             $content = $DOM->saveHTML();
             return true;
@@ -222,6 +226,10 @@ class OutputFilter
             $script->setAttribute('type', 'text/javascript');
             $script->setAttribute('src', $js_url);
             $head = $DOM->getElementsByTagName('head')->item(0);
+            if (!is_object($head)) {
+                // problem initializing - leave here and just return false
+                return false;
+            }
             $head->appendChild($script);
             $content = $DOM->saveHTML();
             return true;
@@ -455,6 +463,10 @@ class OutputFilter
             $link->setAttribute('rel', 'canonical');
             $link->setAttribute('url', $canonical_url);
             $head = $DOM->getElementsByTagName('head')->item(0);
+            if (!is_object($head)) {
+                // problem initializing - leave here and just return false
+                return false;
+            }
             $head->appendChild($link);
         }
 
