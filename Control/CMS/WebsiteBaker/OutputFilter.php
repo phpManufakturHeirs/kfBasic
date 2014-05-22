@@ -645,6 +645,10 @@ class OutputFilter
                 // create or update the robots meta tag
                 $this->setMetaTag('robots', $params['robots'], $content);
             }
+            elseif (isset($_GET['robots']) && parseCMS) {
+                // create or update the robots meta tag
+                $this->setMetaTag('robots', $_GET['robots'], $content);
+            }
 
             if ($add_meta_generator && $parseCMS && (!isset($params['generator']) || (isset($params['generator']) &&
                 (($params['generator'] == 1) || (strtolower($params['generator']) == 'true'))))) {
