@@ -6,7 +6,7 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
-**0.93**
+**0.93** - 2014-05-23
 
 * extended checks for the DOM parser to prevent from accessing uninitialized Objects in CMS Outputfilter
 * add detection for GET parameter `robots`  for SEO improvements (*important!*)
