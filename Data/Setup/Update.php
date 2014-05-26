@@ -180,6 +180,19 @@ class Update
     }
 
     /**
+     * Relese 0.94
+     */
+    protected function release_094()
+    {
+        $config = $this->app['utils']->readConfiguration(FRAMEWORK_PATH.'/config/framework.json');
+        if (!isset($config['FRAMEWORK_UID'])) {
+            // create a unique identifier for the framework
+            $config['FRAMEWORK_UID'] = $this->app['utils']->createGUID();
+            file_put_contents(FRAMEWORK_PATH.'/config/framework.json', $this->app['utils']->JSONFormat($config));
+        }
+    }
+
+    /**
      * Update the database tables for the BASIC extension of the kitFramework
      *
      * @param Application $app
@@ -196,6 +209,7 @@ class Update
         $this->release_072();
         $this->release_076();
         $this->release_084();
+        $this->release_094();
 
         // install the search function
         $Search = new InstallSearch($app);

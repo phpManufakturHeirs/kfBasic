@@ -524,6 +524,65 @@ class OutputFilter
     }
 
     /**
+     * Attach a FUID=FRAMEWORK_UID parameter to all WB_URL links which not point
+     * to the PAGES directory, assuming that these are kitFramework permanent links.
+     *
+     * @param string $content
+     * @return boolean|string
+     */
+    protected function attachFUIDtoPermalinks($content)
+    {
+        $DOM = new \DOMDocument;
+        // enable internal error handling
+        libxml_use_internal_errors(true);
+        // need a hack to properly handle UTF-8 encoding
+        if (!$DOM->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', "UTF-8"))) {
+            // on error still return false
+            return $content;
+        }
+        libxml_clear_errors();
+
+        $changed = false;
+
+        $links = $DOM->getElementsByTagName('a');
+        foreach ($links as $link) {
+            $item = $link->getAttribute('href');
+            if ((false !== stripos($item, WB_URL)) && (false === stripos($item, WB_URL.PAGES_DIRECTORY.'/'))) {
+                // URL inside the installation but outside of the pages directory - possibly permanent link
+                if (false === strpos($item, '?')) {
+                    // item has no query
+                    $item = $item.'?fuid='.FRAMEWORK_UID;
+                    $link->setAttribute('href', $item);
+                    $changed = true;
+                }
+                else {
+                    $query_str = parse_url($item, PHP_URL_QUERY);
+                    $query_array = strpos($query_str, '&') ? explode('&', $query_str) : array($query_str);
+                    $fuid_exists = false;
+                    foreach ($query_array as $query_item) {
+                        if (strpos($query_item, '=')) {
+                            list($key, $value) = explode('=', $query_item);
+                            if ($key == 'fuid') {
+                                $fuid_exists = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!$fuid_exists) {
+                        $item = $item.'?fuid='.FRAMEWORK_UID;
+                        $link->setAttribute('href', $item);
+                        $changed = true;
+                    }
+                }
+            }
+        }
+        if ($changed) {
+            return $DOM->saveHTML();
+        }
+        return $content;
+    }
+
+    /**
      * Execute the content filter for the kitFramework.
      * Extract CMS parameters like type, version, path, url, id of the calling
      * page and other, additional routes all parameters of a kitCommand and all
@@ -731,6 +790,12 @@ class OutputFilter
                     $content = $response;
                 }
                 else {
+                    if (!empty($response) &&
+                        ((isset($_GET['fuid']) && ($_GET['fuid'] == FRAMEWORK_UID)) ||
+                         (isset($_POST['fuid']) && ($_POST['fuid'] == FRAMEWORK_UID)))) {
+                        // attach the fuid parameter to all permanent links!
+                        $response = $this->attachFUIDtoPermalinks($response);
+                    }
                     // replace the kitCommand
                     $search = str_replace(array('[','|'), array('\[','\|'), $command_expression);
                     if (preg_match('%<[^>\/]+>\s*'.$search.'\s*<\/[^>]+>%si', $content, $hits)) {

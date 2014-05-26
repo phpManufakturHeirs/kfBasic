@@ -100,6 +100,7 @@ try {
         // add the accepted extensions to the framework configuration array
         $framework_config['CATALOG_ACCEPT_EXTENSION'] = explode(',', CATALOG_ACCEPT_EXTENSION);
     }
+    define('FRAMEWORK_UID', isset($framework_config['FRAMEWORK_UID']) ? $framework_config['FRAMEWORK_UID'] : null);
 } catch (\Exception $e) {
     throw new \Exception('Problem setting the framework constants!', 0, $e);
 }
