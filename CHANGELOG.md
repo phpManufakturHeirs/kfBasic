@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.94** - 2014-05-26
+
+* introduce the constant `FRAMEWORK_UID` with a unique ID for each kitFramework installation which can be used for simplified authentication of application processes
+
 **0.93** - 2014-05-23
 
 * extended checks for the DOM parser to prevent from accessing uninitialized Objects in CMS Outputfilter
