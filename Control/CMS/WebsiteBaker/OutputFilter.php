@@ -704,7 +704,7 @@ class OutputFilter
                 // create or update the robots meta tag
                 $this->setMetaTag('robots', $params['robots'], $content);
             }
-            elseif (isset($_GET['robots']) && parseCMS) {
+            elseif (isset($_GET['robots']) && $parseCMS) {
                 // create or update the robots meta tag
                 $this->setMetaTag('robots', $_GET['robots'], $content);
             }
