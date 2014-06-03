@@ -6,6 +6,15 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.95** - 2014-06-03
+
+* fixed a strong typo in OutputFilter
+* Try to create a symlink in /media/public to the CMS /media directory
+* fixed: sometimes the outputfilter destroy the brackets of the [WBLINKxx] tags
+* changed loading for bootstrap and font-awesome to `latest`
+* changed `iframe.body.twig` to container-fluid
+* changed ROBOTS handling for kitCommands `catalog`, `help` and `list`
+
 **0.94** - 2014-05-26
 
 * introduce the constant `FRAMEWORK_UID` with a unique ID for each kitFramework installation which can be used for simplified authentication of application processes
