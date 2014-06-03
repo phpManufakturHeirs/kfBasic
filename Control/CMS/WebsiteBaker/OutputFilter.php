@@ -822,6 +822,9 @@ class OutputFilter
                     elseif (isset($params['canonical'])) {
                         $this->setCanonicalLink($command, $params['canonical'], $content);
                     }
+
+                    // sometimes the filter destroy the brackets of the [wblink123] so we fix it ...
+                    $content = str_replace(array('%5B','%5D'), array('[',']'), $content );
                 }
             }
             else {
