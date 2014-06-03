@@ -14,6 +14,7 @@ namespace phpManufaktur\Basic\Data\Setup;
 use Silex\Application;
 use phpManufaktur\Basic\Control\CMS\InstallSearch;
 use phpManufaktur\Basic\Data\Security\AdminAction;
+use Symfony\Component\Filesystem\Exception\IOException;
 
 class Update
 {
@@ -193,6 +194,25 @@ class Update
     }
 
     /**
+     * Release 0.95
+     */
+    protected function release_095()
+    {
+        if (!$this->app['filesystem']->exists(FRAMEWORK_MEDIA_PATH)) {
+            $this->app['filesystem']->mkdir(FRAMEWORK_MEDIA_PATH);
+        }
+        if (!$this->app['filesystem']->exists(FRAMEWORK_MEDIA_PATH.'/cms')) {
+            // try to create a symbolic link to the CMS MEDIA directory
+            try {
+                $this->app['filesystem']->symlink(CMS_MEDIA_PATH, FRAMEWORK_MEDIA_PATH.'/cms');
+            } catch (IOException $e) {
+                // symlink creation fails!
+                $this->app['monolog']->addDebug($e->getMessage());
+            }
+        }
+    }
+
+    /**
      * Update the database tables for the BASIC extension of the kitFramework
      *
      * @param Application $app
@@ -210,6 +230,7 @@ class Update
         $this->release_076();
         $this->release_084();
         $this->release_094();
+        $this->release_095();
 
         // install the search function
         $Search = new InstallSearch($app);
