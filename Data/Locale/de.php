@@ -374,6 +374,8 @@ return array(
         => 'Ja',
     'You are not allowed to access this resource!'
         => 'Sie sind nicht befugt auf diese Resource zuzugreifen.',
+    'Your are not authenticated, please login!'
+        => 'Sie sind nicht angemeldet, bitte authentifizieren Sie sich zunächst!',
     'Your account was succesfull updated.'
         => 'Ihr Benutzerkonto wurde erfolgreich geändert.',
 );
