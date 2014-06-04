@@ -227,7 +227,9 @@ class Alert
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
             '@phpManufaktur/Basic/Template', 'kitcommand/bootstrap/alert.twig'),
             array(
-                'basic' => $this->getBasicSettings()
+                'basic' => array(
+                    'alert' => $this->getAlert()
+                )
             ));
     }
 }
