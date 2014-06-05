@@ -72,6 +72,8 @@ return array(
         => 'Zeitüberschreitung bei der CAPTCHA Übermittlung, bitte versuchen Sie es erneut.',
     'commercial use only'
         => '- nur kommerzielle Verwendung -',
+    'Copy the GUID to the clipboard'
+        => 'Die GUID in die Zwischenablage kopieren',
     'Could not move the unzipped files to the target directory.'
         => 'Konnte die entpackten Dateien nicht in das Zielverzeichnis verschieben!',
     'Create a new account'
@@ -112,6 +114,8 @@ return array(
     'Forgot your password?'
         => 'Passwort vergessen?',
 
+    'Generate a globally unique identifier (GUID)'
+        => 'Eine weltweit eindeutige Kennziffer erstellen (GUID)',
     'Get in touch with the developers, receive support, tipps and tricks for %command%!'
         => 'Treten Sie mit den Entwicklern in Kontakt und erhalten Unterstützung, erfahren Tipps sowie Tricks zu %command%!',
     'Get more information about %command%'

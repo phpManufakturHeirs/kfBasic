@@ -618,6 +618,9 @@ $command->post('/list',
 $command->post('/catalog',
     'phpManufaktur\Basic\Control\kitCommand\Catalog::controllerCreateIFrame')
     ->setOption('info', MANUFAKTUR_PATH.'/Basic/command.catalog.json');
+$command->post('/guid',
+    'phpManufaktur\Basic\Control\kitCommand\GUID::ControllerCreateIFrame')
+    ->setOption('info', MANUFAKTUR_PATH.'/Basic/command.guid.json');
 
 // BASIC responses to kitCommands
 $app->get('/basic/help/{command}',
@@ -630,6 +633,8 @@ $app->get('/basic/list',
     'phpManufaktur\Basic\Control\kitCommand\ListCommands::getList');
 $app->get('/basic/catalog',
     'phpManufaktur\Basic\Control\kitCommand\Catalog::controllerCatalog');
+$app->get('/basic/guid',
+    'phpManufaktur\Basic\Control\kitCommand\GUID::ControllerGUID');
 
 // kitSEARCH
 $app->post('/kit_search/command/{command}',
