@@ -12,6 +12,7 @@ body {
   background-color: transparent !important;
 }
 
+.container-fluid,
 .container {
   padding: 0;
 }
