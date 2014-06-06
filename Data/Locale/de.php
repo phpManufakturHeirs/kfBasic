@@ -177,11 +177,13 @@ return array(
 
     'Message'
         => 'Mitteilung',
+    'Missing the parameter: %parameter%'
+        => 'Benötige den Parameter: %parameter%',
     'more information about <b>%command%</b> ...'
         => 'mehr Informationen über <b>%command%</b> ...',
+
     'New kitFramework release available!'
         => 'Es ist eine neue kitFramework Release verfügbar!',
-
     'NO'
         => 'Nein',
     'No fitting user role dectected!'
