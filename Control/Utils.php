@@ -811,4 +811,16 @@ class Utils
         return ucfirst(trim(strtolower(preg_replace('/[_\s]+/', ' ', $text))));
     }
 
+    /**
+     * Check if the given string is a valid JSON string
+     *
+     * @param string $string
+     * @return boolean
+     */
+    public function isJSON($string)
+    {
+        json_decode($string);
+        return (json_last_error() == JSON_ERROR_NONE);
+    }
+
 }
