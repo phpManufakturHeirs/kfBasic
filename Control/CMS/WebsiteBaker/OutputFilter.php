@@ -693,9 +693,17 @@ class OutputFilter
                 $simulate_expression = substr($command_expression, stripos($command_expression, 'simulate['));
                 $simulate_expression = substr($simulate_expression, 0, strpos($simulate_expression, ']')+2);
                 $response = str_replace($simulate_expression, '', $command_expression);
-                $response = sprintf('<var class="kitcommand-expression" title="Don\'t copy this expression - '.
-                    'it contains HTML tags to prevent it from execution!"><span class="disrupt">~</span>%s</var>',
-                    substr($response, 1));
+                $cmd = sprintf('<span class="disrupt">~</span>%s', substr($response, 1));
+                if (strtolower($params['simulate']) == 'copy') {                    
+                    $response = sprintf('<var class="kitcommand-expression" title="Use the copy link to copy this kitCommand to the clipboard!"><span class="disrupt">~</span>%s</var> '.
+                            '<a class="kitcommand-copy" href="#" data-clipboard-text="%s" title="Copy the kitCommand to the clipboard"><i class="fa fa-files-o"></i></a>',
+                        $cmd, $cmd);
+                }
+                else {
+                    $response = sprintf('<var class="kitcommand-expression" title="Don\'t copy this expression - '.
+                        'it contains HTML tags to prevent it from execution!"><span class="disrupt">~</span>%s</var>',
+                        $cmd);
+                }
                 $content = str_replace($command_expression, $response, $content);
                 continue;
             }
