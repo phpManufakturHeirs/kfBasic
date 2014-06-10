@@ -72,8 +72,12 @@ return array(
         => 'Zeitüberschreitung bei der CAPTCHA Übermittlung, bitte versuchen Sie es erneut.',
     'commercial use only'
         => '- nur kommerzielle Verwendung -',
+    'Copied kitCommand to clipboard!'
+        => 'Das kitCommand wurd in die Zwischenablage kopiert!',
     'Copy the GUID to the clipboard'
         => 'Die GUID in die Zwischenablage kopieren',
+    'Copy this kitCommand to the clipboard'
+        => 'Dieses kitCommand in die Zwischenablage kopieren',
     'Could not move the unzipped files to the target directory.'
         => 'Konnte die entpackten Dateien nicht in das Zielverzeichnis verschieben!',
     'Create a new account'
