@@ -590,6 +590,10 @@ $app->post('/welcome/login/check',
     // first login check
     'phpManufaktur\Basic\Control\Welcome::checkFirstLogin');
 
+// kitCommand Parser
+$app->post('/kit_parser',
+    'phpManufaktur\Basic\Control\kitCommand\Parser::ControllerParser');
+
 // kitFILTER
 $app->post('/kit_filter/{filter}',
     'phpManufaktur\Basic\Control\kitFilter\kitFilter::exec');
@@ -603,11 +607,7 @@ $filter->post('/mailhide',
     ->setOption('info', MANUFAKTUR_PATH.'/Basic/filter.mailhide.json');
 
 // kitCOMMAND
-$app->post('/kit_command/{command}',
-    'phpManufaktur\Basic\Control\kitCommand\kitCommand::exec');
-$app->post('/kit_command/{command}/{params}',
-    'phpManufaktur\Basic\Control\kitCommand\kitCommand::exec');
-$app->post('/command/exists/{command}',
+$command->post('/exists/{command}',
     'phpManufaktur\Basic\Control\kitCommand\ExistsCommand::ControllerExistsCommand');
 $command->post('/help',
     'phpManufaktur\Basic\Control\kitCommand\Help::createHelpFrame')
@@ -621,6 +621,8 @@ $command->post('/catalog',
 $command->post('/guid',
     'phpManufaktur\Basic\Control\kitCommand\GUID::ControllerCreateIFrame')
     ->setOption('info', MANUFAKTUR_PATH.'/Basic/command.guid.json');
+$command->post('/simulate',
+    'phpManufaktur\Basic\Control\kitCommand\Simulate::ControllerCreateIFrame');
 
 // BASIC responses to kitCommands
 $app->get('/basic/help/{command}',
@@ -635,6 +637,8 @@ $app->get('/basic/catalog',
     'phpManufaktur\Basic\Control\kitCommand\Catalog::controllerCatalog');
 $app->get('/basic/guid',
     'phpManufaktur\Basic\Control\kitCommand\GUID::ControllerGUID');
+$app->get('/basic/simulate',
+    'phpManufaktur\Basic\Control\kitCommand\Simulate::ControllerSimulate');
 
 // kitSEARCH
 $app->post('/kit_search/command/{command}',
