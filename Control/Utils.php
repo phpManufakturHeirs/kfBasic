@@ -16,6 +16,7 @@ use phpManufaktur\Basic\Control\CMS\OutputFilter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use phpManufaktur\Basic\Control\JSON\JSONFormat;
+use phpManufaktur\Basic\Control\kitCommand\Parser;
 
 // EXTENSION_PATH is not initialized yet use the full path!
 if (file_exists(BOOTSTRAP_PATH.'/extension/phpmanufaktur/phpManufaktur/Library/Extension/htmlpurifier/4.6.0/library/HTMLPurifier.auto.php')) {
@@ -558,15 +559,31 @@ class Utils
      */
     public function parseKITcommand($content)
     {
-        $Filter = new OutputFilter();
-        $commands = array();
-        // get the commands
-        $content = $Filter->parse($content, false, $commands);
-        // process each kitCommand
+        $Parser = new Parser();
+        $commands = $Parser->getCommandsOnly($this->app, $content);
         foreach ($commands as $command) {
-            // set the locale for the command
-            $command['cms']['locale'] = $this->app['translator']->getLocale();
-            $subRequest = Request::create('/command/'.$command['command'], 'POST', $command);
+            $parse = array(
+                'cms' => array(
+                    'locale' => $this->app['translator']->getLocale(),
+                    'page_id' => '-1',
+                    'page_url' => '',
+                    'user' => array(
+                        'id' => -1,
+                        'name' => '',
+                        'email' => ''
+                    ),
+                    'special' => array(
+                        'post_id' => null,
+                        'topic_id' => null
+                    )
+                ),
+                'GET' => array(),
+                'POST' => array(),
+                'command' => $command['command'],
+                'parameter' => $command['parameter'],
+                'expression' => $command['expression']
+            );
+            $subRequest = Request::create('/command/'.$command['command'], 'POST', $parse);
             $Response = $this->app->handle($subRequest, HttpKernelInterface::SUB_REQUEST, false);
             $content = str_replace($command['expression'], $Response->getContent(), $content);
         }
