@@ -15,7 +15,7 @@ class GUID extends Basic
         $this->setFrameAdd(0);
 
         return $app['twig']->render($app['utils']->getTemplateFile(
-            '@phpManufaktur/Basic/Template', 'kitcommand/guid.twig'),
+            '@phpManufaktur/Basic/Template', 'kitcommand/bootstrap/guid.twig'),
             array(
                 'guid' => $app['utils']->createGUID(),
                 'basic' => $this->getBasicSettings()
