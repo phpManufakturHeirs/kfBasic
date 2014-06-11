@@ -6,6 +6,22 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.96** - 2014-06-11
+
+* fixed a problem executing the Alert box as standalone page
+* extended check for page.cache, fixed content language
+* changed bootstrap and font-awesome loading in backend `body.twig` to `/latest` release
+* changed library dependencies to `/latest`
+* added kitCommand `~~ guid ~~`
+* introduce function `isJSON()` in `$app['utils']`
+* added svg graphic for indication empty images to the template `pattern`
+* start complete redesign and rewriting of the CMS OutputFilter
+* rewriting the kitCommand names enable to separate `simulate[]` to a own kitCommand and remove from OutputFilter
+* changed parsing method for kitCommands from inside kitFramework extensions
+* introduce kitCommand Parser, remove the routes to `/kit_command/` 
+* introduce virtual kitCommand `simulate`
+* changed kitFramework meta generator information
+
 **0.95** - 2014-06-03
 
 * fixed a strong typo in OutputFilter
