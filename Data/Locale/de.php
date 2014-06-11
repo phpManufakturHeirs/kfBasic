@@ -73,7 +73,7 @@ return array(
     'commercial use only'
         => '- nur kommerzielle Verwendung -',
     'Copied kitCommand to clipboard!'
-        => 'Das kitCommand wurd in die Zwischenablage kopiert!',
+        => 'Das kitCommand wurde in die Zwischenablage kopiert!',
     'Copy the GUID to the clipboard'
         => 'Die GUID in die Zwischenablage kopieren',
     'Copy this kitCommand to the clipboard'

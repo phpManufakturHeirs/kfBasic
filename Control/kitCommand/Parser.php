@@ -795,7 +795,7 @@ class Parser
                         }
                     }
                     if ($generator) {
-                        $this->setMetaTag('generator', 'kitFramework, (c) '.date('Y').' by phpManufaktur');
+                        $this->setMetaTag('generator', 'kitFramework - extend your CMS');
                     }
                     break;
                 case 'robots':
