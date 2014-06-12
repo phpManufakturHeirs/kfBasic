@@ -637,8 +637,8 @@ $app->get('/basic/catalog',
     'phpManufaktur\Basic\Control\kitCommand\Catalog::controllerCatalog');
 $app->get('/basic/guid',
     'phpManufaktur\Basic\Control\kitCommand\GUID::ControllerGUID');
-$app->get('/basic/simulate',
-    'phpManufaktur\Basic\Control\kitCommand\Simulate::ControllerSimulate');
+$app->get('/basic/simulate/copy',
+    'phpManufaktur\Basic\Control\kitCommand\Simulate::ControllerSimulateCopy');
 
 // kitSEARCH
 $app->post('/kit_search/command/{command}',
