@@ -7,13 +7,14 @@ use Silex\Application;
 
 class Simulate extends Basic
 {
+    protected static $parameter = null;
 
     /**
      * Prompt the given kitCommand expression
      *
      * @param Application $app
      */
-    public function ControllerSimulate(Application $app)
+    public function ControllerSimulateCopy(Application $app)
     {
         $this->initParameters($app);
 
@@ -25,11 +26,21 @@ class Simulate extends Basic
         }
 
         return $app['twig']->render($app['utils']->getTemplateFile(
-            '@phpManufaktur/Basic/Template', 'kitcommand/bootstrap/simulate.twig'),
+            '@phpManufaktur/Basic/Template', 'kitcommand/bootstrap/simulate.copy.twig'),
             array(
                 'parameter' => $parameter,
                 'basic' => $this->getBasicSettings()
         ));
+    }
+
+    protected function SimulateSimple()
+    {
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template', 'kitcommand/simulate.twig'),
+            array(
+                'parameter' => self::$parameter,
+                'basic' => $this->getBasicSettings()
+            ));
     }
 
     /**
@@ -40,6 +51,13 @@ class Simulate extends Basic
     public function ControllerCreateIFrame(Application $app)
     {
         $this->initParameters($app);
-        return $this->createIFrame('/basic/simulate');
+        self::$parameter = $this->getCommandParameters();
+
+        if (isset(self::$parameter['action']) && (strtolower(self::$parameter['action'] == 'copy'))) {
+            return $this->createIFrame('/basic/simulate/copy');
+        }
+        else {
+            return $this->SimulateSimple();
+        }
     }
 }
