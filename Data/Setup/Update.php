@@ -150,8 +150,12 @@ class Update
         foreach ($files as $file) {
             // remove no longer needed directories and files
             if ($this->app['filesystem']->exists(MANUFAKTUR_PATH.$file)) {
-                $this->app['filesystem']->remove(MANUFAKTUR_PATH.$file);
-                $this->app['monolog']->addInfo(sprintf('[BASIC Update] Removed file or directory %s', $file));
+                try {
+                    $this->app['filesystem']->remove(MANUFAKTUR_PATH.$file);
+                    $this->app['monolog']->addDebug(sprintf('[BASIC Update] Removed file or directory %s', $file));
+                } catch (IOException $e) {
+                    $this->app['monolog']->addDebug($e->getMessage());
+                }
             }
         }
     }
@@ -175,9 +179,13 @@ class Update
      */
     protected function release_084()
     {
-        // /logfile/kit2.log and /logfile/kit2.log.bak are no longer used
-        $this->app['filesystem']->remove(FRAMEWORK_PATH.'/logfile/kit2.log');
-        $this->app['filesystem']->remove(FRAMEWORK_PATH.'/logfile/kit2.log.bak');
+        try {
+            // /logfile/kit2.log and /logfile/kit2.log.bak are no longer used
+            $this->app['filesystem']->remove(FRAMEWORK_PATH.'/logfile/kit2.log');
+            $this->app['filesystem']->remove(FRAMEWORK_PATH.'/logfile/kit2.log.bak');
+        } catch (IOException $e) {
+            $this->app['monolog']->addDebug($e->getMessage());
+        }
     }
 
     /**
@@ -213,6 +221,20 @@ class Update
     }
 
     /**
+     * Release 0.96
+     */
+    protected function release_096()
+    {
+        if ($this->app['filesystem']->exists(MANUFAKTUR_PATH.'/Basic/Control/kitCommand/kitCommand.php')) {
+            try {
+                $this->app['filesystem']->remove(MANUFAKTUR_PATH.'/Basic/Control/kitCommand/kitCommand.php');
+            } catch (IOException $e) {
+                $this->app['monolog']->addDebug($e->getMessage());
+            }
+        }
+    }
+
+    /**
      * Update the database tables for the BASIC extension of the kitFramework
      *
      * @param Application $app
@@ -231,6 +253,7 @@ class Update
         $this->release_084();
         $this->release_094();
         $this->release_095();
+        $this->release_096();
 
         // install the search function
         $Search = new InstallSearch($app);
