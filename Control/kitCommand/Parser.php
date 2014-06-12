@@ -604,6 +604,17 @@ class Parser
             }
             $head->appendChild($link);
         }
+
+        // if a canonical link is set we have to check also an existing OpenGraph URL!
+        $metas = $DOM->getElementsByTagName('meta');
+        foreach ($metas as $meta) {
+            if (strtolower($meta->getAttribute('property')) == 'og:url') {
+                // update the existing og:url tag
+                $meta->setAttribute('content', $canonical_url);
+                break;
+            }
+        }
+
         self::$content = $DOM->saveHTML();
     }
 
