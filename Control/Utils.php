@@ -265,8 +265,16 @@ class Utils
     {
         $TEMPLATE_NAMESPACES = array(
             'phpManufaktur' => MANUFAKTUR_PATH,
-            'thirdParty' => THIRDPARTY_PATH
+            'phpmanufaktur' => MANUFAKTUR_PATH,
+            'thirdParty' => THIRDPARTY_PATH,
+            'thirdparty' => THIRDPARTY_PATH
         );
+        if ($this->app['filesystem']->exists(MANUFAKTUR_PATH.'/TemplateTools/Pattern')) {
+            $TEMPLATE_NAMESPACES['Pattern'] = MANUFAKTUR_PATH.'/TemplateTools/Pattern';
+            $TEMPLATE_NAMESPACES['pattern'] = MANUFAKTUR_PATH.'/TemplateTools/Pattern';
+            $TEMPLATE_NAMESPACES['Templates'] = CMS_PATH.'/templates';
+            $TEMPLATE_NAMESPACES['templates'] = CMS_PATH.'/templates';
+        }
 
         if ($template_namespace[0] != '@') {
             throw new \Exception('Namespace expected in variable $template_namespace but path found!');

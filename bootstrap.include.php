@@ -306,7 +306,16 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 
 // set namespaces for phpManufaktur and thirdParty
 $app['twig.loader.filesystem']->addPath(MANUFAKTUR_PATH, 'phpManufaktur');
+$app['twig.loader.filesystem']->addPath(MANUFAKTUR_PATH, 'phpmanufaktur');
 $app['twig.loader.filesystem']->addPath(THIRDPARTY_PATH, 'thirdParty');
+$app['twig.loader.filesystem']->addPath(THIRDPARTY_PATH, 'thirdparty');
+if ($app['filesystem']->exists(MANUFAKTUR_PATH.'/TemplateTools/Pattern')) {
+    // register the @pattern and @templates Namespaces to enable usage of the TemplateTools
+    $app['twig.loader.filesystem']->addPath(MANUFAKTUR_PATH.'/TemplateTools/Pattern', 'Pattern');
+    $app['twig.loader.filesystem']->addPath(MANUFAKTUR_PATH.'/TemplateTools/Pattern', 'pattern');
+    $app['twig.loader.filesystem']->addPath(CMS_PATH.'/templates', 'Templates');
+    $app['twig.loader.filesystem']->addPath(CMS_PATH.'/templates', 'templates');
+}
 // IMPORTANT: define these namespaces also in phpManufaktur\Basic\Control\Utils\templateFile()
 
 $app['twig'] = $app->share($app->extend('twig', function  ($twig, $app)
