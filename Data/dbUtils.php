@@ -195,4 +195,26 @@ EOD;
         }
     }
 
+    /**
+     * Truncate the given table. This function will disable foreign keys before
+     * operate and enable them after the truncation
+     *
+     * @param string $table
+     * @throws \Exception
+     */
+    public function truncateTable($table)
+    {
+        try {
+            $SQL = <<<EOD
+    SET foreign_key_checks = 0;
+    TRUNCATE TABLE `$table`;
+    SET foreign_key_checks = 1;
+EOD;
+            $this->app['db']->query($SQL);
+            $this->app['monolog']->addInfo("Truncate table '$table'", array(__METHOD__, __LINE__));
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
 }
