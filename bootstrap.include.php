@@ -634,6 +634,8 @@ $command->post('/simulate',
     'phpManufaktur\Basic\Control\kitCommand\Simulate::ControllerCreateIFrame');
 
 // BASIC responses to kitCommands
+$app->get('/basic/alert/{alert}',
+    'phpManufaktur\Basic\Control\kitCommand\PromptAlert::ControllerPromptAlert');
 $app->get('/basic/help/{command}',
     // show the help for the requested kitCommand
     'phpManufaktur\Basic\Control\kitCommand\Help::getHelpPage');

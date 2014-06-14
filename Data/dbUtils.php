@@ -89,7 +89,7 @@ EOD;
     }
 
     /**
-     * Check if the give column exists in the table
+     * Check if the given column exists in the table
      *
      * @param string $table
      * @param string $column_name
