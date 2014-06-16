@@ -27,7 +27,7 @@
       {% endif %}
       <title>{% block title %}{% endblock %}</title>
       <meta http-equiv="Content-Type" content="{% block content_type %}text/html; charset=UTF-8{% endblock content_type %}"/>
-      <meta name="robots" content="{% block robots %}noindex,nofollow{% endblock robots %}" />
+      <meta name="robots" content="{% block robots %}index,follow{% endblock robots %}" />
       {% block canonical %}{% endblock %}
       <meta name="description" content="{% block description %}{% endblock %}" />
       <meta name="keywords" content="{% block keywords %}{% endblock %}" />
