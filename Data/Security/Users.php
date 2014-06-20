@@ -276,7 +276,7 @@ EOD;
                 $user[$key] = (is_string($value)) ? $this->app['utils']->unsanitizeText($value) : $value;
             return $user;
         } catch (\Doctrine\DBAL\DBALException $e)  {
-            throw new \Exception($e->getMessage());
+            throw new \Exception($e);
         }
     } // selectUserByGUID()
 
@@ -289,14 +289,13 @@ EOD;
      */
     public function updateUser($username, $data) {
         try {
-            $where = array('username' => $username);
             $update = array();
-            foreach ($data as $key => $value)
-                // quote keys!
+            foreach ($data as $key => $value) {
                 $update[$this->app['db']->quoteIdentifier($key)] = (is_string($value)) ? $this->app['utils']->sanitizeText($value) : $value;
-            $this->app['db']->update(self::$table_name, $update, $where);
+            }
+            $this->app['db']->update(self::$table_name, $update, array('username' => $username));
         } catch (\Doctrine\DBAL\DBALException $e) {
-            throw new \Exception($e->getMessage(), 0, $e);
+            throw new \Exception($e);
         }
     }
 
@@ -319,7 +318,7 @@ EOD;
             }
             $this->app['db']->update(self::$table_name, $update, array('id' => $id));
         } catch (\Doctrine\DBAL\DBALException $e) {
-            throw new \Exception($e->getMessage(), 0, $e);
+            throw new \Exception($e);
         }
     }
 
