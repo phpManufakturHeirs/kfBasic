@@ -40,6 +40,11 @@ class RoleEntryPoints extends Alert
 
         if ($count < 1) {
             // the user is not allowed to access any entry point!
+            if ($app['account']->isGranted('ROLE_USER')) {
+                // ... but is allowed to access his account, so switch to account
+                $subRequest = Request::create('/user/account');
+                return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+            }
             $this->setAlert('Sorry, but you are not allowed to access any entry point!', array(), self::ALERT_TYPE_WARNING);
         }
         elseif ($count < 14) {
