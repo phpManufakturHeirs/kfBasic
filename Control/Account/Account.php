@@ -48,7 +48,7 @@ class Account
     /**
      * Return the display name of the authenticated user or ANONYMOUS otherwise
      *
-     * @return string|unknown
+     * @return string
      */
     public function getDisplayName()
     {
@@ -67,6 +67,30 @@ class Account
             return 'ANONYMOUS';
         }
         return (isset($user_data['displayname']) && ! empty($user_data['displayname'])) ? $user_data['displayname'] : $user_data['username'];
+    }
+
+    /**
+     * Return the EMail address of the authenticated user or FALSE
+     *
+     * @return boolean|string
+     */
+    public function getEMailAddress()
+    {
+        $token = $this->app['security']->getToken();
+        if (is_null($token))
+            return false;
+
+        $user = $token->getUser();
+
+        if ($user == 'anon.') {
+            return false;
+        }
+        // get the user record
+        if (false === ($user_data = $this->FrameworkUser->selectUser($user->getUsername()))) {
+            // user not found!
+            return false;
+        }
+        return (isset($user_data['email']) && ! empty($user_data['email'])) ? $user_data['email'] : false;
     }
 
     /**
