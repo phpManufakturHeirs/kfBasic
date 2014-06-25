@@ -848,4 +848,15 @@ class Utils
         return (json_last_error() == JSON_ERROR_NONE);
     }
 
+    /**
+     * Check if the given function is disabled in php.ini
+     *
+     * @param string $function
+     * @return boolean
+     */
+    public function isFunctionDisabled($function)
+    {
+        $disabled = explode(',', ini_get('disable_functions'));
+        return in_array($function, $disabled);
+    }
 }

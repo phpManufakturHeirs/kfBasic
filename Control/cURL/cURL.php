@@ -41,7 +41,12 @@ class cURL {
     {
         try {
             // time limit for cURL operation
-            set_time_limit(180);
+            if (function_exists('set_time_limit') && !$this->app['utils']->isFunctionDisabled('set_time_limit')) {
+                set_time_limit(180);
+            }
+            else {
+                $this->app['monolog']->addDebug('Function `set_time_limit()` is disabled!', array(__METHOD__, __LINE__));
+            }
 
             // first try to get the redirected URL
             $ch = curl_init();
