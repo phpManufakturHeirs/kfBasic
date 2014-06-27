@@ -217,19 +217,30 @@ class Alert
     /**
      * Prompt the active Alert(s) using the BASIC Bootstrap template alert.twig
      *
+     * @param string $usage default = 'command' using kitCommand body, alternate 'framework' will using framework body (backend)
      * @return rendered alert template
      */
-    public function promptAlert()
+    public function promptAlert($usage='command')
     {
         if (!$this->isAlert()) {
             $this->setAlert('Oooops, missing the alert which should be prompted here ... ', array(), self::ALERT_TYPE_WARNING);
         }
-        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-            '@phpManufaktur/Basic/Template', 'kitcommand/bootstrap/alert.twig'),
-            array(
-                'basic' => array(
-                    'alert' => $this->getAlert()
-                )
-            ));
+        if ($usage === 'command') {
+            return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+                '@phpManufaktur/Basic/Template', 'kitcommand/bootstrap/alert.twig'),
+                array(
+                    'basic' => array(
+                        'alert' => $this->getAlert()
+                    )
+                ));
+        }
+        else {
+            return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+                '@phpManufaktur/Basic/Template', 'framework/alert.twig'),
+                array(
+                    'alert' => $this->getAlert(),
+                    'usage' => 'framework'
+                ));
+        }
     }
 }
