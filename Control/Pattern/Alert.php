@@ -217,30 +217,41 @@ class Alert
     /**
      * Prompt the active Alert(s) using the BASIC Bootstrap template alert.twig
      *
-     * @param string $usage default = 'command' using kitCommand body, alternate 'framework' will using framework body (backend)
      * @return rendered alert template
+     * @see promptAlertFramework()
      */
-    public function promptAlert($usage='command')
+    public function promptAlert()
     {
         if (!$this->isAlert()) {
             $this->setAlert('Oooops, missing the alert which should be prompted here ... ', array(), self::ALERT_TYPE_WARNING);
         }
-        if ($usage === 'command') {
-            return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-                '@phpManufaktur/Basic/Template', 'kitcommand/bootstrap/alert.twig'),
-                array(
-                    'basic' => array(
-                        'alert' => $this->getAlert()
-                    )
-                ));
-        }
-        else {
-            return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-                '@phpManufaktur/Basic/Template', 'framework/alert.twig'),
-                array(
-                    'alert' => $this->getAlert(),
-                    'usage' => 'framework'
-                ));
-        }
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template', 'kitcommand/bootstrap/alert.twig'),
+            array(
+                'basic' => array(
+                    'alert' => $this->getAlert()
+                )
+            ));
     }
+
+
+    /**
+     * Prompt the active Alert(s) using the kitFramework BACKEND/ADMIN template alert.twig
+     *
+     * @return rendered alert template
+     * @see promptAlert()
+     */
+    public function promptAlertFramework()
+    {
+        if (!$this->isAlert()) {
+            $this->setAlert('Oooops, missing the alert which should be prompted here ... ', array(), self::ALERT_TYPE_WARNING);
+        }
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template', 'framework/alert.twig'),
+            array(
+                'alert' => $this->getAlert(),
+                'usage' => 'framework'
+            ));
+    }
+
 }
