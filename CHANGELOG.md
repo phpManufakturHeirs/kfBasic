@@ -6,6 +6,20 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.97** - 2014-06-30
+
+* reworked the `simulate` kitCommand
+* Setting a canonical link must also update an existing meta tag `og:url` !
+* Update delete no longer needed `/Basic/Control/kitCommand/kitCommand.php`
+* add Twig namespaces for @pattern and @template if the TemplateTools are in use
+* add function `truncateTable()` to `$app['db.utils']`
+* enable general posting of alerts for kitCommands
+* add function `getEMailAddress()` to `$app['account']`
+* extended check for entry points - user who has no access to entry points will be now redirected to his user account
+* extended the password forgotten / create twig templates so they can used also with kitCommands
+* add function `isFunctionDisabled()` and check for `set_time_limit()` to `$app['utils']`
+* introduce `promptAlertFramework()` for class `Alert`
+
 **0.96** - 2014-06-11
 
 * fixed a problem executing the Alert box as standalone page
