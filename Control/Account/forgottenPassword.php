@@ -87,7 +87,8 @@ class forgottenPassword extends Alert
             return $this->dialogForgottenPassword($app);
         }
         // email address is valid, so we can create a new GUID and send a mail
-        if (false === ($guid = $Users->createNewGUID($form['email']))) {
+        $guid_check = ($user['last_login'] !== '0000-00-00 00:00:00');
+        if (false === ($guid = $Users->createNewGUID($form['email'], $guid_check))) {
             $this->setAlert('Can\'t create a new GUID as long the last GUID is not expired. You must wait 24 hours between the creation of new passwords.',
                 array(), self::ALERT_TYPE_WARNING, array(__METHOD__, __LINE__));
             return $this->dialogForgottenPassword($app);
