@@ -396,6 +396,10 @@ return array(
         => 'Sie haben bereits ein Benutzerkonto? <a href="%login_url%">Melden Sie sich an</a>!',
     'Your are not authenticated, please login!'
         => 'Sie sind nicht angemeldet, bitte authentifizieren Sie sich zunächst!',
+    'Your account is locked, but it seems that you have not activated your account. Please use the activation link you have received.'
+        => 'Ihr Benutzerkonto ist gesperrt, es sieht allerdings so aus, als ob Sie das Konto noch nicht aktiviert haben. Bitte verwenden Sie den Aktivierungslink den Sie erhalten haben.',
+    'Your account is locked, please contact the webmaster.'
+        => 'Ihr Benutzerkonto ist gesperrt, bitte nehmen Sie Verbindung mit dem Webmaster auf.',
     'Your account was succesfull updated.'
         => 'Ihr Benutzerkonto wurde erfolgreich geändert.',
 );
