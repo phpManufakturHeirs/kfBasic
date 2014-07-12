@@ -86,6 +86,17 @@ class forgottenPassword extends Alert
                 self::ALERT_TYPE_WARNING, array(__METHOD__, __LINE__));
             return $this->dialogForgottenPassword($app);
         }
+        if ($user['status'] !== 'ACTIVE') {
+            if ($user['last_login'] === '0000-00-00 00:00:00') {
+                $this->setAlert('Your account is locked, but it seems that you have not activated your account. Please use the activation link you have received.',
+                    array(), self::ALERT_TYPE_WARNING);
+            }
+            else {
+                $this->setAlert('Your account is locked, please contact the webmaster.',
+                    array(), self::ALERT_TYPE_WARNING);
+            }
+            return $this->dialogForgottenPassword($app);
+        }
         // email address is valid, so we can create a new GUID and send a mail
         $guid_check = ($user['last_login'] !== '0000-00-00 00:00:00');
         if (false === ($guid = $Users->createNewGUID($form['email'], $guid_check))) {
