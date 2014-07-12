@@ -376,7 +376,7 @@ EOD;
     {
         try {
             $pass = $this->encodePassword($password);
-            $SQL = "SELECT `roles` FROM `".self::$table_name."` WHERE (`username`='$username' OR `email`='$username') AND `password`='$pass'";
+            $SQL = "SELECT `roles` FROM `".self::$table_name."` WHERE (`username`='$username' OR `email`='$username') AND `password`='$pass' AND `status`='ACTIVE'";
             $result = $this->app['db']->fetchAssoc($SQL);
             if (!is_array($result) || !isset($result['roles'])) {
                 return false;
