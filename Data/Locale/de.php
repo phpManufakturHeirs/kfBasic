@@ -46,7 +46,7 @@ return array(
     'Be aware: Changing the email address or username may influence kitFramework extensions which are using the account data to identify users.'
         => 'Bitte beachen Sie: Änderungen der E-Mail Adresse oder des Benutzernamen können sich auf kitFramework Anwendungen auswirken, die Daten der Benutzerkonten zur Identifizierung der Nutzer verwenden.',
     'Be aware: Changing your email address may influence kitFramework extensions which are using the account data to identify you - please contact the webmaster in these cases. The username can only be changed by the administrator.'
-        => 'Bitte beachten Sie: Eine Änderung Ihrer E-Mail Adresse beeinflusst eventuell die mit Ihnen verbundenen Datensätze bei den verschiedenen Anwendungen. Bitte informieren Sie in diesen Fällen den Webmaster. Der Benutzername kann nur durch einen Administrator geändert werden.',
+        => 'Bitte beachten Sie: Eine Änderung Ihrer E-Mail Adresse beeinflusst eventuell die mit Ihnen verbundenen Datensätze in den verschiedenen Anwendungen. Bitte informieren Sie in diesen Fällen den Webmaster. Der Benutzername kann nur durch einen Administrator geändert werden.',
     'Be aware: You are now authenticated as user <b>%username%</b>!'
         => 'Vorsicht! Sie sind momentan als der Benutzer <b>%username%</b> angemeldet!',
     'beta'
@@ -190,6 +190,8 @@ return array(
         => 'Es ist eine neue kitFramework Release verfügbar!',
     'NO'
         => 'Nein',
+    'No account? <a href="%register_url%">Register a user account for DogPaw</a>!'
+        => 'Kein Benutzerkonto? <a href="%register_url%">Melden Sie sich kostenlos an</a>!',
     'No fitting user role dectected!'
         => 'Es wurde kein passendes Benutzerrecht gefunden',
 
@@ -390,6 +392,8 @@ return array(
         => 'Ja',
     'You are not allowed to access this resource!'
         => 'Sie sind nicht befugt auf diese Resource zuzugreifen.',
+    'You have already an account? <a href="%login_url%">Please login</a>!'
+        => 'Sie haben bereits ein Benutzerkonto? <a href="%login_url%">Melden Sie sich an</a>!',
     'Your are not authenticated, please login!'
         => 'Sie sind nicht angemeldet, bitte authentifizieren Sie sich zunächst!',
     'Your account was succesfull updated.'
