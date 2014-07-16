@@ -6,6 +6,13 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.98** - 2014-07-16
+
+* extended check for GUID to prevent problem if user want to get a new password at the first login
+* add cURL handling to BASIC `PermanentLinkBase` for usage with extensions
+* add check at LOGIN if account is LOCKED (was missing)
+* add information at forgotten password dialog if the account is locked
+
 **0.97** - 2014-06-30
 
 * reworked the `simulate` kitCommand
