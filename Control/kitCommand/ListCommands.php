@@ -45,7 +45,6 @@ class ListCommands extends Basic
             // we are searching for all matching kitCommands, starting with '/command/'
             if (((strpos($match, '/command/') !== false) && (strpos($match, '/command/') == 0)) ||
                 ((strpos($match, '/filter/') !== false) && (strpos($match, '/filter/') == 0))) {
-
                 if ((strpos($match, '/filter/') !== false) && (strpos($match, '/filter/') == 0)) {
                     // kitFilter
                     $command = substr($match, strlen('/filter/'));
@@ -125,7 +124,7 @@ class ListCommands extends Basic
                                             ((isset($config['description']['en'])) ? $config['description']['en'] : null)
                     );
                 }
-                $kitCommands[$command] = array(
+                $kitCommands[$command_name] = array(
                     'command' => $command_name,
                     'route' => $match,
                     'info' => $info,
