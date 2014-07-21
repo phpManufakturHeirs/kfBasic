@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**0.99** - 2014-07-21
+
+* Introduce the kitFramework Configuration Editor
+
 **0.98** - 2014-07-16
 
 * extended check for GUID to prevent problem if user want to get a new password at the first login
