@@ -70,8 +70,12 @@ return array(
         => 'Abbruch',
     'captcha-timeout'
         => 'Zeitüberschreitung bei der CAPTCHA Übermittlung, bitte versuchen Sie es erneut.',
+    'Check the email settings and send a email to the webmaster for testing purpose'
+        => 'E-Mail Einstellungen kontrollieren und eine Test E-Mail an den Webmaster schicken',
     'commercial use only'
         => '- nur kommerzielle Verwendung -',
+    'Configuration editor'
+        => 'Konfiguration bearbeiten',
     'Copied kitCommand to clipboard!'
         => 'Das kitCommand wurde in die Zwischenablage kopiert!',
     'Copy the GUID to the clipboard'
@@ -94,6 +98,8 @@ return array(
     'Documentation'
         => 'Dokumentation',
 
+    'Edit kitFramework configuration file'
+        => 'kitFramework Konfigurationsdatei bearbeiten',
     'Email'
         => 'E-Mail',
     'Entry points'
@@ -174,6 +180,12 @@ return array(
         => 'Link übermittelt',
     'List'
         => 'Liste',
+    'Load file'
+        => 'Datei laden',
+    'Load the configuration file <strong>%file%</strong> into the editor.'
+        => 'Die Konfigurationsdatei <strong>%file%</strong> wurde in den Editor geladen.',
+    'Load the selected configuration file into the editor'
+        => 'Die ausgewählte Datei in den Editor laden',
     'Login' =>
         'Anmelden',
     'Logout' =>
@@ -214,6 +226,8 @@ return array(
         => 'Bitte melden Sie sich am kitFramework mit Ihrem Benutzernamen oder Ihrer E-Mail Adresse und Ihrem Passwort an. Sie können sich auch mit Ihrem Benutzernamen und Passwort für das CMS anmelden.',
     'Please report all issues and help to improve %command%!'
         => 'Bitte melden Sie alle auftretenden Probleme und helfen Sie mit %command% zu verbessern!',
+    'Please select the configuration file you want to edit.'
+        => 'Bitte wählen Sie die Konfigurationsdatei aus, die Sie bearbeiten möchten.',
     'Please use the following link to create a new password: %reset_url%'
         => 'Bitte verwenden Sie den folgenden Link um ein neues Passwort anzulegen:<br />%reset_url%',
     'pre-release'
@@ -233,6 +247,8 @@ return array(
         => 'Regelmäßig am Tag x des Monats',
     'Report problems'
         => 'Fehler melden',
+    'Rescan'
+        => 'Suchlauf',
     'Reveal this e-mail address'
         => 'Anklicken um die vollständige E-Mail Adresse anzuzeigen',
     'Role'
@@ -240,8 +256,12 @@ return array(
     'Roles'
         => 'Benutzerrechte, Rollen',
 
+    'Save file'
+        => 'Datei sichern',
     'Scan for installed extensions'
         => 'Nach installierten Erweiterungen suchen',
+    'Scan the kitFramework for existing configuration files'
+        => 'Das kitFramework nach Konfigurationsdateien durchsuchen',
     'Scan the online catalog for available extensions'
         => 'Den online Katalog nach verfügbaren Erweiterungen durchsuchen',
     'Select day'
@@ -262,12 +282,16 @@ return array(
         => 'Die übermittelte GUID ist ungültig. Bitte nehmen Sie mit dem Webmaster Kontakt auf.',
     'Sorry, but you are not allowed to access any entry point!'
         => 'Sie sind leider nicht berechtigt auf einen der kitFramework Zugangspunkte zuzugreifen.',
+    'Sorry, there is currently no information available about <strong>%file%</strong>, please suggest a hint and help to improve the Configuration Editor!'
+        => 'Entschuldigung, es ist leider keine Information zu <strong>%file%</strong> verfügbar, bitte schlagen Sie einen Hinweis vor und helfen Sie mit den Konfigurations Editor zu verbessern!',
     'Submit'
         => 'Übermitteln',
     'Successfull created a account for the user %name%.'
         => 'Für den Benutzer %name% wurde ein Konto eingerichtet.',
     'Successfull installed the extension %extension%.'
         => 'Die Erweiterung %extension% wurde erfolgreich installiert.',
+    'Successful scanned the kitFramework for *.json configuration files'
+        => 'Das kitFramework wurde nach *.json Konfigurationsdateien durchsucht',
     'Successfull scanned the kitFramework for installed extensions.'
         => 'Das kitFramework wurde nach installierten Erweiterungen durchsucht.',
     'Successfull scanned the kitFramework online catalog for available extensions.'
@@ -283,6 +307,8 @@ return array(
     'Switch to this user to see the real active roles'
         => 'Zu diesem Anwender umschalten um die aktiven Rechte zu sehen',
 
+    'Test email'
+        => 'Test E-Mail',
     'Thank you for using the kitFramework'
         => 'Vielen Dank für den Einsatz des kitFramework',
     'The account for the user %name% was successfull deleted.'
@@ -297,6 +323,8 @@ return array(
         => 'Es existiert kein Benutzerkonto für den Benutzername oder die E-Mail Adresse %name%!',
     'The both passwords you have typed in does not match, please try again!'
         => 'Die beiden Passwörter die Sie eingegeben haben stimmen nicht überein, bitte versuchen Sie es noch einmal!',
+    'The configuration file <strong>%file%</strong> was successful saved.'
+        => 'Die Konfigurationsdatei <strong>%file%</strong> wurde erfolgreich gesichert.',
     'The email address %email% is already used by another account!'
         => 'Die E-Mail Adresse %email% wird bereits von einem anderen Benutzerkonto verwendet!',
     'The email address %email% is invalid!'
@@ -374,6 +402,8 @@ return array(
 
     'Vendor'
         => 'Anbieter',
+    'View and edit the kitFramework configuration files'
+        => 'Die kitFramework Konfigurationsdateien einsehen und bearbeiten',
     'View the general help for kitCommands'
         => 'Die allgemeine Hilfe zu den kitCommands anzeigen',
     'View the helpfile for %command%'

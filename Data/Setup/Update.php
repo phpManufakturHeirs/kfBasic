@@ -15,6 +15,7 @@ use Silex\Application;
 use phpManufaktur\Basic\Control\CMS\InstallSearch;
 use phpManufaktur\Basic\Data\Security\AdminAction;
 use Symfony\Component\Filesystem\Exception\IOException;
+use phpManufaktur\Basic\Control\CMS\InstallAdminTool;
 
 class Update
 {
@@ -234,6 +235,13 @@ class Update
         }
     }
 
+    protected function release_099()
+    {
+        //if (!$this->app['filesystem']->exists(CMS_PATH.'/mo'))
+        $admin_tool = new InstallAdminTool($this->app);
+        $admin_tool->exec(MANUFAKTUR_PATH.'/Basic/extension.jsoneditor.json', '/basic/cms/jsoneditor');
+    }
+
     /**
      * Update the database tables for the BASIC extension of the kitFramework
      *
@@ -254,6 +262,7 @@ class Update
         $this->release_094();
         $this->release_095();
         $this->release_096();
+        $this->release_099();
 
         // install the search function
         $Search = new InstallSearch($app);

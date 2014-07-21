@@ -49,7 +49,7 @@ class InstallAdminTool
 
             $data = array(
                 'name' => $extension['name'],
-                'directory' => 'kit_framework_'.strtolower(trim($extension['name'])),
+                'directory' => 'kit_framework_'.strtolower(trim(str_replace(' ', '_', $extension['name']))),
                 'guid' => isset($extension['guid']) ? $extension['guid'] : '',
                 'description' => $extension['description']['en']['short'],
                 'version' => $extension['release']['number'],

@@ -67,10 +67,10 @@
                           {% set img = image(point.icon.path, 20, 20) %}
                           <li class="navbar-link">
                             <span class="pull-left">
-                              <img class="img-responsive" src="{{ img.src }}" alt="{{ point.name }}" height="20" />
+                              <img class="img-responsive" src="{{ img.src }}" alt="{{ point.name|trans }}" height="20" />
                             </span>&nbsp;&nbsp;
                             <span>
-                              <a href="{{ FRAMEWORK_URL ~ point.route }}" title="{{ point.info|trans }}">{{ point.name }}</a>
+                              <a href="{{ FRAMEWORK_URL ~ point.route }}" title="{{ point.info|trans }}">{{ point.name|trans }}</a>
                             </span>
                             <div class="height-5 clearfix"></div>
                           </li>
@@ -87,12 +87,10 @@
         </div>
       </nav>      
     {% endblock user_navigation %}
-    <div id="content_wrap">
-      {# add a hint at all dialogs which must be redesigned for Bootstrap ... #}
-      {% include '@phpManufaktur/Basic/Template/default/pattern/bootstrap/pending.twig' %}
-      {% block content %}{% endblock %}
-    </div>
     
+    {% block content %}
+      {# main content #}
+    {% endblock %}    
     
     {% block footer_jquery %}
       <script type="text/javascript" src="{{ LIBRARY_URL }}/jquery/jquery/latest/jquery.min.js"></script>

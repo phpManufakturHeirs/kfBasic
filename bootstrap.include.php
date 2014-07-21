@@ -31,6 +31,7 @@ use phpManufaktur\Basic\Data\dbUtils;
 use phpManufaktur\Basic\Control\Image;
 use phpManufaktur\Basic\Control\MarkdownFunctions;
 use Symfony\Component\Finder\Finder;
+use phpManufaktur\Basic\Control\CMS\EmbeddedAdministration;
 
 // set the error handling
 ini_set('display_errors', 1);
@@ -448,6 +449,24 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
                     'path' => '/extension/phpmanufaktur/phpManufaktur/Basic/Template/default/framework/image/user-accounts.jpg',
                     'url' => MANUFAKTUR_URL.'/Basic/Template/default/framework/image/user-accounts.jpg'
                 )
+            ),
+            array(
+                'route' => '/admin/json/editor',
+                'name' => 'Configuration editor',
+                'info' => 'View and edit the kitFramework configuration files',
+                'icon' => array(
+                    'path' => '/framework.jpg',
+                    'url' => FRAMEWORK_URL.'/framework.jpg'
+                )
+            ),
+            array(
+                'route' => '/admin/test/mail',
+                'name' => 'Test email',
+                'info' => 'Check the email settings and send a email to the webmaster for testing purpose',
+                'icon' => array(
+                    'path' => '/framework.jpg',
+                    'url' => FRAMEWORK_URL.'/framework.jpg'
+                )
             )
         )
     ),
@@ -571,6 +590,26 @@ $admin->get('/accounts/edit/{id}',
     ->value('id', -1);
 $admin->post('/accounts/edit/check',
     'phpManufaktur\Basic\Control\Account\Dialog\AccountAdminEdit::ControllerAccountEditCheck');
+
+/**
+ * Use the EmbeddedAdministration feature to connect the jsonEditor with the CMS
+ *
+ * @link https://github.com/phpManufaktur/kitFramework/wiki/Extensions-%23-Embedded-Administration
+ */
+$app->get('/basic/cms/jsoneditor/{cms_information}', function ($cms_information) use ($app) {
+    $administration = new EmbeddedAdministration($app);
+    return $administration->route('/admin/json/editor', $cms_information, 'ROLE_ADMIN');
+});
+
+// JSON editor
+$admin->get('/json/editor',
+    'phpManufaktur\Basic\Control\jsonEditor\jsonEditor::Controller');
+$admin->get('/json/editor/scan',
+    'phpManufaktur\Basic\Control\jsonEditor\jsonEditor::ControllerScanFramework');
+$admin->post('/json/editor/load',
+    'phpManufaktur\Basic\Control\jsonEditor\jsonEditor::ControllerLoadFile');
+$app->post('/json/editor/save',
+    'phpManufaktur\Basic\Control\jsonEditor\jsonEditor::ControllerSaveFile');
 
 // send a testmail
 $admin->get('/test/mail',

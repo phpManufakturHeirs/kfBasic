@@ -45,10 +45,13 @@
         {# Place the extension or application content here ... #}
       {% endblock content %}
     </div>
+
+    {% block footer_jquery %}
+      <script type="text/javascript" src="{{ LIBRARY_URL }}/jquery/jquery/latest/jquery.min.js"></script>
+      <script type="text/javascript" src="{{ LIBRARY_URL }}/bootstrap/latest/js/bootstrap.min.js"></script>
+    {% endblock footer_jquery %}
+
     {% block footer %}
-      {% block footer_jquery %}
-        <script src="{{ LIBRARY_URL }}/jquery/jquery/latest/jquery.min.js"></script>
-      {% endblock footer_jquery %}
       <script type="text/javascript">
         if (typeof 'jQuery' !== 'undefined') {
           $(document).ready(function() {
