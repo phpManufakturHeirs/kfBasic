@@ -16,6 +16,7 @@ use phpManufaktur\Basic\Control\CMS\InstallSearch;
 use phpManufaktur\Basic\Data\Security\AdminAction;
 use Symfony\Component\Filesystem\Exception\IOException;
 use phpManufaktur\Basic\Control\CMS\InstallAdminTool;
+use phpManufaktur\Basic\Control\jsonEditor\Configuration;
 
 class Update
 {
@@ -235,11 +236,30 @@ class Update
         }
     }
 
+    /**
+     * Release 0.99
+     */
     protected function release_099()
     {
         //if (!$this->app['filesystem']->exists(CMS_PATH.'/mo'))
         $admin_tool = new InstallAdminTool($this->app);
         $admin_tool->exec(MANUFAKTUR_PATH.'/Basic/extension.jsoneditor.json', '/basic/cms/jsoneditor');
+    }
+
+    /**
+     * Release 1.0.1
+     */
+    protected function release_101()
+    {
+        $jsonConfiguration = new Configuration($this->app);
+        $json_config = $jsonConfiguration->getConfiguration();
+        if (isset($json_config['help']['framework.json']['en'])) {
+            // remove the first generation settings
+            $default_config = $jsonConfiguration->getDefaultConfigArray();
+            $json_config['help'] = $default_config['help'];
+            $jsonConfiguration->setConfiguration($json_config);
+            $jsonConfiguration->saveConfiguration();
+        }
     }
 
     /**
@@ -263,6 +283,7 @@ class Update
         $this->release_095();
         $this->release_096();
         $this->release_099();
+        $this->release_101();
 
         // install the search function
         $Search = new InstallSearch($app);
