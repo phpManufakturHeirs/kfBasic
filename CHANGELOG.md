@@ -6,6 +6,12 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**1.0.0** - 2014-07-22
+
+* BASIC has reached **1.0.0** and is a stable release!
+* changed the handling of the help texts - extensions can now "inject" the hints into the `config.jsoneditor.json`
+* added route `/admin/json/editor/open/file/{filename}` to enable direct loading of specified config files
+
 **0.99** - 2014-07-21
 
 * Introduce the kitFramework Configuration Editor
