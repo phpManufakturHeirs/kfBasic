@@ -452,7 +452,7 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
             ),
             array(
                 'route' => '/admin/json/editor',
-                'name' => 'Configuration editor',
+                'name' => 'Configuration',
                 'info' => 'View and edit the kitFramework configuration files',
                 'icon' => array(
                     'path' => '/framework.jpg',
@@ -608,6 +608,8 @@ $admin->get('/json/editor/scan',
     'phpManufaktur\Basic\Control\jsonEditor\jsonEditor::ControllerScanFramework');
 $admin->post('/json/editor/load',
     'phpManufaktur\Basic\Control\jsonEditor\jsonEditor::ControllerLoadFile');
+$admin->get('/json/editor/open/file/{filename}',
+    'phpManufaktur\Basic\Control\jsonEditor\jsonEditor::ControllerOpenFile');
 $app->post('/json/editor/save',
     'phpManufaktur\Basic\Control\jsonEditor\jsonEditor::ControllerSaveFile');
 

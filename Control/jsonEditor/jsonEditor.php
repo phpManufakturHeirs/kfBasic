@@ -59,6 +59,8 @@ class jsonEditor extends Alert
             ->name('*.json')
             ->in(FRAMEWORK_PATH.'/config')
             ->in(MANUFAKTUR_PATH)
+            ->in(CMS_MEDIA_PATH)
+            ->in(FRAMEWORK_MEDIA_PATH)
             ->sortByName();
 
         // exclude all specified *.json files
@@ -72,6 +74,12 @@ class jsonEditor extends Alert
         foreach ($jsonFiles as $file) {
             if (strpos($file->getRealpath(), FRAMEWORK_PATH.'/config') === 0) {
                 $json_array[$file->getRealpath()] = $file->getBasename();
+            }
+            elseif (strpos($file->getRealpath(), CMS_MEDIA_PATH) === 0) {
+                $json_array[$file->getRealpath()] = substr($file->getRealpath(), strlen(CMS_PATH));
+            }
+            elseif (strpos($file->getRealpath(), FRAMEWORK_MEDIA_PATH) === 0) {
+                $json_array[$file->getRealpath()] = substr($file->getRealpath(), strlen(FRAMEWORK_PATH));
             }
             else {
                 $json_array[$file->getRealpath()] = substr($file->getRealpath(), strlen(MANUFAKTUR_PATH));
@@ -116,14 +124,11 @@ class jsonEditor extends Alert
         if (!is_null(self::$json_path)) {
             $json_file = basename(self::$json_path);
             $replace = array(
-                '{CMS_URL}' => CMS_URL,
-                '{FRAMEWORK_URL}' => FRAMEWORK_URL
+                '%CMS_URL%' => CMS_URL,
+                '%FRAMEWORK_URL%' => FRAMEWORK_URL
             );
-            if (isset(self::$config['help'][$json_file][self::$locale])) {
-                $help = str_ireplace(array_keys($replace), array_values($replace), self::$config['help'][$json_file][self::$locale]);
-            }
-            elseif (isset(self::$config['help'][$json_file]['en'])) {
-                $help = str_ireplace(array_keys($replace), array_values($replace), self::$config['help'][$json_file]['en']);
+            if (isset(self::$config['help'][$json_file])) {
+                $help = $this->app['translator']->trans(self::$config['help'][$json_file], $replace);
             }
             else {
                 $help = $this->app['translator']->trans('Sorry, there is currently no information available about <strong>%file%</strong>, please suggest a hint and help to improve the Configuration Editor!',
@@ -192,13 +197,45 @@ class jsonEditor extends Alert
         return $app->json(array('alert' => $this->getAlert()));
     }
 
+    public function ControllerOpenFile(Application $app, $filename)
+    {
+        $this->initialize($app);
+
+        // search for the given configuration file
+        $hits = array();
+        foreach (self::$config['configuration_files'] as $path => $item) {
+            if (strtolower(basename($path)) === strtolower($filename)) {
+                $hits[] = $path;
+            }
+        }
+        if (count($hits) == 1) {
+            // exactly one hit
+            self::$json_path = $hits[0];
+            $this->setAlert('Load the configuration file <strong>%file%</strong> into the editor.',
+                array('%file%' => $filename), self::ALERT_TYPE_SUCCESS);
+        }
+        elseif (count($hits) > 1) {
+            self::$json_path = $hits[0];
+            $this->setAlert('The controller has detected <strong>%count%</strong> configuration files with the name <strong>%filename%</strong> and loaded the first hit into the editor.',
+                array('%count%' => count($hits), '%filename%' => $filename), self::ALERT_TYPE_SUCCESS);
+        }
+        else {
+            // file not found
+            $this->setAlert('Sorry, but the configuration file <strong>%filename%</strong> was not found. Please be aware that this controller may fail if you try to open a configuration file of a just installed extension, perhaps the extension must be executed first and you should also do a <key>rescan</key> for the configuration files.',
+                array('%filename%' => $filename), self::ALERT_TYPE_WARNING);
+        }
+
+        // show the Editor dialog
+        return $this->showEditor();
+    }
+
     /**
      * Controller to load the selected configuration file
      *
      * @param Application $app
      * @return string
      */
-    public function ControllerLoadFile(Application $app)
+    public function ControllerLoadFile(Application $app, $file='')
     {
         $this->initialize($app);
 

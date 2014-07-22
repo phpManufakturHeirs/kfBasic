@@ -74,8 +74,8 @@ return array(
         => 'E-Mail Einstellungen kontrollieren und eine Test E-Mail an den Webmaster schicken',
     'commercial use only'
         => '- nur kommerzielle Verwendung -',
-    'Configuration editor'
-        => 'Konfiguration bearbeiten',
+    'Configuration'
+        => 'Konfiguration',
     'Copied kitCommand to clipboard!'
         => 'Das kitCommand wurde in die Zwischenablage kopiert!',
     'Copy the GUID to the clipboard'
@@ -139,6 +139,20 @@ return array(
         => 'Hallo %name%,<br />Sie möchten Ihr Passwort ändern, bitte geben Sie das neue Passwort ein, wiederholen Sie es zur Sicherheit und schicken Sie das Formular ab.<br />Falls Sie Ihr Passwort nicht ändern möchten, verlassen Sie bitte einfach diesen Dialog.',
     'Help'
         => 'Hilfe',
+    'help_accounts_list_json'
+        => '<p>Diese Datei ermöglicht es Ihnen die angezeigten Spalten und die Sortierung der Felder in der <a href="%FRAMEWORK_URL%/admin/accounts/list" target="_blank">Übersicht der Benutzerkonten</a> zu ändern.</p><p>Verfügbare Felder für die Verwendung in <var>columns</var> und <var>list > order > by</var> sind: <var>id, username, email, password, displayname, last_login, roles, guid, guid_timestamp, guid_status, status</var> und <var>timestamp</var>. Mit <var>list > rows_per_page</var> legen Sie fest, wie viele Benutzerkonten pro Seite angezeigt werden.</p>',
+    'help_cms_json'
+        => '<p>Diese Konfigurationsdatei enthält Informationen zu dem übergeordneten Content Management System (CMS). Falls Sie die URL der Website verändert haben oder sich das Stammverzeichnis auf dem Webserver geändert hat, sollten Sie die Einstellungen in dieser Datei prüfen und anpassen.</p><p>Das <a href="https://github.com/phpManufaktur/kitFramework/wiki/kitFramework-%23-Configuration#cmsjson" target="_blank">kitFramework WIKI</a> erläutert Ihnen alle Einstellungsmöglichkeiten für die <var>cms.json</var>.</p>',
+    'help_config_jsoneditor_json'
+        => '<p>Diese Konfigurationsdatei enthält die Einstellungen für den Konfigurations Editor, den Sie just in diesem Moment verwenden.</p><p>Normalerweise ist es nicht erforderlich an diesen Einstellungen etwas zu ändern. Die Datei enthält die Hilfeinformationen, die zu den einzelnen Konfigurationsdateien angezeigt werden sowie die Liste der verfügbaren Konfigurationsdateien um ein Überprüfen des Systems bei jedem Aufruf des Editors zu verhindern.</p><p>Falls Sie eine Konfigurationsdatei vermissen, z.B. für eine gerade erst installierte Erweiterung, verwenden Sie bitte den <key>Suchlauf</key> Schalter um ein erneutes Durchsuchen des Systems zu erzwingen.</p>',
+    'help_doctrine_cms_json'
+        => '<p>Diese Konfigurationsdatei enthält die Datenbankeinstellungen. Wenn Sie die Datenbankeinstellungen für das übergeordnete Content Management System (CMS) ändern, müssen Sie die Einstellungen in dieser Datei ebenfalls anpassen - andernfalls wird das kitFramework nicht mehr korrekt funktionieren.</p><p>Das <a href="https://github.com/phpManufaktur/kitFramework/wiki/kitFramework-%23-Configuration#doctrinecmsjson" target="_blank">kitFramework WIKI</a> erläutert Ihnen alle Einstellungsmöglichkeiten für die <var>doctrine.cms.json</var>.</p>',
+    'help_framework_json'
+        => '<p>Dies ist die zentrale Konfigurationsdatei für das kitFramework. Hier können Sie den <var>DEBUG</var> und <var>CACHE</var> Modus ein- oder ausschalten und das kitFramework anweisen stets Ihre benutzerdefinierten Templates vor den Standardvorlagen zu laden.</p><p>Das <a href="https://github.com/phpManufaktur/kitFramework/wiki/kitFramework-%23-Configuration" target="_blank">kitFramework WIKI</a> erläutert Ihnen alle Einstellungsmöglichkeiten für die <var>framework.json</var>.</p>',
+    'help_proxy_json'
+        => '<p>Falls Sie einen Proxy Server verwenden benötigen Sie diese Konfigurationsdatei. Bitte fragen Sie Ihren Systemadministrator nach den benötigten Einstellungen.</p>',
+    'help_swift_cms_json'
+        => '<p>Diese Konfigurationsdatei wird benötigt um die E-Mail Einstellungen für das kitFramework festzulegen. Bitte fragen Sie Ihren E-Mail Anbieter nach den benötigten Einstellungen für den SMTP Server, Port, Benutzername und Passwort.</p><p>Sie können die E-Mail Einstellungen überprüfen, in dem Sie eine <a href="%FRAMEWORK_URL%/admin/test/mail" target="_blank">Testmail versenden</a>.</p><p>Das <a href="https://github.com/phpManufaktur/kitFramework/wiki/kitFramework-%23-Configuration#swiftcmsjson" target="_blank">kitFramework WIKI</a> erläutert Ihnen alle Einstellungsmöglichkeiten für die <var>swift.cms.json</var>.</p>',
 
     'If you have forgotten your password, you can order a link to create a new one. Please type in the email address assigned to your account and submit the form.'
         => 'Falls Sie Ihr Passwort vergessen haben, können Sie einen Link anfordern um ein neues Passwort zu erstellen. Bitte tragen Sie die E-Mail Adresse ein, die ihrem Konto zugeordnet ist und übermitteln Sie das Formular.',
@@ -278,6 +292,8 @@ return array(
         => 'Eine Liste mit den installierten kitCommands anzeigen',
     'Sorry, but only Administrators are allowed to access this kitFramework extension.'
         => 'Ihre Berechtigung ist nicht ausreichend, nur Administratoren dürfen das kitFramework CMS Tool verwenden.',
+    'Sorry, but the configuration file <strong>%filename%</strong> was not found. Please be aware that this controller may fail if you try to open a configuration file of a just installed extension, perhaps the extension must be executed first and you should also do a <key>rescan</key> for the configuration files.'
+        => 'Entschuldigung, die Konfigurationsdatei <strong>%filename%</strong> wurde nicht gefunden. Bitte beachten Sie, dass der Controller die Datei möglicherweise nicht findet, wenn Sie versuchen eine Konfigurationsdatei einer gerade erst installierten Erweiterung zu öffnen, eventuell muss die Erweiterung mindestens einmal ausgeführt worden sein und Sie sollten einen <key>Suchlauf</key> durchführen.',
     'Sorry, but the submitted GUID is invalid. Please contact the webmaster.'
         => 'Die übermittelte GUID ist ungültig. Bitte nehmen Sie mit dem Webmaster Kontakt auf.',
     'Sorry, but you are not allowed to access any entry point!'
@@ -325,6 +341,8 @@ return array(
         => 'Die beiden Passwörter die Sie eingegeben haben stimmen nicht überein, bitte versuchen Sie es noch einmal!',
     'The configuration file <strong>%file%</strong> was successful saved.'
         => 'Die Konfigurationsdatei <strong>%file%</strong> wurde erfolgreich gesichert.',
+    'The controller has detected <strong>%count%</strong> configuration files with the name <strong>%filename%</strong> and loaded the first hit into the editor.'
+        => 'Der Controller hat <strong>%count%</strong> Konfigurationsdateien mit der Bezeichnung <strong>%filename%</strong> gefunden und den ersten Treffer in den Editor geladen.',
     'The email address %email% is already used by another account!'
         => 'Die E-Mail Adresse %email% wird bereits von einem anderen Benutzerkonto verwendet!',
     'The email address %email% is invalid!'
