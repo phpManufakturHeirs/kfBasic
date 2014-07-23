@@ -152,7 +152,7 @@ class Parser
             }
 
             // collect the filters and commands
-            if ((false !== ($pos = strpos($command, 'filter:'))) && ($pos == 0)) {
+            if ((false !== ($pos = strpos($command, 'filter:'))) && ($pos == 0) && !array_key_exists('help', $params)) {
                 // this is a kitFilter
                 self::$filter[] = array(
                     'filter' => trim(substr($command, strlen('filter:'))),
