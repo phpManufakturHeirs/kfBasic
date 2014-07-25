@@ -859,4 +859,66 @@ class Utils
         $disabled = explode(',', ini_get('disable_functions'));
         return in_array($function, $disabled);
     }
+
+    /**
+     * Convert a hexadecimal colorcode into an RGB array, return a 'rgb()' string
+     *
+     * @param string $hex hexadecimal, can contain a leading sharp
+     * @param boolean $formatted if true (default) return RGB string
+     * @param string $format_rgb format string for the RGB return
+     * @return Ambigous <string, array>
+     */
+    function hex2rgb($hex, $formatted=true, $format_rgb='rgb(%d, %d %d)')
+    {
+        // remove the sharp at start
+        $hex =  ltrim($hex, '#');
+
+        if (strlen($hex) === 3) {
+            $rgb = array(
+                hexdec(substr($hex,0,1).substr($hex,0,1)),
+                hexdec(substr($hex,1,1).substr($hex,1,1)),
+                hexdec(substr($hex,2,1).substr($hex,2,1))
+            );
+        }
+        else {
+            $rgb = array(
+                hexdec(substr($hex,0,2)),
+                hexdec(substr($hex,2,2)),
+                hexdec(substr($hex,4,2))
+            );
+        }
+        // return RGB as formatted string or as array
+        return $formatted ? sprintf($format, $rgb) : $rgb;
+    }
+
+    /**
+     * Convert the given rgb value into a hexadecimal color value with the leading '#'
+     *
+     * @param mixed $rgb can be an array(r,g,b) or a string in form 'r,g,b'
+     * @throws \Exception
+     * @return string hexadecimal value
+     */
+    function rgb2hex($rgb)
+    {
+        if (is_string($rgb)) {
+            if (!strpos($rgb, ',')) {
+                throw new \Exception('Variable $rgb can be an array or a string in form r,g,b');
+            }
+            $colors = explode(',', $rgb);
+            if (count($colors) !== 3) {
+                throw new \Exception('Variable $rgb can be an array or a string in form r,g,b');
+            }
+            $rgb = array(intval($colors[0]), intval($colors[1], intval($colors[2])));
+        }
+        elseif (!is_array($rgb)) {
+            throw new \Exception('Variable $rgb can be an array or a string in form r,g,b');
+        }
+        $hex = "#";
+        $hex .= str_pad(dechex($rgb[0]), 2, "0", STR_PAD_LEFT);
+        $hex .= str_pad(dechex($rgb[1]), 2, "0", STR_PAD_LEFT);
+        $hex .= str_pad(dechex($rgb[2]), 2, "0", STR_PAD_LEFT);
+
+        return $hex;
+    }
+
 }
