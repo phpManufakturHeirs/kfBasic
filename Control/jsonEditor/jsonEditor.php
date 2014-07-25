@@ -72,17 +72,18 @@ class jsonEditor extends Alert
 
         $json_array = array();
         foreach ($jsonFiles as $file) {
-            if (strpos($file->getRealpath(), FRAMEWORK_PATH.'/config') === 0) {
-                $json_array[$file->getRealpath()] = $file->getBasename();
+            $realpath = $this->app['utils']->sanitizePath($file->getRealpath());
+            if (strpos($realpath, FRAMEWORK_PATH.'/config') === 0) {
+                $json_array[$realpath] = $file->getBasename();
             }
-            elseif (strpos($file->getRealpath(), CMS_MEDIA_PATH) === 0) {
-                $json_array[$file->getRealpath()] = substr($file->getRealpath(), strlen(CMS_PATH));
+            elseif (strpos($realpath, $this->app['utils']->sanitizePath(CMS_MEDIA_PATH)) === 0) {
+                $json_array[$realpath] = substr($realpath, strlen($this->app['utils']->sanitizePath(CMS_PATH)));
             }
-            elseif (strpos($file->getRealpath(), FRAMEWORK_MEDIA_PATH) === 0) {
-                $json_array[$file->getRealpath()] = substr($file->getRealpath(), strlen(FRAMEWORK_PATH));
+            elseif (strpos($realpath, $this->app['utils']->sanitizePath(FRAMEWORK_MEDIA_PATH)) === 0) {
+                $json_array[$realpath] = substr($realpath, strlen($this->app['utils']->sanitizePath(FRAMEWORK_PATH)));
             }
             else {
-                $json_array[$file->getRealpath()] = substr($file->getRealpath(), strlen(MANUFAKTUR_PATH));
+                $json_array[$realpath] = substr($realpath, strlen($this->app['utils']->sanitizePath(MANUFAKTUR_PATH)));
             }
         }
 
