@@ -48,7 +48,10 @@ class Configuration
                     'bower.json',
                     'extension.*',
                     'command.*',
-                    'filter.*'
+                    'filter.*',
+                    '_*.json',
+                    '.*.json',
+                    'bak.*.json'
                 ),
                 'directory' => array(
                     'Data',
