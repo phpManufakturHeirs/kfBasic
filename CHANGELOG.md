@@ -6,6 +6,13 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**1.0.2** - 2014-07-26
+
+* bugfix: parser must prevent to execute the command as filter if the parameter `help[]` isset
+* added functions `hex2rgb()` and `rgb2hex()` in `$app['utils']`
+* addded more exclude filters for *.json files in the jsonEditor
+* missing sanitizing path's to make the jsonEditor proper working at windows ...
+
 **1.0.1** - 2014-07-22
 
 * missed update for the changed `config.jsoneditor.json`
