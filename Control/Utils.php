@@ -888,7 +888,7 @@ class Utils
             );
         }
         // return RGB as formatted string or as array
-        return $formatted ? sprintf($format, $rgb) : $rgb;
+        return $formatted ? sprintf($format_rgb, $rgb[0], $rgb[1], $rgb[2]) : $rgb;
     }
 
     /**
@@ -904,15 +904,13 @@ class Utils
             if (!strpos($rgb, ',')) {
                 throw new \Exception('Variable $rgb can be an array or a string in form r,g,b');
             }
-            $colors = explode(',', $rgb);
-            if (count($colors) !== 3) {
-                throw new \Exception('Variable $rgb can be an array or a string in form r,g,b');
-            }
-            $rgb = array(intval($colors[0]), intval($colors[1], intval($colors[2])));
+            $rgb = explode(',', $rgb);
         }
-        elseif (!is_array($rgb)) {
+
+        if (count($rgb) != 3) {
             throw new \Exception('Variable $rgb can be an array or a string in form r,g,b');
         }
+
         $hex = "#";
         $hex .= str_pad(dechex($rgb[0]), 2, "0", STR_PAD_LEFT);
         $hex .= str_pad(dechex($rgb[1]), 2, "0", STR_PAD_LEFT);
