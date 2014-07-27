@@ -83,17 +83,16 @@ class Parser
         preg_match_all('/(~~)( |&nbsp;)(.){3,512}( |&nbsp;)(~~)/', $content, $matches, PREG_SET_ORDER);
 
         foreach ($matches as $match) {
-
             if (self::$cms['remove_commands']) {
                 // the CMS forbid to execute kitCommands at this page, so we remove them!
                 $content = str_replace($match[0], '', $content);
                 continue;
             }
 
-            $command_expression = str_ireplace("&nbsp;", ' ', $match[0]);
-            // get the expression without leading and trailing ~~
-            $command_string = trim(str_replace('~~', '', $command_expression));
+            $command_expression = $match[0];
 
+            // get the expression without leading and trailing ~~
+            $command_string = trim(str_ireplace(array('~~', '&nbsp;'), array('', ' '), $command_expression));
             if (empty($command_string)) {
                 // nothing to do ...
                 continue;
@@ -159,6 +158,10 @@ class Parser
                     'parameter' => $params,
                     'expression' => $command_expression
                 );
+                $this->app['monolog']->addDebug("parseCommands() add kitFilter $command", array(
+                    'parameter' => $params,
+                    'expression' => $command_expression
+                ));
             }
             else {
                 self::$command[] = array(
@@ -166,6 +169,10 @@ class Parser
                     'parameter' => $params,
                     'expression' => $command_expression
                 );
+                $this->app['monolog']->addDebug("parseCommands() add kitCommand $command", array(
+                    'parameter' => $params,
+                    'expression' => $command_expression
+                ));
             }
         }
         return $content;
@@ -916,6 +923,8 @@ class Parser
             $app['monolog']->addDebug($prompt);
             return $app['translator']->trans($prompt);
         }
+
+        $this->app['monolog']->addDebug('Parse CMS for kitCommands and kitFilter', self::$cms);
 
         self::$content = $this->parseCommands(self::$content);
 
