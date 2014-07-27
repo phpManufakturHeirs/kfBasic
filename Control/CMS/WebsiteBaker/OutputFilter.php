@@ -132,9 +132,12 @@ class OutputFilter
     public function parse($content)
     {
         global $post_id;
+        global $page_id;
 
         // check CMS type and version
         $this->checkCMS();
+
+        $id = defined(PAGE_ID) ? PAGE_ID : $page_id;
 
         // collect the main information about CMS, page and user
         $parse = array(
@@ -142,10 +145,10 @@ class OutputFilter
                 'type' => self::$cms_type,
                 'version' => self::$cms_version,
                 'locale' => strtolower(LANGUAGE),
-                'page_id' => defined(PAGE_ID) ? PAGE_ID : -1,
-                'page_url' => (defined(PAGE_ID) && (PAGE_ID > 0)) ? $this->getURLbyPageID(PAGE_ID) : $this->getCurrentPageURL(),
+                'page_id' => ($id > 0) ? $id : -1,
+                'page_url' => ($id > 0) ? $this->getURLbyPageID($id) : $this->getCurrentPageURL(),
                 'page_visibility' => VISIBILITY,
-                'remove_commands' => (defined(PAGE_ID) && (PAGE_ID < 1)),
+                'remove_commands' => ($id == 0),
                 'user' => array(
                     'id' => (isset($_SESSION['USER_ID'])) ? $_SESSION['USER_ID'] : -1,
                     'name' => (isset($_SESSION['USERNAME'])) ? $_SESSION['USERNAME'] : '',
