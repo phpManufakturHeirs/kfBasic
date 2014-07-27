@@ -593,7 +593,15 @@ class Utils
             );
             $subRequest = Request::create('/command/'.$command['command'], 'POST', $parse);
             $Response = $this->app->handle($subRequest, HttpKernelInterface::SUB_REQUEST, false);
-            $content = str_replace($command['expression'], $Response->getContent(), $content);
+            $command_response = $Response->getContent();
+            if ($this->isJSON($command_response)) {
+                // if the kitCommand return a JSON response we take only the 'response' part
+                $response = json_decode($command_response, true);
+                if (isset($response['response'])) {
+                    $command_response = $response['response'];
+                }
+            }
+            $content = str_replace($command['expression'], $command_response, $content);
         }
         return $content;
     }
