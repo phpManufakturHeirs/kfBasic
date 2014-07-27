@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**1.0.3** - 2014-07-27
+
+* bugfix: embedded kitCommands can also return a JSON response which was not handled
+
 **1.0.2** - 2014-07-26
 
 * bugfix: parser must prevent to execute the command as filter if the parameter `help[]` isset
