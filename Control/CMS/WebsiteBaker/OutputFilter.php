@@ -137,7 +137,7 @@ class OutputFilter
         // check CMS type and version
         $this->checkCMS();
 
-        $id = defined(PAGE_ID) ? PAGE_ID : $page_id;
+        $id = defined('PAGE_ID') ? PAGE_ID : $page_id;
 
         // collect the main information about CMS, page and user
         $parse = array(
