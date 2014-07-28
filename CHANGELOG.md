@@ -6,6 +6,12 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**1.0.4** - 2014-07-28
+
+* Parser: improved search for locking characters in kitCommands like `&nbsp;`
+add monolog debug information for the parsing process
+* Outputfilter: improved detection of PAGE_ID in CMS
+
 **1.0.3** - 2014-07-27
 
 * bugfix: embedded kitCommands can also return a JSON response which was not handled
