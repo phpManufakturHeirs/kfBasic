@@ -13,9 +13,9 @@
     $j->format('[{"a":"b","c": "d"}]', true);
 */
 
-namespace phpManufaktur\Basic\Control\JSON;
+namespace phpManufaktur\Basic\Control\jsonEditor;
 
-class JSONFormat
+class jsonFormat
 {
 
     public function __construct($indent = '  ', $linebreak = "\n")

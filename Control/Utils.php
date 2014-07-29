@@ -12,10 +12,9 @@
 namespace phpManufaktur\Basic\Control;
 
 use Silex\Application;
-use phpManufaktur\Basic\Control\CMS\OutputFilter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use phpManufaktur\Basic\Control\JSON\JSONFormat;
+use phpManufaktur\Basic\Control\jsonEditor\jsonFormat;
 use phpManufaktur\Basic\Control\kitCommand\Parser;
 
 // EXTENSION_PATH is not initialized yet use the full path!
@@ -644,8 +643,8 @@ class Utils
      */
     public function JSONFormat($chunk, $already_json = false)
     {
-        $JSONFormat = new JSONFormat();
-        return $JSONFormat->format($chunk, $already_json);
+        $jsonFormat = new jsonFormat();
+        return $jsonFormat->format($chunk, $already_json);
     }
 
     /**

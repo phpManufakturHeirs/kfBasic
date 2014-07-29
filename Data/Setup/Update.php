@@ -17,6 +17,7 @@ use phpManufaktur\Basic\Data\Security\AdminAction;
 use Symfony\Component\Filesystem\Exception\IOException;
 use phpManufaktur\Basic\Control\CMS\InstallAdminTool;
 use phpManufaktur\Basic\Control\jsonEditor\Configuration;
+use phpManufaktur\Basic\Control\Account\manufakturPasswordEncoder;
 
 class Update
 {
@@ -263,6 +264,16 @@ class Update
     }
 
     /**
+     * Release 1.0.5
+     */
+    protected function release_105()
+    {
+        if ($this->app['filesystem']->exists(MANUFAKTUR_PATH.'/Basic/Control/JSON')) {
+            $this->app['filesystem']->remove(MANUFAKTUR_PATH.'/Basic/Control/JSON');
+        }
+    }
+
+    /**
      * Update the database tables for the BASIC extension of the kitFramework
      *
      * @param Application $app
@@ -284,6 +295,7 @@ class Update
         $this->release_096();
         $this->release_099();
         $this->release_101();
+        $this->release_105();
 
         // install the search function
         $Search = new InstallSearch($app);
