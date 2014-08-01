@@ -17,7 +17,11 @@ use phpManufaktur\Basic\Data\Security\AdminAction;
 use Symfony\Component\Filesystem\Exception\IOException;
 use phpManufaktur\Basic\Control\CMS\InstallAdminTool;
 use phpManufaktur\Basic\Control\jsonEditor\Configuration;
-use phpManufaktur\Basic\Control\Account\manufakturPasswordEncoder;
+use phpManufaktur\Basic\Data\localeScanFile;
+use phpManufaktur\Basic\Data\localeSource;
+use phpManufaktur\Basic\Data\localeReference;
+use phpManufaktur\Basic\Data\localeTranslation;
+use phpManufaktur\Basic\Data\localeTranslationFile;
 
 class Update
 {
@@ -268,8 +272,31 @@ class Update
      */
     protected function release_105()
     {
+        // class JSONFormat is moved to /jsonEditor/jsonFormat
         if ($this->app['filesystem']->exists(MANUFAKTUR_PATH.'/Basic/Control/JSON')) {
             $this->app['filesystem']->remove(MANUFAKTUR_PATH.'/Basic/Control/JSON');
+        }
+
+        // create the tables for localeEditor
+        if (!$this->app['db.utils']->tableExists(FRAMEWORK_TABLE_PREFIX.'basic_locale_scan_file')) {
+            $LocaleScanFile = new localeScanFile($this->app);
+            $LocaleScanFile->createTable();
+        }
+        if (!$this->app['db.utils']->tableExists(FRAMEWORK_TABLE_PREFIX.'basic_locale_source')) {
+            $LocaleSource = new localeSource($this->app);
+            $LocaleSource->createTable();
+        }
+        if (!$this->app['db.utils']->tableExists(FRAMEWORK_TABLE_PREFIX.'basic_locale_reference')) {
+            $LocaleReference = new localeReference($this->app);
+            $LocaleReference->createTable();
+        }
+        if (!$this->app['db.utils']->tableExists(FRAMEWORK_TABLE_PREFIX.'basic_locale_translation')) {
+            $localeTranslation = new localeTranslation($this->app);
+            $localeTranslation->createTable();
+        }
+        if (!$this->app['db.utils']->tableExists(FRAMEWORK_TABLE_PREFIX.'basic_locale_reference')) {
+            $localeTranslationFile = new localeTranslationFile($this->app);
+            $localeTranslationFile->createTable();
         }
     }
 

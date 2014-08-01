@@ -21,6 +21,11 @@ use phpManufaktur\Basic\Data\kitCommandParameter;
 use phpManufaktur\Basic\Control\CMS\InstallSearch;
 use phpManufaktur\Basic\Data\Security\AdminAction;
 use phpManufaktur\Updater\Updater;
+use phpManufaktur\Basic\Data\localeScanFile;
+use phpManufaktur\Basic\Data\localeSource;
+use phpManufaktur\Basic\Data\localeReference;
+use phpManufaktur\Basic\Data\localeTranslation;
+use phpManufaktur\Basic\Data\localeTranslationFile;
 
 /**
  * Setup all needed database tables and initialize the kitFramework
@@ -128,6 +133,22 @@ class Setup
                 $Updater->clearAlert();
             }
         }
+
+        // create the tables for the localeEditor
+        $LocaleScanFile = new localeScanFile($app);
+        $LocaleScanFile->createTable();
+
+        $LocaleSource = new localeSource($app);
+        $LocaleSource->createTable();
+
+        $LocaleReference = new localeReference($app);
+        $LocaleReference->createTable();
+
+        $localeTranslation = new localeTranslation($app);
+        $localeTranslation->createTable();
+
+        $localeTranslationFile = new localeTranslationFile($app);
+        $localeTranslationFile->createTable();
 
         return $app['translator']->trans('Successfull installed the extension %extension%.',
             array('%extension%' => 'Basic'));
