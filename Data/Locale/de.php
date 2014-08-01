@@ -19,7 +19,7 @@ return array(
         => '- bitte auswählen -',
 
     'Abort'
-        => 'Abbruch',
+        => 'Abbruchi',
     'Access denied'
         => 'Zugriff verweigert',
     'Access to kitFramework User Accounts'
@@ -36,8 +36,6 @@ return array(
         => 'Die Erweiterung <b>%name%</b> wurde dem Register hinzugefügt.',
     'Additional information'
         => 'Zusatzinformation',
-    'alpha'
-        => '- in Entwicklung -',
     'Available extensions'
         => 'Verfügbare Erweiterungen',
 
@@ -49,18 +47,14 @@ return array(
         => 'Bitte beachten Sie: Eine Änderung Ihrer E-Mail Adresse beeinflusst eventuell die mit Ihnen verbundenen Datensätze in den verschiedenen Anwendungen. Bitte informieren Sie in diesen Fällen den Webmaster. Der Benutzername kann nur durch einen Administrator geändert werden.',
     'Be aware: You are now authenticated as user <b>%username%</b>!'
         => 'Vorsicht! Sie sind momentan als der Benutzer <b>%username%</b> angemeldet!',
-    'beta'
-        => 'Beta Version',
 
-    'Can\'t create the target directory for the extension!'
-        => 'Konnte das Zielverzeichnis für die Extension nicht erstellen!',
     'Can not read the extension.json for %name%!<br />Error message: %error%'
         => 'Kann die Beschreibungsdatei extension.json für die Erweiterung <b>%name%</b> nicht lesen!<br />Fehlermeldung: %error%',
     'Can not read the information file for the kitFramework!'
         => 'Kann die Beschreibungsdatei für das kitFramework nicht lesen!',
     "Can't read the the %repository% from %organization% at Github!"
         => 'Kann das Repository %repository% von %organization% auf Github nicht lesen!',
-    'Can\'t create a new GUID as long the last GUID is not expired. You must wait 24 hours between the creation of new passwords.'
+    "Can't create a new GUID as long the last GUID is not expired. You must wait 24 hours between the creation of new passwords."
         => 'Es kann keine neue GUID erzeugt werden, solange die letzte noch gültig ist. Sie können das Anlegen eines neuen Passwort nur einmal innerhalb von 24 Stunden anfordern!',
     "Can't open the file <b>%file%</b>!"
         => 'Kann die Datei <b>%file%</b> nicht öffnen!',
@@ -82,8 +76,6 @@ return array(
         => 'Die GUID in die Zwischenablage kopieren',
     'Copy this kitCommand to the clipboard'
         => 'Dieses kitCommand in die Zwischenablage kopieren',
-    'Could not move the unzipped files to the target directory.'
-        => 'Konnte die entpackten Dateien nicht in das Zielverzeichnis verschieben!',
     'Create a new account'
         => 'Ein neues Benutzerkonto anlegen',
     'Create a new password' =>
@@ -135,7 +127,7 @@ return array(
 
     'Hello %name%,<br />you have asked to create a new password for the kitFramework hosted at %server%.'
         => 'Hallo %name%,<br />Sie haben darum gebeten ein neues Passwort für das kitFramework auf %server% zu erhalten.',
-    'Hello %name%, you want to change your password, so please type in a new one, repeat it and submit the form. If you won\'t change your password just leave this dialog.'
+    "Hello %name%, you want to change your password, so please type in a new one, repeat it and submit the form. If you won't change your password just leave this dialog."
         => 'Hallo %name%,<br />Sie möchten Ihr Passwort ändern, bitte geben Sie das neue Passwort ein, wiederholen Sie es zur Sicherheit und schicken Sie das Formular ab.<br />Falls Sie Ihr Passwort nicht ändern möchten, verlassen Sie bitte einfach diesen Dialog.',
     'Help'
         => 'Hilfe',
@@ -175,17 +167,6 @@ return array(
     'Issues'
         => 'Mängel',
 
-    'kitFramework - Create new password'
-        => 'kitFramework - Neues Passwort anlegen',
-    'kitFramework - Login'
-        => 'kitFramework - Anmeldung',
-    'kitFramework - Logout'
-        => 'kitFramework - Abmeldung',
-    'kitFramework password reset'
-        => 'kitFramework - Passwort zurücksetzen',
-
-    'Last_login'
-        => 'Letzte Anmeldung',
     'License'
         => 'Lizenz',
     'Line'
@@ -209,13 +190,9 @@ return array(
         => 'Mitteilung',
     'Missing the parameter: %parameter%'
         => 'Benötige den Parameter: %parameter%',
-    'more information about <b>%command%</b> ...'
-        => 'mehr Informationen über <b>%command%</b> ...',
 
     'New kitFramework release available!'
         => 'Es ist eine neue kitFramework Release verfügbar!',
-    'NO'
-        => 'Nein',
     'No account? <a href="%register_url%">Register a user account for DogPaw</a>!'
         => 'Kein Benutzerkonto? <a href="%register_url%">Melden Sie sich kostenlos an</a>!',
     'No fitting user role dectected!'
@@ -244,8 +221,6 @@ return array(
         => 'Bitte wählen Sie die Konfigurationsdatei aus, die Sie bearbeiten möchten.',
     'Please use the following link to create a new password: %reset_url%'
         => 'Bitte verwenden Sie den folgenden Link um ein neues Passwort anzulegen:<br />%reset_url%',
-    'pre-release'
-        => 'Vorabversion',
     'published at'
         => 'veröffentlicht am',
 
@@ -265,8 +240,6 @@ return array(
         => 'Suchlauf',
     'Reveal this e-mail address'
         => 'Anklicken um die vollständige E-Mail Adresse anzuzeigen',
-    'Role'
-        => 'Benutzerrecht, Rolle',
     'Roles'
         => 'Benutzerrechte, Rollen',
 
@@ -400,16 +373,12 @@ return array(
     'This value is not a valid email address.'
         => 'Es wurde keine gültige E-Mail Adresse übergeben!',
 
-    'Unknown user'
-        => 'Unbekannter Benutzer',
     'Update available!'
         => 'Aktualisierung verfügbar!',
     'Updated the catalog data for <b>%name%</b>.'
         => 'Die Katalogdaten für die Erweiterung <b>%name%</b> wurden aktualisiert.',
     'Updated the register data for <b>%name%</b>.'
         => 'Die Registrierdaten für die Erweiterung <b>%name%</b> wurden aktualisiert.',
-    'Use <code>~~ help ~~</code> to view the general help file for the kitCommands.'
-        => 'Verwenden Sie <code>~~ help ~~</code> um sich die allgemeine Hilfe zu den kitCommands anzeigen zu lassen.',
     'User roles may depend from others and can be set or extended dynamically by the kitFramework extensions. To see the roles really associated to this account if the user is authenticated use the "switch to" button.'
         => 'Benutzerrechte können von einander abhängig sein und dynamisch durch kitFramework Anwendungen erweitert werden. Um die Benutzerrechte zu sehen, die tatsächlich einem angemeldeten Anwender zugewiesen sind nutzen Sie bitte die Funktion "Zum Anwender umschalten".',
     'Username'
@@ -436,8 +405,6 @@ return array(
     'Welcome back, %user%! Please select the entry point you want to use.'
         => 'Herzlich willkommen, %user%! Bitte wählen Sie den gewünschten Zugangspunkt.',
 
-    'YES'
-        => 'Ja',
     'You are not allowed to access this resource!'
         => 'Sie sind nicht befugt auf diese Resource zuzugreifen.',
     'You have already an account? <a href="%login_url%">Please login</a>!'

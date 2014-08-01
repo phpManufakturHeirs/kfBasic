@@ -100,7 +100,7 @@ class forgottenPassword extends Alert
         // email address is valid, so we can create a new GUID and send a mail
         $guid_check = ($user['last_login'] !== '0000-00-00 00:00:00');
         if (false === ($guid = $Users->createNewGUID($form['email'], $guid_check))) {
-            $this->setAlert('Can\'t create a new GUID as long the last GUID is not expired. You must wait 24 hours between the creation of new passwords.',
+            $this->setAlert("Can't create a new GUID as long the last GUID is not expired. You must wait 24 hours between the creation of new passwords.",
                 array(), self::ALERT_TYPE_WARNING, array(__METHOD__, __LINE__));
             return $this->dialogForgottenPassword($app);
         }
@@ -205,7 +205,7 @@ class forgottenPassword extends Alert
             ))
         ->getForm();
 
-        $this->setAlert('Hello %name%, you want to change your password, so please type in a new one, repeat it and submit the form. If you won\'t change your password just leave this dialog.',
+        $this->setAlert("Hello %name%, you want to change your password, so please type in a new one, repeat it and submit the form. If you won't change your password just leave this dialog.",
             array('%name%' => $user['displayname']), self::ALERT_TYPE_INFO);
         return $app['twig']->render($app['utils']->getTemplateFile(
             '@phpManufaktur/Basic/Template', 'framework/password.set.twig'),
@@ -252,7 +252,7 @@ class forgottenPassword extends Alert
             return $app['twig']->render($app['utils']->getTemplateFile(
                 '@phpManufaktur/Basic/Template', 'framework/alert.twig'),
                 array(
-                    'title' => 'Password changed',
+                    'title' => $this->app['translator']->trans('Password changed'),
                     'alert' => $this->getAlert(),
                     'usage' => self::$usage
                 ));

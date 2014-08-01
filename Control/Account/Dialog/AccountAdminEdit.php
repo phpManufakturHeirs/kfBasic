@@ -104,7 +104,7 @@ class AccountAdminEdit extends Alert
         ))
         ->add('send_email', 'checkbox', array(
             'required' => false,
-            'label' => ($data['id'] > 0) ? 'Send email (only if the password has changed)' : 'Send account info to the user'
+            'label' => ($data['id'] > 0) ? $this->app['translator']->trans('Send email (only if the password has changed)') : $this->app['translator']->trans('Send account info to the user')
         ))
         ;
         if (!isset($data['id']) || ($data['id'] < 1)) {

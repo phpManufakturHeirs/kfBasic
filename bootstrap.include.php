@@ -434,8 +434,8 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
         'ROLE_ADMIN' => array(
             array(
                 'route' => '/admin/welcome',
-                'name' => 'Extensions',
-                'info' => 'Install, update or remove kitFramework Extensions',
+                'name' => $app['translator']->trans('Extensions'),
+                'info' => $app['translator']->trans('Install, update or remove kitFramework Extensions'),
                 'icon' => array(
                     'path' => '/framework.jpg',
                     'url' => FRAMEWORK_URL.'/framework.jpg'
@@ -443,8 +443,8 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
             ),
             array(
                 'route' => '/admin/accounts/list',
-                'name' => 'Accounts',
-                'info' => 'Access to kitFramework User Accounts',
+                'name' => $app['translator']->trans('Accounts'),
+                'info' => $app['translator']->trans('Access to kitFramework User Accounts'),
                 'icon' => array(
                     'path' => '/extension/phpmanufaktur/phpManufaktur/Basic/Template/default/framework/image/user-accounts.jpg',
                     'url' => MANUFAKTUR_URL.'/Basic/Template/default/framework/image/user-accounts.jpg'
@@ -452,8 +452,8 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
             ),
             array(
                 'route' => '/admin/json/editor',
-                'name' => 'Configuration',
-                'info' => 'View and edit the kitFramework configuration files',
+                'name' => $app['translator']->trans('Configuration'),
+                'info' => $app['translator']->trans('View and edit the kitFramework configuration files'),
                 'icon' => array(
                     'path' => '/framework.jpg',
                     'url' => FRAMEWORK_URL.'/framework.jpg'
@@ -461,8 +461,8 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
             ),
             array(
                 'route' => '/admin/test/mail',
-                'name' => 'Test email',
-                'info' => 'Check the email settings and send a email to the webmaster for testing purpose',
+                'name' => $app['translator']->trans('Test email'),
+                'info' => $app['translator']->trans('Check the email settings and send a email to the webmaster for testing purpose'),
                 'icon' => array(
                     'path' => '/framework.jpg',
                     'url' => FRAMEWORK_URL.'/framework.jpg'
@@ -612,6 +612,13 @@ $admin->get('/json/editor/open/file/{filename}',
     'phpManufaktur\Basic\Control\jsonEditor\jsonEditor::ControllerOpenFile');
 $app->post('/json/editor/save',
     'phpManufaktur\Basic\Control\jsonEditor\jsonEditor::ControllerSaveFile');
+
+$admin->get('/locale/editor',
+    'phpManufaktur\Basic\Control\localeEditor\localeEditor::Controller');
+$admin->get('/locale/editor/table/create',
+    'phpManufaktur\Basic\Control\localeEditor\localeEditor::ControllerCreateTable');
+$admin->get('/locale/editor/table/drop',
+    'phpManufaktur\Basic\Control\localeEditor\localeEditor::ControllerDropTable');
 
 // send a testmail
 $admin->get('/test/mail',

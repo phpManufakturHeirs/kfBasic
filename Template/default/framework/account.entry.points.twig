@@ -13,16 +13,16 @@
   {% set template_file = 'framework/backend.body.twig' %}
 {% endif %}
 {% extends getTemplateFile('@phpManufaktur/Basic/Template', template_file) %}
-{% block title %}{{ 'kitFramework - Welcome'|trans }}{% endblock %}
+{% block title %}{{ 'Welcome'|trans }}{% endblock %}
 
 {% block content %}
   <div class="container">
     <div class="page-header">
       <h1>kitFramework <small>{{ 'Entry points'|trans }}</small></h1>
     </div>
-    
+
     {{ alert }}
-    
+
     <div class="hidden-md hidden-sm hidden-xs">
       {# DESKTOP VIEW #}
       {% set counter = 1 %}
@@ -30,21 +30,21 @@
         {% for entry in roles %}
           {% if counter == 1 %}
             <div class="row">
-          {% endif %}    
+          {% endif %}
           <div class="col-lg-2">
             {% include '@phpManufaktur/Basic/Template/default/framework/account.entry.points.item.twig' %}
-          </div>    
+          </div>
           {% if counter == 6 %}
             </div>
             {% set counter = 1 %}
           {% else %}
             {% set counter = counter + 1 %}
-          {% endif %}    
+          {% endif %}
         {% endfor %}
       {% endfor %}
       {% if counter != 1 %}</div>{% endif %}
     </div>
-    
+
     <div class="hidden-lg hidden-xs hidden-sm">
       {# TABLET VIEW #}
       {% set counter = 1 %}
@@ -52,21 +52,21 @@
         {% for entry in roles %}
           {% if counter == 1 %}
             <div class="row">
-          {% endif %}    
+          {% endif %}
           <div class="col-md-3">
             {% include '@phpManufaktur/Basic/Template/default/framework/account.entry.points.item.twig' %}
-          </div>    
+          </div>
           {% if counter == 4 %}
             </div>
             {% set counter = 1 %}
           {% else %}
             {% set counter = counter + 1 %}
-          {% endif %}    
+          {% endif %}
         {% endfor %}
       {% endfor %}
       {% if counter != 1 %}</div>{% endif %}
     </div>
-    
+
     <div class="hidden-lg hidden-md">
       {# SMARTPHONE VIEW #}
       {% set counter = 1 %}
@@ -74,19 +74,19 @@
         {% for entry in roles %}
           {% if counter == 1 %}
             <div class="row">
-          {% endif %}    
+          {% endif %}
           <div class="col-xs-6">
             {% include '@phpManufaktur/Basic/Template/default/framework/account.entry.points.item.twig' %}
-          </div>    
+          </div>
           {% if counter == 2 %}
             </div>
             {% set counter = 1 %}
           {% else %}
             {% set counter = counter + 1 %}
-          {% endif %}    
+          {% endif %}
         {% endfor %}
       {% endfor %}
       {% if counter != 1 %}</div>{% endif %}
     </div>
-    
+
 {% endblock content %}
