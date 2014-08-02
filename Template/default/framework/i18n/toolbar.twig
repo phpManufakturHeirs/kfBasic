@@ -1,0 +1,22 @@
+{% block toolbar %}
+  <ul class="nav nav-tabs">
+    {% for item in toolbar %}
+      <li{% if item.active %} class="active"{% endif %}>
+        <a href="{{ item.link }}" title="{{ item.hint }}">
+          {% if item.name == 'about' %}
+            <i class="fa fa-question"></i>
+          {% elseif item.name == 'overview' %}
+            <i class="fa fa-th-list"></i>
+          {#% elseif item.name == 'contact_edit' %}
+            <i class="fa fa-user"></i>
+          {% elseif item.name == 'breed_of_dogs' %}
+            <i class="fa fa-table"></i>#}
+          {% endif %}
+          {% if item.name != 'about' %}  
+            <span class="visible-lg pull-right">&nbsp;{{ item.text }}</span>  
+          {% endif %}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock toolbar %}

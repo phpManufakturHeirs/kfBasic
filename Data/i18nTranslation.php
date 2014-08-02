@@ -19,7 +19,7 @@ use Silex\Application;
  * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
  *
  */
-class localeTranslation
+class i18nTranslation
 {
     protected $app = null;
     protected static $table_name = null;
@@ -27,7 +27,7 @@ class localeTranslation
     public function __construct(Application $app)
     {
         $this->app = $app;
-        self::$table_name = FRAMEWORK_TABLE_PREFIX.'basic_locale_translation';
+        self::$table_name = FRAMEWORK_TABLE_PREFIX.'basic_i18n_translation';
     }
 
     /**
@@ -38,7 +38,7 @@ class localeTranslation
     public function createTable()
     {
         $table = self::$table_name;
-        $table_source = FRAMEWORK_TABLE_PREFIX.'basic_locale_source';
+        $table_source = FRAMEWORK_TABLE_PREFIX.'basic_i18n_source';
         $SQL = <<<EOD
     CREATE TABLE IF NOT EXISTS `$table` (
       `translation_id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -137,7 +137,7 @@ EOD;
     {
         try {
             $SQL = "SELECT `locale_id` FROM `".self::$table_name."` WHERE `locale_id` ".
-                "NOT IN (SELECT `locale_id` FROM `".FRAMEWORK_TABLE_PREFIX."basic_locale_source`)";
+                "NOT IN (SELECT `locale_id` FROM `".FRAMEWORK_TABLE_PREFIX."basic_i18n_source`)";
             $widowed = $this->app['db']->fetchAll($SQL);
             return (!empty($widowed)) ? $widowed : false;
         } catch (\Doctrine\DBAL\DBALException $e) {

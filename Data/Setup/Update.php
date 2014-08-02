@@ -17,11 +17,11 @@ use phpManufaktur\Basic\Data\Security\AdminAction;
 use Symfony\Component\Filesystem\Exception\IOException;
 use phpManufaktur\Basic\Control\CMS\InstallAdminTool;
 use phpManufaktur\Basic\Control\jsonEditor\Configuration;
-use phpManufaktur\Basic\Data\localeScanFile;
-use phpManufaktur\Basic\Data\localeSource;
-use phpManufaktur\Basic\Data\localeReference;
-use phpManufaktur\Basic\Data\localeTranslation;
-use phpManufaktur\Basic\Data\localeTranslationFile;
+use phpManufaktur\Basic\Data\i18nScanFile;
+use phpManufaktur\Basic\Data\i18nSource;
+use phpManufaktur\Basic\Data\i18nReference;
+use phpManufaktur\Basic\Data\i18nTranslation;
+use phpManufaktur\Basic\Data\i18nTranslationFile;
 
 class Update
 {
@@ -278,25 +278,25 @@ class Update
         }
 
         // create the tables for localeEditor
-        if (!$this->app['db.utils']->tableExists(FRAMEWORK_TABLE_PREFIX.'basic_locale_scan_file')) {
-            $LocaleScanFile = new localeScanFile($this->app);
-            $LocaleScanFile->createTable();
+        if (!$this->app['db.utils']->tableExists(FRAMEWORK_TABLE_PREFIX.'basic_i18n_scan_file')) {
+            $i18nScanFile = new i18nScanFile($this->app);
+            $i18nScanFile->createTable();
         }
-        if (!$this->app['db.utils']->tableExists(FRAMEWORK_TABLE_PREFIX.'basic_locale_source')) {
-            $LocaleSource = new localeSource($this->app);
-            $LocaleSource->createTable();
+        if (!$this->app['db.utils']->tableExists(FRAMEWORK_TABLE_PREFIX.'basic_i18n_source')) {
+            $i18nSource = new i18nSource($this->app);
+            $i18nSource->createTable();
         }
-        if (!$this->app['db.utils']->tableExists(FRAMEWORK_TABLE_PREFIX.'basic_locale_reference')) {
-            $LocaleReference = new localeReference($this->app);
-            $LocaleReference->createTable();
+        if (!$this->app['db.utils']->tableExists(FRAMEWORK_TABLE_PREFIX.'basic_i18n_reference')) {
+            $i18nReference = new i18nReference($this->app);
+            $i18nReference->createTable();
         }
-        if (!$this->app['db.utils']->tableExists(FRAMEWORK_TABLE_PREFIX.'basic_locale_translation')) {
-            $localeTranslation = new localeTranslation($this->app);
-            $localeTranslation->createTable();
+        if (!$this->app['db.utils']->tableExists(FRAMEWORK_TABLE_PREFIX.'basic_i18n_translation')) {
+            $i18nTranslation = new i18nTranslation($this->app);
+            $i18nTranslation->createTable();
         }
-        if (!$this->app['db.utils']->tableExists(FRAMEWORK_TABLE_PREFIX.'basic_locale_reference')) {
-            $localeTranslationFile = new localeTranslationFile($this->app);
-            $localeTranslationFile->createTable();
+        if (!$this->app['db.utils']->tableExists(FRAMEWORK_TABLE_PREFIX.'basic_i18n_reference')) {
+            $i18nTranslationFile = new i18nTranslationFile($this->app);
+            $i18nTranslationFile->createTable();
         }
     }
 

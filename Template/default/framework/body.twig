@@ -60,8 +60,15 @@
                 {% set entrypoints = getUserRolesEntryPoints() %}
                 {% if entrypoints|length > 0 %}
                   <li class="dropdown">
-                    <a href="#" class="dropdown-toggle manufaktur" data-toggle="dropdown" title="{{ 'Entry points'|trans }}"><span class="glyphicon glyphicon-road"></span> <b class="caret"></b></a>
-                    <ul class="dropdown-menu" role="menu">                    
+                    <a href="#" class="dropdown-toggle manufaktur" data-toggle="dropdown" title="{{ 'Entry-points'|trans }}"><span class="glyphicon glyphicon-road"></span> <b class="caret"></b></a>
+                    <ul class="dropdown-menu" role="menu">   
+                      {# set a link to the overview at the top #}
+                      <li class="navbar-link">
+                        <a href="{{ FRAMEWORK_URL ~ '/admin' }}" title="{{ 'Switch to the kitFramework Entry-points'|trans }}">
+                          <img class="img-responsive img-thumbnail" src="{{ FRAMEWORK_URL ~ '/framework.jpg' }}" alt="kitFramework" />
+                        </a>
+                        <div class="height-5 clearfix"></div>
+                      </li>
                       {% for roles in entrypoints %}
                         {% for point in roles %}
                           {% set img = image(point.icon.path, 20, 20) %}

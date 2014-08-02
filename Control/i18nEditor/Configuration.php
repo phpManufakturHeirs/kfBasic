@@ -9,7 +9,7 @@
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
  */
 
-namespace phpManufaktur\Basic\Control\localeEditor;
+namespace phpManufaktur\Basic\Control\i18nEditor;
 
 use Silex\Application;
 
@@ -27,7 +27,7 @@ class Configuration
     public function __construct(Application $app)
     {
         $this->app = $app;
-        self::$config_path = MANUFAKTUR_PATH.'/Basic/config.localeeditor.json';
+        self::$config_path = MANUFAKTUR_PATH.'/Basic/config.i18n.editor.json';
         $this->readConfiguration();
     }
 

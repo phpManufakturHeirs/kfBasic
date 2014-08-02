@@ -19,7 +19,7 @@ use Silex\Application;
  * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
  *
  */
-class localeSource
+class i18nSource
 {
     protected $app = null;
     protected static $table_name = null;
@@ -27,7 +27,7 @@ class localeSource
     public function __construct(Application $app)
     {
         $this->app = $app;
-        self::$table_name = FRAMEWORK_TABLE_PREFIX.'basic_locale_source';
+        self::$table_name = FRAMEWORK_TABLE_PREFIX.'basic_i18n_source';
     }
 
     /**

@@ -19,7 +19,7 @@ use Silex\Application;
  * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
  *
  */
-class localeScanFile
+class i18nScanFile
 {
     protected $app = null;
     protected static $table_name = null;
@@ -27,7 +27,7 @@ class localeScanFile
     public function __construct(Application $app)
     {
         $this->app = $app;
-        self::$table_name = FRAMEWORK_TABLE_PREFIX.'basic_locale_scan_file';
+        self::$table_name = FRAMEWORK_TABLE_PREFIX.'basic_i18n_scan_file';
     }
 
     /**

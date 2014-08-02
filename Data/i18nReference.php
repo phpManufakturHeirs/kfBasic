@@ -19,7 +19,7 @@ use Silex\Application;
  * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
  *
  */
-class localeReference
+class i18nReference
 {
     protected $app = null;
     protected static $table_name = null;
@@ -27,7 +27,7 @@ class localeReference
     public function __construct(Application $app)
     {
         $this->app = $app;
-        self::$table_name = FRAMEWORK_TABLE_PREFIX.'basic_locale_reference';
+        self::$table_name = FRAMEWORK_TABLE_PREFIX.'basic_i18n_reference';
     }
 
     /**
@@ -38,8 +38,8 @@ class localeReference
     public function createTable()
     {
         $table = self::$table_name;
-        $table_source = FRAMEWORK_TABLE_PREFIX.'basic_locale_source';
-        $table_file = FRAMEWORK_TABLE_PREFIX.'basic_locale_scan_file';
+        $table_source = FRAMEWORK_TABLE_PREFIX.'basic_i18n_source';
+        $table_file = FRAMEWORK_TABLE_PREFIX.'basic_i18n_scan_file';
         $SQL = <<<EOD
     CREATE TABLE IF NOT EXISTS `$table` (
       `reference_id` INT(11) NOT NULL AUTO_INCREMENT,

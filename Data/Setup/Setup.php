@@ -21,11 +21,11 @@ use phpManufaktur\Basic\Data\kitCommandParameter;
 use phpManufaktur\Basic\Control\CMS\InstallSearch;
 use phpManufaktur\Basic\Data\Security\AdminAction;
 use phpManufaktur\Updater\Updater;
-use phpManufaktur\Basic\Data\localeScanFile;
-use phpManufaktur\Basic\Data\localeSource;
-use phpManufaktur\Basic\Data\localeReference;
-use phpManufaktur\Basic\Data\localeTranslation;
-use phpManufaktur\Basic\Data\localeTranslationFile;
+use phpManufaktur\Basic\Data\i18nScanFile;
+use phpManufaktur\Basic\Data\i18nSource;
+use phpManufaktur\Basic\Data\i18nReference;
+use phpManufaktur\Basic\Data\i18nTranslation;
+use phpManufaktur\Basic\Data\i18nTranslationFile;
 
 /**
  * Setup all needed database tables and initialize the kitFramework
@@ -135,20 +135,20 @@ class Setup
         }
 
         // create the tables for the localeEditor
-        $LocaleScanFile = new localeScanFile($app);
-        $LocaleScanFile->createTable();
+        $i18nScanFile = new i18nScanFile($app);
+        $i18nScanFile->createTable();
 
-        $LocaleSource = new localeSource($app);
-        $LocaleSource->createTable();
+        $i18nSource = new i18nSource($app);
+        $i18nSource->createTable();
 
-        $LocaleReference = new localeReference($app);
-        $LocaleReference->createTable();
+        $i18nReference = new i18nReference($app);
+        $i18nReference->createTable();
 
-        $localeTranslation = new localeTranslation($app);
-        $localeTranslation->createTable();
+        $i18nTranslation = new i18nTranslation($app);
+        $i18nTranslation->createTable();
 
-        $localeTranslationFile = new localeTranslationFile($app);
-        $localeTranslationFile->createTable();
+        $i18nTranslationFile = new i18nTranslationFile($app);
+        $i18nTranslationFile->createTable();
 
         return $app['translator']->trans('Successfull installed the extension %extension%.',
             array('%extension%' => 'Basic'));

@@ -19,7 +19,7 @@ use Silex\Application;
  * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
  *
  */
-class localeTranslationFile
+class i18nTranslationFile
 {
     protected $app = null;
     protected static $table_name = null;
@@ -27,7 +27,7 @@ class localeTranslationFile
     public function __construct(Application $app)
     {
         $this->app = $app;
-        self::$table_name = FRAMEWORK_TABLE_PREFIX.'basic_locale_translation_file';
+        self::$table_name = FRAMEWORK_TABLE_PREFIX.'basic_i18n_translation_file';
     }
 
     /**
@@ -38,8 +38,8 @@ class localeTranslationFile
     public function createTable()
     {
         $table = self::$table_name;
-        $table_source = FRAMEWORK_TABLE_PREFIX.'basic_locale_source';
-        $table_translation = FRAMEWORK_TABLE_PREFIX.'basic_locale_translation';
+        $table_source = FRAMEWORK_TABLE_PREFIX.'basic_i18n_source';
+        $table_translation = FRAMEWORK_TABLE_PREFIX.'basic_i18n_translation';
         $SQL = <<<EOD
     CREATE TABLE IF NOT EXISTS `$table` (
       `file_id` INT(11) NOT NULL AUTO_INCREMENT,

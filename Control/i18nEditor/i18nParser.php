@@ -9,25 +9,25 @@
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
  */
 
-namespace phpManufaktur\Basic\Control\localeEditor;
+namespace phpManufaktur\Basic\Control\i18nEditor;
 
 use Silex\Application;
 use Symfony\Component\Finder\Finder;
 use phpManufaktur\Basic\Control\Pattern\Alert;
-use phpManufaktur\Basic\Data\localeScanFile;
-use phpManufaktur\Basic\Data\localeReference;
-use phpManufaktur\Basic\Data\localeSource;
-use phpManufaktur\Basic\Data\localeTranslation;
-use phpManufaktur\Basic\Data\localeTranslationFile;
+use phpManufaktur\Basic\Data\i18nScanFile;
+use phpManufaktur\Basic\Data\i18nReference;
+use phpManufaktur\Basic\Data\i18nSource;
+use phpManufaktur\Basic\Data\i18nTranslation;
+use phpManufaktur\Basic\Data\i18nTranslationFile;
 
-class localeEditor extends Alert
+class i18nParser extends Alert
 {
     protected static $config = null;
-    protected $localeScanFile = null;
-    protected $localeSource = null;
-    protected $localeReference = null;
-    protected $localeTranslation = null;
-    protected $localeTranslationFile = null;
+    protected $i18nScanFile = null;
+    protected $i18nSource = null;
+    protected $i18nReference = null;
+    protected $i18nTranslation = null;
+    protected $i18nTranslationFile = null;
 
     /**
      * (non-PHPdoc)
@@ -40,15 +40,15 @@ class localeEditor extends Alert
         $Configuration = new Configuration($app);
         self::$config = $Configuration->getConfiguration();
 
-        $this->localeScanFile = new localeScanFile($app);
-        $this->localeReference = new localeReference($app);
-        $this->localeSource = new localeSource($app);
-        $this->localeTranslation = new localeTranslation($app);
-        $this->localeTranslationFile = new localeTranslationFile($app);
+        $this->i18nScanFile = new i18nScanFile($app);
+        $this->i18nReference = new i18nReference($app);
+        $this->i18nSource = new i18nSource($app);
+        $this->i18nTranslation = new i18nTranslation($app);
+        $this->i18nTranslationFile = new i18nTranslationFile($app);
     }
 
     /**
-     * Controller to create the tables for the localeEditor
+     * Controller to create the tables for the i18nEditor
      *
      * @param Application $app
      * @return \phpManufaktur\Basic\Control\Pattern\rendered
@@ -57,19 +57,19 @@ class localeEditor extends Alert
     {
         $this->initialize($app);
 
-        $this->localeScanFile->createTable();
-        $this->localeSource->createTable();
-        $this->localeReference->createTable();
-        $this->localeTranslation->createTable();
-        $this->localeTranslationFile->createTable();
+        $this->i18nScanFile->createTable();
+        $this->i18nSource->createTable();
+        $this->i18nReference->createTable();
+        $this->i18nTranslation->createTable();
+        $this->i18nTranslationFile->createTable();
 
-        $this->setAlert('Successful created the tables for the localeEditor.',
+        $this->setAlert('Successful created the tables for the i18nEditor.',
             array(), self::ALERT_TYPE_SUCCESS);
         return $this->promptAlertFramework();
     }
 
     /**
-     * Controller to drop the tables for the localeEditor
+     * Controller to drop the tables for the i18nEditor
      *
      * @param Application $app
      * @return \phpManufaktur\Basic\Control\Pattern\rendered
@@ -78,13 +78,13 @@ class localeEditor extends Alert
     {
         $this->initialize($app);
 
-        $this->localeScanFile->dropTable();
-        $this->localeSource->dropTable();
-        $this->localeReference->dropTable();
-        $this->localeTranslation->dropTable();
-        $this->localeTranslationFile->dropTable();
+        $this->i18nScanFile->dropTable();
+        $this->i18nSource->dropTable();
+        $this->i18nReference->dropTable();
+        $this->i18nTranslation->dropTable();
+        $this->i18nTranslationFile->dropTable();
 
-        $this->setAlert('Dropped the tables for the localeEditor.',
+        $this->setAlert('Dropped the tables for the i18nEditor.',
             array(), self::ALERT_TYPE_SUCCESS);
         return $this->promptAlertFramework();
     }
@@ -130,11 +130,11 @@ class localeEditor extends Alert
         $start_word = '';
         $current_source = null;
 
-        if (false === ($file_id = $this->localeScanFile->existsMD5(md5(realpath($path))))) {
+        if (false === ($file_id = $this->i18nScanFile->existsMD5(md5(realpath($path))))) {
             throw new \Exception("Fatal: It exists no data record for the file $path!");
         }
         // first step: delete the existing references!
-        $this->localeReference->deleteFileReferences($file_id);
+        $this->i18nReference->deleteFileReferences($file_id);
         $locale_hits = 0;
 
         foreach ($tokens as $token) {
@@ -143,7 +143,7 @@ class localeEditor extends Alert
             if (is_array($token) && ((($token[0] === T_STRING) && in_array($token[1], self::$config['parse']['php']['start_word']))) ||
                 (($token[0] === T_CONSTANT_ENCAPSED_STRING) && in_array($token[1], self::$config['parse']['php']['property_word']))) {
                 if ($expect_locale) {
-                    $this->app['monolog']->addDebug("[localeEditor] Can't evaluate the code, started parsing at line $code_start and stopped at {$token[2]}.",
+                    $this->app['monolog']->addDebug("[i18nEditor] Can't evaluate the code, started parsing at line $code_start and stopped at {$token[2]}.",
                         array('path' => $path, 'method' => __METHOD__));
                 }
                 $expect_locale = true;
@@ -161,7 +161,7 @@ class localeEditor extends Alert
                 $last_source = $current_source;
                 if (in_array($token[1], self::$config['parse']['php']['stop_word'])) {
                     // skip entry and alert to check the program code
-                    $this->app['monolog']->addDebug("[localeEditor] STOP parsing, detect stop word {$token[1]} at line {$token[2]}",
+                    $this->app['monolog']->addDebug("[i18nEditor] STOP parsing, detect stop word {$token[1]} at line {$token[2]}",
                         array('start_word' => $start_word, 'path' => $path, 'method' => __METHOD__));
                 }
                 else {
@@ -173,7 +173,7 @@ class localeEditor extends Alert
                         $current_source = trim($token[1], "\x22\x27");
                     }
                     $source_md5 = md5($current_source);
-                    if (false === ($locale_id = $this->localeSource->existsMD5($source_md5))) {
+                    if (false === ($locale_id = $this->i18nSource->existsMD5($source_md5))) {
                         // create a new locale source entry
                         $data = array(
                             'locale_source' => $current_source,
@@ -181,10 +181,10 @@ class localeEditor extends Alert
                             'locale_md5' => $source_md5,
                             'locale_remark' => ''
                         );
-                        $locale_id = $this->localeSource->insert($data);
+                        $locale_id = $this->i18nSource->insert($data);
                     }
 
-                    if (!$this->localeReference->existsReference($locale_id, $file_id, $token[2])) {
+                    if (!$this->i18nReference->existsReference($locale_id, $file_id, $token[2])) {
                         // create a new reference
                         switch ($start_word) {
                             case 'add':
@@ -205,13 +205,13 @@ class localeEditor extends Alert
                             'line_number' => $token[2],
                             'locale_usage' => $usage
                         );
-                        $this->localeReference->insert($data);
+                        $this->i18nReference->insert($data);
                         $locale_hits++;
                     }
                 }
 
                 if ($current_source === $last_source) {
-                    $this->app['monolog']->addDebug("[localeEditor] Possibly duplicate definition of '$current_source' at line {$token[2]}!",
+                    $this->app['monolog']->addDebug("[i18nEditor] Possibly duplicate definition of '$current_source' at line {$token[2]}!",
                         array('path' => $path, 'method' => __METHOD__));
                 }
 
@@ -221,11 +221,11 @@ class localeEditor extends Alert
             if ($expect_locale && ($counter > 5)) {
                 $expect_locale = false;
                 if (isset($token[2])) {
-                    $this->app['monolog']->addDebug("[localeEditor] Can't evaluate the code, started parsing at line $code_start and stopped at {$token[2]}.",
+                    $this->app['monolog']->addDebug("[i18nEditor] Can't evaluate the code, started parsing at line $code_start and stopped at {$token[2]}.",
                         array('path' => $path, 'method' => __METHOD__));
                 }
                 else {
-                    $this->app['monolog']->addDebug("[localeEditor] Can't evaluate the code, started parsing at line $code_start and stopped at counter > $counter.",
+                    $this->app['monolog']->addDebug("[i18nEditor] Can't evaluate the code, started parsing at line $code_start and stopped at counter > $counter.",
                         array('path' => $path, 'method' => __METHOD__));
                 }
             }
@@ -237,7 +237,7 @@ class localeEditor extends Alert
             'file_status' => 'SCANNED',
             'locale_hits' => $locale_hits
         );
-        $this->localeScanFile->update($file_id, $data);
+        $this->i18nScanFile->update($file_id, $data);
 
         return true;
     }
@@ -269,7 +269,7 @@ class localeEditor extends Alert
             $extension = substr($realpath, strlen(realpath(MANUFAKTUR_PATH))+1);
             $extension = substr($extension, 0, strpos($extension, DIRECTORY_SEPARATOR));
 
-            if (false === ($file_id = $this->localeScanFile->existsMD5(md5($realpath)))) {
+            if (false === ($file_id = $this->i18nScanFile->existsMD5(md5($realpath)))) {
                 // insert a new record
                 $data = array(
                     'file_type' => 'PHP',
@@ -281,10 +281,10 @@ class localeEditor extends Alert
                     'template' => 'NONE',
                     'locale_hits' => 0
                 );
-                $this->localeScanFile->insert($data);
+                $this->i18nScanFile->insert($data);
             }
             else {
-                $data = $this->localeScanFile->select($file_id);
+                $data = $this->i18nScanFile->select($file_id);
                 if ($data['file_mtime'] !== date('Y-m-d H:i:s', $file->getMTime())) {
                     // the file was changed
                     $update = array(
@@ -292,18 +292,18 @@ class localeEditor extends Alert
                         'file_status' => 'REGISTERED',
                         'locale_hits' => 0
                     );
-                    $this->localeScanFile->update($file_id, $update);
+                    $this->i18nScanFile->update($file_id, $update);
                 }
             }
             $path_array[] = $realpath;
         }
 
         // check for deleted files
-        $all_files = $this->localeScanFile->selectType('PHP');
+        $all_files = $this->i18nScanFile->selectType('PHP');
         foreach ($all_files as $file) {
             if (!in_array(realpath($file['file_path']), $path_array)) {
-                $this->localeScanFile->delete($file['file_id']);
-                $this->app['monolog']->addDebug("[localeEditor] The file ".basename($file['file_path'])." does no longer exists, removed all entries for this file.",
+                $this->i18nScanFile->delete($file['file_id']);
+                $this->app['monolog']->addDebug("[i18nEditor] The file ".basename($file['file_path'])." does no longer exists, removed all entries for this file.",
                     array('path' => $file['file_path'], 'file_id' => $file['file_id'], 'method' => __METHOD__));
             }
         }
@@ -357,7 +357,7 @@ class localeEditor extends Alert
                 $template = 'NONE';
             }
 
-            if (false === ($file_id = $this->localeScanFile->existsMD5(md5($file->getRealpath())))) {
+            if (false === ($file_id = $this->i18nScanFile->existsMD5(md5($file->getRealpath())))) {
                 // insert a new record
                 $data = array(
                     'file_type' => 'TWIG',
@@ -369,10 +369,10 @@ class localeEditor extends Alert
                     'template' => $template,
                     'locale_hits' => 0
                 );
-                $this->localeScanFile->insert($data);
+                $this->i18nScanFile->insert($data);
             }
             else {
-                $data = $this->localeScanFile->select($file_id);
+                $data = $this->i18nScanFile->select($file_id);
                 if ($data['file_mtime'] !== date('Y-m-d H:i:s', $file->getMTime())) {
                     // the file was changed
                     $update = array(
@@ -380,18 +380,18 @@ class localeEditor extends Alert
                         'file_status' => 'REGISTERED',
                         'locale_hits' => 0
                     );
-                    $this->localeScanFile->update($file_id, $update);
+                    $this->i18nScanFile->update($file_id, $update);
                 }
             }
             $path_array[] = $realpath;
         }
 
         // check for deleted files
-        $all_files = $this->localeScanFile->selectType('TWIG');
+        $all_files = $this->i18nScanFile->selectType('TWIG');
         foreach ($all_files as $file) {
             if (!in_array(realpath($file['file_path']), $path_array)) {
-                $this->localeScanFile->delete($file['file_id']);
-                $this->app['monolog']->addDebug("[localeEditor] The file ".basename($file['file_path'])." does no longer exists, removed all entries for this file.",
+                $this->i18nScanFile->delete($file['file_id']);
+                $this->app['monolog']->addDebug("[i18nEditor] The file ".basename($file['file_path'])." does no longer exists, removed all entries for this file.",
                     array('path' => $file['file_path'], 'file_id' => $file['file_id'], 'method' => __METHOD__));
             }
         }
@@ -429,11 +429,11 @@ class localeEditor extends Alert
             return false;
         }
 
-        if (false === ($file_id = $this->localeScanFile->existsMD5(md5(realpath($path))))) {
+        if (false === ($file_id = $this->i18nScanFile->existsMD5(md5(realpath($path))))) {
             throw new \Exception("Fatal: It exists no data record for the file $path!");
         }
         // first step: delete the existing references!
-        $this->localeReference->deleteFileReferences($file_id);
+        $this->i18nReference->deleteFileReferences($file_id);
         $locale_hits = 0;
 
         foreach ($content as $line_number => $line_content) {
@@ -469,7 +469,7 @@ class localeEditor extends Alert
                     }
 
                     $locale_md5 = md5($locale);
-                    if (false === ($locale_id = $this->localeSource->existsMD5($locale_md5))) {
+                    if (false === ($locale_id = $this->i18nSource->existsMD5($locale_md5))) {
                         // create a new locale source entry
                         $data = array(
                             'locale_source' => $locale,
@@ -477,10 +477,10 @@ class localeEditor extends Alert
                             'locale_md5' => $locale_md5,
                             'locale_remark' => ''
                         );
-                        $locale_id = $this->localeSource->insert($data);
+                        $locale_id = $this->i18nSource->insert($data);
                     }
 
-                    if (!$this->localeReference->existsReference($locale_id, $file_id, $line_number)) {
+                    if (!$this->i18nReference->existsReference($locale_id, $file_id, $line_number)) {
                         // create a new reference
                         $data = array(
                             'locale_id' => $locale_id,
@@ -488,7 +488,7 @@ class localeEditor extends Alert
                             'line_number' => $line_number,
                             'locale_usage' => 'TWIG'
                         );
-                        $this->localeReference->insert($data);
+                        $this->i18nReference->insert($data);
                         $locale_hits++;
                     }
                 }
@@ -500,7 +500,7 @@ class localeEditor extends Alert
             'file_status' => 'SCANNED',
             'locale_hits' => $locale_hits
         );
-        $this->localeScanFile->update($file_id, $data);
+        $this->i18nScanFile->update($file_id, $data);
     }
 
     /**
@@ -510,10 +510,10 @@ class localeEditor extends Alert
     protected function updateTranslationTable()
     {
         // build the translation tables for all needed locales
-        if (false !== ($sources = $this->localeSource->selectAll())) {
+        if (false !== ($sources = $this->i18nSource->selectAll())) {
             foreach ($sources as $source) {
                 foreach (self::$config['translation']['locale'] as $locale) {
-                    if (!$this->localeTranslation->existsLocaleID($source['locale_id'], $locale)) {
+                    if (!$this->i18nTranslation->existsLocaleID($source['locale_id'], $locale)) {
                         $data = array(
                             'locale_id' => $source['locale_id'],
                             'locale_source' => $source['locale_source'],
@@ -524,24 +524,28 @@ class localeEditor extends Alert
                             'translation_remark' => '',
                             'translation_status' => 'PENDING'
                         );
-                        $this->localeTranslation->insert($data);
+                        $this->i18nTranslation->insert($data);
                     }
                 }
             }
         }
 
         // check for widowed locale translations
-        $widowed = $this->localeTranslation->selectWidowed();
+        $widowed = $this->i18nTranslation->selectWidowed();
         if (is_array($widowed)) {
             foreach ($widowed as $widow) {
                 // remove widow translation
-                $this->localeTranslation->deleteLocaleID($widow['locale_id']);
+                $this->i18nTranslation->deleteLocaleID($widow['locale_id']);
                 $this->setAlert('Deleted widowed locale translation with the ID %id%.',
                     array('%id%' => $widow['locale_id']));
             }
         }
     }
 
+    /**
+     * Find locale translation files in the kitFramework installation
+     *
+     */
     protected function findLocaleFiles()
     {
         $localeFiles = new Finder();
@@ -611,9 +615,9 @@ class localeEditor extends Alert
                     $locale_md5 = md5($locale_source);
                     $translation_md5 = md5($translation_text);
 
-                    if (false !== ($translation_id = $this->localeTranslation->existsMD5($locale_md5, $locale))) {
+                    if (false !== ($translation_id = $this->i18nTranslation->existsMD5($locale_md5, $locale))) {
                         // translation record exists - get the record
-                        $translation = $this->localeTranslation->select($translation_id);
+                        $translation = $this->i18nTranslation->select($translation_id);
                         if ($translation['translation_status'] === 'PENDING') {
                             // insert the translation
                             $data = array(
@@ -621,7 +625,7 @@ class localeEditor extends Alert
                                 'translation_md5' => $translation_md5,
                                 'translation_status' => 'TRANSLATED'
                             );
-                            $this->localeTranslation->update($translation_id, $data);
+                            $this->i18nTranslation->update($translation_id, $data);
 
                             // add a new translation file information
                             $data = array(
@@ -632,19 +636,19 @@ class localeEditor extends Alert
                                 'extension' => $extension,
                                 'file_path' => $realpath
                             );
-                            $this->localeTranslationFile->insert($data);
+                            $this->i18nTranslationFile->insert($data);
                         }
                         elseif ($translation['translation_status'] === 'TRANSLATED') {
                             // there exists already an translation
-                            if (false !== ($file = $this->localeTranslationFile->selectByExtension($translation_id, $locale, $extension))) {
+                            if (false !== ($file = $this->i18nTranslationFile->selectByExtension($translation_id, $locale, $extension))) {
                                 if (($translation_md5 !== $translation['translation_md5']) && ($file['locale_type'] === 'CUSTOM')) {
                                     // translation is overwritten by a CUSTOM translation - nothing to do ...
-                                    $this->app['monolog']->addDebug("[localeEditor] Translation ID {$translation['translation_id']} is overwritten by CUSTOM translation with File ID {$file['file_id']}!",
+                                    $this->app['monolog']->addDebug("[i18nEditor] Translation ID {$translation['translation_id']} is overwritten by CUSTOM translation with File ID {$file['file_id']}!",
                                         array('extension' => $extension, 'locale' => $locale, 'locale_source' => $locale_source, 'translation_text' => $translation_text, 'method' => __METHOD__));
                                 }
                                 elseif ($translation_md5 !== $translation['translation_md5']) {
                                     // the translation has changed
-                                    if (false !== ($files = $this->localeTranslationFile->selectByTranslationID($translation_id, $locale))) {
+                                    if (false !== ($files = $this->i18nTranslationFile->selectByTranslationID($translation_id, $locale))) {
                                         if ((count($files) === 1) && ($files[0]['extension'] === $extension)) {
                                             // update the translation
                                             $data = array(
@@ -652,8 +656,8 @@ class localeEditor extends Alert
                                                 'translation_md5' => $translation_md5,
                                                 'translation_status' => 'TRANSLATED'
                                             );
-                                            $this->localeTranslation->update($translation_id, $data);
-                                            $this->app['monolog']->addDebug("[localeEditor] Updated Translation ID $translation_id.",
+                                            $this->i18nTranslation->update($translation_id, $data);
+                                            $this->app['monolog']->addDebug("[i18nEditor] Updated Translation ID $translation_id.",
                                                 array('extension' => $extension, 'locale' => $locale, 'locale_source' => $locale_source, 'translation_text' => $translation_text, 'method' => __METHOD__));
                                             $this->setAlert('Updated Translation ID %id%', array('%id%' => $translation_id), self::ALERT_TYPE_SUCCESS);
                                         }
@@ -680,15 +684,15 @@ class localeEditor extends Alert
                                     'file_path' => $realpath
                                 );
                                 // add a new translation file information!
-                                $this->localeTranslationFile->insert($data);
+                                $this->i18nTranslationFile->insert($data);
 
                                 if ($translation['translation_md5'] !== $translation_md5) {
                                     // this translation causes a CONFLICT!
                                     $data = array(
                                         'translation_status' => 'CONFLICT'
                                     );
-                                    $this->localeTranslation->update($translation_id, $data);
-                                    $this->app['monolog']->addDebug("[localeEditor] There exists CONFLICTING translations for the translation ID $translation_id",
+                                    $this->i18nTranslation->update($translation_id, $data);
+                                    $this->app['monolog']->addDebug("[i18nEditor] There exists CONFLICTING translations for the translation ID $translation_id",
                                         array('extension' => $extension, 'locale' => $locale, 'locale_source' => $locale_source, 'translation_text' => $translation_text, 'method' => __METHOD__));
                                     $this->setAlert('Translation ID %translation_id% is conflicting!', array('%translation_id%' => $translation_id));
                                 }
@@ -712,14 +716,14 @@ class localeEditor extends Alert
                         // missing locale source !
                         if (in_array($locale_source, self::$config['translation']['system'])) {
                             // these locale is defined by the system, still add to the source!
-                            if (false === ($locale_id = $this->localeSource->existsMD5($locale_md5))) {
+                            if (false === ($locale_id = $this->i18nSource->existsMD5($locale_md5))) {
                                 $data = array(
                                     'locale_source' => $locale_source,
                                     'locale_locale' => 'EN',
                                     'locale_md5' => $locale_md5,
                                     'locale_remark' => 'SYSTEM'
                                 );
-                                $locale_id = $this->localeSource->insert($data);
+                                $locale_id = $this->i18nSource->insert($data);
                             }
 
                             $data = array(
@@ -732,7 +736,7 @@ class localeEditor extends Alert
                                 'translation_remark' => 'SYSTEM',
                                 'translation_status' => 'TRANSLATED'
                             );
-                            $translation_id = $this->localeTranslation->insert($data);
+                            $translation_id = $this->i18nTranslation->insert($data);
 
                             // add a new translation file information
                             $data = array(
@@ -743,7 +747,7 @@ class localeEditor extends Alert
                                 'extension' => $extension,
                                 'file_path' => $realpath
                             );
-                            $this->localeTranslationFile->insert($data);
+                            $this->i18nTranslationFile->insert($data);
                         }
                         else {
                             //echo 'already translated ... <br>';
@@ -758,62 +762,4 @@ class localeEditor extends Alert
         echo "count: $file_count -> $translation_count<br>";
     }
 
-
-    /**
-     * The general controller for the localeEditor
-     *
-     * @param Application $app
-     * @return string
-     */
-    public function Controller(Application $app)
-    {
-        $start = microtime(true);
-
-        $this->initialize($app);
-        // process PHP files
-        $this->findPHPfiles();
-
-        if (false !== ($files = $this->localeScanFile->selectRegistered('PHP'))) {
-            foreach ($files as $file) {
-                $this->parsePHPfile($file['file_path']);
-            }
-        }
-
-        // process Twig files
-        $this->findTwigFiles();
-
-        if (false !== ($files = $this->localeScanFile->selectRegistered('TWIG'))) {
-            foreach ($files as $file) {
-                $this->parseTwigFile($file['file_path']);
-            }
-        }
-
-        // remove widowed locale sources from the database
-        $widowed = $this->localeSource->selectWidowed();
-        if (is_array($widowed)) {
-            foreach ($widowed as $widow) {
-                if (!in_array($widow['locale_source'], self::$config['translation']['system'])) {
-                    $this->localeSource->delete($widow['locale_id']);
-                    $this->setAlert('Deleted widowed locale source with the ID %id%.',
-                        array('%id%' => $widow['locale_id']));
-                }
-            }
-        }
-
-        // update the translation table
-        $this->updateTranslationTable();
-
-        // find the locale files
-        $this->findLocaleFiles();
-
-        $result = $this->localeScanFile->selectCount();
-        echo "<pre>";
-        print_r($result);
-        echo "</pre>";
-
-        echo "Laufzeit: ". sprintf('%01.2f', (microtime(true) - $start))."<br>";
-
-        echo $this->getAlert();
-        return __METHOD__;
-    }
 }

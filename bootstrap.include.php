@@ -467,6 +467,15 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
                     'path' => '/framework.jpg',
                     'url' => FRAMEWORK_URL.'/framework.jpg'
                 )
+            ),
+            array(
+                'route' => '/admin/i18n/editor',
+                'name' => $app['translator']->trans('i18n'),
+                'info' => $app['translator']->trans('Parse the kitFramework for locale strings, add custom translations and administrate the internationalization'),
+                'icon' => array(
+                    'path' => '/extension/phpmanufaktur/phpManufaktur/Basic/extension.i18n.editor.jpg',
+                    'url' => MANUFAKTUR_URL.'/Basic/extension.i18n.editor.jpg'
+                )
             )
         )
     ),
@@ -613,12 +622,19 @@ $admin->get('/json/editor/open/file/{filename}',
 $app->post('/json/editor/save',
     'phpManufaktur\Basic\Control\jsonEditor\jsonEditor::ControllerSaveFile');
 
-$admin->get('/locale/editor',
-    'phpManufaktur\Basic\Control\localeEditor\localeEditor::Controller');
-$admin->get('/locale/editor/table/create',
-    'phpManufaktur\Basic\Control\localeEditor\localeEditor::ControllerCreateTable');
-$admin->get('/locale/editor/table/drop',
-    'phpManufaktur\Basic\Control\localeEditor\localeEditor::ControllerDropTable');
+// i18nEditor
+$admin->get('/i18n/editor',
+    'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerOverview');
+$admin->get('/i18n/editor/overview',
+    'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerOverview');
+$admin->get('/i18n/editor/about',
+    'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerAbout');
+$admin->get('/i18n/editor/scan',
+    'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerScan');
+$admin->get('/i18n/editor/table/create',
+    'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerCreateTable');
+$admin->get('/i18n/editor/table/drop',
+    'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerDropTable');
 
 // send a testmail
 $admin->get('/test/mail',

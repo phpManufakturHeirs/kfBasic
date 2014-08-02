@@ -121,3 +121,12 @@ key {
   font-family: monospace;
   color: #4682b4;
 }
+
+ul.dropdown-menu {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+}
+#about-wrap {
+  margin-top: 50px;
+}
