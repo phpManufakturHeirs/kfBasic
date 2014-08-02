@@ -176,6 +176,13 @@ EOD;
         }
     }
 
+    /**
+     * Select registered files with the given file type
+     * 
+     * @param string $file_type default 'PHP'
+     * @throws \Exception
+     * @return Ambigous <boolean, array>
+     */
     public function selectRegistered($file_type='PHP')
     {
         try {
@@ -187,6 +194,12 @@ EOD;
         }
     }
 
+    /**
+     * Select all table record
+     * 
+     * @throws \Exception
+     * @return Ambigous <boolean, unknown>
+     */
     public function selectAll()
     {
         try {
@@ -198,6 +211,13 @@ EOD;
         }
     }
 
+    /**
+     * Select all files of the given file type
+     * 
+     * @param string $type
+     * @throws \Exception
+     * @return Ambigous <boolean, array>
+     */
     public function selectType($type='PHP')
     {
         try {
@@ -209,6 +229,12 @@ EOD;
         }
     }
 
+    /**
+     * Delete the file with the given file ID
+     * 
+     * @param unknown $file_id
+     * @throws \Exception
+     */
     public function delete($file_id)
     {
         try {

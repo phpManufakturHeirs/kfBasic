@@ -111,6 +111,12 @@ class i18nEditor extends i18nParser
             ));
     }
 
+    /**
+     * Scan the complete kitFramework and update all i18n data tables
+     * 
+     * @param Application $app
+     * @return string
+     */
     public function ControllerScan(Application $app)
     {
         $this->initialize($app);
