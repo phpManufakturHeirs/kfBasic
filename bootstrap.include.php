@@ -631,6 +631,17 @@ $admin->get('/i18n/editor/about',
     'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerAbout');
 $admin->get('/i18n/editor/scan',
     'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerScan');
+$admin->get('/i18n/editor/locale/{locale}',
+    'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerLocale')
+    ->value('locale', 'en');
+$admin->get('/i18n/editor/sources',
+    'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerSources');
+$admin->get('/i18n/editor/sources/detail/{locale_id}',
+    'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerSourcesDetail')
+    ->assert('locale_id', '\d+');
+$admin->post('/i18n/editor/sources/detail/check',
+    'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerSourcesDetailCheck');
+
 $admin->get('/i18n/editor/table/create',
     'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerCreateTable');
 $admin->get('/i18n/editor/table/drop',

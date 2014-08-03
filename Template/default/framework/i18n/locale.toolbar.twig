@@ -1,5 +1,5 @@
 {% block toolbar %}
-  <ul class="toolbar nav nav-tabs">
+  <ul class="toolbar locale nav nav-tabs">
     {% for item in toolbar %}
       <li{% if item.active %} class="active"{% endif %}>
         <a href="{{ item.link }}" title="{{ item.hint }}">
@@ -7,8 +7,6 @@
             <i class="fa fa-question"></i>
           {% elseif item.name == 'overview' %}
             <i class="fa fa-th-list"></i>
-          {% elseif item.name == 'sources' %}
-            <i class="fa fa-file-code-o"></i>
           {% elseif item.name in config.translation.locale|keys %}
             <i class="fa fa-flag-o"></i>
           {% endif %}

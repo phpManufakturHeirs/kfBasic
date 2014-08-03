@@ -24,6 +24,11 @@ class i18nTranslation
     protected $app = null;
     protected static $table_name = null;
 
+    /**
+     * Constructor
+     *
+     * @param Application $app
+     */
     public function __construct(Application $app)
     {
         $this->app = $app;

@@ -24,6 +24,11 @@ class i18nScanFile
     protected $app = null;
     protected static $table_name = null;
 
+    /**
+     * Constructor
+     *
+     * @param Application $app
+     */
     public function __construct(Application $app)
     {
         $this->app = $app;
@@ -178,7 +183,7 @@ EOD;
 
     /**
      * Select registered files with the given file type
-     * 
+     *
      * @param string $file_type default 'PHP'
      * @throws \Exception
      * @return Ambigous <boolean, array>
@@ -196,7 +201,7 @@ EOD;
 
     /**
      * Select all table record
-     * 
+     *
      * @throws \Exception
      * @return Ambigous <boolean, unknown>
      */
@@ -213,7 +218,7 @@ EOD;
 
     /**
      * Select all files of the given file type
-     * 
+     *
      * @param string $type
      * @throws \Exception
      * @return Ambigous <boolean, array>
@@ -231,7 +236,7 @@ EOD;
 
     /**
      * Delete the file with the given file ID
-     * 
+     *
      * @param unknown $file_id
      * @throws \Exception
      */

@@ -18,6 +18,15 @@ body {
   padding: 0;
 }
 
+h1 {
+  font-size: 24px;
+}
+h2 {
+  font-size: 22px;
+}
+h3 {
+  font-size: 20px;
+}
 .manufaktur {
   color: #da251d;
 }
@@ -129,4 +138,16 @@ ul.dropdown-menu {
 }
 #about-wrap {
   margin-top: 50px;
+}
+
+.toolbar {
+  margin-bottom: 20px;
+}
+.toolbar.locale {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.source {
+  font-family: Courier, monospace;
 }

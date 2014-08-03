@@ -12,6 +12,7 @@
 namespace phpManufaktur\Basic\Control\i18nEditor;
 
 use Silex\Application;
+use Symfony\Component\Form\FormFactoryBuilder;
 
 class i18nEditor extends i18nParser
 {
@@ -46,9 +47,11 @@ class i18nEditor extends i18nParser
      * @param string $active
      * @return array
      */
-    public function getToolbar($active) {
+    protected function getToolbar($active)
+    {
         $toolbar = array();
-        $tabs = array('overview', 'about');
+        $tabs = array_merge(array('overview'), self::$config['translation']['locale'], array('sources', 'about'));
+
         foreach ($tabs as $tab) {
             switch ($tab) {
                 case 'about':
@@ -69,6 +72,57 @@ class i18nEditor extends i18nParser
                         'active' => ($active === 'overview')
                     );
                     break;
+                case 'sources':
+                    $toolbar[$tab] = array(
+                        'name' => 'sources',
+                        'text' => $this->app['translator']->trans('Sources'),
+                        'hint' => $this->app['translator']->trans('File sources for the locales'),
+                        'link' => FRAMEWORK_URL.'/admin/i18n/editor/sources'.self::$usage_param,
+                        'active' => ($active === 'sources')
+                    );
+                    break;
+                default:
+                    if (in_array($tab, self::$config['translation']['locale'])) {
+                        $toolbar[$tab] = array(
+                            'name' => strtolower($tab),
+                            'text' => $tab, // no translation!
+                            'hint' => $this->app['translator']->trans('Edit the locale %locale%', array(
+                                '%locale%' => $this->app['translator']->trans($tab))),
+                            'link' => FRAMEWORK_URL.'/admin/i18n/editor/locale/'.strtolower($tab).self::$usage_param,
+                            'active' => ($active === strtolower($tab))
+                        );
+                    }
+                    break;
+            }
+        }
+        return $toolbar;
+    }
+
+    /**
+     * Get the toolbar for the locale dialogs
+     *
+     * @param string $active
+     * @param string $locale
+     * @return multitype:multitype:string boolean NULL
+     */
+    protected function getLocaleToolbar($active, $locale)
+    {
+        $toolbar = array();
+        $tabs = array('summary');
+
+        foreach ($tabs as $tab) {
+            switch ($tab) {
+                case 'summary':
+                    $toolbar[$tab] = array(
+                        'name' => 'summary',
+                        'text' => $this->app['translator']->trans('Summary'),
+                        'hint' => $this->app['translator']->trans('Summary for the locale %locale%', array(
+                            '%locale%' => $this->app['translator']->trans(strtoupper($locale)))),
+                        'link' => FRAMEWORK_URL.'/admin/i18n/editor/locale/'.strtolower($locale).self::$usage_param,
+                        'active' => ($active === 'summary')
+                    );
+                    break;
+
             }
         }
         return $toolbar;
@@ -106,34 +160,22 @@ class i18nEditor extends i18nParser
             '@phpManufaktur/Basic/Template', 'framework/i18n/overview.twig'),
             array(
                 'usage' => self::$usage,
+                'usage_param' => self::$usage_param,
                 'toolbar' => $this->getToolbar('overview'),
                 'alert' => $this->getAlert(),
+                'config' => self::$config
             ));
     }
 
     /**
      * Scan the complete kitFramework and update all i18n data tables
-     * 
+     *
      * @param Application $app
      * @return string
      */
     public function ControllerScan(Application $app)
     {
         $this->initialize($app);
-
-        return $this->showOverview();
-    }
-
-    /**
-     * The general controller for the localeEditor
-     *
-     * @param Application $app
-     * @return string
-     */
-    public function ControllerOverview(Application $app)
-    {
-        $this->initialize($app);
-        return $this->showOverview();
 
         // process PHP files
         $this->findPHPfiles();
@@ -178,7 +220,185 @@ class i18nEditor extends i18nParser
 
         echo "Laufzeit: ". sprintf('%01.2f', (microtime(true) - self::$script_start))."<br>";
 
-        echo $this->getAlert();
-        return __METHOD__;
+        return $this->showOverview();
+    }
+
+    /**
+     * The general controller for the localeEditor
+     *
+     * @param Application $app
+     * @return string
+     */
+    public function ControllerOverview(Application $app)
+    {
+        $this->initialize($app);
+        return $this->showOverview();
+    }
+
+    /**
+     * Controller for all Locale start dialogs
+     *
+     * @param Application $app
+     * @param string $locale
+     */
+    public function ControllerLocale(Application $app, $locale)
+    {
+        $this->initialize($app);
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template', 'framework/i18n/locale.twig'),
+            array(
+                'usage' => self::$usage,
+                'usage_param' => self::$usage_param,
+                'toolbar' => $this->getToolbar(strtolower($locale)),
+                'locale_toolbar' => $this->getLocaleToolbar('summary', $locale),
+                'alert' => $this->getAlert(),
+                'config' => self::$config
+            ));
+    }
+
+    /**
+     * Return the Sources Overview dialog
+     *
+     */
+    protected function showSources()
+    {
+        if (false === ($list = $this->i18nSource->selectAll(
+            self::$config['editor']['sources']['list']['order_by'],
+            self::$config['editor']['sources']['list']['order_direction']))) {
+            $this->setAlert('No sources available, please <a href="%url%">start a search run</a>!',
+                array('%url%' => FRAMEWORK_URL.'/admin/i18n/editor/scan'.self::$usage_param), self::ALERT_TYPE_WARNING);
+        }
+        $sources = array();
+
+        if (is_array($list)) {
+            foreach ($list as $source) {
+                $sources[$source['locale_id']] = $source;
+                $sources[$source['locale_id']]['references'] =
+                $this->i18nReference->countReferencesForLocaleID($source['locale_id']);
+            }
+        }
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template', 'framework/i18n/sources.twig'),
+            array(
+                'usage' => self::$usage,
+                'usage_param' => self::$usage_param,
+                'toolbar' => $this->getToolbar('sources'),
+                'alert' => $this->getAlert(),
+                'config' => self::$config,
+                'sources' => $sources
+            ));
+    }
+
+    /**
+     * Controller to view the locale sources
+     *
+     * @param Application $app
+     */
+    public function ControllerSources(Application $app)
+    {
+        $this->initialize($app);
+        return $this->showSources();
+    }
+
+    /**
+     * Get the form for the Locale Reference
+     *
+     * @param array $data
+     * @return FormFactoryBuilder
+     */
+    protected function getReferenceForm($data=array())
+    {
+        return $this->app['form.factory']->createBuilder('form')
+            ->add('locale_id', 'hidden', array(
+                'data' => isset($data['locale_id']) ? $data['locale_id'] : -1
+            ))
+            ->add('locale_locale', 'hidden', array(
+                'data' => isset($data['locale_locale']) ? $data['locale_locale'] : ''
+                ))
+            ->add('locale_source', 'hidden', array(
+                'data' => isset($data['locale_source']) ? $data['locale_source'] : ''
+            ))
+            ->add('locale_remark', 'textarea', array(
+                'data' => isset($data['locale_remark']) ? $data['locale_remark'] : '',
+                'required' => false
+            ))
+            ->getForm();
+    }
+
+    /**
+     * Controller to inspect the locale source details and add an optional remark
+     *
+     * @param Application $app
+     * @param integer $locale_id
+     */
+    public function ControllerSourcesDetail(Application $app, $locale_id)
+    {
+        $this->initialize($app);
+
+        if (false === ($source = $this->i18nSource->select($locale_id))) {
+            $this->setAlert('The record with the ID %id% does not exists!',
+                array('%id%' => $locale_id), self::ALERT_TYPE_DANGER);
+        }
+
+        $references = array();
+        if (is_array($source)) {
+            if (false === ($files = $this->i18nReference->selectReferencesForLocaleID($locale_id))) {
+                $this->setAlert('There exists no references for the locale source with the id %locale_id%.',
+                    array('%locale_id%' => $locale_id), self::ALERT_TYPE_WARNING);
+            }
+            else {
+                foreach ($files as $file) {
+                    $references[$file['file_id']] = $file;
+                    $references[$file['file_id']]['file_path'] = realpath($file['file_path']);
+                    $references[$file['file_id']]['basename'] = basename(realpath($file['file_path']));
+                }
+            }
+        }
+
+        $form = $this->getReferenceForm($source);
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template', 'framework/i18n/sources.detail.twig'),
+            array(
+                'usage' => self::$usage,
+                'usage_param' => self::$usage_param,
+                'toolbar' => $this->getToolbar('sources'),
+                'alert' => $this->getAlert(),
+                'config' => self::$config,
+                'source' => $source,
+                'references' => $references,
+                'form' => $form->createView()
+            ));
+    }
+
+    /**
+     * Controller to check the Detail form and update the data record
+     *
+     * @param Application $app
+     */
+    public function ControllerSourcesDetailCheck(Application $app)
+    {
+        $this->initialize($app);
+
+        $form = $this->getReferenceForm();
+
+        $form->bind($this->app['request']);
+
+        if ($form->isValid()) {
+            // the form is valid
+            $data = $form->getData();
+            $remark = !is_null($data['locale_remark']) ? $data['locale_remark'] : '';
+            $this->i18nSource->update($data['locale_id'], array('locale_remark' => $remark));
+            $this->setAlert('The record with the ID %id% was successfull updated.',
+                array('%id%' => $data['locale_id']), self::ALERT_TYPE_SUCCESS);
+            return $this->showSources();
+        }
+        else {
+            // general error (timeout, CSFR ...)
+            $this->setAlert('The form is not valid, please check your input and try again!', array(), self::ALERT_TYPE_DANGER);
+            return $this->ControllerSourcesDetail($app, -1);
+        }
     }
 }

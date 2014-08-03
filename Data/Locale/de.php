@@ -19,7 +19,7 @@ return array(
         => '- bitte auswählen -',
 
     'Abort'
-        => 'Abbruchi',
+        => 'Abbruch',
     'Access denied'
         => 'Zugriff verweigert',
     'Access to kitFramework User Accounts'
@@ -104,11 +104,15 @@ return array(
         => 'Ausführen',
     'Execute Update'
         => 'Aktualisierung durchführen',
+    'Extension'
+        => 'Erweiterung',
     'Extensions'
         => 'Erweiterungen',
 
     'File'
         => 'Datei',
+    'Filename'
+        => 'Dateiname',
     'First steps'
         => 'Erste Schritte',
     'For the event with the ID %event_id% is no recurring defined.'
@@ -181,6 +185,12 @@ return array(
         => 'Die Konfigurationsdatei <strong>%file%</strong> wurde in den Editor geladen.',
     'Load the selected configuration file into the editor'
         => 'Die ausgewählte Datei in den Editor laden',
+    'Locale id'
+        => 'Locale ID',
+    'Locale remark'
+        => 'Notiz',
+    'Locale source'
+        => 'Quelltext',
     'Login' =>
         'Anmelden',
     'Logout' =>
@@ -226,6 +236,10 @@ return array(
 
     'Real active user roles'
         => 'Tatsächlich aktive Anwenderrechte',
+    'References'
+        => 'Verweise',
+    'Referenced files'
+        => 'Verweisende Dateien',
     'Regards, Your kitFramework team'
         => 'Mit freundlichen Grüßen<br />Ihr kitFramework Team',
     'Repeat by pattern, i.e. at the last tuesday of the month'
@@ -273,6 +287,10 @@ return array(
         => 'Sie sind leider nicht berechtigt auf einen der kitFramework Zugangspunkte zuzugreifen.',
     'Sorry, there is currently no information available about <strong>%file%</strong>, please suggest a hint and help to improve the Configuration Editor!'
         => 'Entschuldigung, es ist leider keine Information zu <strong>%file%</strong> verfügbar, bitte schlagen Sie einen Hinweis vor und helfen Sie mit den Konfigurations Editor zu verbessern!',
+    'Source'
+        => 'Quelltext',
+    'Sources'
+        => 'Quelltexte',
     'Submit'
         => 'Übermitteln',
     'Successfull created a account for the user %name%.'
@@ -296,6 +314,8 @@ return array(
     'Switch to this user to see the real active roles'
         => 'Zu diesem Anwender umschalten um die aktiven Rechte zu sehen',
 
+    'Template'
+        => 'Vorlage',
     'Test email'
         => 'Test E-Mail',
     'Thank you for using the kitFramework'
@@ -379,6 +399,8 @@ return array(
         => 'Die Katalogdaten für die Erweiterung <b>%name%</b> wurden aktualisiert.',
     'Updated the register data for <b>%name%</b>.'
         => 'Die Registrierdaten für die Erweiterung <b>%name%</b> wurden aktualisiert.',
+    'Usage'
+        => 'Verwendung',
     'User roles may depend from others and can be set or extended dynamically by the kitFramework extensions. To see the roles really associated to this account if the user is authenticated use the "switch to" button.'
         => 'Benutzerrechte können von einander abhängig sein und dynamisch durch kitFramework Anwendungen erweitert werden. Um die Benutzerrechte zu sehen, die tatsächlich einem angemeldeten Anwender zugewiesen sind nutzen Sie bitte die Funktion "Zum Anwender umschalten".',
     'Username'

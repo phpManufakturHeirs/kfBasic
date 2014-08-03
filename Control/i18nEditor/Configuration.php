@@ -220,6 +220,14 @@ class Configuration
                     'Weekday',
                     'Weekdays'
                 )
+            ),
+            'editor' => array(
+                'sources' => array(
+                    'list' => array(
+                        'order_by' => 'locale_id',
+                        'order_direction' => 'ASC'
+                    )
+                )
             )
         );
     }

@@ -24,6 +24,11 @@ class i18nSource
     protected $app = null;
     protected static $table_name = null;
 
+    /**
+     * Constructor
+     *
+     * @param Application $app
+     */
     public function __construct(Application $app)
     {
         $this->app = $app;
@@ -128,7 +133,7 @@ EOD;
     {
         try {
             $SQL = "SELECT * FROM `".self::$table_name."` WHERE `locale_id` ".
-                "NOT IN (SELECT `locale_id` FROM `".FRAMEWORK_TABLE_PREFIX."basic_locale_reference`)";
+                "NOT IN (SELECT `locale_id` FROM `".FRAMEWORK_TABLE_PREFIX."basic_i18n_reference`)";
             $results = $this->app['db']->fetchAll($SQL);
             $widowed = array();
             if (is_array($results)) {
@@ -167,10 +172,20 @@ EOD;
      * @throws \Exception
      * @return Ambigous <boolean, array>
      */
-    public function selectAll()
+    public function selectAll($order_by=null, $order_direction=null)
     {
         try {
             $SQL = "SELECT * FROM `".self::$table_name."`";
+            if (!is_null($order_by)) {
+                $SQL .= " ORDER BY `$order_by` ";
+                if (!is_null($order_direction)) {
+                    $SQL .= "$order_direction";
+                }
+                else {
+                    $SQL .= "ASC";
+                }
+            }
+
             $results = $this->app['db']->fetchAll($SQL);
             $sources = array();
             foreach ($results as $result) {
@@ -181,6 +196,58 @@ EOD;
                 $sources[] = $item;
             }
             return (!empty($sources)) ? $sources : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Select the record for the given locale ID
+     *
+     * @param integer $locale_id
+     * @throws \Exception
+     * @return Ambigous <boolean, array>
+     */
+    public function select($locale_id)
+    {
+        try {
+            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `locale_id`=$locale_id";
+            $result = $this->app['db']->fetchAssoc($SQL);
+            $source = array();
+            if (is_array($result)) {
+                foreach ($result as $key => $value) {
+                    $source[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+                }
+            }
+            return (!empty($source)) ? $source : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Update the record for the given locale ID
+     *
+     * @param integer $locale_id
+     * @param array $data
+     * @throws \Exception
+     */
+    public function update($locale_id, $data)
+    {
+        try {
+            $check = array('locale_id', 'timestamp');
+            foreach ($check as $key) {
+                if (isset($data[$key])) {
+                    unset($data[$key]);
+                }
+            }
+            $update = array();
+            foreach ($data as $key => $value) {
+                $update[$key] = is_string($value) ? $this->app['utils']->sanitizeText($value) : $value;
+            }
+            if (!empty($update)) {
+                $this->app['db']->update(self::$table_name, $update, array('locale_id' => $locale_id));
+            }
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }

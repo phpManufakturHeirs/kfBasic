@@ -136,4 +136,44 @@ EOD;
             throw new \Exception($e);
         }
     }
+
+    /**
+     * Count the references (hits) for the given locale ID
+     *
+     * @param integer $locale_id
+     * @throws \Exception
+     * @return integer
+     */
+    public function countReferencesForLocaleID($locale_id)
+    {
+        try {
+            $SQL = "SELECT COUNT(`locale_id`) as 'count' FROM `".self::$table_name."` WHERE `locale_id`=$locale_id";
+            $count = $this->app['db']->fetchColumn($SQL);
+            return ($count > 0) ? $count : 0;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Select all references for the given locale ID
+     *
+     * @param integer $locale_id
+     * @throws \Exception
+     * @return Ambigous <boolean, array>
+     */
+    public function selectReferencesForLocaleID($locale_id)
+    {
+        try {
+            $source = self::$table_name;
+            $file = FRAMEWORK_TABLE_PREFIX.'basic_i18n_scan_file';
+            $SQL = "SELECT * FROM `".self::$table_name."` ".
+                "LEFT JOIN `$file` ON `$file`.`file_id` = `$source`.`file_id` ".
+                "WHERE `locale_id`=$locale_id";
+            $references = $this->app['db']->fetchAll($SQL);
+            return (is_array($references) && !empty($references)) ? $references : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
 }

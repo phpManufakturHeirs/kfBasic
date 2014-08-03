@@ -27,15 +27,8 @@
 {% block content %}
   <div class="container{% if usage != 'framework'%}-fluid{% endif %}">
     {% include '@phpManufaktur/Basic/Template/default/framework/i18n/toolbar.twig' %}
+    {% include '@phpManufaktur/Basic/Template/default/framework/i18n/locale.toolbar.twig' with {'toolbar': locale_toolbar} %}
     
-    <div class="page-header">
-      <h1>{{ 'i18nEditor'|trans }} <small>{{ 'Internationalization for the kitFramework'|trans }}</small></h1>
-    </div>
-    
-    {{ alert }}
-    
-    <div>
-      <a class="btn btn-primary btn-lg" href="{{ FRAMEWORK_URL ~ '/admin/i18n/editor/scan' ~ usage_param }}" role="button">{{ 'Start search run'|trans }}</a>
-    </div>
+    locale...
   </div>
 {% endblock content %}

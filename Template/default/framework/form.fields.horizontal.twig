@@ -8,6 +8,10 @@
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
 
+{% block textarea_row %}
+  {{ block('form_row_textarea') }}
+{% endblock %}
+
 {% block text_row %}
   {% set type = 'text' %}
   {{ block('form_row_simple') }}
@@ -142,3 +146,30 @@
     {% endif %}
   {% endspaceless %}
 {% endblock form_label %}
+
+{% block form_row_textarea %}
+  <div class="form-group">
+    {{ block('form_label') }}
+    <div class="col-sm-9">
+      {% if attr.prefix is defined %}
+        <span class="prefix-block">{{ attr.prefix|trans }}</span>
+      {% endif %}
+      {% if attr.type is defined and attr.type == 'html' %}
+        {# load the CKEditor instead of the textarea #}
+        {% if attr.config is defined %}
+          {# a configuration file for the CKEditor is defined #}
+          {% set config = attr.config %}
+        {% else %}
+          {# use the default configuration file from /Contact #}
+          {% set config = MANUFAKTUR_URL ~ '/Contact/Template/default/command/ckeditor.simple.js' %}
+        {% endif %}
+        {{ CKEditor(id, full_name, value, '100%', '150px', config) }}  
+      {% else %}  
+        <textarea class="form-control{% if attr.class is defined %} {{ attr.class }}{% endif %}" rows="3" {{ block('widget_attributes') }}>{{ value }}</textarea>
+      {% endif %}
+      {% if attr.help is defined %}
+        <span class="help-block">{{ attr.help|trans }}</span>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
