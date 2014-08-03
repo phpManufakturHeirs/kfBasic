@@ -9,7 +9,7 @@
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
  */
 
-namespace phpManufaktur\Basic\Data;
+namespace phpManufaktur\Basic\Data\i18n;
 
 use Silex\Application;
 
@@ -244,6 +244,23 @@ EOD;
     {
         try {
             $this->app['db']->delete(self::$table_name, array('file_id' => $file_id));
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Get the last modification date for the scanned files, return FALSE on error
+     *
+     * @throws \Exception
+     * @return Ambigous <boolean, datetime>
+     */
+    public function getLastModificationDateTime()
+    {
+        try {
+            $SQL = "SELECT `file_mtime` FROM `".self::$table_name."` ORDER BY `file_mtime` DESC LIMIT 1";
+            $datetime = $this->app['db']->fetchColumn($SQL);
+            return (!is_null($datetime)) ? $datetime : false;
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }

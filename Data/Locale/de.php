@@ -18,6 +18,8 @@ return array(
     '- please select -'
         => '- bitte auswählen -',
 
+    'A brief summary of the translation status'
+        => 'Eine Zusammenfassung des Übersetzungsstatus',
     'Abort'
         => 'Abbruch',
     'Access denied'
@@ -92,6 +94,8 @@ return array(
 
     'Edit kitFramework configuration file'
         => 'kitFramework Konfigurationsdatei bearbeiten',
+    'Edit the locale %locale%'
+        => 'Die %locale% Übersetzungen bearbeiten',
     'Email'
         => 'E-Mail',
     'Entry points'
@@ -156,6 +160,8 @@ return array(
         => 'Falls Sie kein neues Passwort angefordert haben, ignorieren Sie diese E-Mail bitte. Der o.a. Link ist lediglich für 24 Stunden gültig und ihr aktuelles Passwort wurde nicht geändert.',
     'incorrect-captcha-sol'
         => 'Der übermittelte CAPTCHA ist nicht korrekt.',
+    'Information about the i18nEditor'
+        => 'Informationen über den i18nEditor',
     'Install'
         => 'Installieren',
     'Install, update or remove kitFramework Extensions'
@@ -164,6 +170,8 @@ return array(
         => 'Installierte Erweiterungen',
     'Insufficient user role'
         => 'Ungenügende Zugangsberechtigung',
+    'Internationalization'
+        => 'Internationalisierung',
     'invalid-request-cookie'
         => 'Ungültige ReCaptcha Anfrage',
     'invalid-site-private-key'
@@ -171,6 +179,10 @@ return array(
     'Issues'
         => 'Mängel',
 
+    '<p>Last registered file modification: <strong>%modification%</strong><br />Scanned files: <strong>%scanned%</strong><br />Locale hits: <strong>%hits%</strong></p><p>Switch to developer mode to get also information about problems and conflicts.</p>'
+        => '<p>Letzte erfasste Dateiänderung: <strong>%modification%</strong><br />Durchsuchte Dateien: <strong>%scanned%</strong><br />Quelltext Treffer: <strong>%hits%</strong></p><p>Schalten Sie in den <em>Entwickler Modus</em> um, um zusäzliche Informationen über Probleme in den Übersetzungsdaten zu erhalten.</p>',
+    '<p>Last registered file modification: <strong>%modification%</strong><br />Scanned files: <strong>%scanned%</strong><br />Locale hits: <strong>%hits%</strong><br /><br />Conflicting translations: <strong>%conflicts%</strong><br />Unassigned translations: <strong>%unassigned%</strong></p><p>You execute the i18nEditor in <strong>developer mode</strong>.</p>'
+        => '<p>Letzte erfasste Dateiänderung:: <strong>%modification%</strong><br />Durchsuchte Dateien: <strong>%scanned%</strong><br />Quelltext Treffer: <strong>%hits%</strong><br /><br />Kollidierende Übersetzungen: <strong>%conflicts%</strong><br />Nicht zugeordnete Übersetzungen: <strong>%unassigned%</strong></p><p>Sie führen den i18nEditor im <strong>Entwickler Modus</strong> aus.</p>',
     'License'
         => 'Lizenz',
     'Line'
@@ -179,6 +191,8 @@ return array(
         => 'Link übermittelt',
     'List'
         => 'Liste',
+    'List of translation sources'
+        => 'Liste der Quelltexte für die Übersetzungen',
     'Load file'
         => 'Datei laden',
     'Load the configuration file <strong>%file%</strong> into the editor.'
@@ -231,6 +245,10 @@ return array(
         => 'Bitte wählen Sie die Konfigurationsdatei aus, die Sie bearbeiten möchten.',
     'Please use the following link to create a new password: %reset_url%'
         => 'Bitte verwenden Sie den folgenden Link um ein neues Passwort anzulegen:<br />%reset_url%',
+    'Problems'
+        => 'Probleme',
+    'Problems with the translation data'
+        => 'Probleme mit den Übersetzungsdaten',
     'published at'
         => 'veröffentlicht am',
 
@@ -291,6 +309,8 @@ return array(
         => 'Quelltext',
     'Sources'
         => 'Quelltexte',
+    'Start search run'
+        => 'Suchlauf starten',
     'Submit'
         => 'Übermitteln',
     'Successfull created a account for the user %name%.'
@@ -348,6 +368,8 @@ return array(
         => 'Das Formular scheint kompromitiert worden zu sein, kann die Daten nicht ändern!',
     'The extension.json of <b>%name%</b> does not contain all definitions, check GUID, Group and Release!'
         => 'Die Beschreibungsdatei extension.json für die Erweiterung <b>%name%</b> enthält nicht alle Definitionen, prüfen Sie <i>GUID</i>, <i>Group</i> und <i>Release</i>!',
+    'The kitFramework was never checked for the existing locale sources and translations, please start a search run!'
+        => 'Das kitFramework wurde noch nie nach Quelltexten für Übersetzungen durchsucht, bitte starten Sie einen Suchlauf!',
     'The parameter <code>%parameter%[%value%]</code> for the kitCommand <code>~~ %command% ~~</code> is unknown, please check the parameter and the given value!'
         => 'Der Parameter <code>%parameter%[%value%]</code> für das kitCommand <code>~~ %command% ~~</code> ist nicht bekannt oder übergibt einen ungültigen Wert, bitte prüfen Sie Ihre Eingabe!',
     'The password for the kitFramework was successfull changed. You can now <a href="%login%">login using the new password</a>.'
@@ -388,6 +410,8 @@ return array(
         => 'Der Benutzername %username% wird bereits verwendet, bitte wählen Sie einen anderen Benutzernamen.',
     'There are no roles assigned to this user.'
         => 'Diesem Benutzer sind keine Rechte zugewiesen',
+    '<p>This list contain %count% translation sources.</p><p>Click at <em>ID</em> or at <em>References</em> for information in which files the sources are used.</p>'
+        => '<p>Diese Liste enthält %count% Quelltexte als Basis für die Übersetzungen.</p><p>Klicken Sie auf <em>ID</em> oder <em>Verweise</em> um zu erfahren in welchen Dateien diese Quelltexte verwendet werden.</p>',
     'This user are assigned %count% roles.'
         => 'Diesem Benutzer sind insgesamt <b>%count%</b> Rechte zugewiesen.',
     'This value is not a valid email address.'

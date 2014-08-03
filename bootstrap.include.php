@@ -641,6 +641,12 @@ $admin->get('/i18n/editor/sources/detail/{locale_id}',
     ->assert('locale_id', '\d+');
 $admin->post('/i18n/editor/sources/detail/check',
     'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerSourcesDetailCheck');
+$admin->get('/i18n/editor/problems',
+    'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerProblemsConflicts');
+$admin->get('/i18n/editor/problems/conflicts',
+    'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerProblemsConflicts');
+$admin->get('/i18n/editor/problems/unassigned',
+    'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerProblemsUnassigned');
 
 $admin->get('/i18n/editor/table/create',
     'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerCreateTable');

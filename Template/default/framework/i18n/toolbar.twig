@@ -9,8 +9,10 @@
             <i class="fa fa-th-list"></i>
           {% elseif item.name == 'sources' %}
             <i class="fa fa-file-code-o"></i>
+          {% elseif item.name == 'problems' %}
+            <i class="fa fa-bug"></i>
           {% elseif item.name in config.translation.locale|keys %}
-            <i class="fa fa-flag-o"></i>
+            <i class="fa fa-language"></i>
           {% endif %}
           {% if item.name != 'about' %}  
             <span class="visible-lg pull-right">&nbsp;{{ item.text }}</span>  

@@ -7,12 +7,8 @@
             <i class="fa fa-question"></i>
           {% elseif item.name == 'overview' %}
             <i class="fa fa-th-list"></i>
-          {% elseif item.name in config.translation.locale|keys %}
-            <i class="fa fa-flag-o"></i>
           {% endif %}
-          {% if item.name != 'about' %}  
-            <span class="visible-lg pull-right">&nbsp;{{ item.text }}</span>  
-          {% endif %}
+          <span class="visible-lg pull-right">&nbsp;{{ item.text }}</span>            
         </a>
       </li>
     {% endfor %}

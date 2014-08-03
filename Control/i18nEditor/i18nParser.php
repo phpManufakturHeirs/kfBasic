@@ -14,11 +14,12 @@ namespace phpManufaktur\Basic\Control\i18nEditor;
 use Silex\Application;
 use Symfony\Component\Finder\Finder;
 use phpManufaktur\Basic\Control\Pattern\Alert;
-use phpManufaktur\Basic\Data\i18nScanFile;
-use phpManufaktur\Basic\Data\i18nReference;
-use phpManufaktur\Basic\Data\i18nSource;
-use phpManufaktur\Basic\Data\i18nTranslation;
-use phpManufaktur\Basic\Data\i18nTranslationFile;
+use phpManufaktur\Basic\Data\i18n\i18nScanFile;
+use phpManufaktur\Basic\Data\i18n\i18nReference;
+use phpManufaktur\Basic\Data\i18n\i18nSource;
+use phpManufaktur\Basic\Data\i18n\i18nTranslation;
+use phpManufaktur\Basic\Data\i18n\i18nTranslationFile;
+use phpManufaktur\Basic\Data\i18n\i18nTranslationUnassigned;
 
 class i18nParser extends Alert
 {
@@ -28,6 +29,13 @@ class i18nParser extends Alert
     protected $i18nReference = null;
     protected $i18nTranslation = null;
     protected $i18nTranslationFile = null;
+    protected $i18nTranslationUnassigned = null;
+
+    protected static $translation_updated = null;
+    protected static $translation_conflicting = null;
+    protected static $translation_deleted = null;
+    protected static $translation_unassigned = null;
+
 
     /**
      * (non-PHPdoc)
@@ -45,6 +53,7 @@ class i18nParser extends Alert
         $this->i18nSource = new i18nSource($app);
         $this->i18nTranslation = new i18nTranslation($app);
         $this->i18nTranslationFile = new i18nTranslationFile($app);
+        $this->i18nTranslationUnassigned = new i18nTranslationUnassigned($app);
     }
 
     /**
@@ -62,6 +71,7 @@ class i18nParser extends Alert
         $this->i18nReference->createTable();
         $this->i18nTranslation->createTable();
         $this->i18nTranslationFile->createTable();
+        $this->i18nTranslationUnassigned->createTable();
 
         $this->setAlert('Successful created the tables for the i18nEditor.',
             array(), self::ALERT_TYPE_SUCCESS);
@@ -83,6 +93,7 @@ class i18nParser extends Alert
         $this->i18nReference->dropTable();
         $this->i18nTranslation->dropTable();
         $this->i18nTranslationFile->dropTable();
+        $this->i18nTranslationUnassigned->dropTable();
 
         $this->setAlert('Dropped the tables for the i18nEditor.',
             array(), self::ALERT_TYPE_SUCCESS);
@@ -568,6 +579,12 @@ class i18nParser extends Alert
         $file_count = 0;
         $translation_count = 0;
 
+        self::$translation_conflicting = array();
+        self::$translation_unassigned = array();
+
+        // truncate the table for unassigned translation before starting
+        $this->i18nTranslationUnassigned->truncateTable();
+
         foreach ($localeFiles as $file) {
             $realpath = $file->getRealpath();
 
@@ -593,6 +610,8 @@ class i18nParser extends Alert
             $walking = false;
             $key = null;
 
+            $key_array = array();
+
             foreach ($tokens as $token) {
                 if ($token[0] ===  T_ARRAY) {
                     $walking = true;
@@ -607,8 +626,20 @@ class i18nParser extends Alert
                 if ($token[0] === T_CONSTANT_ENCAPSED_STRING) {
                     // this is the second part: the VALUE is the translation_text
                     $locale_source = trim($key, "\x22\x27");
+
                     // important: set the KEY to NULL and try to get the next pair
                     $key = null;
+
+                    if (in_array($locale_source, $key_array)) {
+                        // Ooops - we have an duplicate location key in the translanslation file !!!
+                        $this->setAlert('There exist an duplicate locale key for <strong>%key%</strong> in the file <em>%file%</em>!',
+                            array('%key%' => $locale_source, '%file%' => $realpath), self::ALERT_TYPE_DANGER, true,
+                            array('extension' => $extension, 'locale' => $locale, 'locale_source' => $locale_source, 'method' => __METHOD__));
+                        // continue loop!
+                        continue;
+                    }
+                    $key_array[] = $locale_source;
+
                     // trim leading and trailing ' and "
                     $translation_text = trim($token[1], "\x22\x27");
 
@@ -656,6 +687,7 @@ class i18nParser extends Alert
                                                 'translation_md5' => $translation_md5,
                                                 'translation_status' => 'TRANSLATED'
                                             );
+
                                             $this->i18nTranslation->update($translation_id, $data);
                                             $this->app['monolog']->addDebug("[i18nEditor] Updated Translation ID $translation_id.",
                                                 array('extension' => $extension, 'locale' => $locale, 'locale_source' => $locale_source, 'translation_text' => $translation_text, 'method' => __METHOD__));
@@ -663,12 +695,13 @@ class i18nParser extends Alert
                                         }
                                         else {
                                             // CONFLICTING translation
-                                            echo "+++++ CONFLICT +++++<br>";
-                                            echo "$realpath<br>";
-                                            echo "<pre>";
-                                            print_r($translation);
-                                            print_r($file);
-                                            echo "</pre>";
+                                            $data = array(
+                                                'translation_status' => 'CONFLICT'
+                                            );
+                                            $this->i18nTranslation->update($translation_id, $data);
+                                            $this->app['monolog']->addDebug("[i18nEditor] There exists CONFLICTING translations for the translation ID $translation_id",
+                                                array('extension' => $extension, 'locale' => $locale, 'locale_source' => $locale_source, 'translation_text' => $translation_text, 'method' => __METHOD__));
+                                            self::$translation_conflicting[] = $translation_id;
                                         }
                                     }
                                 }
@@ -694,26 +727,23 @@ class i18nParser extends Alert
                                     $this->i18nTranslation->update($translation_id, $data);
                                     $this->app['monolog']->addDebug("[i18nEditor] There exists CONFLICTING translations for the translation ID $translation_id",
                                         array('extension' => $extension, 'locale' => $locale, 'locale_source' => $locale_source, 'translation_text' => $translation_text, 'method' => __METHOD__));
-                                    $this->setAlert('Translation ID %translation_id% is conflicting!', array('%translation_id%' => $translation_id));
+                                    self::$translation_conflicting[] = $translation_id;
                                 }
                             }
                         }
                         elseif ($translation['translation_status'] === 'CONFLICT') {
-                            // this translation is marked as CONFLICT - check if the conflict is solved ...
-                            echo "check conflict .... <br>";
+                            // this translation is already marked as CONFLICT - skip file, conflicts will be checked later ...
+
                         }
                         else {
                             // check the translation
-                            echo "other action ... <br>";
-                            echo "$realpath<br>";
-                            echo "<pre>";
-                            print_r($translation);
-                            print_r($file);
-                            echo "</pre>";
+                            $this->setAlert("Ooops, don't know how to handle the locale source '%source%', please check the protocol.",
+                                array('%source%' => $locale_source), self::ALERT_TYPE_DANGER, true,
+                                array('extension' => $extension, 'locale' => $locale, 'locale_source' => $locale_source, 'translation_text' => $translation_text, 'method' => __METHOD__));
                         }
                     }
                     else {
-                        // missing locale source !
+                        // missing locale source !!!
                         if (in_array($locale_source, self::$config['translation']['system'])) {
                             // these locale is defined by the system, still add to the source!
                             if (false === ($locale_id = $this->i18nSource->existsMD5($locale_md5))) {
@@ -750,8 +780,19 @@ class i18nParser extends Alert
                             $this->i18nTranslationFile->insert($data);
                         }
                         else {
-                            //echo 'already translated ... <br>';
-                            echo "$extension -> $locale_source: MD5, local: $locale_md5 - trans: $translation_md5 - $realpath<br>";
+                            // translation is unassigned - probably the parser can not assign the translation to any source
+                            // i.e. because a translation command is missing in source?
+                            $data = array(
+                                'file_path' => $realpath,
+                                'locale_locale' => $locale,
+                                'locale_source' => $locale_source,
+                                'translation_text' => $translation_text
+                            );
+
+                            self::$translation_unassigned[] = $this->i18nTranslationUnassigned->insert($data);
+
+                            $this->app['monolog']->addDebug("[i18nEditor] Can not assign translation to any source!",
+                                array('extension' => $extension, 'locale' => $locale, 'locale_source' => $locale_source, 'translation_text' => $translation_text, 'method' => __METHOD__));
                         }
                     }
                     $translation_count++;
@@ -759,7 +800,23 @@ class i18nParser extends Alert
             }
             $file_count++;
         }
-        echo "count: $file_count -> $translation_count<br>";
+    }
+
+    protected function checkConflicts()
+    {
+        if (false === ($conflicts = $this->i18nTranslation->selectConflicts())) {
+            return false;
+        }
+
+        foreach ($conflicts as $conflict) {
+            $translation_file = $this->i18nTranslationFile->selectByLocaleID($conflict['locale_id'], $conflict['locale_locale']);
+            echo "<pre>";
+            print_r($translation_file);
+            echo "</pre>";
+        }
+        echo "<hr><pre>";
+        print_r($conflicts);
+        echo "</pre>";
     }
 
 }

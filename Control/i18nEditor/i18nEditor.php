@@ -17,8 +17,10 @@ use Symfony\Component\Form\FormFactoryBuilder;
 class i18nEditor extends i18nParser
 {
     protected static $script_start = null;
+    protected static $script_execution_time = null;
     protected static $usage = null;
     protected static $usage_param = null;
+    protected static $info = null;
 
     /**
      * (non-PHPdoc)
@@ -39,6 +41,26 @@ class i18nEditor extends i18nParser
         if (self::$usage != 'framework') {
             $app['translator']->setLocale($app['session']->get('CMS_LOCALE', 'en'));
         }
+
+        // gather some information
+        $this->gatherInformation();
+    }
+
+    /**
+     * Gather information about the locales sources, translations ...
+     *
+     */
+    protected function gatherInformation()
+    {
+        $count = $this->i18nScanFile->selectCount();
+        self::$info = array(
+            'last_file_modification' => $this->i18nScanFile->getLastModificationDateTime(),
+            'count_registered' => $count['count_registered'],
+            'count_scanned' => $count['count_scanned'],
+            'locale_hits' => $count['locale_hits'],
+            'conflicts' => $this->i18nTranslation->countConflicts(),
+            'unassigned' => $this->i18nTranslationUnassigned->count()
+        );
     }
 
     /**
@@ -50,7 +72,7 @@ class i18nEditor extends i18nParser
     protected function getToolbar($active)
     {
         $toolbar = array();
-        $tabs = array_merge(array('overview'), self::$config['translation']['locale'], array('sources', 'about'));
+        $tabs = array_merge(array('overview'), self::$config['translation']['locale'], array('sources', 'problems', 'about'));
 
         foreach ($tabs as $tab) {
             switch ($tab) {
@@ -67,7 +89,7 @@ class i18nEditor extends i18nParser
                     $toolbar[$tab] = array(
                         'name' => 'overview',
                         'text' => $this->app['translator']->trans('Overview'),
-                        'hint' => $this->app['translator']->trans('...'),
+                        'hint' => $this->app['translator']->trans('A brief summary of the translation status'),
                         'link' => FRAMEWORK_URL.'/admin/i18n/editor/overview'.self::$usage_param,
                         'active' => ($active === 'overview')
                     );
@@ -76,10 +98,22 @@ class i18nEditor extends i18nParser
                     $toolbar[$tab] = array(
                         'name' => 'sources',
                         'text' => $this->app['translator']->trans('Sources'),
-                        'hint' => $this->app['translator']->trans('File sources for the locales'),
+                        'hint' => $this->app['translator']->trans('List of translation sources'),
                         'link' => FRAMEWORK_URL.'/admin/i18n/editor/sources'.self::$usage_param,
                         'active' => ($active === 'sources')
                     );
+                    break;
+                case 'problems':
+                    if (self::$config['developer_mode']) {
+                        // add this navigation only in active developer mode!
+                        $toolbar[$tab] = array(
+                            'name' => 'problems',
+                            'text' => $this->app['translator']->trans('Problems'),
+                            'hint' => $this->app['translator']->trans('Problems with the translation data'),
+                            'link' => FRAMEWORK_URL.'/admin/i18n/editor/problems'.self::$usage_param,
+                            'active' => ($active === 'problems')
+                        );
+                    }
                     break;
                 default:
                     if (in_array($tab, self::$config['translation']['locale'])) {
@@ -105,7 +139,7 @@ class i18nEditor extends i18nParser
      * @param string $locale
      * @return multitype:multitype:string boolean NULL
      */
-    protected function getLocaleToolbar($active, $locale)
+    protected function getToolbarLocale($active, $locale)
     {
         $toolbar = array();
         $tabs = array('summary');
@@ -123,6 +157,42 @@ class i18nEditor extends i18nParser
                     );
                     break;
 
+            }
+        }
+        return $toolbar;
+    }
+
+    /**
+     * Get the toolbar for the problems dialog
+     *
+     * @param string $active
+     * @return array
+     */
+    protected function getToolbarProblems($active)
+    {
+        $toolbar = array();
+        $tabs = array('conflicts', 'unassigned');
+
+        foreach ($tabs as $tab) {
+            switch ($tab) {
+                case 'conflicts':
+                    $toolbar[$tab] = array(
+                        'name' => 'conflicts',
+                        'text' => $this->app['translator']->trans('Conflicts'),
+                        'hint' => $this->app['translator']->trans('Translations which causes a conflict'),
+                        'link' => FRAMEWORK_URL.'/admin/i18n/editor/problems/conflicts'.self::$usage_param,
+                        'active' => ($active === 'conflicts')
+                    );
+                    break;
+                case 'unassigned':
+                    $toolbar[$tab] = array(
+                        'name' => 'unassigned',
+                        'text' => $this->app['translator']->trans('Unassigned'),
+                        'hint' => $this->app['translator']->trans('Translations which are not assigned to any files'),
+                        'link' => FRAMEWORK_URL.'/admin/i18n/editor/problems/unassigned'.self::$usage_param,
+                        'active' => ($active === 'unassigned')
+                    );
+                    break;
             }
         }
         return $toolbar;
@@ -163,7 +233,8 @@ class i18nEditor extends i18nParser
                 'usage_param' => self::$usage_param,
                 'toolbar' => $this->getToolbar('overview'),
                 'alert' => $this->getAlert(),
-                'config' => self::$config
+                'config' => self::$config,
+                'info' => self::$info
             ));
     }
 
@@ -198,11 +269,11 @@ class i18nEditor extends i18nParser
         // remove widowed locale sources from the database
         $widowed = $this->i18nSource->selectWidowed();
         if (is_array($widowed)) {
+            self::$translation_deleted = array();
             foreach ($widowed as $widow) {
                 if (!in_array($widow['locale_source'], self::$config['translation']['system'])) {
                     $this->i18nSource->delete($widow['locale_id']);
-                    $this->setAlert('Deleted widowed locale source with the ID %id%.',
-                        array('%id%' => $widow['locale_id']));
+                    self::$translation_deleted[] = $widow['locale_id'];
                 }
             }
         }
@@ -213,13 +284,13 @@ class i18nEditor extends i18nParser
         // find the locale files
         $this->findLocaleFiles();
 
-        $result = $this->i18nScanFile->selectCount();
-        echo "<pre>";
-        print_r($result);
-        echo "</pre>";
+        // check if conflicts are solved
+        $this->checkConflicts();
 
-        echo "Laufzeit: ". sprintf('%01.2f', (microtime(true) - self::$script_start))."<br>";
-
+        self::$script_execution_time = sprintf('%01.2f', (microtime(true) - self::$script_start));
+        $this->setAlert('Executed search run in %seconds% seconds.',
+            array('%seconds%' => self::$script_execution_time), self::ALERT_TYPE_SUCCESS);
+        $this->gatherInformation();
         return $this->showOverview();
     }
 
@@ -251,9 +322,10 @@ class i18nEditor extends i18nParser
                 'usage' => self::$usage,
                 'usage_param' => self::$usage_param,
                 'toolbar' => $this->getToolbar(strtolower($locale)),
-                'locale_toolbar' => $this->getLocaleToolbar('summary', $locale),
+                'toolbar_locale' => $this->getToolbarLocale('summary', $locale),
                 'alert' => $this->getAlert(),
-                'config' => self::$config
+                'config' => self::$config,
+                'info' => self::$info
             ));
     }
 
@@ -400,5 +472,49 @@ class i18nEditor extends i18nParser
             $this->setAlert('The form is not valid, please check your input and try again!', array(), self::ALERT_TYPE_DANGER);
             return $this->ControllerSourcesDetail($app, -1);
         }
+    }
+
+    /**
+     * Controller to show the translation conflicts
+     *
+     * @param Application $app
+     */
+    public function ControllerProblemsConflicts(Application $app)
+    {
+        $this->initialize($app);
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template', 'framework/i18n/problems.conflicts.twig'),
+            array(
+                'usage' => self::$usage,
+                'usage_param' => self::$usage_param,
+                'toolbar' => $this->getToolbar('problems'),
+                'toolbar_problems' => $this->getToolbarProblems('conflicts'),
+                'alert' => $this->getAlert(),
+                'config' => self::$config,
+                'info' => self::$info
+            ));
+    }
+
+    /**
+     * Controller to show the unassigned translations
+     *
+     * @param Application $app
+     */
+    public function ControllerProblemsUnassigned(Application $app)
+    {
+        $this->initialize($app);
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template', 'framework/i18n/problems.unassigned.twig'),
+            array(
+                'usage' => self::$usage,
+                'usage_param' => self::$usage_param,
+                'toolbar' => $this->getToolbar('problems'),
+                'toolbar_problems' => $this->getToolbarProblems('unassigned'),
+                'alert' => $this->getAlert(),
+                'config' => self::$config,
+                'info' => self::$info
+            ));
     }
 }

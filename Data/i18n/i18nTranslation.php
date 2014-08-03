@@ -9,7 +9,7 @@
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
  */
 
-namespace phpManufaktur\Basic\Data;
+namespace phpManufaktur\Basic\Data\i18n;
 
 use Silex\Application;
 
@@ -224,6 +224,23 @@ EOD;
     }
 
     /**
+     * Count all CONFLICTS (locale independend)
+     *
+     * @throws \Exception
+     * @return integer
+     */
+    public function countConflicts()
+    {
+        try {
+            $SQL = "SELECT COUNT(`translation_status`) AS 'conflicts' FROM `".self::$table_name."` WHERE `translation_status`='CONFLICT'";
+            $result = $this->app['db']->fetchColumn($SQL);
+            return ($result > 0) ? $result : 0;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
      * Update the record for the given translation ID
      *
      * @param integer $translation_id
@@ -240,6 +257,27 @@ EOD;
             $this->app['db']->update(self::$table_name, $update, array('translation_id' => $translation_id));
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e->getMessage());
+        }
+    }
+
+    public function selectConflicts()
+    {
+        try {
+            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `translation_status`='CONFLICT'";
+            $results = $this->app['db']->fetchAll($SQL);
+            $conflicts = array();
+            if (is_array($results)) {
+                foreach ($results as $result) {
+                    $conflict = array();
+                    foreach ($result as $key => $value) {
+                        $conflict[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+                    }
+                    $conflicts[] = $conflict;
+                }
+            }
+            return (!empty($conflicts)) ? $conflicts : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
         }
     }
 }

@@ -39,6 +39,7 @@ class Configuration
     public function getDefaultConfigArray()
     {
         return array(
+            'developer_mode' => false,
             'parse' => array(
                 'php' => array(
                     'stop_word' => array(

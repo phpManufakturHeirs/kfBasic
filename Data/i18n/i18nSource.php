@@ -9,7 +9,7 @@
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
  */
 
-namespace phpManufaktur\Basic\Data;
+namespace phpManufaktur\Basic\Data\i18n;
 
 use Silex\Application;
 

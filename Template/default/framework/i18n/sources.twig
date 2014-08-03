@@ -28,6 +28,14 @@
   <div class="container{% if usage != 'framework'%}-fluid{% endif %}">
     {% include '@phpManufaktur/Basic/Template/default/framework/i18n/toolbar.twig' %}
     
+    <h1>{{ 'Sources'|trans }} <small>i18nEditor</small></h1>
+    
+      {% if sources|length > 0 and alert|length == 0 %}
+    <div class="well">
+        {{ '<p>This list contain %count% translation sources.</p><p>Click at <em>ID</em> or at <em>References</em> for information in which files the sources are used.</p>'|trans({'%count%':sources|length}) }}
+    </div>
+      {% endif %}        
+    
     {{ alert }}
     
     {% if sources|length > 0 %}
@@ -47,7 +55,7 @@
                 <td class="id"><a href="{{ FRAMEWORK_URL ~ '/admin/i18n/editor/sources/detail/' ~ source.locale_id ~ usage_param }}">{{ '%05d'|format(source.locale_id) }}</a></td>
                 <td class="source">{{ source.locale_source|escape('html') }}</td>
                 <td class="remark">{{ source.locale_remark }}</td>
-                <td class="references text-right">{{ source.references }}</td>
+                <td class="references text-right"><a href="{{ FRAMEWORK_URL ~ '/admin/i18n/editor/sources/detail/' ~ source.locale_id ~ usage_param }}">{{ source.references }}</a></td>
               </tr>
             {% endfor %}
           </tbody>

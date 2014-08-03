@@ -21,11 +21,12 @@ use phpManufaktur\Basic\Data\kitCommandParameter;
 use phpManufaktur\Basic\Control\CMS\InstallSearch;
 use phpManufaktur\Basic\Data\Security\AdminAction;
 use phpManufaktur\Updater\Updater;
-use phpManufaktur\Basic\Data\i18nScanFile;
-use phpManufaktur\Basic\Data\i18nSource;
-use phpManufaktur\Basic\Data\i18nReference;
-use phpManufaktur\Basic\Data\i18nTranslation;
-use phpManufaktur\Basic\Data\i18nTranslationFile;
+use phpManufaktur\Basic\Data\i18n\i18nScanFile;
+use phpManufaktur\Basic\Data\i18n\i18nSource;
+use phpManufaktur\Basic\Data\i18n\i18nReference;
+use phpManufaktur\Basic\Data\i18n\i18nTranslation;
+use phpManufaktur\Basic\Data\i18n\i18nTranslationFile;
+use phpManufaktur\Basic\Data\i18n\i18nTranslationUnassigned;
 
 /**
  * Setup all needed database tables and initialize the kitFramework
@@ -149,6 +150,9 @@ class Setup
 
         $i18nTranslationFile = new i18nTranslationFile($app);
         $i18nTranslationFile->createTable();
+
+        $i18nTranslationUnassigned = new i18nTranslationUnassigned($app);
+        $i18nTranslationUnassigned->createTable();
 
         return $app['translator']->trans('Successfull installed the extension %extension%.',
             array('%extension%' => 'Basic'));

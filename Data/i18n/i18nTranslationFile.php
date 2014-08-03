@@ -9,7 +9,7 @@
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
  */
 
-namespace phpManufaktur\Basic\Data;
+namespace phpManufaktur\Basic\Data\i18n;
 
 use Silex\Application;
 
@@ -150,6 +150,27 @@ EOD;
     {
         try {
             $SQL = "SELECT * FROM `".self::$table_name."` WHERE `translation_id`=$translation_id AND `locale_locale`='$locale'";
+            $results = $this->app['db']->fetchAll($SQL);
+            $files = array();
+            if (is_array($results)) {
+                foreach ($results as $result) {
+                    $file = array();
+                    foreach ($result as $key => $value) {
+                        $file[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+                    }
+                    $files[] = $file;
+                }
+            }
+            return (!empty($files)) ? $files : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    public function selectByLocaleID($locale_id, $locale)
+    {
+        try {
+            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `locale_id`=$locale_id AND `locale_locale`='$locale'";
             $results = $this->app['db']->fetchAll($SQL);
             $files = array();
             if (is_array($results)) {

@@ -29,13 +29,23 @@
     {% include '@phpManufaktur/Basic/Template/default/framework/i18n/toolbar.twig' %}
     
     <div class="page-header">
-      <h1>{{ 'i18nEditor'|trans }} <small>{{ 'Internationalization for the kitFramework'|trans }}</small></h1>
+      <h1>i18nEditor <small>{{ 'Internationalization'|trans }}</small></h1>
     </div>
     
+    <div class="well">
+    {% if info.locale_hits < 1 %}
+      {{ 'The kitFramework was never checked for the existing locale sources and translations, please start a search run!'|trans }}
+    {% elseif config.developer_mode %}
+      {{ '<p>Last registered file modification: <strong>%modification%</strong><br />Scanned files: <strong>%scanned%</strong><br />Locale hits: <strong>%hits%</strong><br /><br />Conflicting translations: <strong>%conflicts%</strong><br />Unassigned translations: <strong>%unassigned%</strong></p><p>You execute the i18nEditor in <strong>developer mode</strong>.</p>'|trans({'%modification%':info.last_file_modification|date('DATETIME_FORMAT'|trans),'%scanned%':info.count_scanned,'%hits%':info.locale_hits,'%conflicts%':info.conflicts,'%unassigned%':info.unassigned}) }}
+    {% else %}
+      {{ '<p>Last registered file modification: <strong>%modification%</strong><br />Scanned files: <strong>%scanned%</strong><br />Locale hits: <strong>%hits%</strong></p><p>Switch to developer mode to get also information about problems and conflicts.</p>'|trans({'%modification%':info.last_file_modification|date('DATETIME_FORMAT'|trans),'%scanned%':info.count_scanned,'%hits%':info.locale_hits}) }}
+    {% endif %}
+    </div>
     {{ alert }}
     
     <div>
       <a class="btn btn-primary btn-lg" href="{{ FRAMEWORK_URL ~ '/admin/i18n/editor/scan' ~ usage_param }}" role="button">{{ 'Start search run'|trans }}</a>
     </div>
+  
   </div>
 {% endblock content %}

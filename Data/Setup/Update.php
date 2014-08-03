@@ -17,11 +17,12 @@ use phpManufaktur\Basic\Data\Security\AdminAction;
 use Symfony\Component\Filesystem\Exception\IOException;
 use phpManufaktur\Basic\Control\CMS\InstallAdminTool;
 use phpManufaktur\Basic\Control\jsonEditor\Configuration;
-use phpManufaktur\Basic\Data\i18nScanFile;
-use phpManufaktur\Basic\Data\i18nSource;
-use phpManufaktur\Basic\Data\i18nReference;
-use phpManufaktur\Basic\Data\i18nTranslation;
-use phpManufaktur\Basic\Data\i18nTranslationFile;
+use phpManufaktur\Basic\Data\i18n\i18nScanFile;
+use phpManufaktur\Basic\Data\i18n\i18nSource;
+use phpManufaktur\Basic\Data\i18n\i18nReference;
+use phpManufaktur\Basic\Data\i18n\i18nTranslation;
+use phpManufaktur\Basic\Data\i18n\i18nTranslationFile;
+use phpManufaktur\Basic\Data\i18n\i18nTranslationUnassigned;
 
 class Update
 {
@@ -294,9 +295,13 @@ class Update
             $i18nTranslation = new i18nTranslation($this->app);
             $i18nTranslation->createTable();
         }
-        if (!$this->app['db.utils']->tableExists(FRAMEWORK_TABLE_PREFIX.'basic_i18n_reference')) {
+        if (!$this->app['db.utils']->tableExists(FRAMEWORK_TABLE_PREFIX.'basic_i18n_translation_file')) {
             $i18nTranslationFile = new i18nTranslationFile($this->app);
             $i18nTranslationFile->createTable();
+        }
+        if (!$this->app['db.utils']->tableExists(FRAMEWORK_TABLE_PREFIX.'basic_i18n_translation_unassigned')) {
+            $i18nTranslationUnassigned = new i18nTranslationUnassigned($this->app);
+            $i18nTranslationUnassigned->createTable();
         }
     }
 

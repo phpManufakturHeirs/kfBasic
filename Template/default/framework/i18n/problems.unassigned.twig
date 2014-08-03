@@ -27,8 +27,13 @@
 {% block content %}
   <div class="container{% if usage != 'framework'%}-fluid{% endif %}">
     {% include '@phpManufaktur/Basic/Template/default/framework/i18n/toolbar.twig' %}
-    {% include '@phpManufaktur/Basic/Template/default/framework/i18n/toolbar.locale.twig' with {'toolbar': toolbar_locale} %}
+    {% include '@phpManufaktur/Basic/Template/default/framework/i18n/toolbar.problems.twig' with {'toolbar': toolbar_problems} %}
     
-    locale...
+    <div class="page-header">
+      <h1>{{ 'Unassigned translations'|trans }} <small>i18nEditor</small></h1>
+    </div>
+    
+    {{ alert }}
+    
   </div>
 {% endblock content %}
