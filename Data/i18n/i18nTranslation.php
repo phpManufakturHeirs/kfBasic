@@ -260,6 +260,13 @@ EOD;
         }
     }
 
+    /**
+     * Return all records which translation_status are set to CONFLICT.
+     * Return FALSE if no conflict exists
+     *
+     * @throws \Exception
+     * @return Ambigous <boolean, array>
+     */
     public function selectConflicts()
     {
         try {
@@ -276,6 +283,62 @@ EOD;
                 }
             }
             return (!empty($conflicts)) ? $conflicts : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Select all duplicate translation entries
+     *
+     * @throws \Exception
+     * @return integer
+     */
+    public function selectDuplicates()
+    {
+        try {
+            $translation = self::$table_name;
+            $file = FRAMEWORK_TABLE_PREFIX.'basic_i18n_translation_file';
+
+            $SQL = "SELECT *, COUNT(`$file`.`locale_id`) AS 'duplicate' FROM `$translation` ".
+                "LEFT JOIN `$file` ON `$file`.`translation_id`=`$translation`.`translation_id` ".
+                "WHERE `$file`.`locale_type`='DEFAULT' AND `$translation`.`translation_status`='TRANSLATED' ".
+                "GROUP BY `$file`.`locale_locale`, `$file`.`locale_id` HAVING COUNT(`$file`.`locale_id`) > 1";
+
+            $results = $this->app['db']->fetchAll($SQL);
+            $duplicates = array();
+            if (is_array($results)) {
+                foreach ($results as $result) {
+                    $duplicate = array();
+                    foreach ($result as $key => $value) {
+                        $duplicate[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+                    }
+                    $duplicates[] = $duplicate;
+                }
+            }
+            return (!empty($duplicates)) ? $duplicates : 0;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    public function selectPendings($locale)
+    {
+        try {
+            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `locale_locale`='$locale'  AND `translation_status`='PENDING'".
+                "ORDER BY `locale_source` ASC";
+            $results = $this->app['db']->fetchAll($SQL);
+            $pendings = array();
+            if (is_array($results)) {
+                foreach ($results as $result) {
+                    $pending = array();
+                    foreach ($result as $key => $value) {
+                        $pending[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+                    }
+                    $pendings[] = $pending;
+                }
+            }
+            return (!empty($pendings)) ? $pendings : false;
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }

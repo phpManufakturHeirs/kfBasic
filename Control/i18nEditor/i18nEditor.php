@@ -58,6 +58,7 @@ class i18nEditor extends i18nParser
             'count_registered' => $count['count_registered'],
             'count_scanned' => $count['count_scanned'],
             'locale_hits' => $count['locale_hits'],
+            'duplicates' => count($this->i18nTranslation->selectDuplicates()),
             'conflicts' => $this->i18nTranslation->countConflicts(),
             'unassigned' => $this->i18nTranslationUnassigned->count()
         );
@@ -142,7 +143,7 @@ class i18nEditor extends i18nParser
     protected function getToolbarLocale($active, $locale)
     {
         $toolbar = array();
-        $tabs = array('summary');
+        $tabs = array('summary', 'pending', 'edit');
 
         foreach ($tabs as $tab) {
             switch ($tab) {
@@ -156,7 +157,24 @@ class i18nEditor extends i18nParser
                         'active' => ($active === 'summary')
                     );
                     break;
-
+                case 'pending':
+                    $toolbar[$tab] = array(
+                        'name' => 'pending',
+                        'text' => $this->app['translator']->trans('Waiting'),
+                        'hint' => $this->app['translator']->trans('Locales waiting for a translation'),
+                        'link' => FRAMEWORK_URL.'/admin/i18n/editor/locale/'.strtolower($locale).'/pending'.self::$usage_param,
+                        'active' => ($active === 'pending')
+                    );
+                    break;
+                case 'edit':
+                    $toolbar[$tab] = array(
+                        'name' => 'edit',
+                        'text' => $this->app['translator']->trans('Edit'),
+                        'hint' => $this->app['translator']->trans('Create or edit translations'),
+                        'link' => FRAMEWORK_URL.'/admin/i18n/editor/translation/edit/id'.self::$usage_param,
+                        'active' => ($active === 'edit')
+                    );
+                    break;
             }
         }
         return $toolbar;
@@ -171,7 +189,7 @@ class i18nEditor extends i18nParser
     protected function getToolbarProblems($active)
     {
         $toolbar = array();
-        $tabs = array('conflicts', 'unassigned');
+        $tabs = array('conflicts', 'unassigned', 'duplicates');
 
         foreach ($tabs as $tab) {
             switch ($tab) {
@@ -191,6 +209,15 @@ class i18nEditor extends i18nParser
                         'hint' => $this->app['translator']->trans('Translations which are not assigned to any files'),
                         'link' => FRAMEWORK_URL.'/admin/i18n/editor/problems/unassigned'.self::$usage_param,
                         'active' => ($active === 'unassigned')
+                    );
+                    break;
+                case 'duplicates':
+                    $toolbar[$tab] = array(
+                        'name' => 'duplicates',
+                        'text' => $this->app['translator']->trans('Duplicates'),
+                        'hint' => $this->app['translator']->trans('Duplicate translations'),
+                        'link' => FRAMEWORK_URL.'/admin/i18n/editor/problems/duplicates'.self::$usage_param,
+                        'active' => ($active === 'duplicates')
                     );
                     break;
             }
@@ -316,6 +343,8 @@ class i18nEditor extends i18nParser
     {
         $this->initialize($app);
 
+
+
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
             '@phpManufaktur/Basic/Template', 'framework/i18n/locale.twig'),
             array(
@@ -326,6 +355,30 @@ class i18nEditor extends i18nParser
                 'alert' => $this->getAlert(),
                 'config' => self::$config,
                 'info' => self::$info
+            ));
+    }
+
+    public function ControllerLocalePending(Application $app, $locale)
+    {
+        $this->initialize($app);
+
+        if (false === ($pendings = $this->i18nTranslation->selectPendings($locale))) {
+            $this->setAlert('There exists no pending translations for the locale %locale%.',
+                array('%locale%' => $this->app['translator']->trans(strtoupper($locale))),
+                self::ALERT_TYPE_INFO);
+        }
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template', 'framework/i18n/locale.pending.twig'),
+            array(
+                'usage' => self::$usage,
+                'usage_param' => self::$usage_param,
+                'toolbar' => $this->getToolbar(strtolower($locale)),
+                'toolbar_locale' => $this->getToolbarLocale('pending', $locale),
+                'alert' => $this->getAlert(),
+                'config' => self::$config,
+                'info' => self::$info,
+                'pendings' => $pendings
             ));
     }
 
@@ -483,6 +536,20 @@ class i18nEditor extends i18nParser
     {
         $this->initialize($app);
 
+        $conflict_translations = $this->i18nTranslation->selectConflicts();
+        $conflicts = array();
+        if (is_array($conflict_translations)) {
+            foreach ($conflict_translations as $conflict) {
+                $files = $this->i18nTranslationFile->selectByLocaleID($conflict['locale_id'], $conflict['locale_locale']);
+                $conflict['conflict_files'] = $files;
+                $conflicts[] = $conflict;
+            }
+        }
+
+        if (empty($conflicts)) {
+            $this->setAlert('There exists no conflicts.', array(), self::ALERT_TYPE_INFO);
+        }
+
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
             '@phpManufaktur/Basic/Template', 'framework/i18n/problems.conflicts.twig'),
             array(
@@ -492,7 +559,8 @@ class i18nEditor extends i18nParser
                 'toolbar_problems' => $this->getToolbarProblems('conflicts'),
                 'alert' => $this->getAlert(),
                 'config' => self::$config,
-                'info' => self::$info
+                'info' => self::$info,
+                'conflicts' => $conflicts
             ));
     }
 
@@ -505,6 +573,10 @@ class i18nEditor extends i18nParser
     {
         $this->initialize($app);
 
+        if (false === ($unassigneds = $this->i18nTranslationUnassigned->selectAll())) {
+            $this->setAlert('There exists no unassigned translations.', array(), self::ALERT_TYPE_INFO);
+        }
+
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
             '@phpManufaktur/Basic/Template', 'framework/i18n/problems.unassigned.twig'),
             array(
@@ -514,7 +586,125 @@ class i18nEditor extends i18nParser
                 'toolbar_problems' => $this->getToolbarProblems('unassigned'),
                 'alert' => $this->getAlert(),
                 'config' => self::$config,
-                'info' => self::$info
+                'info' => self::$info,
+                'unassigneds' => $unassigneds
+            ));
+    }
+
+    /**
+     * Controller to show duplicate translations
+     *
+     * @param Application $app
+     */
+    public function ControllerProblemsDuplicates(Application $app)
+    {
+        $this->initialize($app);
+
+        if (false === ($duplicate_translations = $this->i18nTranslation->selectDuplicates())) {
+            $this->setAlert('There exists no duplicate translations.', array(), self::ALERT_TYPE_INFO);
+        }
+        $duplicates = array();
+        if (is_array($duplicate_translations)) {
+            foreach ($duplicate_translations as $duplicate) {
+                $files = $this->i18nTranslationFile->selectByLocaleID($duplicate['locale_id'], $duplicate['locale_locale']);
+                $duplicate['duplicate_files'] = $files;
+                $duplicates[] = $duplicate;
+            }
+        }
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template', 'framework/i18n/problems.duplicates.twig'),
+            array(
+                'usage' => self::$usage,
+                'usage_param' => self::$usage_param,
+                'toolbar' => $this->getToolbar('problems'),
+                'toolbar_problems' => $this->getToolbarProblems('duplicates'),
+                'alert' => $this->getAlert(),
+                'config' => self::$config,
+                'info' => self::$info,
+                'duplicates' => $duplicates
+            ));
+    }
+
+    protected function getTranslationForm($data)
+    {
+        $form = $this->app['form.factory']->createBuilder('form')
+            ->add('translation_id', 'hidden', array(
+                'data' => isset($data['translation_id']) ? $data['translation_id'] : -1
+            ))
+            ->add('locale_id', 'hidden', array(
+                'data' => isset($data['locale_id']) ? $data['locale_id'] : -1
+            ))
+            ->add('locale_locale', 'hidden', array(
+                'data' => isset($data['locale_locale']) ? $data['locale_locale'] : ''
+                ))
+            ->add('translation_status', 'hidden', array(
+                'data' => isset($data['translation_status']) ? $data['translation_status'] : 'PENDING'
+            ))
+            ->add('locale_source', 'hidden', array(
+                'data' => isset($data['locale_source']) ? $data['locale_source'] : ''
+            ))
+            ->add('translation_text', 'textarea', array(
+                'data' => isset($data['translation_text']) ? $data['translation_text'] : ''
+            ))
+            ->add('locale_remark', 'textarea', array(
+                'data' => isset($data['locale_remark']) ? $data['locale_remark'] : '',
+                'required' => false
+            ));
+
+        if (self::$config['developer_mode']) {
+
+        }
+        else {
+
+        }
+
+        return $form->getForm();
+    }
+
+    public function ControllerTranslationEdit(Application $app, $translation_id)
+    {
+        $this->initialize($app);
+
+        if (false === ($translation = $this->i18nTranslation->select($translation_id))) {
+            $this->setAlert('The record with the ID %id% does not exists!',
+                array('%id%' => $translation_id), self::ALERT_TYPE_DANGER);
+            return $this->promptAlertFramework();
+        }
+
+        if (false === ($source = $this->i18nSource->select($translation['locale_id']))) {
+            $this->setAlert('The record with the ID %id% does not exists!',
+                array('%id%' => $translation['locale_id']), self::ALERT_TYPE_DANGER);
+        }
+
+        $references = array();
+        if (is_array($source)) {
+            if (false === ($files = $this->i18nReference->selectReferencesForLocaleID($translation['locale_id']))) {
+                $this->setAlert('There exists no references for the locale source with the id %locale_id%.',
+                    array('%locale_id%' => $translation['locale_id']), self::ALERT_TYPE_WARNING);
+            }
+            else {
+                foreach ($files as $file) {
+                    $references[$file['file_id']] = $file;
+                    $references[$file['file_id']]['file_path'] = realpath($file['file_path']);
+                    $references[$file['file_id']]['basename'] = basename(realpath($file['file_path']));
+                }
+            }
+        }
+
+        $form = $this->getTranslationForm($translation);
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template', 'framework/i18n/translation.edit.twig'),
+            array(
+                'usage' => self::$usage,
+                'usage_param' => self::$usage_param,
+                'toolbar' => $this->getToolbar('problems'),
+                'toolbar_locales' => $this->getToolbarLocale('edit', $translation['locale_locale']),
+                'alert' => $this->getAlert(),
+                'config' => self::$config,
+                'info' => self::$info,
+                'form' => $form->createView()
             ));
     }
 }

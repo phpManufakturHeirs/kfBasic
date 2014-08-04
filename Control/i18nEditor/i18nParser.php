@@ -48,12 +48,13 @@ class i18nParser extends Alert
         $Configuration = new Configuration($app);
         self::$config = $Configuration->getConfiguration();
 
-        $this->i18nScanFile = new i18nScanFile($app);
         $this->i18nReference = new i18nReference($app);
         $this->i18nSource = new i18nSource($app);
         $this->i18nTranslation = new i18nTranslation($app);
         $this->i18nTranslationFile = new i18nTranslationFile($app);
         $this->i18nTranslationUnassigned = new i18nTranslationUnassigned($app);
+        $this->i18nScanFile = new i18nScanFile($app);
+
     }
 
     /**
@@ -167,8 +168,10 @@ class i18nParser extends Alert
             if (!$start_scan && $expect_locale && is_array($token) && ($token[0] === T_CONSTANT_ENCAPSED_STRING)) {
                 if (empty(trim($token[1], "\x22\x27"))) {
                     // don't handle empty strings!
+                    $expect_locale = false;
                     continue;
                 }
+
                 $last_source = $current_source;
                 if (in_array($token[1], self::$config['parse']['php']['stop_word'])) {
                     // skip entry and alert to check the program code
@@ -183,6 +186,13 @@ class i18nParser extends Alert
                     else {
                         $current_source = trim($token[1], "\x22\x27");
                     }
+
+                    if (in_array($current_source, self::$config['translation']['ignore'])) {
+                        // ignore this source term
+                        $expect_locale = false;
+                        continue;
+                    }
+
                     $source_md5 = md5($current_source);
                     if (false === ($locale_id = $this->i18nSource->existsMD5($source_md5))) {
                         // create a new locale source entry
@@ -477,6 +487,10 @@ class i18nParser extends Alert
                                 $locale = ucfirst($locale);
                                 break;
                         }
+                    }
+
+                    if (strpos($locale, "'|humanize")) {
+                        $locale = substr($locale, 0, strpos($locale, "'|humanize"));
                     }
 
                     $locale_md5 = md5($locale);
@@ -784,6 +798,7 @@ class i18nParser extends Alert
                             // i.e. because a translation command is missing in source?
                             $data = array(
                                 'file_path' => $realpath,
+                                'extension' => $extension,
                                 'locale_locale' => $locale,
                                 'locale_source' => $locale_source,
                                 'translation_text' => $translation_text
@@ -802,21 +817,93 @@ class i18nParser extends Alert
         }
     }
 
+    /**
+     * Loop through all registered conflicts and check if the conflict is solved
+     *
+     * @return boolean
+     */
     protected function checkConflicts()
     {
         if (false === ($conflicts = $this->i18nTranslation->selectConflicts())) {
-            return false;
+            return;
         }
 
         foreach ($conflicts as $conflict) {
-            $translation_file = $this->i18nTranslationFile->selectByLocaleID($conflict['locale_id'], $conflict['locale_locale']);
-            echo "<pre>";
-            print_r($translation_file);
-            echo "</pre>";
+            $conflict_solved = true;
+            $files = $this->i18nTranslationFile->selectByLocaleID($conflict['locale_id'], $conflict['locale_locale']);
+
+            if (count($files) > 1) {
+                // if only one file exists, the conflict is automatically solved!
+                foreach ($files as $file) {
+                    // get all TOKENS from the code
+                    $code = file_get_contents(realpath($file['file_path']));
+                    $tokens = token_get_all($code);
+
+                    $walking = false;
+                    $key = null;
+                    $source_detected = false;
+
+                    foreach ($tokens as $token) {
+                        if ($token[0] ===  T_ARRAY) {
+                            $walking = true;
+                        }
+                        if (!$walking) continue;
+
+                        if (is_null($key) && $token[0] === T_CONSTANT_ENCAPSED_STRING) {
+                            // this is the first part: the KEY is the locale_source
+                            $key = $token[1];
+                            continue;
+                        }
+                        if ($token[0] === T_CONSTANT_ENCAPSED_STRING) {
+                            // this is the second part: the VALUE is the translation_text
+                            $locale_source = trim($key, "\x22\x27");
+
+                            // important: set the KEY to NULL and try to get the next pair
+                            $key = null;
+
+                            // trim leading and trailing ' and "
+                            $translation_text = trim($token[1], "\x22\x27");
+
+                            $locale_md5 = md5($locale_source);
+                            $translation_md5 = md5($translation_text);
+
+                            if ($locale_md5 === $conflict['locale_md5']) {
+                                // ok - this is the conflicting entry
+                                if ($translation_md5 !== $conflict['translation_md5']) {
+                                    // the conflict is NOT solved
+                                    $conflict_solved = false;
+                                }
+                                // important: set a mark that the source exists in the file!
+                                $source_detected = true;
+
+                                // here we can leave the TOKENS loop
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!$source_detected) {
+                        // the conflicting entry does no longer exists!
+                        $this->i18nTranslationFile->delete($file['file_id']);
+                        if ((count($files) - 1) === 1) {
+                            // only one file left ... so the conflict is automatically solved!
+                            $conflict_solved = true;
+                        }
+                    }
+                }
+            }
+
+            if ($conflict_solved) {
+                // conflict is SOLVED!
+                $data = array(
+                    'translation_status' => 'TRANSLATED'
+                );
+                $this->i18nTranslation->update($conflict['translation_id'], $data);
+                $this->setAlert('The translation conflict for the locale source <strong>%source%</strong> has been solved!',
+                    array('%source%' => $conflict['locale_source']), self::ALERT_TYPE_SUCCESS, true,
+                    array('locale' => $conflict['locale_locale'], 'locale_source' => $conflict['locale_source'], 'method' => __METHOD__));
+            }
         }
-        echo "<hr><pre>";
-        print_r($conflicts);
-        echo "</pre>";
     }
 
 }

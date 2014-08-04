@@ -72,6 +72,10 @@ return array(
         => '- nur kommerzielle Verwendung -',
     'Configuration'
         => 'Konfiguration',
+    'Conflicting translations'
+        => 'Kollidierende Übersetzungen',
+    'Conflicts'
+        => 'Konflikte',
     'Copied kitCommand to clipboard!'
         => 'Das kitCommand wurde in die Zwischenablage kopiert!',
     'Copy the GUID to the clipboard'
@@ -91,11 +95,19 @@ return array(
         => 'Angezeigter Name',
     'Documentation'
         => 'Dokumentation',
+    'Duplicate translations'
+        => 'Mehrfache Übersetzungen',
+    'Duplicates'
+        => 'Duplikate',
 
+    'Edit'
+        => 'Bearbeiten',
     'Edit kitFramework configuration file'
         => 'kitFramework Konfigurationsdatei bearbeiten',
     'Edit the locale %locale%'
         => 'Die %locale% Übersetzungen bearbeiten',
+    'Edit translation'
+        => 'Übersetzung bearbeiten',
     'Email'
         => 'E-Mail',
     'Entry points'
@@ -181,8 +193,8 @@ return array(
 
     '<p>Last registered file modification: <strong>%modification%</strong><br />Scanned files: <strong>%scanned%</strong><br />Locale hits: <strong>%hits%</strong></p><p>Switch to developer mode to get also information about problems and conflicts.</p>'
         => '<p>Letzte erfasste Dateiänderung: <strong>%modification%</strong><br />Durchsuchte Dateien: <strong>%scanned%</strong><br />Quelltext Treffer: <strong>%hits%</strong></p><p>Schalten Sie in den <em>Entwickler Modus</em> um, um zusäzliche Informationen über Probleme in den Übersetzungsdaten zu erhalten.</p>',
-    '<p>Last registered file modification: <strong>%modification%</strong><br />Scanned files: <strong>%scanned%</strong><br />Locale hits: <strong>%hits%</strong><br /><br />Conflicting translations: <strong>%conflicts%</strong><br />Unassigned translations: <strong>%unassigned%</strong></p><p>You execute the i18nEditor in <strong>developer mode</strong>.</p>'
-        => '<p>Letzte erfasste Dateiänderung:: <strong>%modification%</strong><br />Durchsuchte Dateien: <strong>%scanned%</strong><br />Quelltext Treffer: <strong>%hits%</strong><br /><br />Kollidierende Übersetzungen: <strong>%conflicts%</strong><br />Nicht zugeordnete Übersetzungen: <strong>%unassigned%</strong></p><p>Sie führen den i18nEditor im <strong>Entwickler Modus</strong> aus.</p>',
+    '<p>Last registered file modification: <strong>%modification%</strong><br />Scanned files: <strong>%scanned%</strong><br />Locale hits: <strong>%hits%</strong><br /><br />Duplicate translations: <strong>%duplicates%</strong><br />Conflicting translations: <strong>%conflicts%</strong><br />Unassigned translations: <strong>%unassigned%</strong></p><p>You execute the i18nEditor in <strong>developer mode</strong>.</p>'
+        => '<p>Letzte erfasste Dateiänderung:: <strong>%modification%</strong><br />Durchsuchte Dateien: <strong>%scanned%</strong><br />Quelltext Treffer: <strong>%hits%</strong><br /><br />Mehrfache Übersetzungen: <strong>%duplicates%</strong><br />Kollidierende Übersetzungen: <strong>%conflicts%</strong><br />Nicht zugeordnete Übersetzungen: <strong>%unassigned%</strong></p><p>Sie führen den i18nEditor im <strong>Entwickler Modus</strong> aus.</p>',
     'License'
         => 'Lizenz',
     'Line'
@@ -199,6 +211,8 @@ return array(
         => 'Die Konfigurationsdatei <strong>%file%</strong> wurde in den Editor geladen.',
     'Load the selected configuration file into the editor'
         => 'Die ausgewählte Datei in den Editor laden',
+    'Locale'
+        => 'Sprache',
     'Locale id'
         => 'Locale ID',
     'Locale remark'
@@ -233,6 +247,8 @@ return array(
         => 'Passwort geändert',
     'Password repeat'
         => 'Passwort wiederholen',
+    'Pending translations'
+        => 'Anstehende Übersetzungen',
     'Please check the username and password and try again!'
         => 'Bitte prüfen Sie den angegebenen Benutzernamen sowie das Passwort und versuchen Sie es erneut!',
     'Please <a href="%link%" target="_blank">comment this help</a> to improve the kitCommand <b>%command%</b>.'
@@ -327,6 +343,8 @@ return array(
         => 'Die Erweiterung %extension% wurde erfolgreich entfernt.',
     'Successfull updated the extension %extension%.'
         => 'Die Erweiterung %extension% wurde erfolgreich aktualisiert.',
+    'Summary'
+        => 'Zusammenfassung',
     'Support'
         => 'Unterstützung',
     'Switch back to the administration of this user account'
@@ -368,6 +386,8 @@ return array(
         => 'Das Formular scheint kompromitiert worden zu sein, kann die Daten nicht ändern!',
     'The extension.json of <b>%name%</b> does not contain all definitions, check GUID, Group and Release!'
         => 'Die Beschreibungsdatei extension.json für die Erweiterung <b>%name%</b> enthält nicht alle Definitionen, prüfen Sie <i>GUID</i>, <i>Group</i> und <i>Release</i>!',
+    '<p>The i18nEditor has not detected the following sources in any kitFramework file.</p><p>Maybe the source is really not used anywhere, but it is also possible that a source is used in a file and the i18nEditor Parser is not able to assign the source to a translation.</p><p>Search for the sources in the extension files and check the context. This list will be refreshed at the next search run.</p>'
+        => '<p>Der i18nEditor konnte die folgenden Quelltexte in keiner kitFramework Datei finden.</p><p>Möglicherweise werden die Quelltexte tatsächlich nicht verwendet und können entfernt werden. Es ist jedoch genauso möglich, dass die Quelltexte in den Dateien verwendet werden und der i18nEditor Parser nicht in der Lage dazu ist die Zuordnung zu erkennen.</p><p>Suchen Sie nach den Quelltexten in den Dateien und prüfen Sie den jeweiligen Kontext. Diese Liste wird bei jedem Suchlauf neu erstellt.</p>',
     'The kitFramework was never checked for the existing locale sources and translations, please start a search run!'
         => 'Das kitFramework wurde noch nie nach Quelltexten für Übersetzungen durchsucht, bitte starten Sie einen Suchlauf!',
     'The parameter <code>%parameter%[%value%]</code> for the kitCommand <code>~~ %command% ~~</code> is unknown, please check the parameter and the given value!'
@@ -412,11 +432,25 @@ return array(
         => 'Diesem Benutzer sind keine Rechte zugewiesen',
     '<p>This list contain %count% translation sources.</p><p>Click at <em>ID</em> or at <em>References</em> for information in which files the sources are used.</p>'
         => '<p>Diese Liste enthält %count% Quelltexte als Basis für die Übersetzungen.</p><p>Klicken Sie auf <em>ID</em> oder <em>Verweise</em> um zu erfahren in welchen Dateien diese Quelltexte verwendet werden.</p>',
+    '<p>This list show you conflicting translations, which mean: the source is translated more then once and in a different way.</p><p>Remove conflicting translations or change the source if you need different translations.</p><p>Start a search run if you have solved a conflict to remove the entry from the list.</p>'
+        => '<p>Diese Liste zeigt Ihnen kollidierend Übersetzungen: der jeweilige Quelltext wurde mehr als einmal und auf unterschiedliche Weise übersetzt.</p><p>Entfernen sie kollidierende Übersetzungen oder ändern Sie den Quelltext, falls Sie unterschiedliche Übersetzungen benötigen.</p><p>Starten Sie einen Suchlauf, wenn Sie einen Konflikt gelöst haben.</p>',
+    '<p>This list shows duplicate translations.</p><p>Maybe it is not possible to avoid all duplicate translations, for example if the same translation is used by different extensions and they can be used independent. Nevertheless you should check these entries, perhaps you can avoid the one or other.</p>'
+        => '<p>Diese Liste zeigt Ihnen mehrfache Übersetzungen an.</p><p>Es ist wahrscheinlich nicht möglich jede mehrfache Übersetzung zu vermeiden, z.B. weil eine Übersetzung von unterschiedlichen Erweiterungen benötigt wird und diese nicht unbedingt gemeinsam installiert werden müssen. Gleichwohl sollten Sie die Einträge überprüfen, vielleicht lässt sich ja das eine oder andere Duplikat vermeiden.</p>',
     'This user are assigned %count% roles.'
         => 'Diesem Benutzer sind insgesamt <b>%count%</b> Rechte zugewiesen.',
     'This value is not a valid email address.'
         => 'Es wurde keine gültige E-Mail Adresse übergeben!',
+    'Translation'
+        => 'Übersetzung',
+    'Translation status'
+        => 'Status',
+    'Translation text'
+        => 'Übersetzung',
 
+    'Unassigned'
+        => 'Nicht zugeordnet',
+    'Unassigned translations'
+        => 'Nicht zugeordnete Übersetzungen',
     'Update available!'
         => 'Aktualisierung verfügbar!',
     'Updated the catalog data for <b>%name%</b>.'
@@ -444,6 +478,8 @@ return array(
     'Visit the Wiki for %command% and learn more about it!'
         => 'Besuchen Sie das Wiki zu %command% und erfahren Sie mehr über die Möglichkeiten!',
 
+    'Waiting'
+        => 'Anstehend',
     'We have send a link to your email address %email%.'
         => 'Wir haben Ihnen einen Link an Ihre E-Mail Adresse %email% gesendet.',
     'Welcome' =>

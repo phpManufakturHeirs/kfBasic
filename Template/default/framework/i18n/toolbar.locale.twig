@@ -3,10 +3,12 @@
     {% for item in toolbar %}
       <li{% if item.active %} class="active"{% endif %}>
         <a href="{{ item.link }}" title="{{ item.hint }}">
-          {% if item.name == 'about' %}
-            <i class="fa fa-question"></i>
-          {% elseif item.name == 'overview' %}
+          {% if item.name == 'summary' %}
             <i class="fa fa-th-list"></i>
+          {% elseif item.name == 'pending' %}
+            <i class="fa fa-clock-o"></i>
+          {% elseif item.name == 'edit' %}
+            <i class="fa fa-pencil-square-o"></i>
           {% endif %}
           <span class="visible-lg pull-right">&nbsp;{{ item.text }}</span>            
         </a>

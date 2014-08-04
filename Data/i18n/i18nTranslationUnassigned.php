@@ -47,6 +47,7 @@ class i18nTranslationUnassigned
     CREATE TABLE IF NOT EXISTS `$table` (
       `unassigned_id` INT(11) NOT NULL AUTO_INCREMENT,
       `file_path` TEXT NOT NULL,
+      `extension` VARCHAR(64) NOT NULL DEFAULT '',
       `locale_locale` VARCHAR(2) NOT NULL DEFAULT 'EN',
       `locale_source` TEXT NOT NULL,
       `translation_text` TEXT NOT NULL,
@@ -110,6 +111,37 @@ EOD;
         try {
             $SQL = "SELECT COUNT(*) FROM `".self::$table_name."`";
             return $this->app['db']->fetchColumn($SQL);
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Select all unassigned records, ordered by `locale_source`.
+     * Return FALSE if no records exists
+     *
+     * @throws \Exception
+     * @return Ambigous <boolean, array>
+     */
+    public function selectAll()
+    {
+        try {
+            $SQL = "SELECT * FROM `".self::$table_name."` ORDER BY `locale_source` ASC";
+            $results = $this->app['db']->fetchAll($SQL);
+            $unassigneds = array();
+            if (is_array($results)) {
+                foreach ($results as $result) {
+                    $unassigned = array();
+                    foreach ($result as $key => $value) {
+                        $unassigned[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+                        if ($key == 'file_path') {
+                            $unassigned[$key] = realpath($value);
+                        }
+                    }
+                    $unassigneds[] = $unassigned;
+                }
+            }
+            return (!empty($unassigneds)) ? $unassigneds : false;
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }

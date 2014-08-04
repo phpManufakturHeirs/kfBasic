@@ -167,6 +167,15 @@ EOD;
         }
     }
 
+    /**
+     * Select all records for the given ID and locale.
+     * Return FALSE if no record match.
+     *
+     * @param integer $locale_id
+     * @param string $locale
+     * @throws \Exception
+     * @return Ambigous <boolean, array>
+     */
     public function selectByLocaleID($locale_id, $locale)
     {
         try {
@@ -187,4 +196,21 @@ EOD;
             throw new \Exception($e);
         }
     }
+
+    /**
+     * Delete the record for the given file ID
+     *
+     * @param integer $file_id
+     * @throws \Exception
+     */
+    public function delete($file_id)
+    {
+        try {
+            $this->app['db']->delete(self::$table_name, array('file_id' => $file_id));
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+
 }

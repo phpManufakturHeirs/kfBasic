@@ -220,6 +220,13 @@ class Configuration
                     'Wednesday',
                     'Weekday',
                     'Weekdays'
+                ),
+                'ignore' => array(
+                    '%path% %error%',
+                    '%url%',
+                    '&nbsp;',
+                    '[%s] %s',
+                    '[%file%:%line%] Excel Error: %error%'
                 )
             ),
             'editor' => array(

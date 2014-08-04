@@ -7,6 +7,8 @@
             <i class="fa fa-warning"></i>
           {% elseif item.name == 'unassigned' %}
             <i class="fa fa-unlink"></i>
+          {% elseif item.name == 'duplicates' %}
+            <i class="fa fa-copy"></i>
           {% endif %}
           <span class="visible-lg pull-right">&nbsp;{{ item.text }}</span>            
         </a>

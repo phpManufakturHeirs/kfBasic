@@ -634,6 +634,13 @@ $admin->get('/i18n/editor/scan',
 $admin->get('/i18n/editor/locale/{locale}',
     'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerLocale')
     ->value('locale', 'en');
+$admin->get('/i18n/editor/locale/{locale}/pending',
+    'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerLocalePending');
+$admin->get('/i18n/editor/translation/edit/id/{translation_id}',
+    'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerTranslationEdit')
+    ->assert('translation_id', '\d+')
+    ->value('translation_id', -1);
+
 $admin->get('/i18n/editor/sources',
     'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerSources');
 $admin->get('/i18n/editor/sources/detail/{locale_id}',
@@ -647,11 +654,13 @@ $admin->get('/i18n/editor/problems/conflicts',
     'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerProblemsConflicts');
 $admin->get('/i18n/editor/problems/unassigned',
     'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerProblemsUnassigned');
+$admin->get('/i18n/editor/problems/duplicates',
+    'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerProblemsDuplicates');
 
 $admin->get('/i18n/editor/table/create',
-    'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerCreateTable');
+    'phpManufaktur\Basic\Control\i18nEditor\i18nParser::ControllerCreateTable');
 $admin->get('/i18n/editor/table/drop',
-    'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerDropTable');
+    'phpManufaktur\Basic\Control\i18nEditor\i18nParser::ControllerDropTable');
 
 // send a testmail
 $admin->get('/test/mail',

@@ -29,11 +29,40 @@
     {% include '@phpManufaktur/Basic/Template/default/framework/i18n/toolbar.twig' %}
     {% include '@phpManufaktur/Basic/Template/default/framework/i18n/toolbar.problems.twig' with {'toolbar': toolbar_problems} %}
     
-    <div class="page-header">
-      <h1>{{ 'Unassigned translations'|trans }} <small>i18nEditor</small></h1>
-    </div>
+    <h1>{{ 'Unassigned translations'|trans }} <small>i18nEditor</small></h1>
+    
+    {% if unassigneds|length > 0 %}
+      <div class="well">
+        {{ '<p>The i18nEditor has not detected the following sources in any kitFramework file.</p><p>Maybe the source is really not used anywhere, but it is also possible that a source is used in a file and the i18nEditor Parser is not able to assign the source to a translation.</p><p>Search for the sources in the extension files and check the context. This list will be refreshed at the next search run.</p>'|trans }}
+      </div>
+    {% endif %}
     
     {{ alert }}
+
+    {% if unassigneds|length > 0 %}
+      <div class="table-responsive conflicts">
+        <table class="table table-striped table-condensed table-hover">
+          <thead>
+            <tr>
+              <th>{{ 'Extension'|trans }}</th>
+              <th>{{ 'Source'|trans }}</th>
+              <th>{{ 'Locale'|trans }}</th>
+              <th>{{ 'Translation'|trans }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for unassigned in unassigneds %}
+              <tr>
+                <td><span title="{{ unassigned.file_path }}">{{ unassigned.extension }}</span></td>
+                <td class="source">{{ unassigned.locale_source|escape('html') }}</td>
+                <td>{{ unassigned.locale_locale }}</td>
+                <td class="source">{{ unassigned.translation_text|escape('html') }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
     
   </div>
 {% endblock content %}
