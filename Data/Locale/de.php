@@ -215,10 +215,14 @@ return array(
         => 'Sprache',
     'Locale id'
         => 'Locale ID',
+    'Locale locale'
+        => 'Sprache',
     'Locale remark'
         => 'Notiz',
     'Locale source'
         => 'Quelltext',
+    'Locale type'
+        => 'Typ',
     'Login' =>
         'Anmelden',
     'Logout' =>
@@ -238,6 +242,8 @@ return array(
 
     'Oooops, missing the alert which should be prompted here ... '
         => 'Hoppla, da fehlt die Meldung die hier eigentlich angezeigt werden sollte ...',
+    'One or more translation for this source is conflicting!'
+        => 'Eine oder mehrere Übersetzungen für diesen Quelltext kollidieren und sind widersprüchlich.',
     'Open this helpfile in a new window'
         => 'Diese Hilfedatei in einem neuen Fenster öffnen',
 
@@ -382,6 +388,8 @@ return array(
         => 'Die Erweiterung mit der ID %extension_id% existiert nicht!',
     'The file %file% does not exists in Gist %gist_id%!'
         => 'Die Datei %file% existiert nicht im Gist %gist_id%',
+    'The form is not valid, please check your input and try again!'
+        => 'Das Formular ist nicht gültig, bitte überprüfen Sie Ihre Eingabe und übermitteln Sie das Formular erneut!',
     'The form seems to be compromitted, can not check the data!'
         => 'Das Formular scheint kompromitiert worden zu sein, kann die Daten nicht ändern!',
     'The extension.json of <b>%name%</b> does not contain all definitions, check GUID, Group and Release!'
@@ -446,6 +454,8 @@ return array(
         => 'Status',
     'Translation text'
         => 'Übersetzung',
+    'Translations'
+        => 'Übersetzungen',
 
     'Unassigned'
         => 'Nicht zugeordnet',
