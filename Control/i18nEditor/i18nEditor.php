@@ -373,6 +373,7 @@ class i18nEditor extends i18nParser
                 'alert' => $this->getAlert(),
                 'config' => self::$config,
                 'info' => self::$info,
+                'locale_locale' => $locale,
                 'pendings' => $pendings
             ));
     }
@@ -844,6 +845,14 @@ class i18nEditor extends i18nParser
             ));
     }
 
+    protected static function sortLocaleTranslations($a, $b)
+    {
+        $a = strtolower(strip_tags($a));
+        $b = strtolower(strip_tags($b));
+
+        return strcasecmp($a, $b);
+    }
+
     /**
      * Controller to check Translations and write/backup locale files
      *
@@ -913,8 +922,10 @@ class i18nEditor extends i18nParser
                 $file_array = $this->getLocaleFileArray($locale_path);
                 // add or update the current translation
                 $file_array[$data['locale_source']] = $data['translation_text'];
+
                 // sort the array
-                ksort($file_array);
+                //ksort($file_array);
+                uksort($file_array, array('self', 'sortLocaleTranslations'));
 
                 $locale_array = array();
                 foreach ($file_array as $key => $value) {

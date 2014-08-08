@@ -21,24 +21,10 @@ return array(
     => '- alle Dateien -',
   '- please select -'
     => '- bitte auswählen -',
-  '<b>Error</b>: Can\'t execute the kitCommand: <i>%command%</i>'
-    => '<b>Fehler</b>: Das kitCommand <i>%command%</i> konnte nicht ausgeführt werden.',
-  '<b>Error</b>: Can\'t execute the kitFilter: <i>%filter%</i>'
-    => '<b>Fehler</b>: Konnte den kitFilter: <i>%filter%</i> nicht ausführen!',
-  '<em>Custom translations</em> enable you to adapt the <em>regular</em> translations to your needs.'
-    => '<em>Angepasste Übersetzungen</em> ermöglichen es Ihnen, die <em>regulären</em> Übersetzungen zu überschreiben und auf Ihre Anforderungen abzustimmen.',
-  '<p>The i18nEditor has not detected the following sources in any kitFramework file.</p><p>Maybe the source is really not used anywhere, but it is also possible that a source is used in a file and the i18nEditor Parser is not able to assign the source to a translation.</p><p>Search for the sources in the extension files and check the context. This list will be refreshed at the next search run.</p>'
-    => '<p>Der i18nEditor konnte die folgenden Quelltexte in keiner kitFramework Datei finden.</p><p>Möglicherweise werden die Quelltexte tatsächlich nicht verwendet und können entfernt werden. Es ist jedoch genauso möglich, dass die Quelltexte in den Dateien verwendet werden und der i18nEditor Parser nicht in der Lage dazu ist die Zuordnung zu erkennen.</p><p>Suchen Sie nach den Quelltexten in den Dateien und prüfen Sie den jeweiligen Kontext. Diese Liste wird bei jedem Suchlauf neu erstellt.</p>',
-  '<p>This list contain %count% translation sources.</p><p>Click at <em>ID</em> or at <em>References</em> for information in which files the sources are used.</p>'
-    => '<p>Diese Liste enthält %count% Quelltexte als Basis für die Übersetzungen.</p><p>Klicken Sie auf <em>ID</em> oder <em>Verweise</em> um zu erfahren in welchen Dateien diese Quelltexte verwendet werden.</p>',
-  '<p>This list show you conflicting translations, which mean: the source is translated more then once and in a different way.</p><p>Remove conflicting translations or change the source if you need different translations.</p><p>Start a search run if you have solved a conflict to remove the entry from the list.</p>'
-    => '<p>Diese Liste zeigt Ihnen kollidierend Übersetzungen: der jeweilige Quelltext wurde mehr als einmal und auf unterschiedliche Weise übersetzt.</p><p>Entfernen sie kollidierende Übersetzungen oder ändern Sie den Quelltext, falls Sie unterschiedliche Übersetzungen benötigen.</p><p>Starten Sie einen Suchlauf, wenn Sie einen Konflikt gelöst haben.</p>',
-  '<p>This list shows duplicate translations.</p><p>Maybe it is not possible to avoid all duplicate translations, for example if the same translation is used by different extensions and they can be used independent. Nevertheless you should check these entries, perhaps you can avoid the one or other.</p>'
-    => '<p>Diese Liste zeigt Ihnen mehrfache Übersetzungen an.</p><p>Es ist wahrscheinlich nicht möglich jede mehrfache Übersetzung zu vermeiden, z.B. weil eine Übersetzung von unterschiedlichen Erweiterungen benötigt wird und diese nicht unbedingt gemeinsam installiert werden müssen. Gleichwohl sollten Sie die Einträge überprüfen, vielleicht lässt sich ja das eine oder andere Duplikat vermeiden.</p>',
-  'A <em>custom translation</em> will be saved in a separated file and not overwritten when the extension is updated.'
-    => 'Eine <em>angepasste Übersetzung</em> wird in einer gesonderten Datei gespeichert und nicht überschrieben, wenn die Erweiterung aktualisiert wird.',
   'A brief summary of the translation status'
     => 'Eine Zusammenfassung des Übersetzungsstatus',
+  'A <em>custom translation</em> will be saved in a separated file and not overwritten when the extension is updated.'
+    => 'Eine <em>angepasste Übersetzung</em> wird in einer gesonderten Datei gespeichert und nicht überschrieben, wenn die Erweiterung aktualisiert wird.',
   'Abort'
     => 'Abbruch',
   'Access denied'
@@ -49,10 +35,10 @@ return array(
     => 'Benutzerkonto',
   'Accounts'
     => 'Benutzerkonten',
-  'Actual SMTP Settings'
-    => 'Aktuelle SMTP Einstellungen',
   'Actual catalog information: %last_release%, online: %release% (online is newer, we will update!)'
     => 'Aktuelle Katalog Information: %last_release%, online: %release% (die online Information ist neuer, es wird eine Aktualisierung durchgeführt)',
+  'Actual SMTP Settings'
+    => 'Aktuelle SMTP Einstellungen',
   'Add the extension <b>%name%</b> to the catalog.'
     => 'Die Erweiterung <b>%name%</b> wurde dem Katalog hinzugefügt.',
   'Add the extension <b>%name%</b> to the register.'
@@ -91,8 +77,12 @@ return array(
     => 'Konnte die E-Mail nicht an %email% übermitteln!',
   'Cancel'
     => 'Abbruch',
+  'captcha-timeout'
+    => 'Zeitüberschreitung bei der CAPTCHA Übermittlung, bitte versuchen Sie es erneut.',
   'Check the email settings and send a email to the webmaster for testing purpose'
     => 'E-Mail Einstellungen kontrollieren und eine Test E-Mail an den Webmaster schicken',
+  'commercial use only'
+    => '- nur kommerzielle Verwendung -',
   'Configuration'
     => 'Konfiguration',
   'Configuration file'
@@ -119,6 +109,8 @@ return array(
     => 'Angepasst',
   'Custom translations'
     => 'Angepasste Übersetzungen',
+  '<em>Custom translations</em> enable you to adapt the <em>regular</em> translations to your needs.'
+    => '<em>Angepasste Übersetzungen</em> ermöglichen es Ihnen, die <em>regulären</em> Übersetzungen zu überschreiben und auf Ihre Anforderungen abzustimmen.',
   'Data replication'
     => 'Datenabgleich',
   'Delete account'
@@ -165,6 +157,10 @@ return array(
     => 'Bei der Ausführung des kitCommand <b>%command%</b> ist ein Fehler aufgetreten',
   'Error executing the kitFilter <b>%filter%</b>'
     => 'Fehler bei der Ausführung des kitFilter <strong>%filter%</strong>',
+  '<b>Error</b>: Can\'t execute the kitCommand: <i>%command%</i>'
+    => '<b>Fehler</b>: Das kitCommand <i>%command%</i> konnte nicht ausgeführt werden.',
+  '<b>Error</b>: Can\'t execute the kitFilter: <i>%filter%</i>'
+    => '<b>Fehler</b>: Konnte den kitFilter: <i>%filter%</i> nicht ausführen!',
   'Execute'
     => 'Ausführen',
   'Execute Update'
@@ -205,16 +201,36 @@ return array(
     => 'Hallo %name%,<br />Sie möchten Ihr Passwort ändern, bitte geben Sie das neue Passwort ein, wiederholen Sie es zur Sicherheit und schicken Sie das Formular ab.<br />Falls Sie Ihr Passwort nicht ändern möchten, verlassen Sie bitte einfach diesen Dialog.',
   'Hello %name%,<br />you have asked to create a new password for the kitFramework hosted at %server%.'
     => 'Hallo %name%,<br />Sie haben darum gebeten ein neues Passwort für das kitFramework auf %server% zu erhalten.',
+  'help'
+    => 'Hilfe',
   'Help'
     => 'Hilfe',
-  'ID'
-    => 'ID',
+  'help_accounts_list_json'
+    => '<p>Diese Datei ermöglicht es Ihnen die angezeigten Spalten und die Sortierung der Felder in der <a href="%FRAMEWORK_URL%/admin/accounts/list" target="_blank">Übersicht der Benutzerkonten</a> zu ändern.</p><p>Verfügbare Felder für die Verwendung in <var>columns</var> und <var>list > order > by</var> sind: <var>id, username, email, password, displayname, last_login, roles, guid, guid_timestamp, guid_status, status</var> und <var>timestamp</var>. Mit <var>list > rows_per_page</var> legen Sie fest, wie viele Benutzerkonten pro Seite angezeigt werden.</p>',
+  'help_cms_json'
+    => '<p>Diese Konfigurationsdatei enthält Informationen zu dem übergeordneten Content Management System (CMS). Falls Sie die URL der Website verändert haben oder sich das Stammverzeichnis auf dem Webserver geändert hat, sollten Sie die Einstellungen in dieser Datei prüfen und anpassen.</p><p>Das <a href="https://github.com/phpManufaktur/kitFramework/wiki/kitFramework-%23-Configuration#cmsjson" target="_blank">kitFramework WIKI</a> erläutert Ihnen alle Einstellungsmöglichkeiten für die <var>cms.json</var>.</p>',
+  'help_config_jsoneditor_json'
+    => '<p>Diese Konfigurationsdatei enthält die Einstellungen für den Konfigurations Editor, den Sie just in diesem Moment verwenden.</p><p>Normalerweise ist es nicht erforderlich an diesen Einstellungen etwas zu ändern. Die Datei enthält die Hilfeinformationen, die zu den einzelnen Konfigurationsdateien angezeigt werden sowie die Liste der verfügbaren Konfigurationsdateien um ein Überprüfen des Systems bei jedem Aufruf des Editors zu verhindern.</p><p>Falls Sie eine Konfigurationsdatei vermissen, z.B. für eine gerade erst installierte Erweiterung, verwenden Sie bitte den <key>Suchlauf</key> Schalter um ein erneutes Durchsuchen des Systems zu erzwingen.</p>',
+  'help_doctrine_cms_json'
+    => '<p>Diese Konfigurationsdatei enthält die Datenbankeinstellungen. Wenn Sie die Datenbankeinstellungen für das übergeordnete Content Management System (CMS) ändern, müssen Sie die Einstellungen in dieser Datei ebenfalls anpassen - andernfalls wird das kitFramework nicht mehr korrekt funktionieren.</p><p>Das <a href="https://github.com/phpManufaktur/kitFramework/wiki/kitFramework-%23-Configuration#doctrinecmsjson" target="_blank">kitFramework WIKI</a> erläutert Ihnen alle Einstellungsmöglichkeiten für die <var>doctrine.cms.json</var>.</p>',
+  'help_framework_json'
+    => '<p>Dies ist die zentrale Konfigurationsdatei für das kitFramework. Hier können Sie den <var>DEBUG</var> und <var>CACHE</var> Modus ein- oder ausschalten und das kitFramework anweisen stets Ihre benutzerdefinierten Templates vor den Standardvorlagen zu laden.</p><p>Das <a href="https://github.com/phpManufaktur/kitFramework/wiki/kitFramework-%23-Configuration" target="_blank">kitFramework WIKI</a> erläutert Ihnen alle Einstellungsmöglichkeiten für die <var>framework.json</var>.</p>',
+  'help_proxy_json'
+    => '<p>Falls Sie einen Proxy Server verwenden benötigen Sie diese Konfigurationsdatei. Bitte fragen Sie Ihren Systemadministrator nach den benötigten Einstellungen.</p>',
+  'help_swift_cms_json'
+    => '<p>Diese Konfigurationsdatei wird benötigt um die E-Mail Einstellungen für das kitFramework festzulegen. Bitte fragen Sie Ihren E-Mail Anbieter nach den benötigten Einstellungen für den SMTP Server, Port, Benutzername und Passwort.</p><p>Sie können die E-Mail Einstellungen überprüfen, in dem Sie eine <a href="%FRAMEWORK_URL%/admin/test/mail" target="_blank">Testmail versenden</a>.</p><p>Das <a href="https://github.com/phpManufaktur/kitFramework/wiki/kitFramework-%23-Configuration#swiftcmsjson" target="_blank">kitFramework WIKI</a> erläutert Ihnen alle Einstellungsmöglichkeiten für die <var>swift.cms.json</var>.</p>',
+  'i18n'
+    => 'i18n',
   'Id'
+    => 'ID',
+  'ID'
     => 'ID',
   'If you have forgotten your password, you can order a link to create a new one. Please type in the email address assigned to your account and submit the form.'
     => 'Falls Sie Ihr Passwort vergessen haben, können Sie einen Link anfordern um ein neues Passwort zu erstellen. Bitte tragen Sie die E-Mail Adresse ein, die ihrem Konto zugeordnet ist und übermitteln Sie das Formular.',
   'If you have not asked to create a new password, just do nothing. The link above is valid only for 24 hours and your actual password has not changed now.'
     => 'Falls Sie kein neues Passwort angefordert haben, ignorieren Sie diese E-Mail bitte. Der o.a. Link ist lediglich für 24 Stunden gültig und ihr aktuelles Passwort wurde nicht geändert.',
+  'incorrect-captcha-sol'
+    => 'Der übermittelte CAPTCHA ist nicht korrekt.',
   'Info'
     => 'Info',
   'Information about the i18nEditor'
@@ -229,10 +245,36 @@ return array(
     => 'Ungenügende Zugangsberechtigung',
   'Internationalization'
     => 'Internationalisierung',
+  'invalid-request-cookie'
+    => 'Ungültige ReCaptcha Anfrage',
+  'invalid-site-private-key'
+    => 'Der private Schlüssel für den ReCaptcha Service ist ungültig, prüfen Sie die Einstellungen!',
   'Issues'
     => 'Mängel',
   'Json path'
     => 'JSON Pfad',
+  'kitCommand - Alert'
+    => 'kitCommand - Benachrichtigung',
+  'kitCommand - Alert container'
+    => 'kitCommand - Benachrichtigungscontainer',
+  'kitCommand - General help container'
+    => 'kitCommand - Allgemeine Hilfe',
+  'kitFramework - Account'
+    => 'kitFramework - Benutzerkonto',
+  'kitFramework - First Login'
+    => 'kitFramework - Erste Anmeldung',
+  'kitFramework - Link transmitted'
+    => 'kitFramework - Link übermittelt',
+  'kitFramework E-Mail Test'
+    => 'kitFramework E-Mail Test',
+  'kitFramework email test'
+    => 'kitFramework E-Mail Test',
+  'kitFramework Error'
+    => 'kitFramework Fehler',
+  'kitFramework password reset'
+    => 'kitFramework Passwort zurücksetzen',
+  'kitFramework User Account'
+    => 'kitFramework Benutzerkonto',
   'Last registered file modification: <strong>%modification%</strong><br />Scanned files: <strong>%scanned%</strong><br />Locale hits: <strong>%hits%</strong>'
     => 'Letzte erfasste Dateiänderung: <strong>%modification%</strong><br />Durchsuchte Dateien: <strong>%scanned%</strong><br />Quelltext Treffer: <strong>%hits%</strong>',
   'License'
@@ -283,18 +325,26 @@ return array(
     => 'Benötige den Parameter: %parameter%',
   'Missing the user ID!'
     => 'Vermisse die Anwender ID!',
+  'Need help? Please visit the <a href='
+    => 'Benötigen Sie Hilfe? Bitte besuchen Sie die <a href="%url%" target="_blank">phpManufaktur Support Group</a>.',
   'New kitFramework release available!'
     => 'Es ist eine neue kitFramework Release verfügbar!',
   'No account? <a href="%register_url%">Register a user account for DogPaw</a>!'
     => 'Kein Benutzerkonto? <a href="%register_url%">Melden Sie sich kostenlos an</a>!',
   'No fitting user role dectected!'
     => 'Es wurde kein passendes Benutzerrecht gefunden',
+  'No sources available, please <a href='
+    => 'Es sind keine Quelltexte verfügbar, bitte <a href="%url%">starten Sie einen Suchlauf</a>!',
   'One or more translation for this source is conflicting!'
     => 'Eine oder mehrere Übersetzungen für diesen Quelltext kollidieren und sind widersprüchlich.',
   'Oooops, missing the alert which should be prompted here ... '
     => 'Hoppla, da fehlt die Meldung die hier eigentlich angezeigt werden sollte ...',
+  'Ooops, don\'t know how to handle the locale source \'%source%\', please check the protocol.'
+    => 'Weiß nicht, wie ich die Quelle \'%source%\' handhaben soll, bitte prüfen Sie das Protokoll!',
   'Open this helpfile in a new window'
     => 'Diese Hilfedatei in einem neuen Fenster öffnen',
+  'Parse the kitFramework for locale strings, add custom translations and administrate the internationalization'
+    => 'Das kitFramework nach Lokalisierungen durchsuchen, benutzerdefinierte Übersetzungen hinzufügen und die Internationalisierungen verwalten.',
   'Password'
     => 'Passwort',
   'Password changed'
@@ -303,10 +353,14 @@ return array(
     => 'Passwort wiederholen',
   'Pending translations'
     => 'Anstehende Übersetzungen',
-  'Please <a href="%link%" target="_blank">comment this help</a> to improve the kitCommand <b>%command%</b>.'
-    => 'Bitte <a href="%link%" target="_blank">kommentieren und ergänzen Sie diese Hilfe</a> um das kitCommand <b>%command%</b> zu verbessern.',
+  'Please <a href='
+    => 'Bitte <a href="%source%">besuchen Sie diese Seite</a> um den Inhalt dieses iFrame zu sehen.',
+  'Please be aware that <em>translations</em> for the locale <strong>EN</strong> (english) are more often than not identical with the <em>source</em> - for this reason they will be only added to a language file if the <em>translation</em> differ from <em>source</em>.'
+    => 'Bitte beachten Sie, dass <em>Übersetzungen</em> für die Sprache <strong>EN</strong> (Englisch) meistens mit den <em>Quelltexten</em> identisch sind - aus diesem Grund werden der Sprachdatei in diesem Fall nur Übersetzungen hinzugefügt, wenn die <em>Übersetzung</em> vom <em>Quelltext</em> abweicht.',
   'Please check the username and password and try again!'
     => 'Bitte prüfen Sie den angegebenen Benutzernamen sowie das Passwort und versuchen Sie es erneut!',
+  'Please <a href="%link%" target="_blank">comment this help</a> to improve the kitCommand <b>%command%</b>.'
+    => 'Bitte <a href="%link%" target="_blank">kommentieren und ergänzen Sie diese Hilfe</a> um das kitCommand <b>%command%</b> zu verbessern.',
   'Please login to the kitFramework with your username or email address and the assigned password. Your can also use your username and password for the CMS.'
     => 'Bitte melden Sie sich am kitFramework mit Ihrem Benutzernamen oder Ihrer E-Mail Adresse und Ihrem Passwort an. Sie können sich auch mit Ihrem Benutzernamen und Passwort für das CMS anmelden.',
   'Please report all issues and help to improve %command%!'
@@ -321,18 +375,24 @@ return array(
     => 'Probleme',
   'Problems with the translation data'
     => 'Probleme mit den Übersetzungsdaten',
+  'published at'
+    => 'veröffentlicht am',
   'Real active user roles'
     => 'Tatsächlich aktive Anwenderrechte',
+  'Redirect'
+    => 'Weiterleitung',
   'Referenced files'
     => 'Verweisende Dateien',
   'References'
     => 'Verweise',
   'Regards, Your kitFramework team'
     => 'Mit freundlichen Grüßen<br />Ihr kitFramework Team',
-  'Repeat Password'
-    => 'Passwort wiederholen',
+  'Release'
+    => 'Ausgabe',
   'Repeat by pattern, i.e. at the last tuesday of the month'
     => 'Nach einem Muster, z.B. am letzten Donnerstag im Monat',
+  'Repeat Password'
+    => 'Passwort wiederholen',
   'Repeat sequently at day x of month'
     => 'Regelmäßig am Tag x des Monats',
   'Report problems'
@@ -351,6 +411,10 @@ return array(
     => 'Das kitFramework nach Konfigurationsdateien durchsuchen',
   'Scan the online catalog for available extensions'
     => 'Den online Katalog nach verfügbaren Erweiterungen durchsuchen',
+  'Secured area'
+    => 'Geschützter Bereich',
+  'Select'
+    => 'Auswählen',
   'Select day'
     => 'Wochentag auswählen',
   'Select pattern'
@@ -359,10 +423,16 @@ return array(
     => 'Dem Benutzer %name% wurde eine Kontoinformation zugesendet.',
   'Send account info to the user'
     => 'Dem Benutzer eine Kontoinformation zusenden',
+  'Send email'
+    => 'E-Mail senden',
   'Send email (only if the password has changed)'
     => 'Zugangsdaten senden (nur wenn das Passwort geändert wurde)',
   'Show a list of all installed kitCommands'
     => 'Eine Liste mit den installierten kitCommands anzeigen',
+  'Show the given kitCommand expression but dont execute it'
+    => 'Den übergebenen kitCommand Ausdruck anzeigen aber nicht ausführen.',
+  'Simulate the given kitCommand expression'
+    => 'Den übergebenen kitCommand Ausdruck simulieren',
   'Sorry, but only Administrators are allowed to access this kitFramework extension.'
     => 'Ihre Berechtigung ist nicht ausreichend, nur Administratoren dürfen das kitFramework CMS Tool verwenden.',
   'Sorry, but the configuration file <strong>%filename%</strong> was not found. Please be aware that this controller may fail if you try to open a configuration file of a just installed extension, perhaps the extension must be executed first and you should also do a <key>rescan</key> for the configuration files.'
@@ -379,14 +449,20 @@ return array(
     => 'Quelltexte',
   'Start search run'
     => 'Suchlauf starten',
+  'Status'
+    => 'Status',
   'Submit'
     => 'Übermitteln',
+  'Successful created the tables for the i18nEditor.'
+    => 'Tabellen für den i18nEditor erfolgreich angelegt.',
   'Successful scanned the kitFramework for *.json configuration files'
     => 'Das kitFramework wurde nach *.json Konfigurationsdateien durchsucht',
   'Successfull created a account for the user %name%.'
     => 'Für den Benutzer %name% wurde ein Konto eingerichtet.',
   'Successfull installed the extension %extension%.'
     => 'Die Erweiterung %extension% wurde erfolgreich installiert.',
+  'Successfull put the locale entries to the locale file.'
+    => 'Die Übersetzungen wurden erfolgreich in die Übersetzungsdatei geschrieben.',
   'Successfull scanned the kitFramework for installed extensions.'
     => 'Das kitFramework wurde nach installierten Erweiterungen durchsucht.',
   'Successfull scanned the kitFramework online catalog for available extensions.'
@@ -401,6 +477,8 @@ return array(
     => 'Zur Verwaltung dieses Benutzerkontos zurückkehren',
   'Switch to developer mode to get also information about problems and conflicts.'
     => 'Wechseln Sie in den <em>Entwickler Modus</em>, um zusätzlich Informationen über Probleme und Konflikte zu erhalten.',
+  'Switch to the kitFramework Entry-points'
+    => 'Zu den kitFramework Zugangspunkten wechseln',
   'Switch to this user to see the real active roles'
     => 'Zu diesem Anwender umschalten um die aktiven Rechte zu sehen',
   'Template'
@@ -409,8 +487,6 @@ return array(
     => 'Test E-Mail',
   'Thank you for using the kitFramework'
     => 'Vielen Dank für den Einsatz des kitFramework',
-  'The ROLE_USER is needed if you want enable the user to access and change his own account. The ROLE_ADMIN is the highest available role and grant access to really everything.'
-    => 'Das Recht ROLE_USER ist erforderlich um einem Benutzer Zugriff auf sein Konto zu ermöglichen. Das Recht ROLE_ADMIN ist das höchste verfügbare Recht und garantiert einen uneingeschränkten Zugriff auf alle Funktionen des kitFramework.',
   'The account for the user %name% was successfull deleted.'
     => 'Das Benutzerkonto für %name% wurde gelöscht.',
   'The account was not changed.'
@@ -427,6 +503,8 @@ return array(
     => 'Die Konfigurationsdatei <strong>%file%</strong> wurde erfolgreich gesichert.',
   'The controller has detected <strong>%count%</strong> configuration files with the name <strong>%filename%</strong> and loaded the first hit into the editor.'
     => 'Der Controller hat <strong>%count%</strong> Konfigurationsdateien mit der Bezeichnung <strong>%filename%</strong> gefunden und den ersten Treffer in den Editor geladen.',
+  'The displayname %displayname% is already in use by another user, please select another one!'
+    => 'Der Anzeigename <em>%displayname%</em> wird bereits von einem anderen Anwender verwendet, bitte wählen Sie eine alternative Bezeichnung!',
   'The email address %email% is already used by another account!'
     => 'Die E-Mail Adresse %email% wird bereits von einem anderen Benutzerkonto verwendet!',
   'The email address %email% is invalid!'
@@ -437,10 +515,18 @@ return array(
     => 'Die Beschreibungsdatei extension.json für die Erweiterung <b>%name%</b> enthält nicht alle Definitionen, prüfen Sie <i>GUID</i>, <i>Group</i> und <i>Release</i>!',
   'The file %file% does not exists in Gist %gist_id%!'
     => 'Die Datei %file% existiert nicht im Gist %gist_id%',
+  'The file <i>%file%</i> does not exists!'
+    => 'Die Datei <em>%file%</em> existiert nicht!',
+  'The file <strong>%file%</strong> does not exists!'
+    => 'Die Datei <strong>%file%</strong> existiert nicht!',
+  'The file <strong>%file%</strong> is not readable!'
+    => 'Die Datei <strong>%file%</strong> ist nicht lesbar!',
   'The form is not valid, please check your input and try again!'
     => 'Das Formular ist nicht gültig, bitte überprüfen Sie Ihre Eingabe und übermitteln Sie das Formular erneut!',
   'The form seems to be compromitted, can not check the data!'
     => 'Das Formular scheint kompromitiert worden zu sein, kann die Daten nicht ändern!',
+  '<p>The i18nEditor has not detected the following sources in any kitFramework file.</p><p>Maybe the source is really not used anywhere, but it is also possible that a source is used in a file and the i18nEditor Parser is not able to assign the source to a translation.</p><p>Search for the sources in the extension files and check the context. This list will be refreshed at the next search run.</p>'
+    => '<p>Der i18nEditor konnte die folgenden Quelltexte in keiner kitFramework Datei finden.</p><p>Möglicherweise werden die Quelltexte tatsächlich nicht verwendet und können entfernt werden. Es ist jedoch genauso möglich, dass die Quelltexte in den Dateien verwendet werden und der i18nEditor Parser nicht in der Lage dazu ist die Zuordnung zu erkennen.</p><p>Suchen Sie nach den Quelltexten in den Dateien und prüfen Sie den jeweiligen Kontext. Diese Liste wird bei jedem Suchlauf neu erstellt.</p>',
   'The kitFramework was never checked for the existing locale sources and translations, please start a search run!'
     => 'Das kitFramework wurde noch nie nach Quelltexten für Übersetzungen durchsucht, bitte starten Sie einen Suchlauf!',
   'The parameter <code>%parameter%[%value%]</code> for the kitCommand <code>~~ %command% ~~</code> is unknown, please check the parameter and the given value!'
@@ -463,36 +549,80 @@ return array(
     => 'Es existiert kein Datensatz mit der ID %id%!',
   'The requested page could not be found!'
     => 'Die angeforderte Seite wurde nicht gefunden!',
+  'The ROLE_USER is needed if you want enable the user to access and change his own account. The ROLE_ADMIN is the highest available role and grant access to really everything.'
+    => 'Das Recht ROLE_USER ist erforderlich um einem Benutzer Zugriff auf sein Konto zu ermöglichen. Das Recht ROLE_ADMIN ist das höchste verfügbare Recht und garantiert einen uneingeschränkten Zugriff auf alle Funktionen des kitFramework.',
+  'The status of this translation is set to <strong>CONFLICT</strong>. This problem must be solved by a developer.'
+    => 'Der Status dieser Übersetzung is auf <strong>CONFLICT</strong> gesetzt. Dieses Problem muss durch einen Entwickler gelöst werden.',
   'The submitted GUID is expired and no longer valid.<br />Please <a href="%password_forgotten%">order a new link</a>.'
     => 'Die übermittelte GUID ist abgelaufen und nicht länger gültig.<br />Bitte <a href="%password_forgotten%">fordern Sie einen neuen Link an</a>.',
   'The submitted GUID was already used and is no longer valid.<br />Please <a href="%password_forgotten%">order a new link</a>.'
     => 'Die übermittelte GUID wurde bereits verwendet und ist nicht mehr gültig.<br />Bitte <a href="%password_forgotten%">fordern Sie einen neuen Link an</a>.',
   'The test mail to %email% was successfull send.'
     => 'Die Test E-Mail wurde erfolgreich an %email% versendet!',
+  'The translation conflict for the locale source <strong>%source%</strong> has been solved!'
+    => 'Der Übersetzungskonflikt für den Quelltext <strong>%source%</strong> ist aufgelöst!',
   'The username %username% is already in use, please select another one!'
     => 'Der Benutzername %username% wird bereits verwendet, bitte wählen Sie einen anderen Benutzernamen.',
+  'There a no translated sources available'
+    => 'Es sind keine übersetzten Quelltexte verfügbar.',
   'There are no roles assigned to this user.'
     => 'Diesem Benutzer sind keine Rechte zugewiesen',
+  'There exist an duplicate locale key for <strong>%key%</strong> in the file <em>%file%</em>!'
+    => 'Es existiert ein doppelter Schlüssel für <strong>%key%</strong> in der Datei <em>%file%</em>!',
   'There exists no catalog entry for the extension %name% with the GUID %guid%.'
     => 'Es existiert kein Katalog Eintrag für die Erweiterung %name% mit der GUID %guid%.',
+  'There exists no conflicts.'
+    => 'Es bestehen keine Konflikte.',
+  'There exists no custom translations for this installation!'
+    => 'Es existieren keine angepassten Übersetzungen für diese kitFramework Installation!',
+  'There exists no duplicate translations.'
+    => 'Es existieren keine doppelten Übersetzungen.',
+  'There exists no pending translations for the locale %locale%.'
+    => 'Es existieren keine <em>anstehenden</em> Übersetzungen für die Sprache %locale%.',
+  'There exists no references for the locale source with the id %locale_id%.'
+    => 'Es existieren keine Verweise für die lokale Quelle mit der ID %locale_id%.',
+  'There exists no translations for the locale source with the id %locale_id%'
+    => 'Es existieren keine Übersetzungen für den Quelltext mit der ID %locale_id%.',
+  'There exists no unassigned translations.'
+    => 'Es existieren keine <em>nicht zugeordneten</em> Übersetzungen.',
   'There exists no user with the submitted email address.'
     => 'Die übermittelte E-Mail Adresse kann keinem Benutzer zugeordnet werden.',
   'There is no help available for the kitCommand <b>%command%</b>.'
     => 'Für das kitCommand <b>%command%</b> ist keine Hilfe verfügbar.',
   'This link enable you to change your password once within 24 hours.'
     => 'Dieser Link ermöglicht es Ihnen, ihr Passwort einmal innerhalb von 24 Stunden zu ändern.',
+  '<p>This list contain %count% translation sources.</p><p>Click at <em>ID</em> or at <em>References</em> for information in which files the sources are used.</p>'
+    => '<p>Diese Liste enthält %count% Quelltexte als Basis für die Übersetzungen.</p><p>Klicken Sie auf <em>ID</em> oder <em>Verweise</em> um zu erfahren in welchen Dateien diese Quelltexte verwendet werden.</p>',
+  '<p>This list show you conflicting translations, which mean: the source is translated more then once and in a different way.</p><p>Remove conflicting translations or change the source if you need different translations.</p><p>Start a search run if you have solved a conflict to remove the entry from the list.</p>'
+    => '<p>Diese Liste zeigt Ihnen kollidierend Übersetzungen: der jeweilige Quelltext wurde mehr als einmal und auf unterschiedliche Weise übersetzt.</p><p>Entfernen sie kollidierende Übersetzungen oder ändern Sie den Quelltext, falls Sie unterschiedliche Übersetzungen benötigen.</p><p>Starten Sie einen Suchlauf, wenn Sie einen Konflikt gelöst haben.</p>',
+  '<p>This list shows duplicate translations.</p><p>Maybe it is not possible to avoid all duplicate translations, for example if the same translation is used by different extensions and they can be used independent. Nevertheless you should check these entries, perhaps you can avoid the one or other.</p>'
+    => '<p>Diese Liste zeigt Ihnen mehrfache Übersetzungen an.</p><p>Es ist wahrscheinlich nicht möglich jede mehrfache Übersetzung zu vermeiden, z.B. weil eine Übersetzung von unterschiedlichen Erweiterungen benötigt wird und diese nicht unbedingt gemeinsam installiert werden müssen. Gleichwohl sollten Sie die Einträge überprüfen, vielleicht lässt sich ja das eine oder andere Duplikat vermeiden.</p>',
+  'This locale file does not contain any translations!'
+    => 'Diese Sprachdatei enthält keine Übersetzungen!',
+  'This sources are currently not translated to <em>%locale%</em>, they are <em>pending</em>.'
+    => 'Diese Quelltexte wurden noch nicht in <em>%locale%</em> übersetzt und sind als <em>anstehend</em> gekennzeichnet.',
   'This user are assigned %count% roles.'
     => 'Diesem Benutzer sind insgesamt <b>%count%</b> Rechte zugewiesen.',
   'This value is not a valid email address.'
     => 'Es wurde keine gültige E-Mail Adresse übergeben!',
   'Translation'
     => 'Übersetzung',
+  'Translation id'
+    => 'ID',
+  'Translation remark'
+    => 'Bemerkung',
   'Translation status'
     => 'Status',
   'Translation text'
     => 'Übersetzung',
   'Translations'
     => 'Übersetzungen',
+  'Translations which are not assigned to any files'
+    => 'Übersetzungen, die keiner Datei zugeordnet sind',
+  'Translations which causes a conflict'
+    => 'Übersetzungen die einen Konflikt auslösen',
+  'type'
+    => 'Typ',
   'Unassigned'
     => 'Nicht zugeordnet',
   'Unassigned translations'
@@ -503,8 +633,12 @@ return array(
     => 'Die Katalogdaten für die Erweiterung <b>%name%</b> wurden aktualisiert.',
   'Updated the register data for <b>%name%</b>.'
     => 'Die Registrierdaten für die Erweiterung <b>%name%</b> wurden aktualisiert.',
+  'Updated Translation ID %id%'
+    => 'Übersetzung mit der ID %id% aktualisiert.',
   'Usage'
     => 'Verwendung',
+  'Use <code>~~ help ~~</code> to view the <a href='
+    => 'Verwenden Sie <code>~~ help ~~</code> um sich die <a href="%link%">Allgemeine Hilfe zu den kitCommands</a> anzeigen zu lassen.',
   'User roles may depend from others and can be set or extended dynamically by the kitFramework extensions. To see the roles really associated to this account if the user is authenticated use the "switch to" button.'
     => 'Benutzerrechte können von einander abhängig sein und dynamisch durch kitFramework Anwendungen erweitert werden. Um die Benutzerrechte zu sehen, die tatsächlich einem angemeldeten Anwender zugewiesen sind nutzen Sie bitte die Funktion "Zum Anwender umschalten".',
   'Username'
@@ -515,10 +649,16 @@ return array(
     => 'Anbieter',
   'View and edit the kitFramework configuration files'
     => 'Die kitFramework Konfigurationsdateien einsehen und bearbeiten',
+  'View the custom translations for this installation'
+    => 'Sehen Sie die angepassten Übersetzungen für diese kitFramework Installation',
   'View the general help for kitCommands'
     => 'Die allgemeine Hilfe zu den kitCommands anzeigen',
+  'View the help file for %command%'
+    => 'Hilfedatei für %command% anzeigen lassen',
   'View the helpfile for %command%'
     => 'Die Hilfedatei zu %command% anzeigen',
+  'View the translations grouped by locale files'
+    => 'Übersetzungen nach Übersetzungsdateien zusammengefasst',
   'Visit the Wiki for %command% and learn more about it!'
     => 'Besuchen Sie das Wiki zu %command% und erfahren Sie mehr über die Möglichkeiten!',
   'Waiting'
@@ -529,12 +669,18 @@ return array(
     => 'Herzlich Willkommen!',
   'Welcome back, %user%! Please select the entry point you want to use.'
     => 'Herzlich willkommen, %user%! Bitte wählen Sie den gewünschten Zugangspunkt.',
+  'Wiki'
+    => 'Wiki',
   'You are not allowed to access this resource!'
     => 'Sie sind nicht befugt auf diese Resource zuzugreifen.',
   'You execute the i18nEditor in <strong>developer mode</strong>.'
     => 'Sie führen den i18nEditor im <strong>Entwickler Modus</strong> aus.',
   'You have already an account? <a href="%login_url%">Please login</a>!'
     => 'Sie haben bereits ein Benutzerkonto? <a href="%login_url%">Melden Sie sich an</a>!',
+  'You must login as user \'%username%\'!'
+    => 'Sie müssen sich als Benutzer \'%username%\' anmelden!',
+  'You must solve the <strong>CONFLICT</strong> before you can change this translation record.'
+    => 'Sie müssen zunächst den <strong>CONFLICT</strong> lösen bevor Sie diese Übersetzung ändern können.',
   'Your account is locked, but it seems that you have not activated your account. Please use the activation link you have received.'
     => 'Ihr Benutzerkonto ist gesperrt, es sieht allerdings so aus, als ob Sie das Konto noch nicht aktiviert haben. Bitte verwenden Sie den Aktivierungslink den Sie erhalten haben.',
   'Your account is locked, please contact the webmaster.'
@@ -543,57 +689,5 @@ return array(
     => 'Ihr Benutzerkonto wurde erfolgreich geändert.',
   'Your are not authenticated, please login!'
     => 'Sie sind nicht angemeldet, bitte authentifizieren Sie sich zunächst!',
-  'captcha-timeout'
-    => 'Zeitüberschreitung bei der CAPTCHA Übermittlung, bitte versuchen Sie es erneut.',
-  'commercial use only'
-    => '- nur kommerzielle Verwendung -',
-  'help'
-    => 'Hilfe',
-  'help_accounts_list_json'
-    => '<p>Diese Datei ermöglicht es Ihnen die angezeigten Spalten und die Sortierung der Felder in der <a href="%FRAMEWORK_URL%/admin/accounts/list" target="_blank">Übersicht der Benutzerkonten</a> zu ändern.</p><p>Verfügbare Felder für die Verwendung in <var>columns</var> und <var>list > order > by</var> sind: <var>id, username, email, password, displayname, last_login, roles, guid, guid_timestamp, guid_status, status</var> und <var>timestamp</var>. Mit <var>list > rows_per_page</var> legen Sie fest, wie viele Benutzerkonten pro Seite angezeigt werden.</p>',
-  'help_cms_json'
-    => '<p>Diese Konfigurationsdatei enthält Informationen zu dem übergeordneten Content Management System (CMS). Falls Sie die URL der Website verändert haben oder sich das Stammverzeichnis auf dem Webserver geändert hat, sollten Sie die Einstellungen in dieser Datei prüfen und anpassen.</p><p>Das <a href="https://github.com/phpManufaktur/kitFramework/wiki/kitFramework-%23-Configuration#cmsjson" target="_blank">kitFramework WIKI</a> erläutert Ihnen alle Einstellungsmöglichkeiten für die <var>cms.json</var>.</p>',
-  'help_config_jsoneditor_json'
-    => '<p>Diese Konfigurationsdatei enthält die Einstellungen für den Konfigurations Editor, den Sie just in diesem Moment verwenden.</p><p>Normalerweise ist es nicht erforderlich an diesen Einstellungen etwas zu ändern. Die Datei enthält die Hilfeinformationen, die zu den einzelnen Konfigurationsdateien angezeigt werden sowie die Liste der verfügbaren Konfigurationsdateien um ein Überprüfen des Systems bei jedem Aufruf des Editors zu verhindern.</p><p>Falls Sie eine Konfigurationsdatei vermissen, z.B. für eine gerade erst installierte Erweiterung, verwenden Sie bitte den <key>Suchlauf</key> Schalter um ein erneutes Durchsuchen des Systems zu erzwingen.</p>',
-  'help_doctrine_cms_json'
-    => '<p>Diese Konfigurationsdatei enthält die Datenbankeinstellungen. Wenn Sie die Datenbankeinstellungen für das übergeordnete Content Management System (CMS) ändern, müssen Sie die Einstellungen in dieser Datei ebenfalls anpassen - andernfalls wird das kitFramework nicht mehr korrekt funktionieren.</p><p>Das <a href="https://github.com/phpManufaktur/kitFramework/wiki/kitFramework-%23-Configuration#doctrinecmsjson" target="_blank">kitFramework WIKI</a> erläutert Ihnen alle Einstellungsmöglichkeiten für die <var>doctrine.cms.json</var>.</p>',
-  'help_framework_json'
-    => '<p>Dies ist die zentrale Konfigurationsdatei für das kitFramework. Hier können Sie den <var>DEBUG</var> und <var>CACHE</var> Modus ein- oder ausschalten und das kitFramework anweisen stets Ihre benutzerdefinierten Templates vor den Standardvorlagen zu laden.</p><p>Das <a href="https://github.com/phpManufaktur/kitFramework/wiki/kitFramework-%23-Configuration" target="_blank">kitFramework WIKI</a> erläutert Ihnen alle Einstellungsmöglichkeiten für die <var>framework.json</var>.</p>',
-  'help_proxy_json'
-    => '<p>Falls Sie einen Proxy Server verwenden benötigen Sie diese Konfigurationsdatei. Bitte fragen Sie Ihren Systemadministrator nach den benötigten Einstellungen.</p>',
-  'help_swift_cms_json'
-    => '<p>Diese Konfigurationsdatei wird benötigt um die E-Mail Einstellungen für das kitFramework festzulegen. Bitte fragen Sie Ihren E-Mail Anbieter nach den benötigten Einstellungen für den SMTP Server, Port, Benutzername und Passwort.</p><p>Sie können die E-Mail Einstellungen überprüfen, in dem Sie eine <a href="%FRAMEWORK_URL%/admin/test/mail" target="_blank">Testmail versenden</a>.</p><p>Das <a href="https://github.com/phpManufaktur/kitFramework/wiki/kitFramework-%23-Configuration#swiftcmsjson" target="_blank">kitFramework WIKI</a> erläutert Ihnen alle Einstellungsmöglichkeiten für die <var>swift.cms.json</var>.</p>',
-  'i18n'
-    => 'i18n',
-  'incorrect-captcha-sol'
-    => 'Der übermittelte CAPTCHA ist nicht korrekt.',
-  'invalid-request-cookie'
-    => 'Ungültige ReCaptcha Anfrage',
-  'invalid-site-private-key'
-    => 'Der private Schlüssel für den ReCaptcha Service ist ungültig, prüfen Sie die Einstellungen!',
-  'kitCommand - Alert'
-    => 'kitCommand - Benachrichtigung',
-  'kitCommand - Alert container'
-    => 'kitCommand - Benachrichtigungscontainer',
-  'kitCommand - General help container'
-    => 'kitCommand - Allgemeine Hilfe',
-  'kitFramework - Account'
-    => 'kitFramework - Benutzerkonto',
-  'kitFramework - First Login'
-    => 'kitFramework - Erste Anmeldung',
-  'kitFramework - Link transmitted'
-    => 'kitFramework - Link übermittelt',
-  'kitFramework E-Mail Test'
-    => 'kitFramework E-Mail Test',
-  'kitFramework Error'
-    => 'kitFramework Fehler',
-  'kitFramework User Account'
-    => 'kitFramework Benutzerkonto',
-  'kitFramework email test'
-    => 'kitFramework E-Mail Test',
-  'kitFramework password reset'
-    => 'kitFramework Passwort zurücksetzen',
-  'published at'
-    => 'veröffentlicht am',
   
 );

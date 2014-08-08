@@ -33,10 +33,17 @@
     
     {% if pendings|length > 0 %}
       <div class="well">
-        
+        <p>{{ 'This sources are currently not translated to <em>%locale%</em>, they are <em>pending</em>.'|trans({'%locale%':locale_locale}) }}</p>
       </div>
+      {% if locale_locale|upper == 'EN' %}
+        {% include '@phpManufaktur/Basic/Template/default/pattern/bootstrap/alert.twig'
+          with {type:'alert-info',content:'Please be aware that <em>translations</em> for the locale <strong>EN</strong> (english) are more often than not identical with the <em>source</em> - for this reason they will be only added to a language file if the <em>translation</em> differ from <em>source</em>.'|trans } %}
+      {% endif %}
     {% endif %}
     
+    
+    
+    {{ alert }}
     
     {% if pendings|length > 0 %}
       <div class="table-responsive pendings">
