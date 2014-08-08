@@ -1,5 +1,5 @@
 {#
-  localeEditor
+  i18nEditor
 
   @author Team phpManufaktur <team@phpmanufaktur.de>
   @link https://kit2.phpmanufaktur.de/dogpaw
@@ -35,10 +35,19 @@
     <div class="well">
     {% if info.locale_hits < 1 %}
       {{ 'The kitFramework was never checked for the existing locale sources and translations, please start a search run!'|trans }}
-    {% elseif config.developer_mode %}
-      {{ '<p>Last registered file modification: <strong>%modification%</strong><br />Scanned files: <strong>%scanned%</strong><br />Locale hits: <strong>%hits%</strong><br /><br />Duplicate translations: <strong>%duplicates%</strong><br />Conflicting translations: <strong>%conflicts%</strong><br />Unassigned translations: <strong>%unassigned%</strong></p><p>You execute the i18nEditor in <strong>developer mode</strong>.</p>'|trans({'%modification%':info.last_file_modification|date('DATETIME_FORMAT'|trans),'%scanned%':info.count_scanned,'%hits%':info.locale_hits,'%conflicts%':info.conflicts,'%unassigned%':info.unassigned,'%duplicates%':info.duplicates}) }}
+    {% elseif config.developer.enabled %}
+      <p>{{ 'Last registered file modification: <strong>%modification%</strong><br />Scanned files: <strong>%scanned%</strong><br />Locale hits: <strong>%hits%</strong>'|trans({'%modification%':info.last_file_modification|date('DATETIME_FORMAT'|trans),'%scanned%':info.count_scanned,'%hits%':info.locale_hits}) }}</p>
+      {% for translation in info.translation %}
+        <p>{{ 'Locale: <strong>%locale%</strong><br />Sources: <strong>%total%</strong><br />Translations: <strong>%translated%</strong><br />Pending: <strong>%pending%</strong>'|trans({'%locale%':translation.locale,'%total%':translation.status.total,'%translated%':translation.status.translated,'%pending%':translation.status.pending}) }}</p>
+      {% endfor %}  
+      <p>{{ 'Duplicate translations: <strong>%duplicates%</strong><br />Conflicting translations: <strong>%conflicts%</strong><br />Unassigned translations: <strong>%unassigned%</strong>'|trans({'%conflicts%':info.conflicts,'%unassigned%':info.unassigned,'%duplicates%':info.duplicates}) }}</p>
+      <p>{{ 'You execute the i18nEditor in <strong>developer mode</strong>.'|trans }}</p>
     {% else %}
-      {{ '<p>Last registered file modification: <strong>%modification%</strong><br />Scanned files: <strong>%scanned%</strong><br />Locale hits: <strong>%hits%</strong></p><p>Switch to developer mode to get also information about problems and conflicts.</p>'|trans({'%modification%':info.last_file_modification|date('DATETIME_FORMAT'|trans),'%scanned%':info.count_scanned,'%hits%':info.locale_hits}) }}
+      <p>{{ 'Last registered file modification: <strong>%modification%</strong><br />Scanned files: <strong>%scanned%</strong><br />Locale hits: <strong>%hits%</strong>'|trans({'%modification%':info.last_file_modification|date('DATETIME_FORMAT'|trans),'%scanned%':info.count_scanned,'%hits%':info.locale_hits}) }}</p>
+      {% for translation in info.translation %}
+        <p>{{ 'Locale: <strong>%locale%</strong><br />Sources: <strong>%total%</strong><br />Translations: <strong>%translated%</strong><br />Pending: <strong>%pending%</strong>'|trans({'%locale%':translation.locale,'%total%':translation.status.total,'%translated%':translation.status.translated,'%pending%':translation.status.pending}) }}</p>
+      {% endfor %}  
+      <p>{{ 'Switch to developer mode to get also information about problems and conflicts.'|trans }}</p>
     {% endif %}
     </div>
     {{ alert }}

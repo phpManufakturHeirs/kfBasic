@@ -1,5 +1,5 @@
 {#
-  localeEditor
+  i18nEditor
 
   @author Team phpManufaktur <team@phpmanufaktur.de>
   @link https://kit2.phpmanufaktur.de/dogpaw
@@ -74,3 +74,40 @@
     
   </div>
 {% endblock content %}
+{% block footer_jquery %}
+  {{ parent() }}
+  {# tablesorter #}
+  <script src="{{ LIBRARY_URL ~ '/jquery/tablesorter/latest/js/jquery.tablesorter.js' }}"></script>
+  <script src="{{ LIBRARY_URL ~ '/jquery/tablesorter/latest/js/jquery.tablesorter.widgets.js' }}"></script>
+  <script type="text/javascript">
+    $(function() {
+      $.extend($.tablesorter.themes.bootstrap, {
+        table      : 'table table-bordered',
+        caption    : 'caption',
+        header     : 'bootstrap-header',
+        footerRow  : '',
+        footerCells: '',
+        icons      : '',
+        sortNone   : 'bootstrap-icon-unsorted',
+        sortAsc    : 'icon-chevron-up glyphicon glyphicon-chevron-up',
+        sortDesc   : 'icon-chevron-down glyphicon glyphicon-chevron-down',
+        active     : '',
+        hover      : '',
+        filterRow  : '',
+        even       : '',
+        odd        : '' 
+      });
+
+      $("table").tablesorter({
+        theme : "bootstrap",
+        widthFixed: true,
+        headerTemplate : '{content} {icon}', 
+        widgets : [ "uitheme", "filter", "zebra" ],
+        widgetOptions : {
+          zebra : ["even", "odd"],
+          filter_reset : ".reset"
+        }
+      })
+    });
+  </script>
+{% endblock %}

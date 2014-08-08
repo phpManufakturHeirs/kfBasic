@@ -631,16 +631,22 @@ $admin->get('/i18n/editor/about',
     'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerAbout');
 $admin->get('/i18n/editor/scan',
     'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerScan');
-$admin->get('/i18n/editor/locale/{locale}',
-    'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerLocale')
-    ->value('locale', 'en');
 $admin->get('/i18n/editor/locale/{locale}/pending',
     'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerLocalePending');
 $admin->get('/i18n/editor/translation/edit/id/{translation_id}',
     'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerTranslationEdit')
     ->assert('translation_id', '\d+')
     ->value('translation_id', -1);
-
+$admin->post('/i18n/editor/translation/edit/check',
+    'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerTranslationEditCheck');
+$admin->get('/i18n/editor/locale/{locale}/files/{file_id}',
+    'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerLocaleFiles')
+    ->assert('file_id', '\d+')
+    ->value('file_id', -2);
+$admin->post('/i18n/editor/locale/{locale}/file/select',
+    'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerLocaleFileSelect');
+$admin->get('/i18n/editor/locale/{locale}/custom',
+    'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerLocaleCustom');
 $admin->get('/i18n/editor/sources',
     'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerSources');
 $admin->get('/i18n/editor/sources/detail/{locale_id}',

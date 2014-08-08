@@ -322,6 +322,28 @@ EOD;
         }
     }
 
+    public function selectTranslationStatus($locale)
+    {
+        try {
+            $SQL = "SELECT COUNT(*) AS 'total', ".
+                "SUM(CASE WHEN `translation_status`='TRANSLATED' THEN 1 ELSE 0 END) AS 'translated', ".
+                "SUM(CASE WHEN `translation_status`='PENDING' THEN 1 ELSE 0 END) AS 'pending', ".
+                "SUM(CASE WHEN `translation_status`='CONFLICT' THEN 1 ELSE 0 END) AS 'conflicts' ".
+                "FROM `".self::$table_name."` WHERE `locale_locale`='$locale'";
+            return $this->app['db']->fetchAssoc($SQL);
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Select all pending translations for the given locale. Return FALSE if
+     * no pending translations exists
+     *
+     * @param string $locale
+     * @throws \Exception
+     * @return Ambigous <boolean, array>
+     */
     public function selectPendings($locale)
     {
         try {
@@ -339,6 +361,109 @@ EOD;
                 }
             }
             return (!empty($pendings)) ? $pendings : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Select translation by the given file path MD5
+     *
+     * @param string $md5
+     * @throws \Exception
+     * @return Ambigous <boolean, array>
+     */
+    public function selectByPathMD5($md5)
+    {
+        try {
+            $translation = self::$table_name;
+            $file = FRAMEWORK_TABLE_PREFIX.'basic_i18n_translation_file';
+
+            $SQL = "SELECT * FROM `$translation` ".
+                "LEFT JOIN `$file` ON `$file`.`translation_id`=`$translation`.`translation_id` ".
+                "WHERE `file_md5`='$md5' ORDER BY `translation_text` ASC";
+            $results = $this->app['db']->fetchAll($SQL);
+
+            $translations = array();
+            if (is_array($results)) {
+                foreach ($results as $result) {
+                    $translation = array();
+                    foreach ($result as $key => $value) {
+                        $translation[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+                    }
+                    $translations[] = $translation;
+                }
+            }
+            return (!empty($translations)) ? $translations : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Select translations with the status TRANSLATED
+     *
+     * @param string $locale
+     * @throws \Exception
+     * @return Ambigous <boolean, array>
+     */
+    public function selectTranslated($locale)
+    {
+        try {
+            $translation = self::$table_name;
+            $file = FRAMEWORK_TABLE_PREFIX.'basic_i18n_translation_file';
+
+            $SQL = "SELECT * FROM `$translation` ".
+                "LEFT JOIN `$file` ON `$file`.`translation_id`=`$translation`.`translation_id` ".
+                "WHERE `$translation`.`locale_locale`='$locale' AND `translation_status`='TRANSLATED' ORDER BY `translation_text` ASC";
+
+            $results = $this->app['db']->fetchAll($SQL);
+            $translateds = array();
+            if (is_array($results)) {
+                foreach ($results as $result) {
+                    $translated = array();
+                    foreach ($result as $key => $value) {
+                        $translated[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+                    }
+                    $translateds[] = $translated;
+                }
+            }
+            return (!empty($translateds)) ? $translateds : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Select translations with the status TRANSLATED and the locale type CUSTOM
+     *
+     * @param string $locale
+     * @throws \Exception
+     * @return Ambigous <boolean, array>
+     */
+    public function selectTranslatedCustom($locale)
+    {
+        try {
+            $translation = self::$table_name;
+            $file = FRAMEWORK_TABLE_PREFIX.'basic_i18n_translation_file';
+
+            $SQL = "SELECT * FROM `$translation` ".
+                "LEFT JOIN `$file` ON `$file`.`translation_id`=`$translation`.`translation_id` ".
+                "WHERE `$translation`.`locale_locale`='$locale' AND `translation_status`='TRANSLATED' ".
+                "AND `locale_type`='CUSTOM' ORDER BY `translation_text` ASC";
+
+            $results = $this->app['db']->fetchAll($SQL);
+            $translateds = array();
+            if (is_array($results)) {
+                foreach ($results as $result) {
+                    $translated = array();
+                    foreach ($result as $key => $value) {
+                        $translated[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+                    }
+                    $translateds[] = $translated;
+                }
+            }
+            return (!empty($translateds)) ? $translateds : false;
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }

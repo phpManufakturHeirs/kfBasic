@@ -640,6 +640,7 @@ class i18nParser extends Alert
                 if ($token[0] === T_CONSTANT_ENCAPSED_STRING) {
                     // this is the second part: the VALUE is the translation_text
                     $locale_source = trim($key, "\x22\x27");
+                    $locale_source = str_replace(array("\'"), array("'"), $locale_source);
 
                     // important: set the KEY to NULL and try to get the next pair
                     $key = null;
@@ -656,6 +657,7 @@ class i18nParser extends Alert
 
                     // trim leading and trailing ' and "
                     $translation_text = trim($token[1], "\x22\x27");
+                    $translation_text = str_replace(array("\'"), array("'"), $translation_text);
 
                     $locale_md5 = md5($locale_source);
                     $translation_md5 = md5($translation_text);
@@ -679,7 +681,8 @@ class i18nParser extends Alert
                                 'locale_locale' => $locale,
                                 'locale_type' => $locale_type,
                                 'extension' => $extension,
-                                'file_path' => $realpath
+                                'file_path' => $realpath,
+                                'file_md5' => md5($realpath)
                             );
                             $this->i18nTranslationFile->insert($data);
                         }
@@ -728,7 +731,8 @@ class i18nParser extends Alert
                                     'locale_locale' => $locale,
                                     'locale_type' => $locale_type,
                                     'extension' => $extension,
-                                    'file_path' => $realpath
+                                    'file_path' => $realpath,
+                                    'file_md5' => md5($realpath)
                                 );
                                 // add a new translation file information!
                                 $this->i18nTranslationFile->insert($data);
@@ -789,7 +793,8 @@ class i18nParser extends Alert
                                 'locale_locale' => $locale,
                                 'locale_type' => $locale_type,
                                 'extension' => $extension,
-                                'file_path' => $realpath
+                                'file_path' => $realpath,
+                                'file_md5' => md5($realpath)
                             );
                             $this->i18nTranslationFile->insert($data);
                         }
@@ -906,4 +911,133 @@ class i18nParser extends Alert
         }
     }
 
+    /**
+     * Get the with $path given locale file and return the translations as array.
+     * If the file does not exist, the function return an empty array
+     *
+     * @param string $path
+     * @return array
+     */
+    protected function getLocaleFileArray($path)
+    {
+        if (!$this->app['filesystem']->exists($path)) {
+            // this file currently does not exists - return empty array!
+            return array();
+        }
+
+        // get all TOKENS from the code
+        $code = file_get_contents($path);
+        $tokens = token_get_all($code);
+
+        $walking = false;
+        $key = null;
+
+        $key_array = array();
+        $translations = array();
+
+        foreach ($tokens as $token) {
+            if ($token[0] ===  T_ARRAY) {
+                $walking = true;
+            }
+            if (!$walking) continue;
+
+            if (is_null($key) && $token[0] === T_CONSTANT_ENCAPSED_STRING) {
+                // this is the first part: the KEY is the locale_source
+                $key = $token[1];
+                continue;
+            }
+
+            if ($token[0] === T_CONSTANT_ENCAPSED_STRING) {
+                // this is the second part: the VALUE is the translation_text
+                $source = trim($key, "\x22\x27");
+
+                // important: set the KEY to NULL and try to get the next pair
+                $key = null;
+
+                if (in_array($source, $key_array)) {
+                    // Ooops - we have an duplicate location key in the translanslation file !!!
+                    continue;
+                }
+                $key_array[] = $source;
+
+                $translations[$source] = trim($token[1], "\x22\x27");
+            }
+        }
+
+        return $translations;
+    }
+
+    /**
+     * Put the translation as locale file to the given path. This function check
+     * the configuration, create backups and copy the locale file to source directories
+     *
+     * @param string $path
+     * @param array $translations
+     * @param string $extension
+     * @return boolean
+     */
+    protected function putLocaleFile($path, $translations, $extension='UNKNOWN')
+    {
+        if (!self::$config['translation']['file']['save']) {
+            // saving locale files is diaabled
+            return false;
+        }
+
+        // create the locale file content
+        $content = $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template', 'framework/i18n/locale.php.twig'),
+            array(
+                'translations' => $translations,
+                'extension' => $extension
+            ));
+
+        if ($this->app['filesystem']->exists($path) && self::$config['translation']['file']['backup']) {
+            // create a backup file before writing the file
+            $backup_path = str_replace('.php', '.bak', $path);
+            // remove existing backup file
+            $this->app['filesystem']->remove($backup_path);
+            $this->app['filesystem']->rename($path, $backup_path);
+        }
+
+        if (false === file_put_contents($path, $content)) {
+            $this->setAlert("Can't save the file %file%!", array('%file%', basename($path)), self::ALERT_TYPE_DANGER,
+                true, array('error' => error_get_last(), 'method' => __METHOD__, 'line' => __LINE__));
+            return false;
+        }
+
+        if (self::$config['developer']['enabled'] && self::$config['developer']['source']['copy']) {
+            // developer mode is enabled and locales should be copied ...
+            if (isset(self::$config['developer']['source']['extension'][$extension]) &&
+                $this->app['filesystem']->exists(self::$config['developer']['source']['extension'][$extension])) {
+                // locales for this extension should be copied to the source directory
+                $subdirectory = substr($path,
+                    strpos($path, DIRECTORY_SEPARATOR.$extension.DIRECTORY_SEPARATOR)+
+                    strlen(DIRECTORY_SEPARATOR.$extension.DIRECTORY_SEPARATOR));
+                if (self::$config['developer']['source']['custom'] ||
+                    (false === strpos($subdirectory, DIRECTORY_SEPARATOR.'Custom'.DIRECTORY_SEPARATOR)) ||
+                    ((false !== strpos($subdirectory, DIRECTORY_SEPARATOR.'Custom'.DIRECTORY_SEPARATOR)) &&
+                     false !== self::$config['developer']['source']['custom'])) {
+                    // copy the locale file also to the source directory
+                    $source_path = rtrim(self::$config['developer']['source']['extension'][$extension], DIRECTORY_SEPARATOR);
+                    $source_path .= DIRECTORY_SEPARATOR.$subdirectory;
+                    if (self::$config['developer']['source']['backup'] && $this->app['filesystem']->exists($source_path)) {
+                        $backup_path = str_replace('.php', '.bak', $source_path);
+                        // remove existing backup file
+                        $this->app['filesystem']->remove($backup_path);
+                        // create backup file
+                        $this->app['filesystem']->rename($source_path, $backup_path);
+                    }
+                    // copy the locale file to the source directory
+                    $this->app['filesystem']->copy($path, $source_path);
+                    $this->setAlert('Copied the locale file to the source path: <i>%path%</i>',
+                        array('%path%' => $source_path), self::ALERT_TYPE_SUCCESS);
+                }
+
+            }
+        }
+
+        $this->setAlert('Successfull put the locale entries to the locale file.', array(), self::ALERT_TYPE_INFO);
+
+        return true;
+    }
 }

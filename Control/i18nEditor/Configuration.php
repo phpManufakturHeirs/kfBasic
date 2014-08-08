@@ -39,7 +39,17 @@ class Configuration
     public function getDefaultConfigArray()
     {
         return array(
-            'developer_mode' => false,
+            'developer' => array(
+                'enabled' => false,
+                'source' => array(
+                    'copy' => true,
+                    'backup' => false,
+                    'custom' => false,
+                    'extension' => array(
+
+                    )
+                )
+            ),
             'parse' => array(
                 'php' => array(
                     'stop_word' => array(
@@ -89,7 +99,10 @@ class Configuration
                             'Control/utf-8',
                             'Data/Locale',
                             'Template',
-                            'Library'
+                            'Library',
+                            'TemplateTools/Examples',
+                            'TemplateTools/Pattern',
+                            'Updater'
                         )
                     )
                 ),
@@ -101,7 +114,8 @@ class Configuration
                         'directory' => array(
                             'Control',
                             'Data',
-                            'Library'
+                            'Library',
+                            'TemplateTools'
                         )
                     ),
                     'template' => array(
@@ -126,8 +140,7 @@ class Configuration
                             'Library',
                             'Data/Setup',
                             'Data/CMS',
-                            'Data/Security',
-                            'TemplateTools'
+                            'Data/Security'
                         )
                     )
                 )
@@ -179,6 +192,12 @@ class Configuration
                     'Female',
                     'FR',
                     'Friday',
+                    'GALLERY_TYPE_MOBILE',
+                    'GALLERY_TYPE_NORMAL',
+                    'GALLERY_TYPE_PROFILE',
+                    'GALLERY_TYPE_WALL',
+                    'help_config_imagetweak_json',
+                    'help_gallery_json',
                     "I'm a sample header",
                     'I accept that this software is provided under <a href="http://opensource.org/licenses/MIT" target="_blank">MIT License</a>.',
                     'incorrect-captcha-sol',
@@ -205,11 +224,25 @@ class Configuration
                     'prof',
                     'professor',
                     'Public',
+                    'ROLE_EVENT_ADMIN',
+                    'ROLE_EVENT_LOCATION',
+                    'ROLE_EVENT_ORGANIZER',
+                    'ROLE_EVENT_SUBMITTER',
                     'Saturday',
+                    'second',
+                    'second_fourth',
+                    'second_last',
                     'September',
+                    'Show the actual articles in a overview',
+                    'Show the contents of the category',
+                    'Show the description of the category and all assigned articles',
+                    'Show the description of the hashtag and all assigned articles',
+                    'Show this content as single article',
                     'Stay in touch, read our newsletter!',
                     'Sunday',
+                    'Tag (#tag)',
                     'TIME_FORMAT',
+                    'third',
                     'This is a sample panel text whith some unnecessary content',
                     "This Tag type is created by the kitCommand 'Comments' and will be set for persons who leave a comment.",
                     'This value is not a valid email address.',
@@ -226,7 +259,35 @@ class Configuration
                     '%url%',
                     '&nbsp;',
                     '[%s] %s',
-                    '[%file%:%line%] Excel Error: %error%'
+                    '[%file%:%line%] Excel Error: %error%',
+                    'Ckeditorfuncnum',
+                    'Comment parent',
+                    'Comment update info',
+                    'Count cells',
+                    'Create by',
+                    'Create type',
+                    'cURL error: %error%',
+                    'data',
+                    'Day sequence',
+                    'Day type',
+                    'Dbglossary',
+                    'Email type',
+                    'en',
+                    'Event participants canceled',
+                    'Event participants pending',
+                    'event_date_to',
+                    'Extra type description',
+                    "Extra type id",
+                    "Extra type name",
+                    'Extra type type',
+                    'Group location contact tags',
+                    'Group organizer contact tags',
+                    'Group participant contact tags',
+
+                ),
+                'file' => array(
+                    'save' => true,
+                    'backup' => true
                 )
             ),
             'editor' => array(

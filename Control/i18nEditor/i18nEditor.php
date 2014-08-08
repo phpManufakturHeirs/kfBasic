@@ -13,6 +13,7 @@ namespace phpManufaktur\Basic\Control\i18nEditor;
 
 use Silex\Application;
 use Symfony\Component\Form\FormFactoryBuilder;
+use Symfony\Component\Finder\Finder;
 
 class i18nEditor extends i18nParser
 {
@@ -52,6 +53,16 @@ class i18nEditor extends i18nParser
      */
     protected function gatherInformation()
     {
+        $translation = array();
+        foreach (self::$config['translation']['locale'] as $locale) {
+            if ($locale === 'EN') {
+                continue;
+            }
+            $translation[$locale] = array(
+                'locale' => $locale,
+                'status' => $this->i18nTranslation->selectTranslationStatus($locale)
+            );
+        }
         $count = $this->i18nScanFile->selectCount();
         self::$info = array(
             'last_file_modification' => $this->i18nScanFile->getLastModificationDateTime(),
@@ -60,7 +71,8 @@ class i18nEditor extends i18nParser
             'locale_hits' => $count['locale_hits'],
             'duplicates' => count($this->i18nTranslation->selectDuplicates()),
             'conflicts' => $this->i18nTranslation->countConflicts(),
-            'unassigned' => $this->i18nTranslationUnassigned->count()
+            'unassigned' => $this->i18nTranslationUnassigned->count(),
+            'translation' => $translation
         );
     }
 
@@ -105,7 +117,7 @@ class i18nEditor extends i18nParser
                     );
                     break;
                 case 'problems':
-                    if (self::$config['developer_mode']) {
+                    if (self::$config['developer']['enabled']) {
                         // add this navigation only in active developer mode!
                         $toolbar[$tab] = array(
                             'name' => 'problems',
@@ -123,8 +135,8 @@ class i18nEditor extends i18nParser
                             'text' => $tab, // no translation!
                             'hint' => $this->app['translator']->trans('Edit the locale %locale%', array(
                                 '%locale%' => $this->app['translator']->trans($tab))),
-                            'link' => FRAMEWORK_URL.'/admin/i18n/editor/locale/'.strtolower($tab).self::$usage_param,
-                            'active' => ($active === strtolower($tab))
+                            'link' => FRAMEWORK_URL.'/admin/i18n/editor/locale/'.strtolower($tab).'/files'.self::$usage_param,
+                            'active' => (strtolower($active) === strtolower($tab))
                         );
                     }
                     break;
@@ -143,20 +155,10 @@ class i18nEditor extends i18nParser
     protected function getToolbarLocale($active, $locale)
     {
         $toolbar = array();
-        $tabs = array('summary', 'pending', 'edit');
+        $tabs = array('files', 'custom', 'pending', 'edit');
 
         foreach ($tabs as $tab) {
             switch ($tab) {
-                case 'summary':
-                    $toolbar[$tab] = array(
-                        'name' => 'summary',
-                        'text' => $this->app['translator']->trans('Summary'),
-                        'hint' => $this->app['translator']->trans('Summary for the locale %locale%', array(
-                            '%locale%' => $this->app['translator']->trans(strtoupper($locale)))),
-                        'link' => FRAMEWORK_URL.'/admin/i18n/editor/locale/'.strtolower($locale).self::$usage_param,
-                        'active' => ($active === 'summary')
-                    );
-                    break;
                 case 'pending':
                     $toolbar[$tab] = array(
                         'name' => 'pending',
@@ -170,9 +172,27 @@ class i18nEditor extends i18nParser
                     $toolbar[$tab] = array(
                         'name' => 'edit',
                         'text' => $this->app['translator']->trans('Edit'),
-                        'hint' => $this->app['translator']->trans('Create or edit translations'),
+                        'hint' => $this->app['translator']->trans('Edit a translations'),
                         'link' => FRAMEWORK_URL.'/admin/i18n/editor/translation/edit/id'.self::$usage_param,
                         'active' => ($active === 'edit')
+                    );
+                    break;
+                case 'files':
+                    $toolbar[$tab] = array(
+                        'name' => 'files',
+                        'text' => $this->app['translator']->trans('Files'),
+                        'hint' => $this->app['translator']->trans('View the translations grouped by locale files'),
+                        'link' => FRAMEWORK_URL.'/admin/i18n/editor/locale/'.strtolower($locale).'/files'.self::$usage_param,
+                        'active' => ($active === 'files')
+                    );
+                    break;
+                case 'custom':
+                    $toolbar[$tab] = array(
+                        'name' => 'custom',
+                        'text' => $this->app['translator']->trans('Custom'),
+                        'hint' => $this->app['translator']->trans('View the custom translations for this installation'),
+                        'link' => FRAMEWORK_URL.'/admin/i18n/editor/locale/'.strtolower($locale).'/custom'.self::$usage_param,
+                        'active' => ($active === 'custom')
                     );
                     break;
             }
@@ -333,31 +353,6 @@ class i18nEditor extends i18nParser
         return $this->showOverview();
     }
 
-    /**
-     * Controller for all Locale start dialogs
-     *
-     * @param Application $app
-     * @param string $locale
-     */
-    public function ControllerLocale(Application $app, $locale)
-    {
-        $this->initialize($app);
-
-
-
-        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-            '@phpManufaktur/Basic/Template', 'framework/i18n/locale.twig'),
-            array(
-                'usage' => self::$usage,
-                'usage_param' => self::$usage_param,
-                'toolbar' => $this->getToolbar(strtolower($locale)),
-                'toolbar_locale' => $this->getToolbarLocale('summary', $locale),
-                'alert' => $this->getAlert(),
-                'config' => self::$config,
-                'info' => self::$info
-            ));
-    }
-
     public function ControllerLocalePending(Application $app, $locale)
     {
         $this->initialize($app);
@@ -400,7 +395,7 @@ class i18nEditor extends i18nParser
             foreach ($list as $source) {
                 $sources[$source['locale_id']] = $source;
                 $sources[$source['locale_id']]['references'] =
-                $this->i18nReference->countReferencesForLocaleID($source['locale_id']);
+                    $this->i18nReference->countReferencesForLocaleID($source['locale_id']);
             }
         }
 
@@ -468,6 +463,8 @@ class i18nEditor extends i18nParser
         }
 
         $references = array();
+        $translations = array();
+        $translation_conflict = false;
         if (is_array($source)) {
             if (false === ($files = $this->i18nReference->selectReferencesForLocaleID($locale_id))) {
                 $this->setAlert('There exists no references for the locale source with the id %locale_id%.',
@@ -479,6 +476,33 @@ class i18nEditor extends i18nParser
                     $references[$file['file_id']]['file_path'] = realpath($file['file_path']);
                     $references[$file['file_id']]['basename'] = basename(realpath($file['file_path']));
                 }
+            }
+
+            foreach (self::$config['translation']['locale'] as $locale) {
+                if (false === ($files = $this->i18nTranslationFile->selectByLocaleID($locale_id, $locale))) {
+                    continue;
+                }
+                foreach ($files as $file) {
+                    $item = array();
+                    if (false !== ($translation = $this->i18nTranslation->select($file['translation_id']))) {
+                        $item = $file;
+                        $item['translation_text'] = $translation['translation_text'];
+                        $item['translation_remark'] = $translation['translation_remark'];
+                        $item['translation_status'] = $translation['translation_status'];
+                        if ($translation['translation_status'] === 'CONFLICT') {
+                            $translation_conflict = true;
+                        }
+                        $translations[] = $item;
+                    }
+                }
+            }
+            if (empty($translations)) {
+                $this->setAlert('There exists no translations for the locale source with the id %locale_id%',
+                        array('%locale_id%' => $locale_id), self::ALERT_TYPE_WARNING);
+            }
+            if ($translation_conflict) {
+                $this->setAlert('One or more translation for this source is conflicting!',
+                    array(), self::ALERT_TYPE_WARNING);
             }
         }
 
@@ -494,7 +518,8 @@ class i18nEditor extends i18nParser
                 'config' => self::$config,
                 'source' => $source,
                 'references' => $references,
-                'form' => $form->createView()
+                'form' => $form->createView(),
+                'translations' => $translations
             ));
     }
 
@@ -522,7 +547,9 @@ class i18nEditor extends i18nParser
         }
         else {
             // general error (timeout, CSFR ...)
-            $this->setAlert('The form is not valid, please check your input and try again!', array(), self::ALERT_TYPE_DANGER);
+            $this->setAlert('The form is not valid, please check your input and try again!', array(),
+                self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
+                    'method' => __METHOD__, 'line' => __LINE__));
             return $this->ControllerSourcesDetail($app, -1);
         }
     }
@@ -626,42 +653,138 @@ class i18nEditor extends i18nParser
             ));
     }
 
-    protected function getTranslationForm($data)
+    /**
+     * Sorting function for getLocaleFilesForChoice()
+     *
+     * @param string $a
+     * @param string $b
+     * @return integer
+     */
+    protected static function sortLocaleDirectories($a, $b)
     {
+        $a = strtolower(pathinfo($a, PATHINFO_DIRNAME));
+        $b = strtolower(pathinfo($b, PATHINFO_DIRNAME));
+
+        if ($a == $b) {
+            return 0;
+        }
+        return ($a < $b) ? -1 : 1;
+    }
+
+    /**
+     * Get the possible locale files for selecting or saving - this function
+     * check if the developer access is enabled or not
+     *
+     * @param string $locale
+     * @param boolean $must_exists the locale file must exists
+     */
+    protected function getLocaleFilesForChoice($locale, $must_exists=false, $ignore_admin=false)
+    {
+        $locale = strtolower($locale);
+        $extensions = new Finder();
+        $extensions->directories()->in(array(MANUFAKTUR_PATH));
+        $extensions->depth('== 0');
+        $extensions->sortByName();
+
+        // use stricly DIRECTORY_SEPARATOR to avoid problems with the realpath
+        $base = DIRECTORY_SEPARATOR.'Data'.DIRECTORY_SEPARATOR.'Locale'.DIRECTORY_SEPARATOR;
+
+        $search = array();
+        if ($ignore_admin || self::$config['developer']['enabled']) {
+            $sub = 'Metric'.DIRECTORY_SEPARATOR.$locale.'.php';
+            if (!$must_exists || ($must_exists && $this->app['filesystem']->exists(realpath(MANUFAKTUR_PATH).DIRECTORY_SEPARATOR.'Basic'.$base.$sub))) {
+                $search = array(realpath(MANUFAKTUR_PATH).DIRECTORY_SEPARATOR.'Basic'.$base.$sub => DIRECTORY_SEPARATOR.'Basic'.$base.$sub);
+            }
+        }
+
+
+        foreach ($extensions as $extension) {
+            $path = $extension->getRealpath();
+            $extension_name = substr($path, strrpos($path, DIRECTORY_SEPARATOR)+1);
+            if (in_array($extension_name, self::$config['finder']['php']['exclude']['directory'])) {
+                continue;
+            }
+            if ($ignore_admin || self::$config['developer']['enabled']) {
+                $subdirectory = DIRECTORY_SEPARATOR.'Data'.DIRECTORY_SEPARATOR.'Locale'.DIRECTORY_SEPARATOR.$locale.'.php';
+                if (!$must_exists || ($must_exists && $this->app['filesystem']->exists($path.$subdirectory))) {
+                    $search[$path.$subdirectory] = DIRECTORY_SEPARATOR.$extension_name.$subdirectory;
+                }
+            }
+            $subdirectory = DIRECTORY_SEPARATOR.'Data'.DIRECTORY_SEPARATOR.'Locale'.DIRECTORY_SEPARATOR.'Custom'.DIRECTORY_SEPARATOR.$locale.'.php';
+            if (!$must_exists || ($must_exists && $this->app['filesystem']->exists($path.$subdirectory))) {
+                $search[$path.$subdirectory] = DIRECTORY_SEPARATOR.$extension_name.$subdirectory;
+            }
+        }
+
+        // sort the result array by the locale directories
+        uasort($search, array('self', 'sortLocaleDirectories'));
+
+        return $search;
+    }
+
+    /**
+     * Get the form for translating locales
+     *
+     * @param array $data
+     */
+    protected function getTranslationForm($translation=array(), $translation_file=array())
+    {
+        $files = array();
+        $locale_files = $this->getLocaleFilesForChoice(isset($translation['locale_locale']) ? $translation['locale_locale'] : 'EN');
+        $locale_file_id = null;
+        $i = 0;
+        foreach ($locale_files as $key => $value) {
+            // use integer values instead of path's as key for the choices
+            $files[$i] = $value;
+            if (isset($translation_file['file_path']) && ($translation_file['file_path'] === $key)) {
+                $locale_file_id = $i;
+            }
+            $i++;
+        }
+
         $form = $this->app['form.factory']->createBuilder('form')
             ->add('translation_id', 'hidden', array(
-                'data' => isset($data['translation_id']) ? $data['translation_id'] : -1
+                'data' => isset($translation['translation_id']) ? $translation['translation_id'] : -1
             ))
             ->add('locale_id', 'hidden', array(
-                'data' => isset($data['locale_id']) ? $data['locale_id'] : -1
+                'data' => isset($translation['locale_id']) ? $translation['locale_id'] : -1
             ))
             ->add('locale_locale', 'hidden', array(
-                'data' => isset($data['locale_locale']) ? $data['locale_locale'] : ''
+                'data' => isset($translation['locale_locale']) ? $translation['locale_locale'] : 'EN'
                 ))
             ->add('translation_status', 'hidden', array(
-                'data' => isset($data['translation_status']) ? $data['translation_status'] : 'PENDING'
+                'data' => isset($translation['translation_status']) ? $translation['translation_status'] : 'PENDING'
+            ))
+            ->add('extension', 'hidden', array(
+                'data' => isset($translation_file['extension']) ? $translation_file['extension'] : 'UNKNOWN'
             ))
             ->add('locale_source', 'hidden', array(
-                'data' => isset($data['locale_source']) ? $data['locale_source'] : ''
+                'data' => isset($translation['locale_source']) ? $translation['locale_source'] : ''
             ))
             ->add('translation_text', 'textarea', array(
-                'data' => isset($data['translation_text']) ? $data['translation_text'] : ''
+                'data' => isset($translation['translation_text']) ? $translation['translation_text'] : '',
+                'read_only' => (isset($translation['translation_status']) && ($translation['translation_status'] === 'CONFLICT'))
             ))
-            ->add('locale_remark', 'textarea', array(
-                'data' => isset($data['locale_remark']) ? $data['locale_remark'] : '',
+            ->add('translation_remark', 'textarea', array(
+                'data' => isset($translation['locale_remark']) ? $translation['locale_remark'] : '',
                 'required' => false
-            ));
-
-        if (self::$config['developer_mode']) {
-
-        }
-        else {
-
-        }
+            ))
+            ->add('file_path', 'choice', array(
+                'choices' => $files,
+                'empty_value' => '- please select -',
+                'data' => $locale_file_id
+            ))
+            ;
 
         return $form->getForm();
     }
 
+    /**
+     * Controller for the Translation Edit Dialog
+     *
+     * @param Application $app
+     * @param integer $translation_id
+     */
     public function ControllerTranslationEdit(Application $app, $translation_id)
     {
         $this->initialize($app);
@@ -671,6 +794,18 @@ class i18nEditor extends i18nParser
                 array('%id%' => $translation_id), self::ALERT_TYPE_DANGER);
             return $this->promptAlertFramework();
         }
+        if ($translation['translation_status'] === 'CONFLICT') {
+            if (!self::$config['developer']['enabled']) {
+                $this->setAlert('The status of this translation is set to <strong>CONFLICT</strong>. This problem must be solved by a developer.',
+                    array(), self::ALERT_TYPE_DANGER);
+            }
+            else {
+                $this->setAlert('You must solve the <strong>CONFLICT</strong> before you can change this translation record.',
+                    array(), self::ALERT_TYPE_DANGER);
+            }
+        }
+
+        $translation_files = $this->i18nTranslationFile->selectByTranslationID($translation_id, $translation['locale_locale']);
 
         if (false === ($source = $this->i18nSource->select($translation['locale_id']))) {
             $this->setAlert('The record with the ID %id% does not exists!',
@@ -692,19 +827,261 @@ class i18nEditor extends i18nParser
             }
         }
 
-        $form = $this->getTranslationForm($translation);
+        $form = $this->getTranslationForm($translation, $translation_files[0]);
 
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
             '@phpManufaktur/Basic/Template', 'framework/i18n/translation.edit.twig'),
             array(
                 'usage' => self::$usage,
                 'usage_param' => self::$usage_param,
-                'toolbar' => $this->getToolbar('problems'),
+                'toolbar' => $this->getToolbar($translation['locale_locale']),
                 'toolbar_locales' => $this->getToolbarLocale('edit', $translation['locale_locale']),
                 'alert' => $this->getAlert(),
                 'config' => self::$config,
                 'info' => self::$info,
-                'form' => $form->createView()
+                'form' => $form->createView(),
+                'references' => $references
+            ));
+    }
+
+    /**
+     * Controller to check Translations and write/backup locale files
+     *
+     * @param Application $app
+     */
+    public function ControllerTranslationEditCheck(Application $app)
+    {
+        $this->initialize($app);
+
+        // get the form
+        $form = $this->getTranslationForm();
+        // get the requested data
+        $form->bind($this->app['request']);
+
+        if ($form->isValid()) {
+            // the form is valid
+            $data = $form->getData();
+
+            $files = $this->getLocaleFilesForChoice($data['locale_locale']);
+            $i = 0;
+            foreach ($files as $key => $value) {
+                if ($i === $data['file_path']) {
+                    // locale path
+                    $locale_path = $key;
+                    // extension name
+                    $extension = ltrim($value, DIRECTORY_SEPARATOR);
+                    $extension = substr($extension, 0, strpos($extension, DIRECTORY_SEPARATOR));
+                    break;
+                }
+                $i++;
+            }
+
+            // update the translation record
+            $translation = array(
+                'translation_text' => $data['translation_text'],
+                'translation_md5' => md5($data['translation_text']),
+                'translation_remark' => !empty($data['translation_remark']) ? $data['translation_remark'] : '',
+                'translation_status' => 'TRANSLATED'
+            );
+            $this->i18nTranslation->update($data['translation_id'], $translation);
+
+            if (false === ($files = $this->i18nTranslationFile->selectByTranslationID($data['translation_id'], $data['locale_locale']))) {
+                // create a new translation file record
+                if (strpos($locale_path, DIRECTORY_SEPARATOR.'Metric'.DIRECTORY_SEPARATOR)) {
+                    $locale_type = 'METRIC';
+                }
+                elseif (strpos($locale_path, DIRECTORY_SEPARATOR.'Custom'.DIRECTORY_SEPARATOR)) {
+                    $locale_type = 'CUSTOM';
+                }
+                else {
+                    $locale_type = 'DEFAULT';
+                }
+                $file_data = array(
+                    'translation_id' => $data['translation_id'],
+                    'locale_id' => $data['locale_id'],
+                    'locale_locale' => $data['locale_locale'],
+                    'locale_type' => $locale_type,
+                    'extension' => $extension,
+                    'file_path' => $locale_path,
+                    'file_md5' => md5($locale_path)
+                );
+                $this->i18nTranslationFile->insert($file_data);
+            }
+
+            if (self::$config['translation']['file']['save']) {
+                // get the content of the current locale file
+                $file_array = $this->getLocaleFileArray($locale_path);
+                // add or update the current translation
+                $file_array[$data['locale_source']] = $data['translation_text'];
+                // sort the array
+                ksort($file_array);
+
+                $locale_array = array();
+                foreach ($file_array as $key => $value) {
+                    $locale_array["'".str_replace(array("\'","'"), array("'", "\'"), $key)."'"] = "'".str_replace(array("\'", "'"), array("'", "\'"), $value)."'";
+                }
+
+                $this->putLocaleFile($locale_path, $locale_array, $extension);
+            }
+        }
+        else {
+            // general error (timeout, CSFR ...)
+            $this->setAlert('The form is not valid, please check your input and try again!', array(),
+                self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
+                    'method' => __METHOD__, 'line' => __LINE__));
+        }
+
+        return $this->ControllerTranslationEdit($app, $data['translation_id']);
+    }
+
+    /**
+     * Create form to select a locale file
+     *
+     * @param string $locale
+     * @param integer $file_id
+     */
+    protected function getLocaleFileForm($locale, $file_id=-1)
+    {
+        $locale_files = $this->getLocaleFilesForChoice($locale, true, true);
+        $files = array();
+        $files[-1] = $this->app['translator']->trans('- all files -');
+        $i = 0;
+        foreach ($locale_files as $key => $value) {
+            $files[$i] = $value;
+            $i++;
+        }
+
+        $form = $this->app['form.factory']->createBuilder('form')
+        ->add('locale_locale', 'hidden', array(
+            'data' => $locale
+        ))
+        ->add('locale_file', 'choice', array(
+             'choices' => $files,
+             'data' => $file_id
+        ));
+        return $form->getForm();
+    }
+
+    /**
+     * Show select dropdown for locale files an a list of translations for the
+     * current choosen locale file
+     *
+     * @param string $locale
+     * @param integer $file_id
+     */
+    protected function showLocaleFile($locale, $file_id)
+    {
+        $locale_path = null; // select all files
+        if ($file_id >= 0) {
+            $locale_files = $this->getLocaleFilesForChoice($locale, true, true);
+            $i = 0;
+            foreach ($locale_files as $key => $value) {
+                if ($i === $file_id) {
+                    $locale_path = $key;
+                    break;
+                }
+                $i++;
+            }
+        }
+
+        $form = $this->getLocaleFileForm($locale, $file_id);
+
+        if (is_null($locale_path)) {
+            if (false === ($locales = $this->i18nTranslation->selectTranslated($locale))) {
+                $this->setAlert('There a no translated sources available');
+            }
+        }
+        else {
+            if (false === ($locales = $this->i18nTranslation->selectByPathMD5(md5($locale_path)))) {
+                $this->setAlert('This locale file does not contain any translations!');
+            }
+        }
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template', 'framework/i18n/locale.file.twig'),
+            array(
+                'usage' => self::$usage,
+                'usage_param' => self::$usage_param,
+                'toolbar' => $this->getToolbar($locale),
+                'toolbar_locale' => $this->getToolbarLocale('files', $locale),
+                'alert' => $this->getAlert(),
+                'locale_locale' => $locale,
+                'config' => self::$config,
+                'info' => self::$info,
+                'form' => $form->createView(),
+                'locales' => $locales
+            ));
+    }
+
+    /**
+     * General controller for locale files
+     *
+     * @param Application $app
+     * @param string $locale
+     * @param integer $file_id
+     */
+    public function ControllerLocaleFiles(Application $app, $locale, $file_id)
+    {
+        $this->initialize($app);
+        $id = ($file_id > -2) ? $file_id : 0;
+        return $this->showLocaleFile($locale, $id);
+    }
+
+    /**
+     * Check the select form and show the locale list for the choosen file
+     *
+     * @param Application $app
+     * @param string $locale
+     */
+    public function ControllerLocaleFileSelect(Application $app, $locale)
+    {
+        $this->initialize($app);
+
+        // get the form
+        $form = $this->getLocaleFileForm($locale);
+        // get the requested data
+        $form->bind($this->app['request']);
+
+        if ($form->isValid()) {
+            // the form is valid
+            $data = $form->getData();
+            return $this->showLocaleFile($locale, $data['locale_file']);
+        }
+        else {
+            // general error (timeout, CSFR ...)
+            $this->setAlert('The form is not valid, please check your input and try again!', array(),
+                self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
+                    'method' => __METHOD__, 'line' => __LINE__));
+        }
+        return $this->showLocaleFile($locale, -1);
+    }
+
+    /**
+     * Show all available custom translations for this installation
+     *
+     * @param Application $app
+     * @param string $locale
+     */
+    public function ControllerLocaleCustom(Application $app, $locale)
+    {
+        $this->initialize($app);
+
+        if (false === ($locales = $this->i18nTranslation->selectTranslatedCustom($locale))) {
+            $this->setAlert('There exists no custom translations for this installation!');
+        }
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template', 'framework/i18n/locale.custom.twig'),
+            array(
+                'usage' => self::$usage,
+                'usage_param' => self::$usage_param,
+                'toolbar' => $this->getToolbar($locale),
+                'toolbar_locale' => $this->getToolbarLocale('custom', $locale),
+                'alert' => $this->getAlert(),
+                'locale_locale' => $locale,
+                'config' => self::$config,
+                'info' => self::$info,
+                'locales' => $locales
             ));
     }
 }

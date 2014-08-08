@@ -148,6 +148,19 @@ ul.dropdown-menu {
   margin-bottom: 20px;
 }
 
+.conflict {
+  font-weight: bold;
+  color: #da251d;
+}
 .source {
   font-family: Courier, monospace;
+}
+.source.conflict {
+  text-decoration: line-through;
+  font-weight: normal;
+  color: #dcdcdc;
+}
+
+form.form-inline {
+  margin-bottom: 20px;
 }

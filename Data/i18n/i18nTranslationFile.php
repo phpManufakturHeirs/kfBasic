@@ -54,6 +54,7 @@ class i18nTranslationFile
       `locale_type` ENUM ('DEFAULT', 'CUSTOM', 'METRIC') NOT NULL DEFAULT 'DEFAULT',
       `extension` VARCHAR(64) NOT NULL DEFAULT '',
       `file_path` TEXT NOT NULL,
+      `file_md5` VARCHAR(64) NOT NULL DEFAULT '',
       `timestamp` TIMESTAMP,
       PRIMARY KEY (`file_id`),
       INDEX (`locale_id`, `translation_id`),
