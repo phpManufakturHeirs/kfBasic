@@ -30,7 +30,7 @@
   "description": {
     "en":{
       "title":"i18nEditor for the kitFramework",
-      "short":"i18nEditor for the kitFramework",
+      "short":"Special editor to edit kitFramework locale files (Internationalization)",
       "url":"https:\/\/kit2.phpmanufaktur.de"
     },
     "de":{

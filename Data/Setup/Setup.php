@@ -27,6 +27,7 @@ use phpManufaktur\Basic\Data\i18n\i18nReference;
 use phpManufaktur\Basic\Data\i18n\i18nTranslation;
 use phpManufaktur\Basic\Data\i18n\i18nTranslationFile;
 use phpManufaktur\Basic\Data\i18n\i18nTranslationUnassigned;
+use phpManufaktur\Basic\Control\CMS\InstallAdminTool;
 
 /**
  * Setup all needed database tables and initialize the kitFramework
@@ -135,6 +136,10 @@ class Setup
             }
         }
 
+        // install the Confguration Editor as CMS Admin-Tool
+        $admin_tool = new InstallAdminTool($this->app);
+        $admin_tool->exec(MANUFAKTUR_PATH.'/Basic/extension.jsoneditor.json', '/basic/cms/jsoneditor');
+
         // create the tables for the localeEditor
         $i18nScanFile = new i18nScanFile($app);
         $i18nScanFile->createTable();
@@ -153,6 +158,8 @@ class Setup
 
         $i18nTranslationUnassigned = new i18nTranslationUnassigned($app);
         $i18nTranslationUnassigned->createTable();
+
+        $admin_tool->exec(MANUFAKTUR_PATH.'/Basic/extension.i18n.editor.json', '/basic/cms/i18n/editor');
 
         return $app['translator']->trans('Successfull installed the extension %extension%.',
             array('%extension%' => 'Basic'));

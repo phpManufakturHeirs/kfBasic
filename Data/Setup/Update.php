@@ -247,7 +247,6 @@ class Update
      */
     protected function release_099()
     {
-        //if (!$this->app['filesystem']->exists(CMS_PATH.'/mo'))
         $admin_tool = new InstallAdminTool($this->app);
         $admin_tool->exec(MANUFAKTUR_PATH.'/Basic/extension.jsoneditor.json', '/basic/cms/jsoneditor');
     }
@@ -303,6 +302,9 @@ class Update
             $i18nTranslationUnassigned = new i18nTranslationUnassigned($this->app);
             $i18nTranslationUnassigned->createTable();
         }
+
+        $admin_tool = new InstallAdminTool($this->app);
+        $admin_tool->exec(MANUFAKTUR_PATH.'/Basic/extension.i18n.editor.json', '/basic/cms/i18n/editor');
     }
 
     /**

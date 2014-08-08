@@ -622,6 +622,16 @@ $admin->get('/json/editor/open/file/{filename}',
 $app->post('/json/editor/save',
     'phpManufaktur\Basic\Control\jsonEditor\jsonEditor::ControllerSaveFile');
 
+/**
+ * Use the EmbeddedAdministration feature to connect the i18nEditor with the CMS
+ *
+ * @link https://github.com/phpManufaktur/kitFramework/wiki/Extensions-%23-Embedded-Administration
+ */
+$app->get('/basic/cms/i18n/editor/{cms_information}', function ($cms_information) use ($app) {
+    $administration = new EmbeddedAdministration($app);
+    return $administration->route('/admin/i18n/editor', $cms_information, 'ROLE_ADMIN');
+});
+
 // i18nEditor
 $admin->get('/i18n/editor',
     'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerOverview');
