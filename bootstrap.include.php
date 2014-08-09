@@ -657,8 +657,9 @@ $admin->post('/i18n/editor/locale/{locale}/file/select',
     'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerLocaleFileSelect');
 $admin->get('/i18n/editor/locale/{locale}/custom',
     'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerLocaleCustom');
-$admin->get('/i18n/editor/sources',
-    'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerSources');
+$admin->get('/i18n/editor/sources/{tab}',
+    'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerSources')
+    ->value('tab', 'a-c');
 $admin->get('/i18n/editor/sources/detail/{locale_id}',
     'phpManufaktur\Basic\Control\i18nEditor\i18nEditor::ControllerSourcesDetail')
     ->assert('locale_id', '\d+');

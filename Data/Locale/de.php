@@ -201,9 +201,9 @@ return array(
     => 'Hallo %name%,<br />Sie möchten Ihr Passwort ändern, bitte geben Sie das neue Passwort ein, wiederholen Sie es zur Sicherheit und schicken Sie das Formular ab.<br />Falls Sie Ihr Passwort nicht ändern möchten, verlassen Sie bitte einfach diesen Dialog.',
   'Hello %name%,<br />you have asked to create a new password for the kitFramework hosted at %server%.'
     => 'Hallo %name%,<br />Sie haben darum gebeten ein neues Passwort für das kitFramework auf %server% zu erhalten.',
-  'help'
-    => 'Hilfe',
   'Help'
+    => 'Hilfe',
+  'help'
     => 'Hilfe',
   'help_accounts_list_json'
     => '<p>Diese Datei ermöglicht es Ihnen die angezeigten Spalten und die Sortierung der Felder in der <a href="%FRAMEWORK_URL%/admin/accounts/list" target="_blank">Übersicht der Benutzerkonten</a> zu ändern.</p><p>Verfügbare Felder für die Verwendung in <var>columns</var> und <var>list > order > by</var> sind: <var>id, username, email, password, displayname, last_login, roles, guid, guid_timestamp, guid_status, status</var> und <var>timestamp</var>. Mit <var>list > rows_per_page</var> legen Sie fest, wie viele Benutzerkonten pro Seite angezeigt werden.</p>',
@@ -222,8 +222,6 @@ return array(
   'i18n'
     => 'i18n',
   'Id'
-    => 'ID',
-  'ID'
     => 'ID',
   'If you have forgotten your password, you can order a link to create a new one. Please type in the email address assigned to your account and submit the form.'
     => 'Falls Sie Ihr Passwort vergessen haben, können Sie einen Link anfordern um ein neues Passwort zu erstellen. Bitte tragen Sie die E-Mail Adresse ein, die ihrem Konto zugeordnet ist und übermitteln Sie das Formular.',
@@ -319,22 +317,22 @@ return array(
     => 'Abmelden',
   'Message'
     => 'Mitteilung',
-  'Missing the parameter'
+  'Missing the parameter "expression"!'
     => 'Vermisse den Parameter <em>expression</em>!',
   'Missing the parameter: %parameter%'
     => 'Benötige den Parameter: %parameter%',
   'Missing the user ID!'
     => 'Vermisse die Anwender ID!',
-  'Need help? Please visit the <a href='
-    => 'Benötigen Sie Hilfe? Bitte besuchen Sie die <a href="%url%" target="_blank">phpManufaktur Support Group</a>.',
+  'Need help? Please visit the <a href="%url%" target="_blank">phpManufaktur Support Group</a>.'
+    => 'Benötigen Sie Hilfe? Bitte besuchen Sie die <a href="%url% target="_blank">phpManufaktur Support Group</a>.',
   'New kitFramework release available!'
     => 'Es ist eine neue kitFramework Release verfügbar!',
   'No account? <a href="%register_url%">Register a user account for DogPaw</a>!'
     => 'Kein Benutzerkonto? <a href="%register_url%">Melden Sie sich kostenlos an</a>!',
   'No fitting user role dectected!'
     => 'Es wurde kein passendes Benutzerrecht gefunden',
-  'No sources available, please <a href='
-    => 'Es sind keine Quelltexte verfügbar, bitte <a href="%url%">starten Sie einen Suchlauf</a>!',
+  'No sources available, please <a href="%url%">start a search run</a>!'
+    => 'Es sind keine Quelltexte verfügbar, bitte <a href="%url%">führen Sie einen Suchlauf durch</a>!',
   'One or more translation for this source is conflicting!'
     => 'Eine oder mehrere Übersetzungen für diesen Quelltext kollidieren und sind widersprüchlich.',
   'Oooops, missing the alert which should be prompted here ... '
@@ -353,8 +351,6 @@ return array(
     => 'Passwort wiederholen',
   'Pending translations'
     => 'Anstehende Übersetzungen',
-  'Please <a href='
-    => 'Bitte <a href="%source%">besuchen Sie diese Seite</a> um den Inhalt dieses iFrame zu sehen.',
   'Please be aware that <em>translations</em> for the locale <strong>EN</strong> (english) are more often than not identical with the <em>source</em> - for this reason they will be only added to a language file if the <em>translation</em> differ from <em>source</em>.'
     => 'Bitte beachten Sie, dass <em>Übersetzungen</em> für die Sprache <strong>EN</strong> (Englisch) meistens mit den <em>Quelltexten</em> identisch sind - aus diesem Grund werden der Sprachdatei in diesem Fall nur Übersetzungen hinzugefügt, wenn die <em>Übersetzung</em> vom <em>Quelltext</em> abweicht.',
   'Please check the username and password and try again!'
@@ -371,6 +367,8 @@ return array(
     => 'Bitte wählen Sie die Konfigurationsdatei aus, die Sie bearbeiten möchten.',
   'Please use the following link to create a new password: %reset_url%'
     => 'Bitte verwenden Sie den folgenden Link um ein neues Passwort anzulegen:<br />%reset_url%',
+  'Please <a href="%source%">visit this page</a> to view the content of this iframe.'
+    => 'Bitte <a href="%source%">besuchen Sie diese Seite</a> um den Inhalt dieses iFrame zu sehen.',
   'Problems'
     => 'Probleme',
   'Problems with the translation data'
@@ -388,7 +386,7 @@ return array(
   'Regards, Your kitFramework team'
     => 'Mit freundlichen Grüßen<br />Ihr kitFramework Team',
   'Release'
-    => 'Ausgabe',
+    => 'Release',
   'Repeat by pattern, i.e. at the last tuesday of the month'
     => 'Nach einem Muster, z.B. am letzten Donnerstag im Monat',
   'Repeat Password'
@@ -515,10 +513,10 @@ return array(
     => 'Die Beschreibungsdatei extension.json für die Erweiterung <b>%name%</b> enthält nicht alle Definitionen, prüfen Sie <i>GUID</i>, <i>Group</i> und <i>Release</i>!',
   'The file %file% does not exists in Gist %gist_id%!'
     => 'Die Datei %file% existiert nicht im Gist %gist_id%',
-  'The file <i>%file%</i> does not exists!'
-    => 'Die Datei <em>%file%</em> existiert nicht!',
   'The file <strong>%file%</strong> does not exists!'
     => 'Die Datei <strong>%file%</strong> existiert nicht!',
+  'The file <i>%file%</i> does not exists!'
+    => 'Die Datei <em>%file%</em> existiert nicht!',
   'The file <strong>%file%</strong> is not readable!'
     => 'Die Datei <strong>%file%</strong> ist nicht lesbar!',
   'The form is not valid, please check your input and try again!'
@@ -637,7 +635,7 @@ return array(
     => 'Übersetzung mit der ID %id% aktualisiert.',
   'Usage'
     => 'Verwendung',
-  'Use <code>~~ help ~~</code> to view the <a href='
+  'Use <code>~~ help ~~</code> to view the <a href="%link%">general help file for the kitCommands</a>.'
     => 'Verwenden Sie <code>~~ help ~~</code> um sich die <a href="%link%">Allgemeine Hilfe zu den kitCommands</a> anzeigen zu lassen.',
   'User roles may depend from others and can be set or extended dynamically by the kitFramework extensions. To see the roles really associated to this account if the user is authenticated use the "switch to" button.'
     => 'Benutzerrechte können von einander abhängig sein und dynamisch durch kitFramework Anwendungen erweitert werden. Um die Benutzerrechte zu sehen, die tatsächlich einem angemeldeten Anwender zugewiesen sind nutzen Sie bitte die Funktion "Zum Anwender umschalten".',

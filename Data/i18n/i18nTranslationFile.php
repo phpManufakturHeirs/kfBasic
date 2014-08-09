@@ -98,6 +98,7 @@ EOD;
     public function insert($data)
     {
         try {
+
             $insert = array();
             foreach ($data as $key => $value) {
                 $insert[$key] = (is_string($value)) ? $this->app['utils']->sanitizeText($value) : $value;

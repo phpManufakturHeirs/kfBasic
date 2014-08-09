@@ -47,9 +47,7 @@ class forgottenPassword extends Alert
         $this->initialize($app);
 
         $form = $app['form.factory']->createBuilder('form')
-        ->add('email', 'email', array(
-            'label' => 'Email'
-        ))
+        ->add('email', 'email')
         ->getForm();
         return $app['twig']->render($app['utils']->getTemplateFile(
             '@phpManufaktur/Basic/Template', 'framework/password.forgotten.twig'),

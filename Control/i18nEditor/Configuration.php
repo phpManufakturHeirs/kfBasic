@@ -100,9 +100,9 @@ class Configuration
                             'Data/Locale',
                             'Template',
                             'Library',
+                            'TemplateTools',
                             'TemplateTools/Examples',
-                            'TemplateTools/Pattern',
-                            'Updater'
+                            'TemplateTools/Pattern'
                         )
                     )
                 ),
@@ -137,6 +137,7 @@ class Configuration
                         'directory' => array(
                             'Control',
                             'Template',
+                            'TemplateTools',
                             'Library',
                             'Data/Setup',
                             'Data/CMS',
@@ -262,14 +263,11 @@ class Configuration
                     '[%file%:%line%] Excel Error: %error%',
                     'Ckeditorfuncnum',
                     'Comment parent',
-                    'Comment update info',
                     'Count cells',
                     'Create by',
                     'Create type',
                     'cURL error: %error%',
                     'data',
-                    'Day sequence',
-                    'Day type',
                     'Dbglossary',
                     'Email type',
                     'en',
@@ -279,10 +277,7 @@ class Configuration
                     'Extra type description',
                     "Extra type id",
                     "Extra type name",
-                    'Extra type type',
-                    'Group location contact tags',
-                    'Group organizer contact tags',
-                    'Group participant contact tags',
+                    'Extra type type'
 
                 ),
                 'file' => array(

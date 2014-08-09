@@ -50,7 +50,9 @@ class i18nTranslationUnassigned
       `extension` VARCHAR(64) NOT NULL DEFAULT '',
       `locale_locale` VARCHAR(2) NOT NULL DEFAULT 'EN',
       `locale_source` TEXT NOT NULL,
+      `locale_source_plain` TEXT NOT NULL,
       `translation_text` TEXT NOT NULL,
+      `translation_text_plain` TEXT NOT NULL,
       `timestamp` TIMESTAMP,
       PRIMARY KEY (`unassigned_id`)
     )
@@ -90,6 +92,8 @@ EOD;
     public function insert($data)
     {
         try {
+            $data['locale_source_plain'] = isset($data['locale_source']) ? $this->app['utils']->specialCharsToAsciiChars(strip_tags($data['locale_source']), true) : '';
+            $data['translation_text_plain'] = isset($data['translation_text']) ? $this->app['utils']->specialCharsToAsciiChars(strip_tags($data['translation_text']), true) : '';
             $insert = array();
             foreach ($data as $key => $value) {
                 $insert[$key] = is_string($value) ? $this->app['utils']->sanitizeText($value) : $value;

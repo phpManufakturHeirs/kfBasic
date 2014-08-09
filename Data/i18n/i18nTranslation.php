@@ -50,8 +50,10 @@ class i18nTranslation
       `locale_id` INT(11) NOT NULL DEFAULT -1,
       `locale_locale` VARCHAR(2) NOT NULL DEFAULT 'EN',
       `locale_source` TEXT NOT NULL,
+      `locale_source_plain` TEXT NOT NULL,
       `locale_md5` VARCHAR(64) NOT NULL DEFAULT '',
       `translation_text` TEXT NOT NULL,
+      `translation_text_plain` TEXT NOT NULL,
       `translation_md5` VARCHAR(64) NOT NULL DEFAULT '',
       `translation_remark` TEXT NOT NULL,
       `translation_status` ENUM ('PENDING', 'TRANSLATED', 'CONFLICT', 'WIDOWED') NOT NULL DEFAULT 'PENDING',
@@ -112,6 +114,8 @@ EOD;
     public function insert($data)
     {
         try {
+            $data['locale_source_plain'] = isset($data['locale_source']) ?  $this->app['utils']->specialCharsToAsciiChars(strip_tags($data['locale_source']), true) : '';
+            $data['translation_text_plain'] = isset($data['translation_text']) ? $this->app['utils']->specialCharsToAsciiChars(strip_tags($data['translation_text']), true) : '';
             $insert = array();
             foreach ($data as $key => $value) {
                 $insert[$key] = (is_string($value)) ? $this->app['utils']->sanitizeText($value) : $value;
@@ -250,6 +254,12 @@ EOD;
     public function update($translation_id, $data)
     {
         try {
+            if (isset($data['locale_source'])) {
+                $data['locale_source_plain'] = $this->app['utils']->specialCharsToAsciiChars(strip_tags($data['locale_source']), true);
+            }
+            if (isset($data['translation_text'])) {
+                $data['translation_text_plain'] = $this->app['utils']->specialCharsToAsciiChars(strip_tags($data['translation_text']), true);
+            }
             $update = array();
             foreach ($data as $key => $value) {
                 $update[$key] = is_string($value) ? $this->app['utils']->sanitizeText($value) : $value;

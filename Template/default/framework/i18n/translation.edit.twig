@@ -50,7 +50,7 @@
       <div class="form-group">
         <label class="col-sm-3 control-label">{{ 'locale_source'|humanize|trans }}</label>
         <div class="col-sm-6">
-          <p class="form-control-static source">{{ form.locale_source.vars.value|escape('html') }}</p>
+          <p class="form-control-static source">{{ form.locale_source.vars.value }}</p>
         </div>
       </div>
       {{ form_widget(form) }}

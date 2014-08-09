@@ -200,6 +200,91 @@ class i18nEditor extends i18nParser
         return $toolbar;
     }
 
+    protected function getToolbarAZ($active)
+    {
+        $toolbar = array();
+        $tabs = array('a-c','d-f','g-i','j-l','m-p','q-s','t','u-z','special');
+
+        foreach ($tabs as $tab) {
+            switch ($tab) {
+                case 'a-c':
+                    $toolbar[$tab] = array(
+                        'name' => 'a-c',
+                        'text' => 'ABC',
+                        'link' => FRAMEWORK_URL.'/admin/i18n/editor/sources/'.$tab.self::$usage_param,
+                        'active' => ($active === 'a-c')
+                    );
+                    break;
+                case 'd-f':
+                    $toolbar[$tab] = array(
+                        'name' => 'd-f',
+                        'text' => 'DEF',
+                        'link' => FRAMEWORK_URL.'/admin/i18n/editor/sources/'.$tab.self::$usage_param,
+                        'active' => ($active === 'd-f')
+                    );
+                    break;
+                case 'g-i':
+                    $toolbar[$tab] = array(
+                        'name' => 'g-i',
+                        'text' => 'GHI',
+                        'link' => FRAMEWORK_URL.'/admin/i18n/editor/sources/'.$tab.self::$usage_param,
+                        'active' => ($active === 'g-i')
+                    );
+                    break;
+                case 'j-l':
+                    $toolbar[$tab] = array(
+                        'name' => 'j-l',
+                        'text' => 'JKL',
+                        'link' => FRAMEWORK_URL.'/admin/i18n/editor/sources/'.$tab.self::$usage_param,
+                        'active' => ($active === 'j-l')
+                    );
+                    break;
+                case 'm-p':
+                    $toolbar[$tab] = array(
+                        'name' => 'm-p',
+                        'text' => 'MNOP',
+                        'link' => FRAMEWORK_URL.'/admin/i18n/editor/sources/'.$tab.self::$usage_param,
+                        'active' => ($active === 'm-p')
+                    );
+                    break;
+               case 'q-s':
+                    $toolbar[$tab] = array(
+                        'name' => 'q-s',
+                        'text' => 'QRS',
+                        'link' => FRAMEWORK_URL.'/admin/i18n/editor/sources/'.$tab.self::$usage_param,
+                        'active' => ($active === 'q-s')
+                    );
+                    break;
+               case 't':
+                    $toolbar[$tab] = array(
+                        'name' => 't',
+                        'text' => 'T',
+                        'link' => FRAMEWORK_URL.'/admin/i18n/editor/sources/'.$tab.self::$usage_param,
+                        'active' => ($active === 't')
+                    );
+                    break;
+               case 'u-z':
+                    $toolbar[$tab] = array(
+                        'name' => 'u-z',
+                        'text' => 'UVWXYZ',
+                        'link' => FRAMEWORK_URL.'/admin/i18n/editor/sources/'.$tab.self::$usage_param,
+                        'active' => ($active === 'u-z')
+                    );
+                    break;
+               case 'special':
+                    $toolbar[$tab] = array(
+                        'name' => 'special',
+                        'text' => '*',
+                        'link' => FRAMEWORK_URL.'/admin/i18n/editor/sources/'.$tab.self::$usage_param,
+                        'active' => ($active === 'special')
+                    );
+                    break;
+
+            }
+        }
+        return $toolbar;
+    }
+
     /**
      * Get the toolbar for the problems dialog
      *
@@ -262,7 +347,8 @@ class i18nEditor extends i18nParser
             array(
                 'usage' => self::$usage,
                 'toolbar' => $this->getToolbar('about'),
-                'extension' => $extension
+                'extension' => $extension,
+                'config' => self::$config
             ));
     }
 
@@ -382,11 +468,12 @@ class i18nEditor extends i18nParser
      * Return the Sources Overview dialog
      *
      */
-    protected function showSources()
+    protected function showSources($tab)
     {
         if (false === ($list = $this->i18nSource->selectAll(
             self::$config['editor']['sources']['list']['order_by'],
-            self::$config['editor']['sources']['list']['order_direction']))) {
+            self::$config['editor']['sources']['list']['order_direction'],
+            $tab))) {
             $this->setAlert('No sources available, please <a href="%url%">start a search run</a>!',
                 array('%url%' => FRAMEWORK_URL.'/admin/i18n/editor/scan'.self::$usage_param), self::ALERT_TYPE_WARNING);
         }
@@ -408,7 +495,8 @@ class i18nEditor extends i18nParser
                 'toolbar' => $this->getToolbar('sources'),
                 'alert' => $this->getAlert(),
                 'config' => self::$config,
-                'sources' => $sources
+                'sources' => $sources,
+                'toolbar_az' => $this->getToolbarAZ($tab)
             ));
     }
 
@@ -417,10 +505,10 @@ class i18nEditor extends i18nParser
      *
      * @param Application $app
      */
-    public function ControllerSources(Application $app)
+    public function ControllerSources(Application $app, $tab)
     {
         $this->initialize($app);
-        return $this->showSources();
+        return $this->showSources($tab);
     }
 
     /**
@@ -439,7 +527,7 @@ class i18nEditor extends i18nParser
                 'data' => isset($data['locale_locale']) ? $data['locale_locale'] : ''
                 ))
             ->add('locale_source', 'hidden', array(
-                'data' => isset($data['locale_source']) ? $data['locale_source'] : ''
+                'data' => isset($data['locale_source']) ? $this->app['utils']->sanitizeText($data['locale_source']) : ''
             ))
             ->add('locale_remark', 'textarea', array(
                 'data' => isset($data['locale_remark']) ? $data['locale_remark'] : '',
@@ -760,7 +848,7 @@ class i18nEditor extends i18nParser
                 'data' => isset($translation_file['extension']) ? $translation_file['extension'] : 'UNKNOWN'
             ))
             ->add('locale_source', 'hidden', array(
-                'data' => isset($translation['locale_source']) ? $translation['locale_source'] : ''
+                'data' => isset($translation['locale_source']) ? $this->app['utils']->sanitizeText($translation['locale_source']) : ''
             ))
             ->add('translation_text', 'textarea', array(
                 'data' => isset($translation['translation_text']) ? $translation['translation_text'] : '',
@@ -920,6 +1008,7 @@ class i18nEditor extends i18nParser
             if (self::$config['translation']['file']['save']) {
                 // get the content of the current locale file
                 $file_array = $this->getLocaleFileArray($locale_path);
+
                 // add or update the current translation
                 $file_array[$data['locale_source']] = $data['translation_text'];
 
@@ -931,7 +1020,6 @@ class i18nEditor extends i18nParser
                 foreach ($file_array as $key => $value) {
                     $locale_array["'".str_replace(array("\'","'"), array("'", "\'"), $key)."'"] = "'".str_replace(array("\'", "'"), array("'", "\'"), $value)."'";
                 }
-
                 $this->putLocaleFile($locale_path, $locale_array, $extension);
             }
         }

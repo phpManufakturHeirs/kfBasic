@@ -875,7 +875,7 @@ class Utils
      * @param string $format_rgb format string for the RGB return
      * @return Ambigous <string, array>
      */
-    function hex2rgb($hex, $formatted=true, $format_rgb='rgb(%d, %d %d)')
+    public function hex2rgb($hex, $formatted=true, $format_rgb='rgb(%d, %d %d)')
     {
         // remove the sharp at start
         $hex =  ltrim($hex, '#');
@@ -905,7 +905,7 @@ class Utils
      * @throws \Exception
      * @return string hexadecimal value
      */
-    function rgb2hex($rgb)
+    public function rgb2hex($rgb)
     {
         if (is_string($rgb)) {
             if (!strpos($rgb, ',')) {
@@ -924,6 +924,22 @@ class Utils
         $hex .= str_pad(dechex($rgb[2]), 2, "0", STR_PAD_LEFT);
 
         return $hex;
+    }
+
+    /**
+     * Uses the htmlentities function to change special chars like é or Ö to a
+     * simple e or O - use i.e. for sorting functions
+     *
+     * @param string $string
+     * @param boolean $lowercase set to TRUE to return a lowercase string
+     * @return string
+     */
+    public function specialCharsToAsciiChars($string, $lowercase=false)
+    {
+        if (strpos($string = htmlentities($string, ENT_QUOTES, 'UTF-8'), '&') !== false) {
+            $string = html_entity_decode(preg_replace('~&([a-z]{1,2})(?:acute|cedil|circ|grave|lig|orn|ring|slash|tilde|uml);~i', '$1', $string), ENT_QUOTES, 'UTF-8');
+        }
+        return ($lowercase) ? strtolower($string) : $string;
     }
 
 }

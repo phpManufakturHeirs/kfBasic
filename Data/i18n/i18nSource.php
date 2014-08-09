@@ -47,6 +47,7 @@ class i18nSource
     CREATE TABLE IF NOT EXISTS `$table` (
       `locale_id` INT(11) NOT NULL AUTO_INCREMENT,
       `locale_source` TEXT NOT NULL,
+      `locale_source_plain` TEXT NOT NULL,
       `locale_locale` VARCHAR(2) NOT NULL DEFAULT 'EN',
       `locale_md5` VARCHAR (64) NOT NULL DEFAULT '',
       `locale_remark` TEXT NOT NULL,
@@ -103,6 +104,7 @@ EOD;
     public function insert($data)
     {
         try {
+            $data['locale_source_plain'] = isset($data['locale_source']) ? $this->app['utils']->specialCharsToAsciiChars(strip_tags($data['locale_source']), true) : '';
             $insert = array();
             foreach ($data as $key => $value) {
                 $insert[$key] = (is_string($value)) ? $this->app['utils']->sanitizeText($value) : $value;
@@ -172,10 +174,35 @@ EOD;
      * @throws \Exception
      * @return Ambigous <boolean, array>
      */
-    public function selectAll($order_by=null, $order_direction=null)
+    public function selectAll($order_by=null, $order_direction=null, $tab=null)
     {
         try {
             $SQL = "SELECT * FROM `".self::$table_name."`";
+            if (!is_null($tab)) {
+                $SQL .= " WHERE `locale_source_plain` ";
+                switch ($tab) {
+                    case 'a-c':
+                        $SQL .= "RLIKE '^[A-C]'"; break;
+                    case 'd-f':
+                        $SQL .= "RLIKE '^[D-F]'"; break;
+                    case 'g-i':
+                        $SQL .= "RLIKE '^[G-I]'"; break;
+                    case 'j-l':
+                        $SQL .= "RLIKE '^[J-L]'"; break;
+                    case 'm-p':
+                        $SQL .= "RLIKE '^[M-P]'"; break;
+                    case 'q-s':
+                        $SQL .= "RLIKE '^[Q-S]'"; break;
+                    case 't':
+                        $SQL .= "RLIKE '^[T]'"; break;
+                    case 'u-z':
+                        $SQL .= "RLIKE '^[U-Z]'"; break;
+                    case 'special':
+                    default:
+                        $SQL .= "NOT RLIKE '^[A-Z]'";
+                        break;
+                }
+            }
             if (!is_null($order_by)) {
                 $SQL .= " ORDER BY `$order_by` ";
                 if (!is_null($order_direction)) {
@@ -240,6 +267,9 @@ EOD;
                 if (isset($data[$key])) {
                     unset($data[$key]);
                 }
+            }
+            if (isset($data['locale_source'])) {
+                $data['locale_source_plain'] = $this->app['utils']->specialCharsToAsciiChars(strip_tags($data['locale_source']), true);
             }
             $update = array();
             foreach ($data as $key => $value) {
