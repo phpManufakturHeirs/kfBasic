@@ -358,7 +358,7 @@ EOD;
     {
         try {
             $SQL = "SELECT * FROM `".self::$table_name."` WHERE `locale_locale`='$locale'  AND `translation_status`='PENDING'".
-                "ORDER BY `locale_source` ASC";
+                "ORDER BY `locale_source_plain` ASC";
             $results = $this->app['db']->fetchAll($SQL);
             $pendings = array();
             if (is_array($results)) {
@@ -391,7 +391,7 @@ EOD;
 
             $SQL = "SELECT * FROM `$translation` ".
                 "LEFT JOIN `$file` ON `$file`.`translation_id`=`$translation`.`translation_id` ".
-                "WHERE `file_md5`='$md5' ORDER BY `translation_text` ASC";
+                "WHERE `file_md5`='$md5' ORDER BY `translation_text_plain` ASC";
             $results = $this->app['db']->fetchAll($SQL);
 
             $translations = array();
@@ -417,7 +417,7 @@ EOD;
      * @throws \Exception
      * @return Ambigous <boolean, array>
      */
-    public function selectTranslated($locale)
+    public function selectTranslated($locale, $type=null)
     {
         try {
             $translation = self::$table_name;
@@ -425,7 +425,13 @@ EOD;
 
             $SQL = "SELECT * FROM `$translation` ".
                 "LEFT JOIN `$file` ON `$file`.`translation_id`=`$translation`.`translation_id` ".
-                "WHERE `$translation`.`locale_locale`='$locale' AND `translation_status`='TRANSLATED' ORDER BY `translation_text` ASC";
+                "WHERE `$translation`.`locale_locale`='$locale' AND `translation_status`='TRANSLATED' ";
+
+            if (is_null($type)) {
+                $SQL .= "AND (`$file`.`locale_type`='DEFAULT' OR `$file`.`locale_type`='METRIC') ";
+            }
+
+            $SQL .= "ORDER BY `translation_text_plain` ASC";
 
             $results = $this->app['db']->fetchAll($SQL);
             $translateds = array();
@@ -460,7 +466,7 @@ EOD;
             $SQL = "SELECT * FROM `$translation` ".
                 "LEFT JOIN `$file` ON `$file`.`translation_id`=`$translation`.`translation_id` ".
                 "WHERE `$translation`.`locale_locale`='$locale' AND `translation_status`='TRANSLATED' ".
-                "AND `locale_type`='CUSTOM' ORDER BY `translation_text` ASC";
+                "AND `locale_type`='CUSTOM' ORDER BY `translation_text_plain` ASC";
 
             $results = $this->app['db']->fetchAll($SQL);
             $translateds = array();

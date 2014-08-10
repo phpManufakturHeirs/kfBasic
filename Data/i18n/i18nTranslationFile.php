@@ -214,5 +214,19 @@ EOD;
         }
     }
 
+    /**
+     * Delete the record(s) for the given translation ID
+     *
+     * @param integer $translation_id
+     * @throws \Exception
+     */
+    public function deleteByTranslationID($translation_id)
+    {
+        try {
+            $this->app['db']->delete(self::$table_name, array('translation_id' => $translation_id));
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
 
 }

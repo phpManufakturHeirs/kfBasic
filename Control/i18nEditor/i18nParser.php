@@ -690,9 +690,40 @@ class i18nParser extends Alert
                             // there exists already an translation
                             if (false !== ($file = $this->i18nTranslationFile->selectByExtension($translation_id, $locale, $extension))) {
                                 if (($translation_md5 !== $translation['translation_md5']) && ($file['locale_type'] === 'CUSTOM')) {
-                                    // translation is overwritten by a CUSTOM translation - nothing to do ...
+                                    // translation is overwritten by a CUSTOM translation - create the regular one!
+
+                                    // get the locale ID
+                                    $locale_id = $this->i18nSource->existsMD5($locale_md5);
+
+                                    // insert a new translation record
+                                    $data = array(
+                                        'locale_id' => $locale_id,
+                                        'locale_source' => $locale_source,
+                                        'locale_md5' => $locale_md5,
+                                        'locale_locale' => $locale,
+                                        'translation_text' => $translation_text,
+                                        'translation_md5' => $translation_md5,
+                                        'translation_remark' => '',
+                                        'translation_status' => 'TRANSLATED'
+                                    );
+                                    $translation_id = $this->i18nTranslation->insert($data);
+
+                                    // add a new translation file information
+                                    $data = array(
+                                        'translation_id' => $translation_id,
+                                        'locale_id' => $locale_id,
+                                        'locale_locale' => $locale,
+                                        'locale_type' => $locale_type,
+                                        'extension' => $extension,
+                                        'file_path' => $realpath,
+                                        'file_md5' => md5($realpath)
+                                    );
+                                    $this->i18nTranslationFile->insert($data);
+
+                                    /* OLD SOLUTION - can be remove later ...
                                     $this->app['monolog']->addDebug("[i18nEditor] Translation ID {$translation['translation_id']} is overwritten by CUSTOM translation with File ID {$file['file_id']}!",
                                         array('extension' => $extension, 'locale' => $locale, 'locale_source' => $locale_source, 'translation_text' => $translation_text, 'method' => __METHOD__));
+                                    */
                                 }
                                 elseif ($translation_md5 !== $translation['translation_md5']) {
                                     // the translation has changed
@@ -976,7 +1007,7 @@ class i18nParser extends Alert
      * @param string $extension
      * @return boolean
      */
-    protected function putLocaleFile($path, $translations, $extension='UNKNOWN')
+    protected function putLocaleFile($path, $translations, $extension='UNKNOWN', $no_alert=false)
     {
         if (!self::$config['translation']['file']['save']) {
             // saving locale files is diaabled
@@ -1036,7 +1067,9 @@ class i18nParser extends Alert
             }
         }
 
-        $this->setAlert('Successfull put the locale entries to the locale file.', array(), self::ALERT_TYPE_INFO);
+        if (!$no_alert) {
+            $this->setAlert('Successfull put the locale entries to the locale file.', array(), self::ALERT_TYPE_INFO);
+        }
 
         return true;
     }

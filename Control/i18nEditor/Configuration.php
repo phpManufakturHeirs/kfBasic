@@ -277,8 +277,8 @@ class Configuration
                     'Extra type description',
                     "Extra type id",
                     "Extra type name",
-                    'Extra type type'
-
+                    'Extra type type',
+                    'File path choice'
                 ),
                 'file' => array(
                     'save' => true,
@@ -290,6 +290,16 @@ class Configuration
                     'list' => array(
                         'order_by' => 'locale_id',
                         'order_direction' => 'ASC'
+                    )
+                ),
+                'translation' => array(
+                    'exclude' => array(
+                        'extension' => array(
+                            'CKEditor',
+                            'Library',
+                            'TemplateTools',
+                            'Updater'
+                        )
                     )
                 )
             )

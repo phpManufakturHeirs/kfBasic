@@ -175,6 +175,8 @@ return array(
     => 'Datei',
   'File path'
     => 'Dateipfad',
+  'File path choice'
+    => 'Dateipfad',
   'Filename'
     => 'Dateiname',
   'Files'
@@ -352,7 +354,7 @@ return array(
   'Pending translations'
     => 'Anstehende Übersetzungen',
   'Please be aware that <em>translations</em> for the locale <strong>EN</strong> (english) are more often than not identical with the <em>source</em> - for this reason they will be only added to a language file if the <em>translation</em> differ from <em>source</em>.'
-    => 'Bitte beachten Sie, dass <em>Übersetzungen</em> für die Sprache <strong>EN</strong> (Englisch) meistens mit den <em>Quelltexten</em> identisch sind - aus diesem Grund werden der Sprachdatei in diesem Fall nur Übersetzungen hinzugefügt, wenn die <em>Übersetzung</em> vom <em>Quelltext</em> abweicht.',
+    => 'Bitte beachten Sie, dass <em>Übersetzungen</em> für die Sprache <strong>EN</strong> (Englisch) häufig mit den <em>Quelltexten</em> identisch sind - aus diesem Grund werden der Sprachdatei in diesem Fall nur Übersetzungen hinzugefügt, wenn die <em>Übersetzung</em> vom <em>Quelltext</em> abweicht.',
   'Please check the username and password and try again!'
     => 'Bitte prüfen Sie den angegebenen Benutzernamen sowie das Passwort und versuchen Sie es erneut!',
   'Please <a href="%link%" target="_blank">comment this help</a> to improve the kitCommand <b>%command%</b>.'
@@ -413,10 +415,6 @@ return array(
     => 'Geschützter Bereich',
   'Select'
     => 'Auswählen',
-  'Select day'
-    => 'Wochentag auswählen',
-  'Select pattern'
-    => 'Muster auswählen',
   'Send a account information to the user %name%'
     => 'Dem Benutzer %name% wurde eine Kontoinformation zugesendet.',
   'Send account info to the user'
@@ -526,7 +524,7 @@ return array(
   '<p>The i18nEditor has not detected the following sources in any kitFramework file.</p><p>Maybe the source is really not used anywhere, but it is also possible that a source is used in a file and the i18nEditor Parser is not able to assign the source to a translation.</p><p>Search for the sources in the extension files and check the context. This list will be refreshed at the next search run.</p>'
     => '<p>Der i18nEditor konnte die folgenden Quelltexte in keiner kitFramework Datei finden.</p><p>Möglicherweise werden die Quelltexte tatsächlich nicht verwendet und können entfernt werden. Es ist jedoch genauso möglich, dass die Quelltexte in den Dateien verwendet werden und der i18nEditor Parser nicht in der Lage dazu ist die Zuordnung zu erkennen.</p><p>Suchen Sie nach den Quelltexten in den Dateien und prüfen Sie den jeweiligen Kontext. Diese Liste wird bei jedem Suchlauf neu erstellt.</p>',
   'The kitFramework was never checked for the existing locale sources and translations, please start a search run!'
-    => 'Das kitFramework wurde noch nie nach Quelltexten für Übersetzungen durchsucht, bitte starten Sie einen Suchlauf!',
+    => 'Das kitFramework wurde noch nicht nach Quelltexten für Übersetzungen durchsucht, bitte starten Sie einen Suchlauf!',
   'The parameter <code>%parameter%[%value%]</code> for the kitCommand <code>~~ %command% ~~</code> is unknown, please check the parameter and the given value!'
     => 'Der Parameter <code>%parameter%[%value%]</code> für das kitCommand <code>~~ %command% ~~</code> ist nicht bekannt oder übergibt einen ungültigen Wert, bitte prüfen Sie Ihre Eingabe!',
   'The password for the kitFramework was successfull changed. You can now <a href="%login%">login using the new password</a>.'
@@ -687,5 +685,5 @@ return array(
     => 'Ihr Benutzerkonto wurde erfolgreich geändert.',
   'Your are not authenticated, please login!'
     => 'Sie sind nicht angemeldet, bitte authentifizieren Sie sich zunächst!',
-  
+
 );

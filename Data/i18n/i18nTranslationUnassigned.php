@@ -130,7 +130,7 @@ EOD;
     public function selectAll()
     {
         try {
-            $SQL = "SELECT * FROM `".self::$table_name."` ORDER BY `locale_source` ASC";
+            $SQL = "SELECT * FROM `".self::$table_name."` ORDER BY `locale_source_plain` ASC";
             $results = $this->app['db']->fetchAll($SQL);
             $unassigneds = array();
             if (is_array($results)) {

@@ -43,7 +43,7 @@
 {% block checkbox_row %}
   <div class="form-group">
     <div class="col-sm-6 col-sm-offset-3">
-      {{ block('checkbox_widget') }}&nbsp;&nbsp;{% if label is empty %}{{ name|humanize }}{% else %}{{ label|trans }}{% endif %}
+      {{ block('checkbox_widget') }}&nbsp;&nbsp;{% if label is empty %}{{ name|humanize|trans }}{% else %}{{ label|trans }}{% endif %}
     </div>
   </div>
 {% endblock %}
