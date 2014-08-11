@@ -166,7 +166,8 @@ class i18nParser extends Alert
             }
 
             if (!$start_scan && $expect_locale && is_array($token) && ($token[0] === T_CONSTANT_ENCAPSED_STRING)) {
-                if (empty(trim($token[1], "\x22\x27"))) {
+                $check = trim($token[1], "\x22\x27");
+                if (empty($check)) {
                     // don't handle empty strings!
                     $expect_locale = false;
                     continue;

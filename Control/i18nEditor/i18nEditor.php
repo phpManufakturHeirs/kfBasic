@@ -54,6 +54,7 @@ class i18nEditor extends i18nParser
     protected function gatherInformation()
     {
         $translation = array();
+        $count = $this->i18nScanFile->selectCount();
         foreach (self::$config['translation']['locale'] as $locale) {
             if ($locale === 'EN') {
                 continue;
@@ -62,12 +63,12 @@ class i18nEditor extends i18nParser
                 'locale' => $locale,
                 'status' => $this->i18nTranslation->selectTranslationStatus($locale)
             );
-            if ($translation[$locale]['status']['total'] == 0) {
+            if (($count['locale_hits'] > 0) && ($translation[$locale]['status']['total'] == 0)) {
                 $this->setAlert('There exists no statistic information about the locale <strong>%locale%</strong>, please execute a <em>search run</em>!',
                     array('%locale%' => $locale), self::ALERT_TYPE_INFO);
             }
         }
-        $count = $this->i18nScanFile->selectCount();
+
         self::$info = array(
             'last_file_modification' => $this->i18nScanFile->getLastModificationDateTime(),
             'count_registered' => $count['count_registered'],
@@ -176,7 +177,7 @@ class i18nEditor extends i18nParser
                     $toolbar[$tab] = array(
                         'name' => 'edit',
                         'text' => $this->app['translator']->trans('Edit'),
-                        'hint' => $this->app['translator']->trans('Edit a translations'),
+                        'hint' => $this->app['translator']->trans('Edit translation'),
                         'link' => FRAMEWORK_URL.'/admin/i18n/editor/translation/edit/id'.self::$usage_param,
                         'active' => ($active === 'edit')
                     );
