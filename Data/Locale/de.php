@@ -117,6 +117,8 @@ return array(
     => 'Benutzerkonto löschen',
   'Delete this account irrevocable'
     => 'Benutzerkonto unwiderruflich löschen',
+  'Deleted the translation with the ID %id%.'
+    => 'Die Übersetzung mi tder ID <strong>%id</strong> wurde gelöscht.',
   'Deleted widowed locale translation with the ID %id%.'
     => 'Die verwittwete Übersetzung mit der ID %id% gelöscht.',
   'Display name'
@@ -203,9 +205,9 @@ return array(
     => 'Hallo %name%,<br />Sie möchten Ihr Passwort ändern, bitte geben Sie das neue Passwort ein, wiederholen Sie es zur Sicherheit und schicken Sie das Formular ab.<br />Falls Sie Ihr Passwort nicht ändern möchten, verlassen Sie bitte einfach diesen Dialog.',
   'Hello %name%,<br />you have asked to create a new password for the kitFramework hosted at %server%.'
     => 'Hallo %name%,<br />Sie haben darum gebeten ein neues Passwort für das kitFramework auf %server% zu erhalten.',
-  'Help'
-    => 'Hilfe',
   'help'
+    => 'Hilfe',
+  'Help'
     => 'Hilfe',
   'help_accounts_list_json'
     => '<p>Diese Datei ermöglicht es Ihnen die angezeigten Spalten und die Sortierung der Felder in der <a href="%FRAMEWORK_URL%/admin/accounts/list" target="_blank">Übersicht der Benutzerkonten</a> zu ändern.</p><p>Verfügbare Felder für die Verwendung in <var>columns</var> und <var>list > order > by</var> sind: <var>id, username, email, password, displayname, last_login, roles, guid, guid_timestamp, guid_status, status</var> und <var>timestamp</var>. Mit <var>list > rows_per_page</var> legen Sie fest, wie viele Benutzerkonten pro Seite angezeigt werden.</p>',
@@ -451,6 +453,8 @@ return array(
     => 'Übermitteln',
   'Successful created the tables for the i18nEditor.'
     => 'Tabellen für den i18nEditor erfolgreich angelegt.',
+  'Successful moved the translation to the extension %extension%.'
+    => 'Die Übersetzung wurde erfolgreich in die Erweiterung %extension% verschoben.',
   'Successful scanned the kitFramework for *.json configuration files'
     => 'Das kitFramework wurde nach *.json Konfigurationsdateien durchsucht',
   'Successfull created a account for the user %name%.'
@@ -557,6 +561,8 @@ return array(
     => 'Die Test E-Mail wurde erfolgreich an %email% versendet!',
   'The translation conflict for the locale source <strong>%source%</strong> has been solved!'
     => 'Der Übersetzungskonflikt für den Quelltext <strong>%source%</strong> ist aufgelöst!',
+  'The translation has not changed.'
+    => 'Die Übersetzung wurde nicht geändert.',
   'The username %username% is already in use, please select another one!'
     => 'Der Benutzername %username% wird bereits verwendet, bitte wählen Sie einen anderen Benutzernamen.',
   'There a no translated sources available'
@@ -577,6 +583,8 @@ return array(
     => 'Es existieren keine <em>anstehenden</em> Übersetzungen für die Sprache %locale%.',
   'There exists no references for the locale source with the id %locale_id%.'
     => 'Es existieren keine Verweise für die lokale Quelle mit der ID %locale_id%.',
+  'There exists no statistic information about the locale <strong>%locale%</strong>, please execute a <em>search run</em>!'
+    => 'Es existieren keine statistischen Informationen über die Sprache <strong>%locale%</strong>, bitte führen Sie einen <em>Suchlauf</em> durch!',
   'There exists no translations for the locale source with the id %locale_id%'
     => 'Es existieren keine Übersetzungen für den Quelltext mit der ID %locale_id%.',
   'There exists no unassigned translations.'
@@ -603,8 +611,14 @@ return array(
     => 'Es wurde keine gültige E-Mail Adresse übergeben!',
   'Translation'
     => 'Übersetzung',
+  'Translation custom file'
+    => 'Übersetzung anpassen',
+  'Translation delete checkbox'
+    => 'diese Übersetzung löschen',
   'Translation id'
     => 'ID',
+  'Translation move to'
+    => 'Übersetzung verschieben',
   'Translation remark'
     => 'Bemerkung',
   'Translation status'
@@ -685,5 +699,5 @@ return array(
     => 'Ihr Benutzerkonto wurde erfolgreich geändert.',
   'Your are not authenticated, please login!'
     => 'Sie sind nicht angemeldet, bitte authentifizieren Sie sich zunächst!',
-
+  
 );

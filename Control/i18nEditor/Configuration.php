@@ -191,6 +191,7 @@ class Configuration
                     'earl',
                     'February',
                     'Female',
+                    'File path choice',
                     'FR',
                     'Friday',
                     'GALLERY_TYPE_MOBILE',
@@ -277,8 +278,7 @@ class Configuration
                     'Extra type description',
                     "Extra type id",
                     "Extra type name",
-                    'Extra type type',
-                    'File path choice'
+                    'Extra type type'
                 ),
                 'file' => array(
                     'save' => true,

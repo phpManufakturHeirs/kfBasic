@@ -62,6 +62,10 @@ class i18nEditor extends i18nParser
                 'locale' => $locale,
                 'status' => $this->i18nTranslation->selectTranslationStatus($locale)
             );
+            if ($translation[$locale]['status']['total'] == 0) {
+                $this->setAlert('There exists no statistic information about the locale <strong>%locale%</strong>, please execute a <em>search run</em>!',
+                    array('%locale%' => $locale), self::ALERT_TYPE_INFO);
+            }
         }
         $count = $this->i18nScanFile->selectCount();
         self::$info = array(
@@ -856,7 +860,7 @@ class i18nEditor extends i18nParser
             }
         }
 
-        $form = $this->app['form.factory']->createBuilder('form', null, array('csrf_protection' => false))
+        $form = $this->app['form.factory']->createBuilder('form')
             ->add('translation_id', 'hidden', array(
                 'data' => isset($translation['translation_id']) ? $translation['translation_id'] : -1
             ))
@@ -888,7 +892,7 @@ class i18nEditor extends i18nParser
         $choice_path = 'file_path';
         if (!is_null($locale_file_id)) {
             $choice_path = 'file_path_choice';
-            // we need a hidden field with the file_path
+            // we need a hidden field with the file_path to avoid problems with CSRF and the form validation
             $form->add('file_path', 'hidden', array(
                 'data' => $locale_file_id
             ));
@@ -924,7 +928,7 @@ class i18nEditor extends i18nParser
                 ));
             }
             else {
-                $form->add('translation_custom_files', 'hidden');
+                $form->add('translation_custom_file', 'hidden');
             }
             // add checkbox to delete this translation
             $form->add('translation_delete_checkbox', 'checkbox', array(
@@ -932,6 +936,7 @@ class i18nEditor extends i18nParser
             ));
         }
         else {
+            // add hidden fields to avoid problems with CSRF and the form validation
             $form->add('translation_delete_checkbox', 'hidden');
             $form->add('translation_move_to', 'hidden');
             $form->add('translation_custom_file', 'hidden');
@@ -1034,7 +1039,7 @@ class i18nEditor extends i18nParser
         // get the requested data
         $form->bind($this->app['request']);
 
-        //if ($form->isValid()) {
+        if ($form->isValid()) {
             // the form is valid
             $data = $form->getData();
 
@@ -1049,7 +1054,7 @@ class i18nEditor extends i18nParser
             $files = $this->getLocaleFilesForChoice($data['locale_locale']);
             $i = 0;
             foreach ($files as $key => $value) {
-                if ($i == $data['file_path']) { echo "HITTT!!!";
+                if ($i == $data['file_path']) {
                     // locale path
                     $locale_path = $key;
                     // extension name
@@ -1288,14 +1293,14 @@ class i18nEditor extends i18nParser
             else {
                 $this->setAlert('The translation has not changed.', array(), self::ALERT_TYPE_INFO);
             }
-   /*     }
+        }
         else {
             // general error (timeout, CSFR ...)
             $this->setAlert('The form is not valid, please check your input and try again!', array(),
                 self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
                     'method' => __METHOD__, 'line' => __LINE__));
         }
-*/
+
         return $this->ControllerTranslationEdit($app, isset($data['translation_id']) ? $data['translation_id'] : -1);
     }
 
