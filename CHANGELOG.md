@@ -6,6 +6,13 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**1.0.5** - 2014-08-11
+
+* Introduce the i18nEditor
+* generate extended debug information if the form submission is not valid
+* fixed: ConfigurationEditor, problem shortening paths for the selection list in a correct and expected way
+* fixed: strong typo may cause problems with the output filter - PAGE_ID will not recognized
+
 **1.0.4** - 2014-07-28
 
 * Parser: improved search for locking characters in kitCommands like `&nbsp;`
