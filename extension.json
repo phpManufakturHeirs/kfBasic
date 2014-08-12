@@ -19,8 +19,8 @@
   "path":"\/extension\/phpmanufaktur\/phpManufaktur\/Basic",
   "namespace":"phpManufaktur\\Basic",
   "release":{
-    "number":"1.0.6",
-    "date":"2014-08-11",
+    "number":"1.0.7",
+    "date":"2014-08-12",
     "status":"release"
   },
   "description": {
@@ -40,6 +40,9 @@
   "require":{
     "framework": {
       "release":"0.27"
+    },
+    "CKEditor":{
+        "release":"0.28"
     },
     "Library":{
         "release":"0.35"
