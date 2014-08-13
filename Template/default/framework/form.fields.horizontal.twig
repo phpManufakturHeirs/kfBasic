@@ -59,7 +59,7 @@
 
 
 {% block choice_widget_collapsed %}
-  {% spaceless %}  
+  {% spaceless %}
   <select class="form-control" {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
       {% if empty_value is not none %}
           <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ empty_value|trans({}, translation_domain) }}</option>
@@ -112,8 +112,8 @@
           {% set i = 1 %}
         {% endif %}
       {% endfor %}
-      {% if i != 1 %}</div>{% endif %}      
-    {% else %}        
+      {% if i != 1 %}</div>{% endif %}
+    {% else %}
       <div {{ block('widget_container_attributes') }}>
       {% for child in form %}
           {{ form_widget(child) }}
@@ -122,14 +122,14 @@
       </div>
     {% endif %}
   {% endspaceless %}
-{% endblock choice_widget_expanded %}            
-               
+{% endblock choice_widget_expanded %}
+
 {% block checkbox_widget %}
   {% spaceless %}
     <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
   {% endspaceless %}
 {% endblock checkbox_widget %}
-    
+
 {% block form_label %}
   {% spaceless %}
     {% if label is not sameas(false) %}
@@ -154,19 +154,7 @@
       {% if attr.prefix is defined %}
         <span class="prefix-block">{{ attr.prefix|trans }}</span>
       {% endif %}
-      {% if attr.type is defined and attr.type == 'html' %}
-        {# load the CKEditor instead of the textarea #}
-        {% if attr.config is defined %}
-          {# a configuration file for the CKEditor is defined #}
-          {% set config = attr.config %}
-        {% else %}
-          {# use the default configuration file from /Contact #}
-          {% set config = MANUFAKTUR_URL ~ '/Contact/Template/default/command/ckeditor.simple.js' %}
-        {% endif %}
-        {{ CKEditor(id, full_name, value, '100%', '150px', config) }}  
-      {% else %}  
-        <textarea class="form-control{% if attr.class is defined %} {{ attr.class }}{% endif %}" rows="3" {{ block('widget_attributes') }}>{{ value }}</textarea>
-      {% endif %}
+      <textarea class="form-control{% if attr.class is defined %} {{ attr.class }}{% endif %}" rows="3" {{ block('widget_attributes') }}>{{ value }}</textarea>
       {% if attr.help is defined %}
         <span class="help-block">{{ attr.help|trans }}</span>
       {% endif %}
