@@ -6,7 +6,7 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
-**1.0.7** - 2014-08-12
+**1.0.8** - 2014-08-13
 
 * fixed: BASIC needs the CKEditor also at the first initialization, added dependency
 
