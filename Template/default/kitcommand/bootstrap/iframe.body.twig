@@ -9,7 +9,7 @@
 #}
 <!DOCTYPE html>
 {% spaceless %}
-<html lang="{{ app.translator.locale }}">
+<html lang="{{ basic.cms.locale }}">
   <head>
     {% block head %}
       {% if (basic.frame is defined and basic.frame.redirect.active) %}
@@ -27,6 +27,7 @@
       {% endif %}
       <title>{% block title %}{% endblock %}</title>
       <meta http-equiv="Content-Type" content="{% block content_type %}text/html; charset=UTF-8{% endblock content_type %}"/>
+      <meta charset="utf-8" />
       <meta name="robots" content="{% block robots %}index,follow{% endblock robots %}" />
       {% block canonical %}{% endblock %}
       <meta name="description" content="{% block description %}{% endblock %}" />

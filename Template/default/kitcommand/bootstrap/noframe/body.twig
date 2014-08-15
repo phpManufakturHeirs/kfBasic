@@ -9,11 +9,12 @@
 #}
 <!DOCTYPE html>
 {% spaceless %}
-<html lang="en">
+<html lang="{{ app.translator.locale }}">
   <head>
     {% block head %}
       <title>{% block title %}kitCommand Response{% endblock %}</title>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <meta charset="utf-8" />
       <meta name="robots" content="noindex,nofollow" />
       <meta name="description" content="{% block description %}{% endblock %}" />
       <meta name="keywords" content="{% block keywords %}{% endblock %}" />
