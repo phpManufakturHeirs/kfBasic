@@ -102,7 +102,8 @@ class Configuration
                             'Library',
                             'TemplateTools',
                             'TemplateTools/Examples',
-                            'TemplateTools/Pattern'
+                            'TemplateTools/Pattern',
+                            'Include'
                         )
                     )
                 ),
