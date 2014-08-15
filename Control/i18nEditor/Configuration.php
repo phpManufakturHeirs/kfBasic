@@ -294,7 +294,7 @@ class Configuration
             'editor' => array(
                 'sources' => array(
                     'list' => array(
-                        'order_by' => 'locale_id',
+                        'order_by' => 'locale_source_plain',
                         'order_direction' => 'ASC'
                     )
                 ),

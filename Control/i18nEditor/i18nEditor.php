@@ -961,6 +961,7 @@ class i18nEditor extends i18nParser
                 array('%id%' => $translation_id), self::ALERT_TYPE_DANGER);
             return $this->promptAlertFramework();
         }
+
         if ($translation['translation_status'] === 'CONFLICT') {
             if (!self::$config['developer']['enabled']) {
                 $this->setAlert('The status of this translation is set to <strong>CONFLICT</strong>. This problem must be solved by a developer.',

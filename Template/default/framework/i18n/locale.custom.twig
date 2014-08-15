@@ -44,6 +44,10 @@
       
     {{ alert }}
     
+    <div class="create-button">
+      <a class="btn btn-default pull-right" role="button" href="{{ FRAMEWORK_URL ~ '/admin/i18n/editor/locale/' ~ locale_locale ~ '/custom/new?usage=' ~ usage }}">{{ 'Create a custom translation without source'|trans }}</a>
+    </div>
+    
     {% if locales|length > 0 %}
       <div class="table-responsive locales">
         <table class="table table-striped table-condensed table-hover">

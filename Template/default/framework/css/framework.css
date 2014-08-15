@@ -164,3 +164,15 @@ ul.dropdown-menu {
 form.form-inline {
   margin-bottom: 20px;
 }
+
+.create-button {
+  margin-bottom: 20px;
+}
+.create-button:before,
+.create-button:after {
+  display: table;
+  content: " ";
+}
+.create-button:after {
+  clear: both;
+}
