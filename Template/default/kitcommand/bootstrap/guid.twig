@@ -20,6 +20,7 @@
   <script type="text/javascript" src="{{ LIBRARY_URL }}/jquery/zeroclipboard/latest/ZeroClipboard.min.js"></script>
 {% endblock %}
 {% block content %}
+  <!-- {{ _self.getTemplateName() }} -->
   {# need the parent to enable prompting messages #}
   {{ parent() }}
   <div class="panel panel-default">

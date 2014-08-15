@@ -12,6 +12,7 @@
 {% block description %}{{ 'General help container for kitCommand help files'|trans }}{% endblock %}
 {% block robots %}noindex,follow{% endblock %}
 {% block content %}
+  <!-- {{ _self.getTemplateName() }} -->
   {# need the parent to enable prompting messages #}
   {{ parent() }}
   <div class="kitcommand list">
