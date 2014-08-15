@@ -175,6 +175,30 @@ EOD;
     }
 
     /**
+     * Get the SET values of the given table and field
+     *
+     * @param string $table
+     * @param string $field
+     * @throws \Exception
+     * @return Ambigous <boolean, array>
+     */
+    public function getSetValues($table, $field)
+    {
+        try {
+            $SQL = "SHOW COLUMNS FROM `$table` WHERE FIELD = '$field'";
+            $result = $this->app['db']->fetchAssoc($SQL);
+            $set_array = array();
+            if (isset($result['Type']) && (false !== strpos($result['Type'], "set('"))) {
+                $set = str_replace(array("set('", "')", "''"), array('', '', "'"), $result['Type']);
+                $set_array = explode("','", $set);
+            }
+            return (!empty($set_array)) ? $set_array : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
      * Get the columns of the given table
      *
      * @param string $table
