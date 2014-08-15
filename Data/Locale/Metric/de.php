@@ -22,6 +22,10 @@ return array(
     'August'
         => 'August',
 
+    'CURRENCY_NAME_ISO'
+        => 'EUR',
+    'CURRENCY_NAME'
+        => 'Euro',
     'CURRENCY_SYMBOL'
         => '€',
 

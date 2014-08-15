@@ -15,6 +15,10 @@ if ('á' != "\xc3\xa1") {
 }
 
 return array(
+    'CURRENCY_NAME_ISO'
+        => 'USD',
+    'CURRENCY_NAME'
+        => 'US-Dollar',
     'CURRENCY_SYMBOL'
         => '$',
     'DATE_FORMAT'

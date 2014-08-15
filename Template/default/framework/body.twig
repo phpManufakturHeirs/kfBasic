@@ -9,11 +9,12 @@
 #}
 <!DOCTYPE html>
 {% spaceless %}
-<html lang="en">
+<html lang="{{ app.translator.locale }}">
   <head>
     {% block head %}
       <title>{% block title %}{% endblock %}</title>
       <meta http-equiv="Content-Type" content="{% block content_type %}text/html; charset=UTF-8{% endblock content_type %}"/>
+      <meta charset="utf-8" />
       <meta name="robots" content="{% block robots %}noindex,nofollow{% endblock robots %}" />
       <meta name="description" content="{% block description %}{% endblock %}" />
       <meta name="keywords" content="{% block keywords %}{% endblock %}" />

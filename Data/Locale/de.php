@@ -113,6 +113,8 @@ return array(
     => '<em>Angepasste Übersetzungen</em> ermöglichen es Ihnen, die <em>regulären</em> Übersetzungen zu überschreiben und auf Ihre Anforderungen abzustimmen.',
   'Data replication'
     => 'Datenabgleich',
+  'De'
+    => 'Deutsch',
   'Delete account'
     => 'Benutzerkonto löschen',
   'Delete this account irrevocable'
@@ -149,6 +151,8 @@ return array(
     => 'Übersetzung bearbeiten',
   'Email'
     => 'E-Mail',
+  'En'
+    => 'Englisch',
   'Entry points'
     => 'Zugangspunkte',
   'Entry-points'
@@ -699,5 +703,5 @@ return array(
     => 'Ihr Benutzerkonto wurde erfolgreich geändert.',
   'Your are not authenticated, please login!'
     => 'Sie sind nicht angemeldet, bitte authentifizieren Sie sich zunächst!',
-  
+
 );
