@@ -31,13 +31,7 @@ try {
     $CMS_URL = WB_URL;
     $TOGGLE_PAGETREE = '';
     if (defined('CAT_VERSION')) {
-      $TOGGLE_PAGETREE = <<<EOD
-    <script type="text/javascript">
-      $(document).ready(function() {
-        togglePageTree();
-      });
-    </script>
-EOD;    
+      $TOGGLE_PAGETREE = '<script type="text/javascript">$(document).ready(function() { togglePageTree(); });</script>';
     }
     
     echo <<<EOD
