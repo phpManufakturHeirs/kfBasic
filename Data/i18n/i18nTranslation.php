@@ -383,7 +383,7 @@ EOD;
      * @throws \Exception
      * @return Ambigous <boolean, array>
      */
-    public function selectByPathMD5($md5)
+    public function selectByFileMD5($md5)
     {
         try {
             $translation = self::$table_name;

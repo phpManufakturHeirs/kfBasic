@@ -834,11 +834,15 @@ class i18nParser extends Alert
                             // translation is unassigned - probably the parser can not assign the translation to any source
                             // i.e. because a translation command is missing in source?
                             $data = array(
-                                'file_path' => $realpath,
                                 'extension' => $extension,
                                 'locale_locale' => $locale,
                                 'locale_source' => $locale_source,
-                                'translation_text' => $translation_text
+                                'locale_md5' => $locale_md5,
+                                'locale_type' => $locale_type,
+                                'translation_text' => $translation_text,
+                                'translation_md5' => $translation_md5,
+                                'file_path' => $realpath,
+                                'file_md5' => md5($realpath)
                             );
 
                             self::$translation_unassigned[] = $this->i18nTranslationUnassigned->insert($data);

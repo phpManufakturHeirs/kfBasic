@@ -14,9 +14,12 @@ namespace phpManufaktur\Basic\Control\i18nEditor;
 use Silex\Application;
 use Symfony\Component\Form\FormFactoryBuilder;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Form\FormFactory;
 
 class i18nEditor extends i18nParser
 {
+    const unassigned_start_number = 1000000;
+
     protected static $script_start = null;
     protected static $script_execution_time = null;
     protected static $usage = null;
@@ -792,7 +795,6 @@ class i18nEditor extends i18nParser
             }
         }
 
-
         foreach ($extensions as $extension) {
             $path = $extension->getRealpath();
             $extension_name = substr($path, strrpos($path, DIRECTORY_SEPARATOR)+1);
@@ -830,10 +832,11 @@ class i18nEditor extends i18nParser
         $locale_file_id = null;
         $i = 0;
         $is_custom_file = false;
+
         foreach ($locale_files as $key => $value) {
             // use integer values instead of path's as key for the choices
             $files[$i] = $value;
-            if (isset($translation_file['file_path']) && ($translation_file['file_path'] === $key)) {
+            if (isset($translation_file['file_path']) && ($translation_file['file_path'] == $key)) {
                 $locale_file_id = $i;
                 $is_custom_file = (false !== strpos($value, DIRECTORY_SEPARATOR.'Custom'.DIRECTORY_SEPARATOR));
             }
@@ -885,7 +888,7 @@ class i18nEditor extends i18nParser
                 'read_only' => (isset($translation['translation_status']) && ($translation['translation_status'] === 'CONFLICT'))
             ))
             ->add('translation_remark', 'textarea', array(
-                'data' => isset($translation['locale_remark']) ? $translation['locale_remark'] : '',
+                'data' => isset($translation['translation_remark']) ? $translation['translation_remark'] : '',
                 'required' => false
             ))
             ;
@@ -956,7 +959,23 @@ class i18nEditor extends i18nParser
     {
         $this->initialize($app);
 
-        if (false === ($translation = $this->i18nTranslation->select($translation_id))) {
+        if ($translation_id > self::unassigned_start_number) {
+            // this is a unassigned translation!
+            $unassigned_id = $translation_id - self::unassigned_start_number;
+            if (false === ($unassigned = $this->i18nTranslationUnassigned->select($unassigned_id))) {
+                $this->setAlert('The record with the ID %id% does not exists!',
+                array('%id%' => $translation_id), self::ALERT_TYPE_DANGER);
+                return $this->promptAlertFramework();
+            }
+            // map the unassigned record as translation record
+            $translation = $unassigned;
+            $translation['translation_id'] = $translation_id;
+            $translation['locale_md5'] = md5($unassigned['locale_source']);
+            $translation['translation_md5'] = md5($unassigned['translation_text']);
+            $translation['translation_remark'] = 'UNASSIGNED';
+            $translation['translation_status'] = 'UNASSIGNED';
+        }
+        elseif (false === ($translation = $this->i18nTranslation->select($translation_id))) {
             $this->setAlert('The record with the ID %id% does not exists!',
                 array('%id%' => $translation_id), self::ALERT_TYPE_DANGER);
             return $this->promptAlertFramework();
@@ -973,9 +992,28 @@ class i18nEditor extends i18nParser
             }
         }
 
-        $translation_files = $this->i18nTranslationFile->selectByTranslationID($translation_id, $translation['locale_locale']);
+        if ($translation_id > self::unassigned_start_number) {
+            // map the unassigned record as translation file
+            $translation_files = array(
+                array(
+                    'file_id' => -1,
+                    'translation_id' => $translation_id,
+                    'locale_id' => -1,
+                    'locale_locale' => $translation['locale_locale'],
+                    'locale_type' => $translation['locale_type'],
+                    'extension' => $translation['extension'],
+                    'file_path' => $translation['file_path'],
+                    'file_md5' => $translation['file_md5'],
+                    'timestamp' => $translation['timestamp']
+                )
+            );
+        }
+        else {
+            $translation_files = $this->i18nTranslationFile->selectByTranslationID($translation_id, $translation['locale_locale']);
+        }
 
-        if (false === ($source = $this->i18nSource->select($translation['locale_id']))) {
+        $source = false;
+        if (($translation_id < self::unassigned_start_number) && (false === ($source = $this->i18nSource->select($translation['locale_id'])))) {
             $this->setAlert('The record with the ID %id% does not exists!',
                 array('%id%' => $translation['locale_id']), self::ALERT_TYPE_DANGER);
         }
@@ -994,6 +1032,7 @@ class i18nEditor extends i18nParser
                 }
             }
         }
+
 
         $form = $this->getTranslationForm($translation, $translation_files[0]);
 
@@ -1072,8 +1111,16 @@ class i18nEditor extends i18nParser
 
             if ($data['translation_delete_checkbox']) {
                 // delete this translation
-                $this->i18nTranslation->delete($data['translation_id']);
-                $this->i18nTranslationFile->deleteByTranslationID($data['translation_id']);
+                if ($data['translation_id'] > self::unassigned_start_number) {
+                    // this is a unassigned translation!
+                    $unassigned_id = $data['translation_id'] - self::unassigned_start_number;
+                    $this->i18nTranslationUnassigned->delete($unassigned_id);
+                }
+                else {
+                    // regular translation
+                    $this->i18nTranslation->delete($data['translation_id']);
+                    $this->i18nTranslationFile->deleteByTranslationID($data['translation_id']);
+                }
                 $this->setAlert('Deleted the translation with the ID %id%.',
                     array('%id%' => $data['translation_id']), self::ALERT_TYPE_SUCCESS);
                 // get the content of the current locale file
@@ -1093,8 +1140,11 @@ class i18nEditor extends i18nParser
 
             if (is_numeric($data['translation_move_to']) && ($data['translation_move_to'] >= 0)) {
                 // move this translation to another translation file
+                if ($data['translation_id'] < self::unassigned_start_number) {
+                    // regular translation file
+                    $this->i18nTranslationFile->deleteByTranslationID($data['translation_id']);
+                }
 
-                $this->i18nTranslationFile->deleteByTranslationID($data['translation_id']);
                 // get the content of the current locale file
                 $file_array = $this->getLocaleFileArray($locale_path);
                 // remove this translation from the array
@@ -1131,16 +1181,29 @@ class i18nEditor extends i18nParser
                     $i++;
                 }
 
-                $file_data = array(
-                    'translation_id' => $data['translation_id'],
-                    'locale_id' => $data['locale_id'],
-                    'locale_locale' => $data['locale_locale'],
-                    'locale_type' => $locale_type,
-                    'extension' => $extension,
-                    'file_path' => $new_locale_path,
-                    'file_md5' => md5($new_locale_path)
-                );
-                $this->i18nTranslationFile->insert($file_data);
+                if ($data['translation_id'] > self::unassigned_start_number) {
+                    $update = array(
+                        'locale_locale' => $data['locale_locale'],
+                        'locale_type' => $locale_type,
+                        'extension' => $extension,
+                        'file_path' => $new_locale_path,
+                        'file_md5' => md5($new_locale_path)
+                    );
+                    $this->i18nTranslationUnassigned->update($data['translation_id'] - self::unassigned_start_number, $update);
+                }
+                else {
+                    // this is a regular translation file
+                    $file_data = array(
+                        'translation_id' => $data['translation_id'],
+                        'locale_id' => $data['locale_id'],
+                        'locale_locale' => $data['locale_locale'],
+                        'locale_type' => $locale_type,
+                        'extension' => $extension,
+                        'file_path' => $new_locale_path,
+                        'file_md5' => md5($new_locale_path)
+                    );
+                    $this->i18nTranslationFile->insert($file_data);
+                }
 
                 // get the content of the current locale file
                 $file_array = $this->getLocaleFileArray($new_locale_path);
@@ -1163,93 +1226,14 @@ class i18nEditor extends i18nParser
                 return $this->ControllerTranslationEdit($app, $data['translation_id']);
             }
 
-            if (false === ($files = $this->i18nTranslationFile->selectByTranslationID($data['translation_id'], $data['locale_locale']))) {
-                // create a new translation file record
-                if (strpos($locale_path, DIRECTORY_SEPARATOR.'Metric'.DIRECTORY_SEPARATOR)) {
-                    $locale_type = 'METRIC';
-                }
-                elseif (strpos($locale_path, DIRECTORY_SEPARATOR.'Custom'.DIRECTORY_SEPARATOR)) {
-                    $locale_type = 'CUSTOM';
-                }
-                else {
-                    $locale_type = 'DEFAULT';
-                }
-                $file_data = array(
-                    'translation_id' => $data['translation_id'],
-                    'locale_id' => $data['locale_id'],
-                    'locale_locale' => $data['locale_locale'],
-                    'locale_type' => $locale_type,
-                    'extension' => $extension,
-                    'file_path' => $locale_path,
-                    'file_md5' => md5($locale_path)
-                );
-                $this->i18nTranslationFile->insert($file_data);
-
-                $translation = array(
-                    'translation_text' => $data['translation_text'],
-                    'translation_md5' => md5($data['translation_text']),
-                    'translation_remark' => !empty($data['translation_remark']) ? $data['translation_remark'] : '',
-                    'translation_status' => 'TRANSLATED'
-                );
-                $this->i18nTranslation->update($data['translation_id'], $translation);
-
-                $write_locale_file = true;
-            }
-            elseif (isset($files[0]['file_pathe']) && ($files[0]['file_path'] === $locale_path)) {
-                // update the translation record ?
-                $current = $this->i18nTranslation->select($data['translation_id']);
+            if ($data['translation_id'] > self::unassigned_start_number) { echo "yepp!";
+                // this is a unassigned translation !!!
+                $unassigned_id = $data['translation_id'] - self::unassigned_start_number;
+                $current = $this->i18nTranslationUnassigned->select($unassigned_id);
                 if ($current['translation_md5'] !== md5($data['translation_text'])) {
-                    // the translation has changed, save the record
-                    $translation = array(
-                        'translation_text' => $data['translation_text'],
-                        'translation_md5' => md5($data['translation_text']),
-                        'translation_remark' => !empty($data['translation_remark']) ? $data['translation_remark'] : '',
-                        'translation_status' => 'TRANSLATED'
-                    );
-                    $this->i18nTranslation->update($data['translation_id'], $translation);
-                    $write_locale_file = true;
-                }
-            }
-            else {
-                // new translation file?
-                $check_files = $this->i18nTranslationFile->selectByLocaleID($data['locale_id'], $data['locale_locale']);
-                if (is_array($check_files)) {
-                    $checked = false;
-                    foreach ($check_files as $check_file) {
-                        if ($check_file['file_md5'] === md5($locale_path)) {
-                            $checked = true;
-                            $translation = $this->i18nTranslation->select($check_file['translation_id']);
-                            if ($translation['translation_md5'] !== md5($data['translation_text'])) {
-                                // change existing translation
-                                $update = array(
-                                    'translation_text' => $data['translation_text'],
-                                    'translation_md5' => md5($data['translation_text']),
-                                    'translation_remark' => !empty($data['translation_remark']) ? $data['translation_remark'] : '',
-                                    'translation_status' => 'TRANSLATED'
-                                );
-                                $this->i18nTranslation->update($check_file['translation_id'], $update);
-                                $write_locale_file = true;
-                            }
-                            $data['translation_id'] = $check_file['translation_id'];
-                        }
-                    }
-                    if (!$checked) {
-                        // create a new translation file
-                        $current = $this->i18nTranslation->select($data['translation_id']);
-                        $new = array(
-                            'locale_id' => $current['locale_id'],
-                            'locale_locale' => $current['locale_locale'],
-                            'locale_source' => $current['locale_source'],
-                            'locale_source_plain' => $current['locale_source'],
-                            'locale_md5' => $current['locale_md5'],
-                            'translation_text' => $data['translation_text'],
-                            'translation_md5' => md5($data['translation_text']),
-                            'translation_remark' => !empty($data['translation_remark']) ? $data['translation_remark'] : '',
-                            'translation_status' => 'TRANSLATED'
-                        );
-                        $translation_id = $this->i18nTranslation->insert($new);
-                        $data['translation_id'] = $translation_id;
-
+                    // the translation has changed
+                    if ($target_is_custom && ($locale_path !== $current['file_path'])) { echo "NEQW!!";
+                        // create a new custom file
                         if (strpos($locale_path, DIRECTORY_SEPARATOR.'Metric'.DIRECTORY_SEPARATOR)) {
                             $locale_type = 'METRIC';
                         }
@@ -1259,19 +1243,142 @@ class i18nEditor extends i18nParser
                         else {
                             $locale_type = 'DEFAULT';
                         }
-                        $file_data = array(
-                            'translation_id' => $translation_id,
-                            'locale_id' => $data['locale_id'],
-                            'locale_locale' => $data['locale_locale'],
-                            'locale_type' => $locale_type,
-                            'extension' => $extension,
+                        $insert = array(
                             'file_path' => $locale_path,
-                            'file_md5' => md5($locale_path)
+                            'file_md5' => md5($locale_path),
+                            'extension' => $extension,
+                            'locale_locale' => $data['locale_locale'],
+                            'locale_source' => $current['locale_source'],
+                            'locale_md5' => $current['locale_md5'],
+                            'locale_type' => $locale_type,
+                            'translation_text' => $data['translation_text'],
+                            'translation_md5' => md5($data['translation_text'])
                         );
-                        $this->i18nTranslationFile->insert($file_data);
+                        $unassigned_id = $this->i18nTranslationUnassigned->insert($insert);
+                        $data['translation_id'] = self::unassigned_start_number + $unassigned_id;
+                    }
+                    else {
+                        $update = array(
+                            'translation_text' => $data['translation_text'],
+                            'translation_md5' => md5($data['translation_text'])
+                        );
+                        $this->i18nTranslationUnassigned->update($unassigned_id, $update);
+                    }
+                    $write_locale_file = true;
+                }
+            }
+            else {
+                // this is a regular translation
+                if (false === ($files = $this->i18nTranslationFile->selectByTranslationID($data['translation_id'], $data['locale_locale']))) {
+                    // create a new translation file record
+                    if (strpos($locale_path, DIRECTORY_SEPARATOR.'Metric'.DIRECTORY_SEPARATOR)) {
+                        $locale_type = 'METRIC';
+                    }
+                    elseif (strpos($locale_path, DIRECTORY_SEPARATOR.'Custom'.DIRECTORY_SEPARATOR)) {
+                        $locale_type = 'CUSTOM';
+                    }
+                    else {
+                        $locale_type = 'DEFAULT';
+                    }
+                    $file_data = array(
+                        'translation_id' => $data['translation_id'],
+                        'locale_id' => $data['locale_id'],
+                        'locale_locale' => $data['locale_locale'],
+                        'locale_type' => $locale_type,
+                        'extension' => $extension,
+                        'file_path' => $locale_path,
+                        'file_md5' => md5($locale_path)
+                    );
+                    $this->i18nTranslationFile->insert($file_data);
+
+                    $translation = array(
+                        'translation_text' => $data['translation_text'],
+                        'translation_md5' => md5($data['translation_text']),
+                        'translation_remark' => !empty($data['translation_remark']) ? $data['translation_remark'] : '',
+                        'translation_status' => 'TRANSLATED'
+                    );
+                    $this->i18nTranslation->update($data['translation_id'], $translation);
+
+                    $write_locale_file = true;
+                }
+                elseif (isset($files[0]['file_path']) && ($files[0]['file_path'] === $locale_path)) {
+                    // update the translation record ?
+                    $current = $this->i18nTranslation->select($data['translation_id']);
+                    if ($current['translation_md5'] !== md5($data['translation_text'])) {
+                        // the translation has changed, save the record
+                        $translation = array(
+                            'translation_text' => $data['translation_text'],
+                            'translation_md5' => md5($data['translation_text']),
+                            'translation_remark' => !empty($data['translation_remark']) ? $data['translation_remark'] : '',
+                            'translation_status' => 'TRANSLATED'
+                        );
+                        $this->i18nTranslation->update($data['translation_id'], $translation);
                         $write_locale_file = true;
+                    }
+                }
+                else {
+                    // new translation file?
+                    $check_files = $this->i18nTranslationFile->selectByLocaleID($data['locale_id'], $data['locale_locale']);
+                    if (is_array($check_files)) {
+                        $checked = false;
+                        foreach ($check_files as $check_file) {
+                            if ($check_file['file_md5'] === md5($locale_path)) {
+                                $checked = true;
+                                $translation = $this->i18nTranslation->select($check_file['translation_id']);
+                                if ($translation['translation_md5'] !== md5($data['translation_text'])) {
+                                    // change existing translation
+                                    $update = array(
+                                        'translation_text' => $data['translation_text'],
+                                        'translation_md5' => md5($data['translation_text']),
+                                        'translation_remark' => !empty($data['translation_remark']) ? $data['translation_remark'] : '',
+                                        'translation_status' => 'TRANSLATED'
+                                    );
+                                    $this->i18nTranslation->update($check_file['translation_id'], $update);
+                                    $write_locale_file = true;
+                                }
+                                $data['translation_id'] = $check_file['translation_id'];
+                            }
+                        }
+                        if (!$checked) {
+                            // create a new translation file
+                            $current = $this->i18nTranslation->select($data['translation_id']);
+                            $new = array(
+                                'locale_id' => $current['locale_id'],
+                                'locale_locale' => $current['locale_locale'],
+                                'locale_source' => $current['locale_source'],
+                                'locale_source_plain' => $current['locale_source'],
+                                'locale_md5' => $current['locale_md5'],
+                                'translation_text' => $data['translation_text'],
+                                'translation_md5' => md5($data['translation_text']),
+                                'translation_remark' => !empty($data['translation_remark']) ? $data['translation_remark'] : '',
+                                'translation_status' => 'TRANSLATED'
+                            );
+                            $translation_id = $this->i18nTranslation->insert($new);
+                            $data['translation_id'] = $translation_id;
+
+                            if (strpos($locale_path, DIRECTORY_SEPARATOR.'Metric'.DIRECTORY_SEPARATOR)) {
+                                $locale_type = 'METRIC';
+                            }
+                            elseif (strpos($locale_path, DIRECTORY_SEPARATOR.'Custom'.DIRECTORY_SEPARATOR)) {
+                                $locale_type = 'CUSTOM';
+                            }
+                            else {
+                                $locale_type = 'DEFAULT';
+                            }
+                            $file_data = array(
+                                'translation_id' => $translation_id,
+                                'locale_id' => $data['locale_id'],
+                                'locale_locale' => $data['locale_locale'],
+                                'locale_type' => $locale_type,
+                                'extension' => $extension,
+                                'file_path' => $locale_path,
+                                'file_md5' => md5($locale_path)
+                            );
+                            $this->i18nTranslationFile->insert($file_data);
+                            $write_locale_file = true;
 
 
+                        }
                     }
                 }
             }
@@ -1359,12 +1466,42 @@ class i18nEditor extends i18nParser
         $form = $this->getLocaleFileForm($locale, $file_id);
 
         if (is_null($locale_path)) {
-            if (false === ($locales = $this->i18nTranslation->selectTranslated($locale))) {
+            // select all files and all non custom translations
+            $locales = $this->i18nTranslation->selectTranslated($locale);
+            $unassigneds = $this->i18nTranslationUnassigned->selectAllNonCustom();
+            if (is_array($unassigneds)) {
+                if (!is_array($locales)) {
+                    $locales = array();
+                }
+                foreach ($unassigneds as $unassigned) {
+                    $unassigned['translation_id'] = $unassigned['unassigned_id'] + self::unassigned_start_number;
+                    $unassigned['locale_id'] = -1;
+                    $unassigned['translation_remark'] = 'UNASSIGNED';
+                    $unassigned['translation_status'] = 'UNASSIGNED';
+                    $locales[] = $unassigned;
+                }
+            }
+            if (!is_array($locales)) {
                 $this->setAlert('There a no translated sources available');
             }
         }
         else {
-            if (false === ($locales = $this->i18nTranslation->selectByPathMD5(md5($locale_path)))) {
+            // select non custom translations for a specific file
+            $locales = $this->i18nTranslation->selectByFileMD5(md5($locale_path));
+            $unassigneds = $this->i18nTranslationUnassigned->selectByFileMD5(md5($locale_path));
+            if (is_array($unassigneds)) {
+                if (!is_array($locales)) {
+                    $locales = array();
+                }
+                foreach ($unassigneds as $unassigned) {
+                    $unassigned['translation_id'] = $unassigned['unassigned_id'] + self::unassigned_start_number;
+                    $unassigned['locale_id'] = -1;
+                    $unassigned['translation_remark'] = 'UNASSIGNED';
+                    $unassigned['translation_status'] = 'UNASSIGNED';
+                    $locales[] = $unassigned;
+                }
+            }
+            if (!is_array($locales)) {
                 $this->setAlert('This locale file does not contain any translations!');
             }
         }
@@ -1438,7 +1575,22 @@ class i18nEditor extends i18nParser
     {
         $this->initialize($app);
 
-        if (false === ($locales = $this->i18nTranslation->selectTranslatedCustom($locale))) {
+        $locales = $this->i18nTranslation->selectTranslatedCustom($locale);
+        $unassigneds = $this->i18nTranslationUnassigned->selectAllCustom();
+        if (is_array($unassigneds)) {
+            if (!is_array($locales)) {
+                $locales = array();
+            }
+            foreach ($unassigneds as $unassigned) {
+                $unassigned['translation_id'] = $unassigned['unassigned_id'] + self::unassigned_start_number;
+                $unassigned['locale_id'] = -1;
+                $unassigned['translation_remark'] = 'UNASSIGNED';
+                $unassigned['translation_status'] = 'UNASSIGNED';
+                $locales[] = $unassigned;
+            }
+        }
+
+        if (!is_array($locales)) {
             $this->setAlert('There exists no custom translations for this installation!');
         }
 
@@ -1455,5 +1607,171 @@ class i18nEditor extends i18nParser
                 'info' => self::$info,
                 'locales' => $locales
             ));
+    }
+
+    /**
+     * Get the form to create a custom unassigned translation
+     *
+     * @param string $locale
+     */
+    protected function getLocaleCustomForm($locale)
+    {
+        $locale_files = $this->getLocaleFilesForChoice($locale, false, true);
+
+        $files = array();
+        $i = 0;
+        foreach ($locale_files as $key => $value) {
+            if (false !== strpos($value, DIRECTORY_SEPARATOR.'Custom'.DIRECTORY_SEPARATOR)) {
+                $files[$i] = $value;
+            }
+            $i++;
+        }
+
+        $form = $this->app['form.factory']->createBuilder('form')
+        ->add('locale_locale', 'hidden', array(
+            'data' => $locale
+        ))
+        ->add('locale_source', 'textarea')
+        ->add('translation_text', 'textarea')
+        ->add('file_path', 'choice', array(
+            'choices' => $files,
+            'empty_value' => '- please select -'
+        ));
+        return $form->getForm();
+    }
+
+    /**
+     * Show the rendered dialog to create a custom unassigned translation
+     *
+     * @param string $locale
+     * @param FormFactory $form
+     */
+    protected function showLocaleCustomNew($locale, $form)
+    {
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template', 'framework/i18n/locale.custom.create.twig'),
+            array(
+                'usage' => self::$usage,
+                'usage_param' => self::$usage_param,
+                'toolbar' => $this->getToolbar($locale),
+                'toolbar_locale' => $this->getToolbarLocale('custom', $locale),
+                'alert' => $this->getAlert(),
+                'locale_locale' => $locale,
+                'config' => self::$config,
+                'info' => self::$info,
+                'form' => $form->createView()
+            ));
+    }
+
+    /**
+     * Controller to create a custom unassigned translation
+     *
+     * @param Application $app
+     * @param string $locale
+     */
+    public function ControllerLocaleCustomNew(Application $app, $locale)
+    {
+        $this->initialize($app);
+        $form = $this->getLocaleCustomForm($locale);
+        return $this->showLocaleCustomNew($locale, $form);
+    }
+
+    /**
+     * Controller to check the dialog with a custom unassigned translation
+     *
+     * @param Application $app
+     */
+    public function ControllerLocaleCustomNewCheck(Application $app)
+    {
+        $this->initialize($app);
+
+        $locale = (null !== ($form = $this->app['request']->request->get('form'))) ? $form['locale_locale'] : 'en';
+
+        // get the form
+        $form = $this->getLocaleCustomForm($locale);
+        // get the requested data
+        $form->bind($this->app['request']);
+
+        if ($form->isValid()) {
+            // the form is valid
+            $data = $form->getData();
+
+            if (false !== ($source_id = $this->i18nSource->existsMD5(md5($data['locale_source'])))) {
+                // this source is already in use
+                $this->setAlert('The source <a href="%url%">%source%</a> is already in use, can not insert it as unassigned translation!',
+                    array('%url%' => FRAMEWORK_URL.'/admin/i18n/editor/sources/detail/'.$source_id.self::$usage_param,
+                        '%source%' => $data['locale_source']), self::ALERT_TYPE_WARNING);
+                return $this->showLocaleCustomNew($locale, $form);
+            }
+
+            if (false !== ($unassigned_id = $this->i18nTranslationUnassigned->existsMD5(md5($data['locale_source'])))) {
+                // this source exists already as unassigned record!
+                $this->setAlert('The source <strong>%source%</strong> exists already as unassigned translation record, can not insert it!',
+                    array('%source%' => $data['locale_source']), self::ALERT_TYPE_WARNING);
+                return $this->showLocaleCustomNew($locale, $form);
+            }
+
+            $files = $this->getLocaleFilesForChoice($data['locale_locale']);
+            $i = 0;
+            foreach ($files as $key => $value) {
+                if ($i == $data['file_path']) {
+                    // locale path
+                    $locale_path = $key;
+                    // extension name
+                    $extension = ltrim($value, DIRECTORY_SEPARATOR);
+                    $extension = substr($extension, 0, strpos($extension, DIRECTORY_SEPARATOR));
+                    $target_is_custom = (false !== (strpos($value, DIRECTORY_SEPARATOR.'Custom'.DIRECTORY_SEPARATOR)));
+                    break;
+                }
+                $i++;
+            }
+
+            if (strpos($locale_path, DIRECTORY_SEPARATOR.'Metric'.DIRECTORY_SEPARATOR)) {
+                $locale_type = 'METRIC';
+            }
+            elseif (strpos($locale_path, DIRECTORY_SEPARATOR.'Custom'.DIRECTORY_SEPARATOR)) {
+                $locale_type = 'CUSTOM';
+            }
+            else {
+                $locale_type = 'DEFAULT';
+            }
+
+            $insert = array(
+                'file_path' => $locale_path,
+                'file_md5' => md5($locale_path),
+                'extension' => $extension,
+                'locale_locale' => $data['locale_locale'],
+                'locale_source' => $data['locale_source'],
+                'locale_md5' => md5($data['locale_source']),
+                'locale_type' => $locale_type,
+                'translation_text' => $data['translation_text'],
+                'translation_md5' => md5($data['translation_text'])
+            );
+            // insert the unassigned record
+            $this->i18nTranslationUnassigned->insert($insert);
+
+            // get the content of the current locale file
+            $file_array = $this->getLocaleFileArray($locale_path);
+            // add or update the current translation
+            $file_array[$data['locale_source']] = $data['translation_text'];
+            // sort the array
+            uksort($file_array, array('self', 'sortLocaleTranslations'));
+            $locale_array = array();
+            foreach ($file_array as $key => $value) {
+                $locale_array["'".str_replace(array("\'","'"), array("'", "\'"), $key)."'"] = "'".str_replace(array("\'", "'"), array("'", "\'"), $value)."'";
+            }
+            $this->putLocaleFile($locale_path, $locale_array, $extension);
+
+            $this->setAlert('Successful inserted a new unassigned translation.',
+                array(), self::ALERT_TYPE_SUCCESS);
+        }
+        else {
+            // general error (timeout, CSFR ...)
+            $this->setAlert('The form is not valid, please check your input and try again!', array(),
+                self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
+                    'method' => __METHOD__, 'line' => __LINE__));
+        }
+
+        return $this->ControllerLocaleCustom($app, $locale);
     }
 }

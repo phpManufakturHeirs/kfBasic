@@ -45,7 +45,7 @@
     {{ alert }}
     
     <div class="create-button">
-      <a class="btn btn-default pull-right" role="button" href="{{ FRAMEWORK_URL ~ '/admin/i18n/editor/locale/' ~ locale_locale ~ '/custom/new?usage=' ~ usage }}">{{ 'Create a custom translation without source'|trans }}</a>
+      <a class="btn btn-default pull-right" role="button" href="{{ FRAMEWORK_URL ~ '/admin/i18n/editor/locale/' ~ locale_locale ~ '/custom/new?usage=' ~ usage }}">{{ 'Create a unassigned translation'|trans }}</a>
     </div>
     
     {% if locales|length > 0 %}
@@ -61,7 +61,13 @@
           <tbody>
             {% for locale in locales %}
               <tr>
-                <td><a href="{{ FRAMEWORK_URL ~ '/admin/i18n/editor/sources/detail/' ~ locale.locale_id ~ usage_param }}">{{ '%05d'|format(locale.locale_id) }}</a></td>
+                <td>
+                  {% if locale.locale_id > 0 %}
+                    <a href="{{ FRAMEWORK_URL ~ '/admin/i18n/editor/sources/detail/' ~ locale.locale_id ~ usage_param }}">{{ '%05d'|format(locale.locale_id) }}</a>
+                  {% else %}
+                    - {{ 'UNASSIGNED'|humanize|trans|lower }} -
+                  {% endif %}
+                </td>
                 <td class="source"><a href="{{ FRAMEWORK_URL ~ '/admin/i18n/editor/translation/edit/id/' ~ locale.translation_id ~ usage_param }}"><i class="fa fa-pencil-square-o"></i></a>&nbsp;{{ locale.translation_text|escape('html') }}</td>
                 <td>{{ locale.extension }}</td>               
               </tr>

@@ -308,6 +308,25 @@ class Update
     }
 
     /**
+     * Release 1.0.9
+     */
+    protected function release_109()
+    {
+        if (!$this->app['db.utils']->columnExists(FRAMEWORK_TABLE_PREFIX.'basic_i18n_translation_unassigned', 'file_md5')) {
+            // add field release_status
+            $SQL = "ALTER TABLE `".FRAMEWORK_TABLE_PREFIX."basic_i18n_translation_unassigned` ADD `file_md5` VARCHAR(64) NOT NULL DEFAULT '' AFTER `file_path`";
+            $this->app['db']->query($SQL);
+            $SQL = "ALTER TABLE `".FRAMEWORK_TABLE_PREFIX."basic_i18n_translation_unassigned` ADD `locale_md5` VARCHAR(64) NOT NULL DEFAULT '' AFTER `locale_source_plain`";
+            $this->app['db']->query($SQL);
+            $SQL = "ALTER TABLE `".FRAMEWORK_TABLE_PREFIX."basic_i18n_translation_unassigned` ADD `locale_type` ENUM ('DEFAULT', 'CUSTOM', 'METRIC') NOT NULL DEFAULT 'DEFAULT' AFTER `locale_md5`";
+            $this->app['db']->query($SQL);
+            $SQL = "ALTER TABLE `".FRAMEWORK_TABLE_PREFIX."basic_i18n_translation_unassigned` ADD `translation_md5` VARCHAR(64) NOT NULL DEFAULT '' AFTER `translation_text_plain`";
+            $this->app['db']->query($SQL);
+            $this->app['monolog']->addDebug('[BASIC Update] Added columns `file_md5`, `locale_md5` and `translation_md5` to table `basic_i18n_translation_unassigned`');
+        }
+    }
+
+    /**
      * Update the database tables for the BASIC extension of the kitFramework
      *
      * @param Application $app
@@ -330,6 +349,7 @@ class Update
         $this->release_099();
         $this->release_101();
         $this->release_105();
+        $this->release_109();
 
         // install the search function
         $Search = new InstallSearch($app);

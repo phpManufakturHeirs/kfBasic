@@ -105,6 +105,8 @@ return array(
     => 'Ein neues Benutzerkonto anlegen',
   'Create a new password'
     => 'Ein neues Password anlegen',
+  'Create a unassigned translation'
+    => 'Eine nicht zugeordnete Übersetzung erstellen',
   'Custom'
     => 'Angepasst',
   'Custom translations'
@@ -120,7 +122,7 @@ return array(
   'Delete this account irrevocable'
     => 'Benutzerkonto unwiderruflich löschen',
   'Deleted the translation with the ID %id%.'
-    => 'Die Übersetzung mi tder ID <strong>%id%</strong> wurde gelöscht.',
+    => 'Die Übersetzung mit der ID <strong>%id%</strong> wurde gelöscht.',
   'Deleted widowed locale translation with the ID %id%.'
     => 'Die verwittwete Übersetzung mit der ID %id% gelöscht.',
   'Display name'
@@ -231,6 +233,8 @@ return array(
     => 'i18n',
   'Id'
     => 'ID',
+  'If you have added a source to program file or a template execute a <em>search run</em> instead, the i18nEditor will find it.'
+    => 'Falls Sie einer Programmdatei oder einem Template einen Quelltext hinzugefügt haben, sollten Sie stattdessen einen <em>Suchlauf</em> durchführen, der i18nEditor wird den Quelltext finden!',
   'If you have forgotten your password, you can order a link to create a new one. Please type in the email address assigned to your account and submit the form.'
     => 'Falls Sie Ihr Passwort vergessen haben, können Sie einen Link anfordern um ein neues Passwort zu erstellen. Bitte tragen Sie die E-Mail Adresse ein, die ihrem Konto zugeordnet ist und übermitteln Sie das Formular.',
   'If you have not asked to create a new password, just do nothing. The link above is valid only for 24 hours and your actual password has not changed now.'
@@ -457,6 +461,8 @@ return array(
     => 'Übermitteln',
   'Successful created the tables for the i18nEditor.'
     => 'Tabellen für den i18nEditor erfolgreich angelegt.',
+  'Successful inserted a new unassigned translation.'
+    => 'Die nicht zugeordnete Übersetzung wurde erfolgreich eingefügt.',
   'Successful moved the translation to the extension %extension%.'
     => 'Die Übersetzung wurde erfolgreich in die Erweiterung %extension% verschoben.',
   'Successful scanned the kitFramework for *.json configuration files'
@@ -555,6 +561,10 @@ return array(
     => 'Die angeforderte Seite wurde nicht gefunden!',
   'The ROLE_USER is needed if you want enable the user to access and change his own account. The ROLE_ADMIN is the highest available role and grant access to really everything.'
     => 'Das Recht ROLE_USER ist erforderlich um einem Benutzer Zugriff auf sein Konto zu ermöglichen. Das Recht ROLE_ADMIN ist das höchste verfügbare Recht und garantiert einen uneingeschränkten Zugriff auf alle Funktionen des kitFramework.',
+  'The source <strong>%source%</strong> exists already as unassigned translation record, can not insert it!'
+    => 'Der Quelltext <strong>%source%</strong> existiert bereits als <em>nicht zugeordnete</em> Übersetzung, kann den Datensatz nicht hinzufügen!',
+  'The source <a href="%url%">%source%</a> is already in use, can not insert it as unassigned translation!'
+    => 'Der Quelltext <a href="%url%">%source%</a> wird bereits verwendet, kann ihn nicht als <em>nicht zugeordenete</em> Übersetzung einfügen!',
   'The status of this translation is set to <strong>CONFLICT</strong>. This problem must be solved by a developer.'
     => 'Der Status dieser Übersetzung is auf <strong>CONFLICT</strong> gesetzt. Dieses Problem muss durch einen Entwickler gelöst werden.',
   'The submitted GUID is expired and no longer valid.<br />Please <a href="%password_forgotten%">order a new link</a>.'
@@ -641,6 +651,8 @@ return array(
     => 'Nicht zugeordnet',
   'Unassigned translations'
     => 'Nicht zugeordnete Übersetzungen',
+  '<em>Unassigned translations</em> can be used to translate <em>sources</em>, which are representend by a variable and does not physically exists in a program file or a template.'
+    => '<em>Nicht zugeordnete Übersetzungen</em> können verwendet werden um <em>Quelltexte</em> zu übersetzen, die durch eine Variable repräsentiert werden und nicht physikalisch in einer Programmdatei oder einem Template existieren.',
   'Update available!'
     => 'Aktualisierung verfügbar!',
   'Updated the catalog data for <b>%name%</b>.'
@@ -703,5 +715,5 @@ return array(
     => 'Ihr Benutzerkonto wurde erfolgreich geändert.',
   'Your are not authenticated, please login!'
     => 'Sie sind nicht angemeldet, bitte authentifizieren Sie sich zunächst!',
-
+  
 );

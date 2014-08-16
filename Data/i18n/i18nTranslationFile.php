@@ -200,6 +200,34 @@ EOD;
     }
 
     /**
+     * Select the translation file by the path MD5
+     *
+     * @param string $path_md5
+     * @throws \Exception
+     * @return Ambigous <boolean, array>
+     */
+    public function selectByPathMD5($path_md5)
+    {
+        try {
+            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `file_md5`='$path_md5'";
+            $results = $this->app['db']->fetchAll($SQL);
+            $files = array();
+            if (is_array($results)) {
+                foreach ($results as $result) {
+                    $file = array();
+                    foreach ($result as $key => $value) {
+                        $file[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+                    }
+                    $files[] = $file;
+                }
+            }
+            return (!empty($files)) ? $files : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
      * Delete the record for the given file ID
      *
      * @param integer $file_id
