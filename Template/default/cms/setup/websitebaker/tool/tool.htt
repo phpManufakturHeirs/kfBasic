@@ -29,7 +29,17 @@ try {
     $cms_info['target'] = 'framework';
     $FRAMEWORK_PARAMETER = base64_encode(json_encode($cms_info));
     $CMS_URL = WB_URL;
-
+    $TOGGLE_PAGETREE = '';
+    if (defined('CAT_VERSION')) {
+      $TOGGLE_PAGETREE = <<<EOD
+    <script type="text/javascript">
+      $(document).ready(function() {
+        togglePageTree();
+      });
+    </script>
+EOD;    
+    }
+    
     echo <<<EOD
     <div style="width:100%;margin:0;padding:5px;color:#000;background-color:#fff;">
       <div style="width:100%;height:15px;margin:5px 0;padding:0;text-align:right;">
@@ -44,6 +54,7 @@ try {
         <a href="https://kit2.phpmanufaktur.de" target="_blank">kitFramework by phpManufaktur</a>
       </div>
     </div>
+    {$TOGGLE_PAGETREE}
 EOD;
 }
 catch (Exception $e) {
