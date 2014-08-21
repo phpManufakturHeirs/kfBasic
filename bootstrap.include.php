@@ -793,6 +793,18 @@ $app->error(function (\Exception $e, $code) use ($app) {
                 '@phpManufaktur/Basic/Template', 'framework/error.403.twig'),
                 array('usage' => $app['request']->get('usage', 'framework')));
             break;
+        case 410:
+            // gone
+            $message = $app['twig']->render($app['utils']->getTemplateFile(
+                '@phpManufaktur/Basic/Template', 'framework/error.410.twig'),
+                array('usage' => $app['request']->get('usage', 'framework')));
+            break;
+        case 423:
+            // locked
+            $message = $app['twig']->render($app['utils']->getTemplateFile(
+                '@phpManufaktur/Basic/Template', 'framework/error.423.twig'),
+                array('usage' => $app['request']->get('usage', 'framework')));
+            break;
         default:
             // general error message
             $message = $app['twig']->render($app['utils']->getTemplateFile(
