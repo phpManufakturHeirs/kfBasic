@@ -41,7 +41,8 @@ class Alert
     /**
      * Constructor
      */
-    public function __construct(Application $app=null) {
+    public function __construct(Application $app=null)
+    {
         if (!is_null($app)) {
             $this->initialize($app);
         }
