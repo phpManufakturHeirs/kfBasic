@@ -160,11 +160,13 @@ return array(
   'Entry-points'
     => 'Zugangspunkte',
   'Error 404'
-    => 'Fehler 404',
+    => '404 - Datei nicht gefunden',
+  'Error 405'
+    => '405 - Route nicht gefunden',
   'Error 410'
-    => 'Fehler 410',
+    => '410 - Resource existiert nicht mehr',
   'Error 423'
-    => 'Fehler 423',
+    => '423 - Resource gesperrt',
   'Error executing the kitCommand <b>%command%</b>'
     => 'Bei der Ausführung des kitCommand <b>%command%</b> ist ein Fehler aufgetreten',
   'Error executing the kitFilter <b>%filter%</b>'
@@ -529,10 +531,10 @@ return array(
     => 'Die Beschreibungsdatei extension.json für die Erweiterung <b>%name%</b> enthält nicht alle Definitionen, prüfen Sie <i>GUID</i>, <i>Group</i> und <i>Release</i>!',
   'The file %file% does not exists in Gist %gist_id%!'
     => 'Die Datei %file% existiert nicht im Gist %gist_id%',
-  'The file <i>%file%</i> does not exists!'
-    => 'Die Datei <em>%file%</em> existiert nicht!',
   'The file <strong>%file%</strong> does not exists!'
     => 'Die Datei <strong>%file%</strong> existiert nicht!',
+  'The file <i>%file%</i> does not exists!'
+    => 'Die Datei <em>%file%</em> existiert nicht!',
   'The file <strong>%file%</strong> is not readable!'
     => 'Die Datei <strong>%file%</strong> ist nicht lesbar!',
   'The form is not valid, please check your input and try again!'
@@ -567,6 +569,8 @@ return array(
     => 'Die angeforderte Seite wurde entfernt und ist nicht mehr verfügbar!',
   'The requested page is locked and temporary not available!'
     => 'Die angeforderte Seite ist gesperrt und vorübergehend nicht verfügbar!',
+  'The requested route does not exists!'
+    => 'Die angeforderte Route existiert nicht.',
   'The ROLE_USER is needed if you want enable the user to access and change his own account. The ROLE_ADMIN is the highest available role and grant access to really everything.'
     => 'Das Recht ROLE_USER ist erforderlich um einem Benutzer Zugriff auf sein Konto zu ermöglichen. Das Recht ROLE_ADMIN ist das höchste verfügbare Recht und garantiert einen uneingeschränkten Zugriff auf alle Funktionen des kitFramework.',
   'The source <strong>%source%</strong> exists already as unassigned translation record, can not insert it!'
