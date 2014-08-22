@@ -161,6 +161,10 @@ return array(
     => 'Zugangspunkte',
   'Error 404'
     => 'Fehler 404',
+  'Error 410'
+    => 'Fehler 410',
+  'Error 423'
+    => 'Fehler 423',
   'Error executing the kitCommand <b>%command%</b>'
     => 'Bei der Ausführung des kitCommand <b>%command%</b> ist ein Fehler aufgetreten',
   'Error executing the kitFilter <b>%filter%</b>'
@@ -211,9 +215,9 @@ return array(
     => 'Hallo %name%,<br />Sie möchten Ihr Passwort ändern, bitte geben Sie das neue Passwort ein, wiederholen Sie es zur Sicherheit und schicken Sie das Formular ab.<br />Falls Sie Ihr Passwort nicht ändern möchten, verlassen Sie bitte einfach diesen Dialog.',
   'Hello %name%,<br />you have asked to create a new password for the kitFramework hosted at %server%.'
     => 'Hallo %name%,<br />Sie haben darum gebeten ein neues Passwort für das kitFramework auf %server% zu erhalten.',
-  'Help'
-    => 'Hilfe',
   'help'
+    => 'Hilfe',
+  'Help'
     => 'Hilfe',
   'help_accounts_list_json'
     => '<p>Diese Datei ermöglicht es Ihnen die angezeigten Spalten und die Sortierung der Felder in der <a href="%FRAMEWORK_URL%/admin/accounts/list" target="_blank">Übersicht der Benutzerkonten</a> zu ändern.</p><p>Verfügbare Felder für die Verwendung in <var>columns</var> und <var>list > order > by</var> sind: <var>id, username, email, password, displayname, last_login, roles, guid, guid_timestamp, guid_status, status</var> und <var>timestamp</var>. Mit <var>list > rows_per_page</var> legen Sie fest, wie viele Benutzerkonten pro Seite angezeigt werden.</p>',
@@ -559,6 +563,10 @@ return array(
     => 'Es existiert kein Datensatz mit der ID %id%!',
   'The requested page could not be found!'
     => 'Die angeforderte Seite wurde nicht gefunden!',
+  'The requested page has been removed and is no longer available!'
+    => 'Die angeforderte Seite wurde entfernt und ist nicht mehr verfügbar!',
+  'The requested page is locked and temporary not available!'
+    => 'Die angeforderte Seite ist gesperrt und vorübergehend nicht verfügbar!',
   'The ROLE_USER is needed if you want enable the user to access and change his own account. The ROLE_ADMIN is the highest available role and grant access to really everything.'
     => 'Das Recht ROLE_USER ist erforderlich um einem Benutzer Zugriff auf sein Konto zu ermöglichen. Das Recht ROLE_ADMIN ist das höchste verfügbare Recht und garantiert einen uneingeschränkten Zugriff auf alle Funktionen des kitFramework.',
   'The source <strong>%source%</strong> exists already as unassigned translation record, can not insert it!'
