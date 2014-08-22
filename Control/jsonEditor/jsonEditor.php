@@ -190,6 +190,7 @@ class jsonEditor extends Alert
         if (null == ($json_content = $app['request']->request->get('json_content'))) {
             throw new \Exception('Missing the GET parameter `json_content`!');
         }
+        $json_path = urldecode($json_path);
 
         file_put_contents($json_path, $app['utils']->JSONFormat(json_decode($json_content, true)));
 
