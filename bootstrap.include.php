@@ -453,11 +453,13 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     )
  ));
 
-$app['security.authentication.logout_handler.general'] = $app->share(function () use ($app) {
+$app['security.authentication.logout_handler.general'] = $app->share(function () use ($app)
+{
     return new CustomLogoutSuccessHandler(
         $app['security.http_utils'], '/goodbye');
 });
-$app['security.authentication.success_handler.general'] = $app->share(function () use ($app) {
+$app['security.authentication.success_handler.general'] = $app->share(function () use ($app)
+{
     return new CustomAuthenticationSuccessHandler($app['security.http_utils'], array(), $app);
 });
 
@@ -595,7 +597,8 @@ $app->post('/json/editor/save',
  *
  * @link https://github.com/phpManufaktur/kitFramework/wiki/Extensions-%23-Embedded-Administration
  */
-$app->get('/basic/cms/i18n/editor/{cms_information}', function ($cms_information) use ($app) {
+$app->get('/basic/cms/i18n/editor/{cms_information}', function ($cms_information) use ($app)
+{
     $administration = new EmbeddedAdministration($app);
     return $administration->route('/admin/i18n/editor', $cms_information, 'ROLE_ADMIN');
 });
@@ -744,7 +747,8 @@ $app->mount('/command', $command);
 $app->mount('/filter', $filter);
 
 
-$app->error(function (\Exception $e, $code) use ($app) {
+$app->error(function (\Exception $e, $code) use ($app)
+{
     if ($app['debug'] && ($code != 403)) {
         // on debugging mode use the regular exception handler!
         return;
@@ -779,7 +783,8 @@ $app->error(function (\Exception $e, $code) use ($app) {
     return new Response($message);
 });
 
-$app->before(function(Request $request) use ($app) {
+$app->before(function(Request $request) use ($app)
+{
     // default language
     $locale = 'en';
     // quick and dirty ... try to detect the favorised language - to be improved!
