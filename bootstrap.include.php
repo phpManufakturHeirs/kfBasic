@@ -14,7 +14,6 @@ require_once realpath(BOOTSTRAP_PATH.'/framework/autoload.php');
 use Symfony\Component\HttpKernel\Debug\ErrorHandler;
 use Symfony\Component\HttpKernel\Debug\ExceptionHandler;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Translation\Loader\ArrayLoader;
 use phpManufaktur\Basic\Control\Account\UserProvider;
 use phpManufaktur\Basic\Control\Account\manufakturPasswordEncoder;
 use phpManufaktur\Basic\Control\twigExtension;
@@ -32,6 +31,7 @@ use phpManufaktur\Basic\Control\Image;
 use phpManufaktur\Basic\Control\MarkdownFunctions;
 use Symfony\Component\Finder\Finder;
 use phpManufaktur\Basic\Control\CMS\EmbeddedAdministration;
+use Symfony\Component\HttpFoundation\Request;
 
 // set the error handling
 ini_set('display_errors', 1);
@@ -207,40 +207,8 @@ $app['monolog']->addDebug('SessionServiceProvider registered.');
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app['monolog']->addDebug('UrlGeneratorServiceProvider registered.');
 
-// default language
-$locale = 'en';
-// quick and dirty ... try to detect the favorised language - to be improved!
-if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-    $langs = array();
-    // break up string into pieces (languages and q factors)
-    preg_match_all('/([a-z]{1,8}(-[a-z]{1,8})?)\s*(;\s*q\s*=\s*(1|0\.[0-9]+))?/i', $_SERVER['HTTP_ACCEPT_LANGUAGE'], $lang_parse);
-    if (count($lang_parse[1]) > 0) {
-        foreach ($lang_parse[1] as $lang) {
-            if (false === (strpos($lang, '-'))) {
-                // only the country sign like 'de'
-                $locale = strtolower($lang);
-            } else {
-                // perhaps something like 'de-DE'
-                $locale = strtolower(substr($lang, 0, strpos($lang, '-')));
-            }
-            break;
-        }
-    }
-}
-
 // register the Translator
-$app->register(new Silex\Provider\TranslationServiceProvider(), array(
-    'locale_fallback' => 'en'
-));
-
-$app['translator'] = $app->share($app->extend('translator', function  ($translator, $app)
-{
-    $translator->addLoader('array', new ArrayLoader());
-    return $translator;
-}));
-
-$app['translator']->setLocale($locale);
-
+$app->register(new Silex\Provider\TranslationServiceProvider());
 $app['monolog']->addDebug('Translator Service registered. Added ArrayLoader to the Translator');
 
 // load the language files for all extensions
@@ -775,6 +743,7 @@ $app->mount('/user', $user);
 $app->mount('/command', $command);
 $app->mount('/filter', $filter);
 
+
 $app->error(function (\Exception $e, $code) use ($app) {
     if ($app['debug'] && ($code != 403)) {
         // on debugging mode use the regular exception handler!
@@ -808,6 +777,31 @@ $app->error(function (\Exception $e, $code) use ($app) {
             break;
     }
     return new Response($message);
+});
+
+$app->before(function(Request $request) use ($app) {
+    // default language
+    $locale = 'en';
+    // quick and dirty ... try to detect the favorised language - to be improved!
+    if (!is_null($request->server->get('HTTP_ACCEPT_LANGUAGE'))) {
+        $langs = array();
+        // break up string into pieces (languages and q factors)
+        preg_match_all('/([a-z]{1,8}(-[a-z]{1,8})?)\s*(;\s*q\s*=\s*(1|0\.[0-9]+))?/i', $request->server->get('HTTP_ACCEPT_LANGUAGE'), $lang_parse);
+        if (count($lang_parse[1]) > 0) {
+            foreach ($lang_parse[1] as $lang) {
+                if (false === (strpos($lang, '-'))) {
+                    // only the country sign like 'de'
+                    $locale = strtolower($lang);
+                } else {
+                    // perhaps something like 'de-DE'
+                    $locale = strtolower(substr($lang, 0, strpos($lang, '-')));
+                }
+                break;
+            }
+        }
+        $app['translator']->setLocale($locale);
+        $app['monolog']->addDebug('Set locale to '.$locale);
+    }
 });
 
 
