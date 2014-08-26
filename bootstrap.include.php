@@ -785,10 +785,11 @@ $app->error(function (\Exception $e, $code) use ($app)
 
 $app->before(function(Request $request) use ($app)
 {
-    // default language
-    $locale = 'en';
     // quick and dirty ... try to detect the favorised language - to be improved!
     if (!is_null($request->server->get('HTTP_ACCEPT_LANGUAGE'))) {
+        // default language
+        $locale = 'en';
+
         $langs = array();
         // break up string into pieces (languages and q factors)
         preg_match_all('/([a-z]{1,8}(-[a-z]{1,8})?)\s*(;\s*q\s*=\s*(1|0\.[0-9]+))?/i', $request->server->get('HTTP_ACCEPT_LANGUAGE'), $lang_parse);
@@ -804,6 +805,7 @@ $app->before(function(Request $request) use ($app)
                 break;
             }
         }
+        // set the locale
         $app['translator']->setLocale($locale);
         $app['monolog']->addDebug('Set locale to '.$locale);
     }
