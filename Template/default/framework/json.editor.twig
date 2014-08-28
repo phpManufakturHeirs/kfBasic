@@ -54,6 +54,14 @@
       <div class="row">
         <div class="col-xs-8">
           <div id="jsoneditor"></div>
+          <div class="row">
+            <div class="col-xs-6">
+              <button class="btn btn-default form-control" id="jsonSave" />{{ 'Save file'|trans }}</button>
+            </div>
+            <div class="col-xs-6">
+              <a class="btn btn-default form-control" role="button" href="{{ FRAMEWORK_URL ~ '/admin/json/editor?usage=' ~ usage }}">{{ 'Abort'|trans }}</a> 
+            </div>
+          </div>
         </div>
         <div class="col-xs-4">
           {# reserved for help and additional information #}
@@ -77,14 +85,7 @@
         </div>     
       </div>
 
-      <div class="row">
-        <div class="col-xs-4">
-          <button class="btn btn-default form-control" id="jsonSave" />{{ 'Save file'|trans }}</button>
-        </div>
-        <div class="col-xs-4">
-          <a class="btn btn-default form-control" role="button" href="{{ FRAMEWORK_URL ~ '/admin/json/editor?usage=' ~ usage }}">{{ 'Abort'|trans }}</a> 
-        </div>
-      </div>
+      
     {% endif %}  
     
   </div>
