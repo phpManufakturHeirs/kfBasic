@@ -41,10 +41,10 @@ class jsonEditor extends Alert
         $this->Configuration = new Configuration($app);
         self::$config = $this->Configuration->getConfiguration();
 
-        if (null !== ($locale = $app['session']->get('CMS_LOCALE'))) {
-            $this->app['translator']->setLocale($locale);
+        if (self::$usage != 'framework') {
+            // set the locale from the CMS locale
+            $app['translator']->setLocale($app['session']->get('CMS_LOCALE', 'en'));
         }
-        self::$locale = $this->app['translator']->getLocale();
     }
 
     /**
