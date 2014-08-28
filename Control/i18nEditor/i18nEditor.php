@@ -41,8 +41,8 @@ class i18nEditor extends i18nParser
         self::$usage = is_null($usage) ? 'framework' : $usage;
         self::$usage_param = (self::$usage != 'framework') ? '?usage='.self::$usage : '';
 
-        // set the locale from the CMS locale
         if (self::$usage != 'framework') {
+            // set the locale from the CMS locale
             $app['translator']->setLocale($app['session']->get('CMS_LOCALE', 'en'));
         }
 
