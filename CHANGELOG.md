@@ -6,6 +6,17 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**1.0.9** - 2014-08-28
+
+* added function `getSetValues()` to `$app['db.utils']`
+* exclude all `/Include` directories from i18n Parser to avoid overhead
+* changed formatting and styling for usage of extensions as CMS Tool: grant a padding of 5px and always a white background for the tools.
+* added custom unassigned translations to the i18nEditor
+* added `togglePageTree()` to enable Admin-Tools to toggle the page tree in BlackCat installations
+* extended and improved handling of 403, 404, 405, 410 and 423 HTTP errors
+* changed the translation service initialization and the setting of the default locale
+* smaller changes in formatting and translations
+
 **1.0.8** - 2014-08-13
 
 * fixed: BASIC needs the CKEditor also at the first initialization, added dependency
