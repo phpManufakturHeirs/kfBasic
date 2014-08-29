@@ -9,7 +9,7 @@
 #}
 <!DOCTYPE html>
 {% spaceless %}
-<html lang="{{ basic.cms.locale }}">
+<html lang="{{ basic.cms.locale|default(app.translator.locale) }}">
   <head>
     {% block head %}
       {% if (basic.frame is defined and basic.frame.redirect.active) %}
