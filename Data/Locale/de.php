@@ -27,6 +27,8 @@ return array(
     => 'Eine <em>angepasste Übersetzung</em> wird in einer gesonderten Datei gespeichert und nicht überschrieben, wenn die Erweiterung aktualisiert wird.',
   'Abort'
     => 'Abbruch',
+  'About'
+    => 'Über ...',
   'Access denied'
     => 'Zugriff verweigert',
   'Access to kitFramework User Accounts'
@@ -217,9 +219,9 @@ return array(
     => 'Hallo %name%,<br />Sie möchten Ihr Passwort ändern, bitte geben Sie das neue Passwort ein, wiederholen Sie es zur Sicherheit und schicken Sie das Formular ab.<br />Falls Sie Ihr Passwort nicht ändern möchten, verlassen Sie bitte einfach diesen Dialog.',
   'Hello %name%,<br />you have asked to create a new password for the kitFramework hosted at %server%.'
     => 'Hallo %name%,<br />Sie haben darum gebeten ein neues Passwort für das kitFramework auf %server% zu erhalten.',
-  'help'
-    => 'Hilfe',
   'Help'
+    => 'Hilfe',
+  'help'
     => 'Hilfe',
   'help_accounts_list_json'
     => '<p>Diese Datei ermöglicht es Ihnen die angezeigten Spalten und die Sortierung der Felder in der <a href="%FRAMEWORK_URL%/admin/accounts/list" target="_blank">Übersicht der Benutzerkonten</a> zu ändern.</p><p>Verfügbare Felder für die Verwendung in <var>columns</var> und <var>list > order > by</var> sind: <var>id, username, email, password, displayname, last_login, roles, guid, guid_timestamp, guid_status, status</var> und <var>timestamp</var>. Mit <var>list > rows_per_page</var> legen Sie fest, wie viele Benutzerkonten pro Seite angezeigt werden.</p>',
@@ -341,6 +343,8 @@ return array(
     => 'Benötige den Parameter: %parameter%',
   'Missing the user ID!'
     => 'Vermisse die Anwender ID!',
+  'Modified'
+    => 'Geändert',
   'Need help? Please visit the <a href="%url%" target="_blank">phpManufaktur Support Group</a>.'
     => 'Benötigen Sie Hilfe? Bitte besuchen Sie die <a href="%url% target="_blank">phpManufaktur Support Group</a>.',
   'New kitFramework release available!'
@@ -405,6 +409,8 @@ return array(
     => 'Mit freundlichen Grüßen<br />Ihr kitFramework Team',
   'Release'
     => 'Release',
+  'Remark'
+    => 'Anmerkung',
   'Repeat by pattern, i.e. at the last tuesday of the month'
     => 'Nach einem Muster, z.B. am letzten Donnerstag im Monat',
   'Repeat Password'
@@ -531,10 +537,10 @@ return array(
     => 'Die Beschreibungsdatei extension.json für die Erweiterung <b>%name%</b> enthält nicht alle Definitionen, prüfen Sie <i>GUID</i>, <i>Group</i> und <i>Release</i>!',
   'The file %file% does not exists in Gist %gist_id%!'
     => 'Die Datei %file% existiert nicht im Gist %gist_id%',
-  'The file <strong>%file%</strong> does not exists!'
-    => 'Die Datei <strong>%file%</strong> existiert nicht!',
   'The file <i>%file%</i> does not exists!'
     => 'Die Datei <em>%file%</em> existiert nicht!',
+  'The file <strong>%file%</strong> does not exists!'
+    => 'Die Datei <strong>%file%</strong> existiert nicht!',
   'The file <strong>%file%</strong> is not readable!'
     => 'Die Datei <strong>%file%</strong> ist nicht lesbar!',
   'The form is not valid, please check your input and try again!'
