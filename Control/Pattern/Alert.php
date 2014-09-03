@@ -230,7 +230,10 @@ class Alert
             '@phpManufaktur/Basic/Template', 'kitcommand/bootstrap/alert.twig'),
             array(
                 'basic' => array(
-                    'alert' => $this->getAlert()
+                    'alert' => $this->getAlert(),
+                    'cms' => array(
+                        'locale' => $this->app['translator']->getLocale()
+                    )
                 )
             ));
     }
