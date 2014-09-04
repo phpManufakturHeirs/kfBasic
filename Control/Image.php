@@ -70,17 +70,39 @@ class Image
     {
         switch ($image_type) {
             case IMAGETYPE_GIF:
-                $origin_image = imagecreatefromgif($image_path);
+                $origin_image = @imagecreatefromgif($image_path);
                 break;
             case IMAGETYPE_JPEG:
-                $origin_image = imagecreatefromjpeg($image_path);
+                $origin_image = @imagecreatefromjpeg($image_path);
                 break;
             case IMAGETYPE_PNG:
-                $origin_image = imagecreatefrompng($image_path);
+                $origin_image = @imagecreatefrompng($image_path);
                 break;
             default :
                 // unsupported image type
                 throw new \Exception("The image type $image_type is not supported!");
+        }
+
+        if (!$origin_image) {
+            // error creating the image resource for any reason
+            $this->app['monolog']->addError("Can not create image from $image_path.", array(
+                'image_type' => $image_type, 'origin_width' => $origin_width, 'origin_height' => $origin_height,
+                'new_image_path' => $new_image_path, 'new_width' => $new_width, 'new_height' => $new_height
+            ));
+            // create a dummy image with a hint
+            $image = imagecreate($new_width, $new_height);
+            $bgColor = ImageColorAllocate ($image, 255, 255, 255);
+            $textColor = ImageColorAllocate ($image, 255, 0, 0);
+            ImageFilledRectangle ($image, 0, 0, $new_width, $new_height, $bgColor);
+            ImageString($image, 2, 5, 5,
+                $this->app['translator']->trans('Error creating image'), $textColor);
+            if (!$this->app['filesystem']->exists(dirname($new_image_path))) {
+                $this->app['filesystem']->mkdir(dirname($new_image_path));
+            }
+            imagejpeg($image, $new_image_path, 90);
+            $this->app['filesystem']->chmod($new_image_path, 0644);
+            $this->app['filesystem']->touch($new_image_path, filemtime($image_path));
+            return false;
         }
 
         // create new image of $new_width and $new_height
@@ -118,6 +140,8 @@ class Image
         $this->app['filesystem']->chmod($new_image_path, 0644);
 
         $this->app['filesystem']->touch($new_image_path, filemtime($image_path));
+
+        return true;
     }
 
     /**
