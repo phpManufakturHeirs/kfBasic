@@ -78,6 +78,9 @@ class FirstLogin extends Alert
     {
         $this->initialize($app);
 
+        // set the locale from the CMS locale
+        $app['translator']->setLocale($app['session']->get('CMS_LOCALE', 'en'));
+
         if (null === (self::$redirect = $app['request']->request->get('redirect', null))) {
             throw new \Exception('Missing the POST parameter `redirect`');
         }
