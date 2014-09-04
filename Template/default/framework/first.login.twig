@@ -14,6 +14,12 @@
 {% endif %}
 {% extends getTemplateFile('@phpManufaktur/Basic/Template', template_file) %}
 {% block title %}{{ 'kitFramework - First Login'|trans }}{% endblock %}
+{% block stylesheet %}
+  {# at the first login the Library is not initialized, so we have no access to the /latest directory ! #}
+  <link href="{{ LIBRARY_URL }}/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{{ LIBRARY_URL }}/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Basic/Template/default/framework/css/framework.min.css" media="screen, projection" />
+{% endblock %}  
 {% block content %}
   <!-- {{ _self.getTemplateName() }} -->
   <div class="container">
@@ -28,7 +34,7 @@
         {% if app.translator.locale == 'de' %}
           {# GERMAN language #}
           <p>Hallo {{ form.display_name.vars.value }},</p>
-          <p>sie rufen das kitFramework zum ersten Mal auf.</p>
+          <p>Sie rufen das kitFramework zum ersten Mal auf.</p>
           <p>Sie sind bereits in {{ usage }} eingeloggt. Damit Sie künftig automatisch mit Ihrem Konto am kitFramework angemeldet werden können, müssen Sie einmalig Ihr Passwort eingeben.</p>
         {% else %}
           {# ENGLISH language #}
@@ -51,3 +57,8 @@
     </form>
   </div>
 {% endblock %}
+
+{% block footer_jquery %}
+  <script type="text/javascript" src="{{ LIBRARY_URL }}/jquery/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="{{ LIBRARY_URL }}/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+{% endblock footer_jquery %}
