@@ -152,6 +152,12 @@ class Welcome extends Alert
                 ));
         }
 
+        // save them partial into session
+        $app['session']->set('CMS_TYPE', $cms['type']);
+        $app['session']->set('CMS_VERSION', $cms['version']);
+        $app['session']->set('CMS_LOCALE', $cms['locale']);
+        $app['session']->set('CMS_USER_NAME', $cms['username']);
+
         if (!$app['account']->checkUserHasFrameworkAccount($cms['username'])) {
             // this user does not exists in the kitFramework User database
             $subRequest = Request::create('/login/first/cms', 'POST', array(
@@ -164,12 +170,6 @@ class Welcome extends Alert
             ));
             return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
         }
-
-        // save them partial into session
-        $app['session']->set('CMS_TYPE', $cms['type']);
-        $app['session']->set('CMS_VERSION', $cms['version']);
-        $app['session']->set('CMS_LOCALE', $cms['locale']);
-        $app['session']->set('CMS_USER_NAME', $cms['username']);
 
         // auto login the CMS user into the secured area with admin privileges
         $app['account']->loginUserToSecureArea($cms['username'], array('ROLE_ADMIN'));
