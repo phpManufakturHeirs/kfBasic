@@ -83,6 +83,10 @@ return array(
     => 'Zeitüberschreitung bei der CAPTCHA Übermittlung, bitte versuchen Sie es erneut.',
   'Check the email settings and send a email to the webmaster for testing purpose'
     => 'E-Mail Einstellungen kontrollieren und eine Test E-Mail an den Webmaster schicken',
+  'Click to sort column ascending'
+    => 'Anklicken um die Spalte aufsteigend zu sortieren',
+  'Click to sort column descending'
+    => 'Anklicken um die Spalte absteigend zu sortieren',
   'commercial use only'
     => '- nur kommerzielle Verwendung -',
   'Configuration'
@@ -169,6 +173,8 @@ return array(
     => '410 - Resource existiert nicht mehr',
   'Error 423'
     => '423 - Resource gesperrt',
+  'Error creating image'
+    => 'Error creating image',
   'Error executing the kitCommand <b>%command%</b>'
     => 'Bei der Ausführung des kitCommand <b>%command%</b> ist ein Fehler aufgetreten',
   'Error executing the kitFilter <b>%filter%</b>'
@@ -187,6 +193,8 @@ return array(
     => 'Erweiterung',
   'Extensions'
     => 'Erweiterungen',
+  'Failed to send a email with the subject <b>%subject%</b> to the addresses: <b>%failed%</b>.'
+    => 'Eine E-Mail mit dem Betreff <b>%subject%</b> konnte an die folgenden Adressaten nicht übermittelt werden: <b>%failed%</b>.',
   'File'
     => 'Datei',
   'File path'
@@ -219,9 +227,9 @@ return array(
     => 'Hallo %name%,<br />Sie möchten Ihr Passwort ändern, bitte geben Sie das neue Passwort ein, wiederholen Sie es zur Sicherheit und schicken Sie das Formular ab.<br />Falls Sie Ihr Passwort nicht ändern möchten, verlassen Sie bitte einfach diesen Dialog.',
   'Hello %name%,<br />you have asked to create a new password for the kitFramework hosted at %server%.'
     => 'Hallo %name%,<br />Sie haben darum gebeten ein neues Passwort für das kitFramework auf %server% zu erhalten.',
-  'Help'
-    => 'Hilfe',
   'help'
+    => 'Hilfe',
+  'Help'
     => 'Hilfe',
   'help_accounts_list_json'
     => '<p>Diese Datei ermöglicht es Ihnen die angezeigten Spalten und die Sortierung der Felder in der <a href="%FRAMEWORK_URL%/admin/accounts/list" target="_blank">Übersicht der Benutzerkonten</a> zu ändern.</p><p>Verfügbare Felder für die Verwendung in <var>columns</var> und <var>list > order > by</var> sind: <var>id, username, email, password, displayname, last_login, roles, guid, guid_timestamp, guid_status, status</var> und <var>timestamp</var>. Mit <var>list > rows_per_page</var> legen Sie fest, wie viele Benutzerkonten pro Seite angezeigt werden.</p>',
@@ -345,6 +353,8 @@ return array(
     => 'Vermisse die Anwender ID!',
   'Modified'
     => 'Geändert',
+  'Name'
+    => 'Bezeichner',
   'Need help? Please visit the <a href="%url%" target="_blank">phpManufaktur Support Group</a>.'
     => 'Benötigen Sie Hilfe? Bitte besuchen Sie die <a href="%url% target="_blank">phpManufaktur Support Group</a>.',
   'New kitFramework release available!'
@@ -363,6 +373,8 @@ return array(
     => 'Weiß nicht, wie ich die Quelle \'%source%\' handhaben soll, bitte prüfen Sie das Protokoll!',
   'Open this helpfile in a new window'
     => 'Diese Hilfedatei in einem neuen Fenster öffnen',
+  'Overview'
+    => 'Übersicht',
   'Parse the kitFramework for locale strings, add custom translations and administrate the internationalization'
     => 'Das kitFramework nach Lokalisierungen durchsuchen, benutzerdefinierte Übersetzungen hinzufügen und die Internationalisierungen verwalten.',
   'Password'
@@ -537,10 +549,10 @@ return array(
     => 'Die Beschreibungsdatei extension.json für die Erweiterung <b>%name%</b> enthält nicht alle Definitionen, prüfen Sie <i>GUID</i>, <i>Group</i> und <i>Release</i>!',
   'The file %file% does not exists in Gist %gist_id%!'
     => 'Die Datei %file% existiert nicht im Gist %gist_id%',
-  'The file <i>%file%</i> does not exists!'
-    => 'Die Datei <em>%file%</em> existiert nicht!',
   'The file <strong>%file%</strong> does not exists!'
     => 'Die Datei <strong>%file%</strong> existiert nicht!',
+  'The file <i>%file%</i> does not exists!'
+    => 'Die Datei <em>%file%</em> existiert nicht!',
   'The file <strong>%file%</strong> is not readable!'
     => 'Die Datei <strong>%file%</strong> ist nicht lesbar!',
   'The form is not valid, please check your input and try again!'
@@ -569,6 +581,8 @@ return array(
     => 'Der Datensatz wurde erfolgreich aktualisiert!',
   'The record with the ID %id% does not exists!'
     => 'Es existiert kein Datensatz mit der ID %id%!',
+  'The record with the ID %id% was successfull updated.'
+    => 'Der Datensatz mit der ID %id% wurde erfolgreich aktualisiert.',
   'The requested page could not be found!'
     => 'Die angeforderte Seite wurde nicht gefunden!',
   'The requested page has been removed and is no longer available!'
