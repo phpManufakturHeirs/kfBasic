@@ -6,6 +6,15 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**1.0.10** - 2014-09-05
+
+* add missing default locale definition in `iframe.body.twig`
+* catch problem creating new images - now return empty image with a hint instead of throwing an error
+* set missing translator locale in first login dialog
+* fixed: Session variables must be set before the first login dialog to enable a proper locale setting
+* if `<title>` tag is missing in CMS template the kitCommand Parser now insert this tag
+* translation still in progress
+
 **1.0.9** - 2014-08-28
 
 * added function `getSetValues()` to `$app['db.utils']`
