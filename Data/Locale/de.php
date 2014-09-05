@@ -17,6 +17,10 @@ if ('á' != "\xc3\xa1") {
 }
 
 return array(
+    'Yes'
+        => 'Ja',
+    'No'
+        => 'Nein',
   '- all files -'
     => '- alle Dateien -',
   '- please select -'
@@ -747,5 +751,5 @@ return array(
     => 'Ihr Benutzerkonto wurde erfolgreich geändert.',
   'Your are not authenticated, please login!'
     => 'Sie sind nicht angemeldet, bitte authentifizieren Sie sich zunächst!',
-  
+
 );
