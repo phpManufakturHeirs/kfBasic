@@ -521,22 +521,31 @@ class Parser
 
             if (isset($header['title']) && !empty($header['title'])) {
                 $titles = $DOM->getElementsByTagName('title');
-                $titles->item(0)->nodeValue = $header['title'];
-                $changed = true;
+                if (!is_null($titles->item(0))) {
+                    $titles->item(0)->nodeValue = $header['title'];
+                    $changed = true;
+                }
+                else {
+                    // missing the <title> tag in the CMS template, insert it:
+                    $title = $DOM->createElement('title', $header['title']);
+                    $head = $DOM->getElementsByTagName('head')->item(0);
+                    $head->appendChild($title);
+                    $changed = true;
+                }
             }
 
             $metas = $DOM->getElementsByTagName('meta');
             foreach ($metas as $meta) {
                 if ((strtolower($meta->getAttribute('name')) == 'description')  &&
                     (isset($header['description']) && !empty($header['description']))) {
-                        $meta->setAttribute('content', $header['description']);
-                        $changed = true;
-                    }
-                    if ((strtolower($meta->getAttribute('name')) == 'keywords') &&
-                        (isset($header['keywords']) && !empty($header['keywords']))) {
-                            $meta->setAttribute('content', $header['keywords']);
-                            $changed = true;
-                        }
+                    $meta->setAttribute('content', $header['description']);
+                    $changed = true;
+                }
+                if ((strtolower($meta->getAttribute('name')) == 'keywords') &&
+                    (isset($header['keywords']) && !empty($header['keywords']))) {
+                    $meta->setAttribute('content', $header['keywords']);
+                    $changed = true;
+                }
             }
             if ($changed) {
                 self::$content = $DOM->saveHTML();
