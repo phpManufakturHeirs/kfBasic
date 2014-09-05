@@ -28,6 +28,7 @@ use phpManufaktur\Basic\Data\i18n\i18nTranslation;
 use phpManufaktur\Basic\Data\i18n\i18nTranslationFile;
 use phpManufaktur\Basic\Data\i18n\i18nTranslationUnassigned;
 use phpManufaktur\Basic\Control\CMS\InstallAdminTool;
+use Symfony\Component\Filesystem\Exception\IOException;
 
 /**
  * Setup all needed database tables and initialize the kitFramework
@@ -133,6 +134,19 @@ class Setup
                 // install the Library
                 $Updater->controllerInstallExtension($app, $extension['id'], false);
                 $Updater->clearAlert();
+            }
+        }
+
+        if (!$app['filesystem']->exists(FRAMEWORK_MEDIA_PATH)) {
+            $app['filesystem']->mkdir(FRAMEWORK_MEDIA_PATH);
+        }
+        if (!$app['filesystem']->exists(FRAMEWORK_MEDIA_PATH.'/cms')) {
+            // try to create a symbolic link to the CMS MEDIA directory
+            try {
+                $app['filesystem']->symlink(CMS_MEDIA_PATH, FRAMEWORK_MEDIA_PATH.'/cms');
+            } catch (IOException $e) {
+                // symlink creation fails!
+                $app['monolog']->addDebug($e->getMessage());
             }
         }
 
