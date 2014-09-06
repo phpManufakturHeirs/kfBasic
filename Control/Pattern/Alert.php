@@ -160,7 +160,8 @@ class Alert
     public function setAlertType($type)
     {
         if (!in_array(strtolower($type), self::$alert_type_array)) {
-            throw new \Exception("Unexpected alert type: '$type', allowed are only the types alert-success, alert-info, alert-warning or alert-danger.");
+            $this->app['monolog']->addError("Unexpected alert type: '$type', allowed are only the types alert-success, alert-info, alert-warning or alert-danger.");
+            $type = self::ALERT_TYPE_INFO;
         }
         self::$alert_type = strtolower($type);
     }
