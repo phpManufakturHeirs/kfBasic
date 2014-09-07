@@ -102,7 +102,7 @@ class i18nEditor extends i18nParser
                         'name' => 'about',
                         'text' => $this->app['translator']->trans('About'),
                         'hint' => $this->app['translator']->trans('Information about the i18nEditor'),
-                        'link' => FRAMEWORK_URL.'/admin/i18n/editor/about'.self::$usage_param,
+                        'link' => FRAMEWORK_URL.'/admin/i18n/editor/about',
                         'active' => ($active === 'about')
                     );
                     break;
@@ -111,7 +111,7 @@ class i18nEditor extends i18nParser
                         'name' => 'overview',
                         'text' => $this->app['translator']->trans('Overview'),
                         'hint' => $this->app['translator']->trans('A brief summary of the translation status'),
-                        'link' => FRAMEWORK_URL.'/admin/i18n/editor/overview'.self::$usage_param,
+                        'link' => FRAMEWORK_URL.'/admin/i18n/editor/overview',
                         'active' => ($active === 'overview')
                     );
                     break;
@@ -120,7 +120,7 @@ class i18nEditor extends i18nParser
                         'name' => 'sources',
                         'text' => $this->app['translator']->trans('Sources'),
                         'hint' => $this->app['translator']->trans('List of translation sources'),
-                        'link' => FRAMEWORK_URL.'/admin/i18n/editor/sources'.self::$usage_param,
+                        'link' => FRAMEWORK_URL.'/admin/i18n/editor/sources',
                         'active' => ($active === 'sources')
                     );
                     break;
@@ -131,7 +131,7 @@ class i18nEditor extends i18nParser
                             'name' => 'problems',
                             'text' => $this->app['translator']->trans('Problems'),
                             'hint' => $this->app['translator']->trans('Problems with the translation data'),
-                            'link' => FRAMEWORK_URL.'/admin/i18n/editor/problems'.self::$usage_param,
+                            'link' => FRAMEWORK_URL.'/admin/i18n/editor/problems',
                             'active' => ($active === 'problems')
                         );
                     }
@@ -143,7 +143,7 @@ class i18nEditor extends i18nParser
                             'text' => $tab, // no translation!
                             'hint' => $this->app['translator']->trans('Edit the locale %locale%', array(
                                 '%locale%' => $this->app['translator']->trans($tab))),
-                            'link' => FRAMEWORK_URL.'/admin/i18n/editor/locale/'.strtolower($tab).'/files'.self::$usage_param,
+                            'link' => FRAMEWORK_URL.'/admin/i18n/editor/locale/'.strtolower($tab).'/files',
                             'active' => (strtolower($active) === strtolower($tab))
                         );
                     }
