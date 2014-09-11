@@ -50,6 +50,35 @@ class ExtensionCatalog extends Alert
     }
 
     /**
+     * Check if a new catalog information is available at Github
+     *
+     * @param string reference $catalog_release
+     * @param string reference $available_release
+     * @param string reference $catalog_url
+     * @throws \Exception
+     * @return boolean
+     */
+    public function isCatalogUpdateAvailable(&$catalog_release=null,&$available_release=null, &$catalog_url=null)
+    {
+        // init GitHub
+        $github = new gitHub($this->app);
+        $available_release = null;
+        if (false === ($catalog_url = $github->getLastRepositoryZipUrl('phpManufaktur', 'kitFramework_Catalog', $available_release))) {
+            throw new \Exception($this->app['translator']->trans("Can't read the the %repository% from %organization% at Github!",
+                array('%repository%' => 'kitFramework_Catalog', '%organization%' => 'phpManufaktur')));
+        }
+
+        $Setting = new Setting($this->app);
+        $catalog_release = $Setting->select('extension_catalog_release');
+        if (version_compare($available_release, $catalog_release, '>')) {
+            // update available
+            return true;
+        }
+        // no update available
+        return false;
+    }
+
+    /**
      * Get the online catalog from Github and read it into the database
      *
      * @throws \Exception
@@ -57,24 +86,15 @@ class ExtensionCatalog extends Alert
      */
     public function getOnlineCatalog()
     {
-        // init GitHub
-        $github = new gitHub($this->app);
-        $release = null;
-        if (false === ($catalog_url = $github->getLastRepositoryZipUrl('phpManufaktur', 'kitFramework_Catalog', $release))) {
-            throw new \Exception($this->app['translator']->trans("Can't read the the %repository% from %organization% at Github!",
-                array('%repository%' => 'kitFramework_Catalog', '%organization%' => 'phpManufaktur')));
-        }
+        $catalog_release = null;
+        $available_release = null;
+        $catalog_url = null;
 
-        $Setting = new Setting($this->app);
-        $last_release = $Setting->select('extension_catalog_release');
-        if (\version_compare($release, $last_release, '>')) {
-            $this->setAlert('Actual catalog information: %last_release%, online: %release% (online is newer, we will update!)',
-                array('%last_release%' => $last_release, '%release%' => $release), self::ALERT_TYPE_INFO);
-        }
-        else {
-            // nothing to do!
+        if (!$this->isCatalogUpdateAvailable($catalog_release, $available_release, $catalog_url)) {
+            // nothing to do - return ...
             return true;
         }
+
         $cURL = new cURL($this->app);
         $info = array();
         $target_path = FRAMEWORK_TEMP_PATH.'/catalog.zip';
@@ -97,6 +117,9 @@ class ExtensionCatalog extends Alert
 
         // init catalog
         $catalog = new Catalog($this->app);
+
+        $update_extension = array();
+        $add_extension = array();
 
         foreach ($files as $file) {
             if (false !== strpos($file['file_name'], '/')) {
@@ -181,14 +204,12 @@ class ExtensionCatalog extends Alert
                                 if (null === ($id = $catalog->selectIDbyGUID($data['guid']))) {
                                     // insert as new record
                                     $id = $catalog->insert($data);
-                                    $this->setAlert('Add the extension <b>%name%</b> to the catalog.',
-                                        array('%name%' => $data['name']), self::ALERT_TYPE_SUCCESS);
+                                    $add_extension[] = $data['name'];
                                 }
                                 else {
                                     // update the existing record
                                     $catalog->update($id, $data);
-                                    $this->setAlert('Updated the catalog data for <b>%name%</b>.',
-                                        array('%name%' => $data['name']), self::ALERT_TYPE_SUCCESS);
+                                    $update_extension[] = $data['name'];
                                 }
                             }
                             break;
@@ -196,8 +217,23 @@ class ExtensionCatalog extends Alert
                 }
             }
         }
+
         // update settings
-        $Setting->update('extension_catalog_release', $release);
+        $Setting = new Setting($this->app);
+        if (is_null($Setting->select('extension_catalog_release'))) {
+            $Setting->insertDefaultValues();
+        }
+        $Setting->update('extension_catalog_release', $available_release);
+
+        if (!empty($add_extension)) {
+            $this->setAlert('Add the extension(s) <strong>%extension%</strong> to the catalog.',
+                array('%extension%' => implode(', ', $add_extension)), self::ALERT_TYPE_SUCCESS);
+        }
+        if (!empty($update_extension)) {
+            $this->setAlert('Updated the catalog data for the extension(s) <strong>%extension%</strong>.',
+                array('%extension%' => implode(', ', $update_extension)), self::ALERT_TYPE_SUCCESS);
+        }
+
         return true;
     }
 

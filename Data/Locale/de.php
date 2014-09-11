@@ -37,14 +37,12 @@ return array(
     => 'Benutzerkonto',
   'Accounts'
     => 'Benutzerkonten',
-  'Actual catalog information: %last_release%, online: %release% (online is newer, we will update!)'
-    => 'Aktuelle Katalog Information: %last_release%, online: %release% (die online Information ist neuer, es wird eine Aktualisierung durchgeführt)',
   'Actual SMTP Settings'
     => 'Aktuelle SMTP Einstellungen',
-  'Add the extension <b>%name%</b> to the catalog.'
-    => 'Die Erweiterung <b>%name%</b> wurde dem Katalog hinzugefügt.',
-  'Add the extension <b>%name%</b> to the register.'
-    => 'Die Erweiterung <b>%name%</b> wurde dem Register hinzugefügt.',
+  'Add the extension(s) <strong>%extension%</strong> to the catalog.'
+    => 'Die Erweiterung(en) <strong>%extension%</strong> wurden dem Katalog hinzugefügt.',
+  'Add the extension(s) <strong>%extension%</strong> to the register.'
+    => 'Die Erweiterung(en) <strong>%extension%</strong> wurden dem Register hinzugefügt.',
   'Additional information'
     => 'Zusatzinformation',
   'Auto login'
@@ -659,6 +657,8 @@ return array(
     => 'Diesem Benutzer sind insgesamt <b>%count%</b> Rechte zugewiesen.',
   'This value is not a valid email address.'
     => 'Es wurde keine gültige E-Mail Adresse übergeben!',
+  'Translated'
+    => 'Übersetzt',
   'Translation'
     => 'Übersetzung',
   'Translation custom file'
@@ -691,10 +691,10 @@ return array(
     => '<em>Nicht zugeordnete Übersetzungen</em> können verwendet werden um <em>Quelltexte</em> zu übersetzen, die durch eine Variable repräsentiert werden und nicht physikalisch in einer Programmdatei oder einem Template existieren.',
   'Update available!'
     => 'Aktualisierung verfügbar!',
-  'Updated the catalog data for <b>%name%</b>.'
-    => 'Die Katalogdaten für die Erweiterung <b>%name%</b> wurden aktualisiert.',
-  'Updated the register data for <b>%name%</b>.'
-    => 'Die Registrierdaten für die Erweiterung <b>%name%</b> wurden aktualisiert.',
+  'Updated the catalog data for the extension(s) <strong>%extension%</strong>.'
+    => 'Die Kataloginformationen für die Erweiterung(en) <strong>%extension%</strong> wurden aktualisiert.',
+  'Updated the register data for the extension(s) <strong>%extension%</strong>.'
+    => 'Die Registerinformationen für die Erweiterung(en) <strong>%extension%</strong> wurden aktualisiert.',
   'Updated Translation ID %id%'
     => 'Übersetzung mit der ID %id% aktualisiert.',
   'Usage'

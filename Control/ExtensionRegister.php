@@ -31,12 +31,14 @@ class ExtensionRegister extends Alert
 
     /**
      * Check the given $path and $group for a installed extension
+     *
      * @param string $path
      * @param string $group
      * @param string reference $extension
+     * @param string reference $mode
      * @return boolean
      */
-    protected function checkDirectory($path, $group, &$extension='')
+    protected function checkDirectory($path, $group, &$extension='', $mode=null)
     {
         $extension = '';
         if (file_exists($path.'/extension.json')) {
@@ -77,14 +79,12 @@ class ExtensionRegister extends Alert
                 // insert as new record
                 $data['date_installed'] = date('Y-m-d');
                 $id = $register->insert($data);
-                $this->setAlert('Add the extension <b>%name%</b> to the register.',
-                    array('%name%' => $data['name']), self::ALERT_TYPE_SUCCESS);
+                $mode = 'insert';
             }
             else {
                 // update the existing record
                 $register->update($id, $data);
-                $this->setAlert('Updated the register data for <b>%name%</b>.',
-                    array('%name%' => $data['name']), self::ALERT_TYPE_SUCCESS);
+                $mode = 'update';
             }
             $extension = $data['name'];
             return true;
@@ -100,17 +100,28 @@ class ExtensionRegister extends Alert
     public function scanDirectories($group=self::GROUP_PHPMANUFAKTUR)
     {
         $checkedExtensions = array();
+        $insert_extension = array();
+        $update_extension = array();
+
         $path = ($group == self::GROUP_PHPMANUFAKTUR) ? MANUFAKTUR_PATH : THIRDPARTY_PATH;
         $handle = opendir($path);
+
         // we loop through the directory to get the first subdirectory ...
         while (false !== ($directory = readdir($handle))) {
             if ('.' == $directory || '..' == $directory)
                 continue;
             if (is_dir($path .'/'. $directory)) {
                 $extension = '';
-                $this->checkDirectory($path.'/'.$directory, $group, $extension);
+                $mode = null;
+                $this->checkDirectory($path.'/'.$directory, $group, $extension, $mode);
                 if (!empty($extension)) {
                     $checkedExtensions[] = $extension;
+                    if ($mode === 'insert') {
+                        $insert_extension[] = $extension;
+                    }
+                    else {
+                        $update_extension[] = $extension;
+                    }
                 }
             }
         }
@@ -124,6 +135,14 @@ class ExtensionRegister extends Alert
                     $Register->delete($reg['id']);
                     unset($checkedExtensions[$reg['name']]);
                 }
+            }
+            if (!empty($insert_extension)) {
+                $this->setAlert('Add the extension(s) <strong>%extension%</strong> to the register.',
+                    array('%extension%' => implode(', ', $insert_extension)), self::ALERT_TYPE_SUCCESS);
+            }
+            if (!empty($update_extension)) {
+                $this->setAlert('Updated the register data for the extension(s) <strong>%extension%</strong>.',
+                    array('%extension%' => implode(', ', $update_extension)), self::ALERT_TYPE_SUCCESS);
             }
         }
     }

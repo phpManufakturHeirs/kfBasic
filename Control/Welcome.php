@@ -92,14 +92,16 @@ class Welcome extends Alert
 
         $catalog = new ExtensionCatalog($app);
 
-        try {
-            $catalog->getOnlineCatalog();
-        } catch (\Exception $e) {
-            $this->setAlert($e->getMessage(), array(), self::ALERT_TYPE_WARNING);
+        $catalog_release = null;
+        $available_release = null;
+        if ($catalog->isCatalogUpdateAvailable($catalog_release, $available_release)) {
+            $this->setAlert('There are new catalog information available, <strong><a href="%route%">please update the catalog</a></strong>.',
+                array('%route%' => FRAMEWORK_URL.'/admin/scan/catalog?usage='.self::$usage), self::ALERT_TYPE_INFO);
         }
 
         $accepted_items = explode(',', CATALOG_ACCEPT_EXTENSION);
         $cat_items = $catalog->getAvailableExtensions($app['translator']->getLocale());
+
         $catalog_items = array();
         foreach ($cat_items as $item) {
             // show only catalog items which have the accepted release status
@@ -110,6 +112,13 @@ class Welcome extends Alert
 
         $register = new ExtensionRegister($this->app);
         $register_items = $register->getInstalledExtensions();
+
+        if (empty($register_items)) {
+            // seems that we should scan first for installed extensions
+            $register->scanDirectories(ExtensionRegister::GROUP_PHPMANUFAKTUR);
+            $register->scanDirectories(ExtensionRegister::GROUP_THIRDPARTY);
+            $register_items = $register->getInstalledExtensions();
+        }
 
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
             '@phpManufaktur/Basic/Template',
