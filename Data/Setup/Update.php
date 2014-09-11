@@ -106,9 +106,11 @@ class Update
      */
     protected function release_054()
     {
-        // create the AdminAction table
-        $adminAction = new AdminAction($this->app);
-        $adminAction->createTable();
+        if (!$this->app['db.utils']->tableExists(FRAMEWORK_TABLE_PREFIX.'basic_admin_action')) {
+            // create the AdminAction table
+            $adminAction = new AdminAction($this->app);
+            $adminAction->createTable();
+        }
     }
 
     /**
@@ -327,6 +329,28 @@ class Update
     }
 
     /**
+     * Release 1.0.11
+     */
+    protected function release_1011()
+    {
+        if ($this->app['filesystem']->exists(FRAMEWORK_PATH.'/extension/framework')) {
+            $this->app['filesystem']->remove(FRAMEWORK_PATH.'/extension/framework');
+        }
+
+        $version = file_get_contents(CMS_PATH.'/modules/kit_framework/VERSION');
+        if (version_compare(trim($version), '0.40.0', '<=')) {
+            // copy a new tool.php to the CMS
+            $this->app['filesystem']->copy(
+                MANUFAKTUR_PATH.'/Basic/Data/Setup/Files/Release_1.0.11/tool.php',
+                CMS_PATH.'/modules/kit_framework/tool.php', true);
+            $this->app['filesystem']->copy(
+                MANUFAKTUR_PATH.'/Basic/Data/Setup/Files/Release_1.0.11/VERSION',
+                CMS_PATH.'/modules/kit_framework/VERSION', true);
+            $this->app['monolog']->addDebug('[BASIC Update] Updated tool.php of the kitFramework CMS Tool to 0.40.1');
+        }
+    }
+
+    /**
      * Update the database tables for the BASIC extension of the kitFramework
      *
      * @param Application $app
@@ -350,6 +374,7 @@ class Update
         $this->release_101();
         $this->release_105();
         $this->release_109();
+        $this->release_1011();
 
         // install the search function
         $Search = new InstallSearch($app);
