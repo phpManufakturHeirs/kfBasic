@@ -18,8 +18,11 @@ use phpManufaktur\Basic\Control\cURL\cURL;
 use phpManufaktur\Basic\Control\unZip\unZip;
 use phpManufaktur\Basic\Control\Welcome;
 use phpManufaktur\Basic\Data\ExtensionCatalog;
-use phpManufaktur\Basic\Data\ExtensionRegister;
+use phpManufaktur\Basic\Data\ExtensionRegister as DataExtensionRegister;
 use phpManufaktur\Basic\Control\Pattern\Alert;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use phpManufaktur\Basic\Control\ExtensionRegister;
 
 
 /**
@@ -45,6 +48,11 @@ class Updater extends Alert
     protected static $extension_array = array();
     protected static $usage = null;
 
+    /**
+     * Constructor
+     *
+     * @param Application $app
+     */
     public function __construct(Application $app=null)
     {
         if (!is_null($app)) {
@@ -62,7 +70,7 @@ class Updater extends Alert
         $this->initialize($app);
 
         $this->ExtensionCatalog = new ExtensionCatalog($app);
-        $this->ExtensionRegister = new ExtensionRegister($app);
+        $this->DataExtensionRegister = new DataExtensionRegister($app);
         $this->Github = new gitHub($app);
         $this->cURL = new cURL($app);
         $this->unZIP = new unZip($app);
@@ -111,7 +119,7 @@ class Updater extends Alert
             foreach ($info['require']['extension'] as $group => $items) {
                 foreach ($items as $extension => $check) {
                     $must_install = false;
-                    if (false === ($installed = $this->ExtensionRegister->selectByGroupAndName($group, $extension))) {
+                    if (false === ($installed = $this->DataExtensionRegister->selectByGroupAndName($group, $extension))) {
                         // this extension is not installed
                         $must_install = true;
                     }
@@ -270,7 +278,7 @@ class Updater extends Alert
     {
         $this->initUpdater($app);
 
-        if (false === ($extension = $this->ExtensionRegister->select($extension_id))) {
+        if (false === ($extension = $this->DataExtensionRegister->select($extension_id))) {
             $this->Welcome->setAlert('The extension with the ID %extension_id% does not exists!',
                 array('%extension_id%' => $extension_id), self::ALERT_TYPE_WARNING);
             return $this->Welcome->controllerFramework($app);
@@ -283,6 +291,57 @@ class Updater extends Alert
         }
         // ok - we have the catalog number and can execute the update/installation
         return $this->controllerInstallExtension($app, $catalog_id);
+    }
+
+    /**
+     * Controller to remove an extension
+     *
+     * @param Application $app
+     * @param integer $extension_id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function controllerRemoveExtension(Application $app, $extension_id)
+    {
+        $this->initUpdater($app);
+
+        if (false === ($extension = $this->DataExtensionRegister->select($extension_id))) {
+            $this->setAlert('The extension with the ID %extension_id% does not exists!',
+                array('%extension_id%' => $extension_id), self::ALERT_TYPE_WARNING);
+            // sub request to the extensions dialog
+            $subRequest = Request::create('/admin/welcome/extensions', 'GET', array('usage' => self::$usage));
+            return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+        }
+
+        // extract the extension.json
+        $info = json_decode(base64_decode($extension['info']), true);
+
+        if ($app['filesystem']->exists(FRAMEWORK_PATH.$info['path'])) {
+            // the extension exists and can be removed
+            if (isset($info['setup']['uninstall'])) {
+                // execute the uninstall route
+                $subRequest = Request::create($info['setup']['uninstall'], 'GET');
+                $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+            }
+            // now remove the extension directory
+            $app['filesystem']->remove(FRAMEWORK_PATH.$info['path']);
+            // alert success
+            $this->setAlert('The extension %extension% was successful removed.',
+                array('%extension%' => $info['name']), self::ALERT_TYPE_SUCCESS);
+        }
+        else {
+            // Oooops ...
+            $this->setAlert('The extension %extension% does not exists.',
+                array('%extension%' => $info['name']), self::ALERT_TYPE_WARNING);
+        }
+
+        // cleanup Register
+        $Extension = new ExtensionRegister($app);
+        $Extension->scanDirectories(ExtensionRegister::GROUP_PHPMANUFAKTUR);
+        $Extension->scanDirectories(ExtensionRegister::GROUP_THIRDPARTY);
+
+        // sub request to the extension dialog
+        $subRequest = Request::create('/admin/welcome/extensions', 'GET', array('usage' => self::$usage));
+        return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
     }
 }
 

@@ -14,6 +14,7 @@ namespace phpManufaktur\Basic\Control;
 use phpManufaktur\Basic\Data\ExtensionRegister as Register;
 use phpManufaktur\Basic\Data\ExtensionCatalog as Catalog;
 use phpManufaktur\Basic\Control\Pattern\Alert;
+use phpManufaktur\Basic\Data\ExtensionCatalog;
 
 /**
  * Check for installed extensions and read the information from extension.json
@@ -148,6 +149,56 @@ class ExtensionRegister extends Alert
     }
 
     /**
+     * Get an array with the extension data for the given $item
+     *
+     * @param array $item
+     * @return array
+     */
+    protected function getExtensionData($item)
+    {
+        $catalog = new Catalog($this->app);
+        $cat = array();
+
+        if (null !== ($cat_id = $catalog->selectIDbyGUID($item['guid']))) {
+            $cat = $catalog->select($cat_id);
+        }
+
+        $data = $item;
+        $info = isset($cat['info']) ? json_decode(base64_decode($cat['info']), true) : array();
+        $data['info'] = $info;
+        if (isset($info['description'][$this->app['locale']])) {
+            // description for the actual locale is available
+            $description = array(
+                'title' => isset($info['description'][$this->app['locale']]['title']) ? $info['description'][$this->app['locale']]['title'] : '',
+                'short' => isset($info['description'][$this->app['locale']]['short']) ? $info['description'][$this->app['locale']]['short'] : '',
+                'long' => isset($info['description'][$this->app['locale']]['long']) ? $info['description'][$this->app['locale']]['long'] : '',
+                'url' => isset($info['description'][$this->app['locale']]['url']) ? $info['description'][$this->app['locale']]['url'] : ''
+            );
+        }
+        else {
+            // use the english default
+            $description = array(
+                'title' => isset($info['description']['en']['title']) ? $info['description']['en']['title'] : '',
+                'short' => isset($info['description']['en']['short']) ? $info['description']['en']['short'] : '',
+                'long' => isset($info['description']['en']['long']) ? $info['description']['en']['long'] : '',
+                'url' => isset($info['description']['en']['url']) ? $info['description']['en']['url'] : ''
+            );
+        }
+        $data['description'] = $description;
+        $data['logo_blob'] = '';
+        $data['release_available'] = (isset($cat['release'])) ? $cat['release'] : $item['release'];
+        $data['update_available'] = (isset($cat['release']) && (\version_compare($cat['release'], $item['release'], '>'))) ? true : false;
+        if (isset($cat['logo_blob'])) {
+            $data['logo_blob'] = $cat['logo_blob'];
+            $data['logo_type'] = $cat['logo_type'];
+            $data['logo_width'] = $cat['logo_width'];
+            $data['logo_height'] = $cat['logo_height'];
+        }
+
+        return $data;
+    }
+
+    /**
      * Check the kitFramework for installed extensions
      *
      * @return array
@@ -157,48 +208,35 @@ class ExtensionRegister extends Alert
         $register = new Register($this->app);
         $items = $register->selectAll();
 
-        $catalog = new Catalog($this->app);
-
         $result = array();
         foreach ($items as $item) {
-           $cat = array();
-           if (null !== ($cat_id = $catalog->selectIDbyGUID($item['guid']))) {
-               $cat = $catalog->select($cat_id);
-           }
-
-           $data = $item;
-           $info = isset($cat['info']) ? json_decode(base64_decode($cat['info']), true) : array();
-           $data['info'] = $info;
-           if (isset($info['description'][$this->app['locale']])) {
-               // description for the actual locale is available
-               $description = array(
-                   'title' => isset($info['description'][$this->app['locale']]['title']) ? $info['description'][$this->app['locale']]['title'] : '',
-                   'short' => isset($info['description'][$this->app['locale']]['short']) ? $info['description'][$this->app['locale']]['short'] : '',
-                   'long' => isset($info['description'][$this->app['locale']]['long']) ? $info['description'][$this->app['locale']]['long'] : '',
-                   'url' => isset($info['description'][$this->app['locale']]['url']) ? $info['description'][$this->app['locale']]['url'] : ''
-               );
-           }
-           else {
-               // use the english default
-               $description = array(
-                   'title' => isset($info['description']['en']['title']) ? $info['description']['en']['title'] : '',
-                   'short' => isset($info['description']['en']['short']) ? $info['description']['en']['short'] : '',
-                   'long' => isset($info['description']['en']['long']) ? $info['description']['en']['long'] : '',
-                   'url' => isset($info['description']['en']['url']) ? $info['description']['en']['url'] : ''
-               );
-           }
-           $data['description'] = $description;
-           $data['logo_blob'] = '';
-           $data['release_available'] = (isset($cat['release'])) ? $cat['release'] : $item['release'];
-           $data['update_available'] = (isset($cat['release']) && (\version_compare($cat['release'], $item['release'], '>'))) ? true : false;
-           if (isset($cat['logo_blob'])) {
-               $data['logo_blob'] = $cat['logo_blob'];
-               $data['logo_type'] = $cat['logo_type'];
-               $data['logo_width'] = $cat['logo_width'];
-               $data['logo_height'] = $cat['logo_height'];
-           }
-           $result[] = $data;
+           $result[] = $this->getExtensionData($item);
         }
+        return $result;
+    }
+
+    /**
+     * Return all availablable Updates as preconfigured array
+     *
+     * @return array
+     */
+    public function getAvailableUpdates()
+    {
+        $register = new Register($this->app);
+        $items = $register->selectAll();
+
+        $catalog = new ExtensionCatalog($this->app);
+        $result = array();
+        foreach ($items as $item) {
+            $cat = array();
+            if (null !== ($cat_id = $catalog->selectIDbyGUID($item['guid']))) {
+                $cat = $catalog->select($cat_id);
+            }
+            if ((isset($cat['release']) && isset($item['release'])) && (version_compare($cat['release'], $item['release'], '>'))) {
+                $result[] = $this->getExtensionData($item);
+            }
+        }
+
         return $result;
     }
 }

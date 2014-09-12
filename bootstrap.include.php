@@ -401,7 +401,7 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     'security.role_entry_points' => array(
         'ROLE_ADMIN' => array(
             array(
-                'route' => '/admin/welcome',
+                'route' => '/admin/welcome/extensions',
                 'name' => $app['translator']->trans('Extensions'),
                 'info' => $app['translator']->trans('Install, update or remove kitFramework Extensions'),
                 'icon' => array(
@@ -552,7 +552,25 @@ $admin->match('/scan/extensions',
     'phpManufaktur\Basic\Control\ScanExtensions::exec');
 $admin->get('/scan/catalog',
     // scan for available extensions from Github
-    'phpManufaktur\Basic\Control\ScanCatalog::exec');
+    'phpManufaktur\Basic\Control\ScanCatalog::Controller');
+$admin->get('/welcome/about',
+    'phpManufaktur\Basic\Control\Welcome::ControllerAbout');
+$admin->get('/welcome/extensions',
+    'phpManufaktur\Basic\Control\Welcome::ControllerExtensions');
+$admin->get('/welcome/extensions/installed',
+    'phpManufaktur\Basic\Control\Welcome::ControllerExtensionsInstalled');
+$admin->get('/welcome/extensions/catalog',
+    'phpManufaktur\Basic\Control\Welcome::ControllerExtensionsCatalog');
+
+
+$app->get('/welcome/cms/{cms}',
+    // the welcome dialog is called by the CMS backend
+    'phpManufaktur\Basic\Control\Welcome::controllerCMS');
+$app->post('/welcome/login/check',
+    // first login check
+    'phpManufaktur\Basic\Control\Welcome::checkFirstLogin');
+
+
 
 $admin->get('/updater/install/{catalog_id}',
     // install a extension
@@ -560,6 +578,8 @@ $admin->get('/updater/install/{catalog_id}',
 $admin->get('/updater/update/{extension_id}',
     // update a extension
     'phpManufaktur\Updater\Updater::controllerUpdateExtension');
+$admin->get('/updater/remove/{extension_id}',
+    'phpManufaktur\Updater\Updater::controllerRemoveExtension');
 
 $admin->get('/accounts/list/{page}',
     'phpManufaktur\Basic\Control\Account\Dialog\AccountAdminList::ControllerAccountList')
@@ -673,13 +693,6 @@ $user->get('/account',
 $user->post('/account/edit/check',
     'phpManufaktur\Basic\Control\Account\Dialog\Account::ControllerAccountEditCheck');
 
-
-$app->get('/welcome/cms/{cms}',
-    // the welcome dialog is called by the CMS backend
-    'phpManufaktur\Basic\Control\Welcome::controllerCMS');
-$app->post('/welcome/login/check',
-    // first login check
-    'phpManufaktur\Basic\Control\Welcome::checkFirstLogin');
 
 // kitCommand Parser
 $app->post('/kit_parser',

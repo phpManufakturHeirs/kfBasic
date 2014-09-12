@@ -65,7 +65,7 @@
                   {% if locale.locale_id > 0 %}
                     <a href="{{ FRAMEWORK_URL ~ '/admin/i18n/editor/sources/detail/' ~ locale.locale_id ~ usage_param }}">{{ '%05d'|format(locale.locale_id) }}</a>
                   {% else %}
-                    - {{ 'UNASSIGNED'|humanize|trans|lower }} -
+                    - {{ 'unassigned'|humanize|trans|lower }} -
                   {% endif %}
                 </td>
                 <td class="source"><a href="{{ FRAMEWORK_URL ~ '/admin/i18n/editor/translation/edit/id/' ~ locale.translation_id ~ usage_param }}"><i class="fa fa-pencil-square-o"></i></a>&nbsp;{{ locale.translation_text|escape('html') }}</td>

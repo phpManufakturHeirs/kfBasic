@@ -29,6 +29,8 @@ return array(
     => 'Abbruch',
   'About'
     => 'Über ...',
+  'About ...'
+    => 'Über ...',
   'Access denied'
     => 'Zugriff verweigert',
   'Access to kitFramework User Accounts'
@@ -49,6 +51,10 @@ return array(
     => 'Automatische Anmeldung',
   'Available extensions'
     => 'Verfügbare Erweiterungen',
+  'Available release'
+    => 'Verfügbare Ausgabe',
+  'Available updates for your extensions'
+    => 'Aktualisierungen die für Ihre Erweiterungen verfügbar sind',
   'Bad credentials'
     => 'Die Angaben sind unvollständig oder ungültig!',
   'Be aware: Changing the email address or username may influence kitFramework extensions which are using the account data to identify users.'
@@ -79,6 +85,8 @@ return array(
     => 'Abbruch',
   'captcha-timeout'
     => 'Zeitüberschreitung bei der CAPTCHA Übermittlung, bitte versuchen Sie es erneut.',
+  'Catalog'
+    => 'Katalog',
   'Check the email settings and send a email to the webmaster for testing purpose'
     => 'E-Mail Einstellungen kontrollieren und eine Test E-Mail an den Webmaster schicken',
   'Click to sort column ascending'
@@ -187,10 +195,14 @@ return array(
     => 'Aktualisierung durchführen',
   'Executed search run in %seconds% seconds.'
     => 'Der Suchlauf wurde in %seconds% Sekunden durchgeführt.',
+  'Explore the catalog for kitFramework extensions'
+    => 'Durchsuchen Sie den Katalog mit kitFramework Erweiterungen',
   'Extension'
     => 'Erweiterung',
   'Extensions'
     => 'Erweiterungen',
+  'Extensions catalog'
+    => 'Erweiterungskatalog',
   'Failed to send a email with the subject <b>%subject%</b> to the addresses: <b>%failed%</b>.'
     => 'Eine E-Mail mit dem Betreff <b>%subject%</b> konnte an die folgenden Adressaten nicht übermittelt werden: <b>%failed%</b>.',
   'File'
@@ -259,12 +271,22 @@ return array(
     => 'Info',
   'Information about the i18nEditor'
     => 'Informationen über den i18nEditor',
+  'Information about the kitFramework'
+    => 'Information über das kitFramework',
   'Install'
     => 'Installieren',
+  'Install extension'
+    => 'Erweiterung installieren',
   'Install, update or remove kitFramework Extensions'
     => 'Installieren, aktualisieren oder entfernen Sie kitFramework Erweiterungen',
+  'Install, update or remove kitFramework extensions'
+    => 'Installieren, Aktualisieren oder Entfernen von kitFramework Erweiterungen',
+  'Installed'
+    => 'Installiert',
   'Installed extensions'
     => 'Installierte Erweiterungen',
+  'Installed release'
+    => 'Installierte Ausgabe',
   'Insufficient user role'
     => 'Ungenügende Zugangsberechtigung',
   'Internationalization'
@@ -285,8 +307,12 @@ return array(
     => 'kitCommand - Allgemeine Hilfe',
   'kitFramework - Account'
     => 'kitFramework - Benutzerkonto',
+  'kitFramework - Entry points'
+    => 'kitFramework - Zugangspunkte',
   'kitFramework - First Login'
     => 'kitFramework - Erste Anmeldung',
+  'kitFramework - Installed extensions'
+    => 'kitFramework - Installierte Erweiterungen',
   'kitFramework - Link transmitted'
     => 'kitFramework - Link übermittelt',
   'kitFramework E-Mail Test'
@@ -351,6 +377,8 @@ return array(
     => 'Vermisse die Anwender ID!',
   'Modified'
     => 'Geändert',
+  'More information ...'
+    => 'Weitere Informationen ...',
   'Name'
     => 'Bezeichner',
   'Need help? Please visit the <a href="%url%" target="_blank">phpManufaktur Support Group</a>.'
@@ -373,6 +401,8 @@ return array(
     => 'Weiß nicht, wie ich die Quelle \'%source%\' handhaben soll, bitte prüfen Sie das Protokoll!',
   'Open the %extension% extension in kitFramework'
     => 'Die Erweiterung %extension% im kitFramework öffnen',
+  'Open the CMS Tool in kitFramework'
+    => 'Das CMS Tool direkt im kitFramework öffnen',
   'Open this helpfile in a new window'
     => 'Diese Hilfedatei in einem neuen Fenster öffnen',
   'Overview'
@@ -425,6 +455,8 @@ return array(
     => 'Release',
   'Remark'
     => 'Anmerkung',
+  'Remove'
+    => 'Entfernen',
   'Repeat by pattern, i.e. at the last tuesday of the month'
     => 'Nach einem Muster, z.B. am letzten Donnerstag im Monat',
   'Repeat Password'
@@ -545,16 +577,20 @@ return array(
     => 'Die E-Mail Adresse %email% wird bereits von einem anderen Benutzerkonto verwendet!',
   'The email address %email% is invalid!'
     => 'Die E-Mail Adresse %email% ist ungültig, bitte prüfen Sie Ihre Eingabe!',
+  'The extension %extension% does not exists.'
+    => 'Die Erweiterung %extension% existiert nicht.',
+  'The extension %extension% was successful removed.'
+    => 'Die Erweiterung %extension% wurde erfolgreich entfernt.',
   'The extension with the ID %extension_id% does not exists!'
     => 'Die Erweiterung mit der ID %extension_id% existiert nicht!',
   'The extension.json of <b>%name%</b> does not contain all definitions, check GUID, Group and Release!'
     => 'Die Beschreibungsdatei extension.json für die Erweiterung <b>%name%</b> enthält nicht alle Definitionen, prüfen Sie <i>GUID</i>, <i>Group</i> und <i>Release</i>!',
   'The file %file% does not exists in Gist %gist_id%!'
     => 'Die Datei %file% existiert nicht im Gist %gist_id%',
-  'The file <i>%file%</i> does not exists!'
-    => 'Die Datei <em>%file%</em> existiert nicht!',
   'The file <strong>%file%</strong> does not exists!'
     => 'Die Datei <strong>%file%</strong> existiert nicht!',
+  'The file <i>%file%</i> does not exists!'
+    => 'Die Datei <em>%file%</em> existiert nicht!',
   'The file <strong>%file%</strong> is not readable!'
     => 'Die Datei <strong>%file%</strong> ist nicht lesbar!',
   'The form is not valid, please check your input and try again!'
@@ -615,8 +651,12 @@ return array(
     => 'Der Benutzername %username% wird bereits verwendet, bitte wählen Sie einen anderen Benutzernamen.',
   'There a no translated sources available'
     => 'Es sind keine übersetzten Quelltexte verfügbar.',
+  'There are new catalog information available, <strong><a href="%route%">please update the catalog</a></strong>.'
+    => 'Es sind neue Katalog Informationen verfügbar, <strong><a href="%route%">bitte aktualisieren Sie den Katalog</a></strong>.',
   'There are no roles assigned to this user.'
     => 'Diesem Benutzer sind keine Rechte zugewiesen',
+  'There are updates available, <strong><a href="%route%">please check out your installed extensions</a></strong>!'
+    => 'Es sind Aktualisierungen verfügbar, <strong><a href="%route%">bitte überprüfen Sie die installierten Erweiterungen</a></strong>!',
   'There exist an duplicate locale key for <strong>%key%</strong> in the file <em>%file%</em>!'
     => 'Es existiert ein doppelter Schlüssel für <strong>%key%</strong> in der Datei <em>%file%</em>!',
   'There exists no catalog entry for the extension %name% with the GUID %guid%.'
@@ -689,6 +729,8 @@ return array(
     => 'Nicht zugeordnete Übersetzungen',
   '<em>Unassigned translations</em> can be used to translate <em>sources</em>, which are representend by a variable and does not physically exists in a program file or a template.'
     => '<em>Nicht zugeordnete Übersetzungen</em> können verwendet werden um <em>Quelltexte</em> zu übersetzen, die durch eine Variable repräsentiert werden und nicht physikalisch in einer Programmdatei oder einem Template existieren.',
+  'Update'
+    => 'Aktualisierung',
   'Update available!'
     => 'Aktualisierung verfügbar!',
   'Updated the catalog data for the extension(s) <strong>%extension%</strong>.'
@@ -697,8 +739,12 @@ return array(
     => 'Die Registerinformationen für die Erweiterung(en) <strong>%extension%</strong> wurden aktualisiert.',
   'Updated Translation ID %id%'
     => 'Übersetzung mit der ID %id% aktualisiert.',
+  'Updates'
+    => 'Aktualisierungen',
   'Usage'
     => 'Verwendung',
+  'Use the entry points for an easy access'
+    => 'Verwenden Sie die Zugangspunkte für einen einfachen Zugriff auf das kitFramework',
   'Use <code>~~ help ~~</code> to view the <a href="%link%">general help file for the kitCommands</a>.'
     => 'Verwenden Sie <code>~~ help ~~</code> um sich die <a href="%link%">Allgemeine Hilfe zu den kitCommands</a> anzeigen zu lassen.',
   'User roles may depend from others and can be set or extended dynamically by the kitFramework extensions. To see the roles really associated to this account if the user is authenticated use the "switch to" button.'

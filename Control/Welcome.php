@@ -28,7 +28,150 @@ use phpManufaktur\Basic\Control\Pattern\Alert;
 class Welcome extends Alert
 {
 
-    protected static $usage = 'framework';
+    protected static $usage = null;
+
+    /**
+     * (non-PHPdoc)
+     * @see \phpManufaktur\Basic\Control\Pattern\Alert::initialize()
+     */
+    protected function initialize(Application $app)
+    {
+        parent::initialize($app);
+
+        self::$usage = $this->app['request']->get('usage', 'framework');
+
+        if (self::$usage != 'framework') {
+            // set the locale from the CMS locale
+            $app['translator']->setLocale($app['session']->get('CMS_LOCALE', 'en'));
+        }
+    }
+
+    /**
+     * Get the toolbar for the Welcome dialog
+     *
+     * @param string $active tab
+     * @return array
+     */
+    protected function getToolbar($active)
+    {
+        $toolbar = array();
+        $tabs = array('entrypoints', 'extensions', 'update'); // , 'about');
+
+        foreach ($tabs as $tab) {
+            switch ($tab) {
+                case 'about':
+                    $toolbar[$tab] = array(
+                        'name' => 'about',
+                        'text' => $this->app['translator']->trans('About'),
+                        'hint' => $this->app['translator']->trans('Information about the kitFramework'),
+                        'link' => FRAMEWORK_URL.'/admin/welcome/about',
+                        'active' => ($active === $tab)
+                    );
+                    break;
+                case 'entrypoints':
+                    $toolbar[$tab] = array(
+                        'name' => 'entrypoints',
+                        'text' => $this->app['translator']->trans('Entry points'),
+                        'hint' => $this->app['translator']->trans('Use the entry points for an easy access'),
+                        'link' => FRAMEWORK_URL.'/admin/welcome',
+                        'active' => ($active === $tab)
+                    );
+                    break;
+                case 'extensions':
+                    $toolbar[$tab] = array(
+                        'name' => 'extensions',
+                        'text' => $this->app['translator']->trans('Extensions'),
+                        'hint' => $this->app['translator']->trans('Install, update or remove kitFramework extensions'),
+                        'link' => FRAMEWORK_URL.'/admin/welcome/extensions',
+                        'active' => ($active === $tab)
+                    );
+                    break;
+            }
+        }
+        return $toolbar;
+    }
+
+    /**
+     * Get the second toolbar for the Extensions
+     *
+     * @param string $active
+     * @return array
+     */
+    protected function getToolbarExtensions($active)
+    {
+        $toolbar = array();
+        $tabs = array('update', 'catalog', 'installed');
+
+        foreach ($tabs as $tab) {
+            switch ($tab) {
+                case 'update':
+                    $toolbar[$tab] = array(
+                        'name' => 'update',
+                        'text' => $this->app['translator']->trans('Update'),
+                        'hint' => $this->app['translator']->trans('Available updates for your extensions'),
+                        'link' => FRAMEWORK_URL.'/admin/welcome/extensions',
+                        'active' => ($active === $tab)
+                    );
+                    break;
+                case 'installed':
+                    $toolbar[$tab] = array(
+                        'name' => 'installed',
+                        'text' => $this->app['translator']->trans('Installed'),
+                        'hint' => $this->app['translator']->trans('Currently installed extensions'),
+                        'link' => FRAMEWORK_URL.'/admin/welcome/extensions/installed',
+                        'active' => ($active === $tab)
+                    );
+                    break;
+                case 'catalog':
+                    $toolbar[$tab] = array(
+                        'name' => 'catalog',
+                        'text' => $this->app['translator']->trans('Catalog'),
+                        'hint' => $this->app['translator']->trans('Explore the catalog for kitFramework extensions'),
+                        'link' => FRAMEWORK_URL.'/admin/welcome/extensions/catalog',
+                        'active' => ($active === $tab)
+                    );
+                    break;
+
+            }
+        }
+        return $toolbar;
+    }
+
+    /**
+     * Get the dialog for the entry points
+     *
+     * return string
+     */
+    protected function getEntryPointsDialog()
+    {
+        // get all entry points for this user
+        $entry_points = $this->app['account']->getUserRolesEntryPoints();
+
+        foreach ($entry_points['ROLE_ADMIN'] as $key => $entry) {
+            // we dont want an access to the extensions here, so we remove it!
+            if ($entry['route'] === '/admin/welcome') {
+                unset($entry_points['ROLE_ADMIN'][$key]);
+            }
+        }
+
+        $count = count($entry_points, COUNT_RECURSIVE);
+        if ($count < 1) {
+            $this->setAlert('Sorry, but you are not allowed to access any entry point!', array(), self::ALERT_TYPE_WARNING);
+            $entry_points = null;
+        }
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template',
+            'framework/tool/entry.points.twig'),
+            array(
+                'usage' => self::$usage,
+                'alert' => $this->getAlert(),
+                'toolbar' => $this->getToolbar('entrypoints'),
+                'entry_points' => $entry_points
+        ));
+    }
+
+
 
     /**
      * Initialize the Welcome dialog
@@ -45,7 +188,6 @@ class Welcome extends Alert
         }
         $app['filesystem']->copy(MANUFAKTUR_PATH.'/Basic/Control/Updater/Updater.php', MANUFAKTUR_PATH.'/Updater/Updater.php', true);
 
-        self::$usage = $this->app['request']->get('usage', 'framework');
 
         // check if the search addon is installed
         if (!file_exists(CMS_PATH.'/modules/kit_framework_search')) {
@@ -99,38 +241,14 @@ class Welcome extends Alert
                 array('%route%' => FRAMEWORK_URL.'/admin/scan/catalog?usage='.self::$usage), self::ALERT_TYPE_INFO);
         }
 
-        $accepted_items = explode(',', CATALOG_ACCEPT_EXTENSION);
-        $cat_items = $catalog->getAvailableExtensions($app['translator']->getLocale());
-
-        $catalog_items = array();
-        foreach ($cat_items as $item) {
-            // show only catalog items which have the accepted release status
-            if (isset($item['release_status']) && in_array($item['release_status'], $accepted_items)) {
-                $catalog_items[] = $item;
-            }
-        }
-
         $register = new ExtensionRegister($this->app);
-        $register_items = $register->getInstalledExtensions();
-
-        if (empty($register_items)) {
-            // seems that we should scan first for installed extensions
-            $register->scanDirectories(ExtensionRegister::GROUP_PHPMANUFAKTUR);
-            $register->scanDirectories(ExtensionRegister::GROUP_THIRDPARTY);
-            $register_items = $register->getInstalledExtensions();
+        $updates = $register->getAvailableUpdates();
+        if (!empty($updates)) {
+            $this->setAlert('There are updates available, <strong><a href="%route%">please check out your installed extensions</a></strong>!',
+                array('%route%' => FRAMEWORK_URL.'/admin/welcome/extensions?usage='.self::$usage), self::ALERT_TYPE_INFO);
         }
 
-        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-            '@phpManufaktur/Basic/Template',
-            'framework/welcome.twig'),
-            array(
-                'usage' => self::$usage,
-                'catalog_items' => $catalog_items,
-                'register_items' => $register_items,
-                'alert' => $this->getAlert(),
-                'scan_extensions' => FRAMEWORK_URL.'/admin/scan/extensions?usage='.self::$usage,
-                'scan_catalog' => FRAMEWORK_URL.'/admin/scan/catalog?usage='.self::$usage
-            ));
+        return $this->getEntryPointsDialog();
     }
 
     /**
@@ -188,4 +306,117 @@ class Welcome extends Alert
         return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
     }
 
+    /**
+     * Controller to show the about dialog
+     *
+     * @param Application $app
+     */
+    public function ControllerAbout(Application $app)
+    {
+        $this->initialize($app);
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template',
+            'framework/tool/about.twig'),
+            array(
+                'usage' => self::$usage,
+                'alert' => $this->getAlert(),
+                'toolbar' => $this->getToolbar('about')
+        ));
+    }
+
+    /**
+     * Controller to show the extension dialog
+     *
+     * @param Application $app
+     */
+    public function ControllerExtensions(Application $app)
+    {
+        $this->initialize($app);
+
+        $catalog = new ExtensionCatalog($app);
+        $catalog_release = null;
+        $available_release = null;
+        if ($catalog->isCatalogUpdateAvailable($catalog_release, $available_release)) {
+            $this->setAlert('There are new catalog information available, <strong><a href="%route%">please update the catalog</a></strong>.',
+                array('%route%' => FRAMEWORK_URL.'/admin/scan/catalog?usage='.self::$usage), self::ALERT_TYPE_INFO);
+        }
+
+        $register = new ExtensionRegister($this->app);
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template',
+            'framework/tool/extensions.twig'),
+            array(
+                'usage' => self::$usage,
+                'alert' => $this->getAlert(),
+                'toolbar' => $this->getToolbar('extensions'),
+                'toolbar_extensions' => $this->getToolbarExtensions('update'),
+                'update_items' => $register->getAvailableUpdates()
+        ));
+    }
+
+    /**
+     * Controller to show the installed extensions
+     *
+     * @param Application $app
+     */
+    public function ControllerExtensionsInstalled(Application $app)
+    {
+        $this->initialize($app);
+
+        $register = new ExtensionRegister($this->app);
+        $register_items = $register->getInstalledExtensions();
+
+        if (empty($register_items)) {
+            // seems that we should scan first for installed extensions
+            $register->scanDirectories(ExtensionRegister::GROUP_PHPMANUFAKTUR);
+            $register->scanDirectories(ExtensionRegister::GROUP_THIRDPARTY);
+            $register_items = $register->getInstalledExtensions();
+        }
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template',
+            'framework/tool/installed.extensions.twig'),
+            array(
+                'usage' => self::$usage,
+                'alert' => $this->getAlert(),
+                'toolbar' => $this->getToolbar('extensions'),
+                'toolbar_extensions' => $this->getToolbarExtensions('installed'),
+                'register_items' => $register_items
+        ));
+    }
+
+    /**
+     * Controller to show the extension catalog
+     *
+     * @param Application $app
+     */
+    public function ControllerExtensionsCatalog(Application $app)
+    {
+        $this->initialize($app);
+
+        $catalog = new ExtensionCatalog($app);
+        $accepted_items = explode(',', CATALOG_ACCEPT_EXTENSION);
+        $cat_items = $catalog->getAvailableExtensions($app['translator']->getLocale());
+
+        $catalog_items = array();
+        foreach ($cat_items as $item) {
+            // show only catalog items which have the accepted release status
+            if (isset($item['release_status']) && in_array($item['release_status'], $accepted_items)) {
+                $catalog_items[] = $item;
+            }
+        }
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template',
+            'framework/tool/catalog.extensions.twig'),
+            array(
+                'usage' => self::$usage,
+                'alert' => $this->getAlert(),
+                'toolbar' => $this->getToolbar('extensions'),
+                'toolbar_extensions' => $this->getToolbarExtensions('catalog'),
+                'catalog_items' => $catalog_items
+        ));
+    }
 }

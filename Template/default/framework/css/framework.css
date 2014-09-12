@@ -181,3 +181,36 @@ form.form-inline {
 .create-button:after {
   clear: both;
 }
+
+.media.extension {
+  border: 1px solid #dcdcdc;
+  padding: 5px;
+  margin: 10px 10px 10px 0;
+}
+.media.extension .usage {
+  font-weight: bold;
+  color: #da251d;
+  margin-bottom: 5px;
+}
+.media.extension .license {
+  font-size: small;
+  margin-bottom: 5px;
+}
+
+.media-control:before {
+  clear: both;
+  display: table;
+  content: " ";
+}
+.media-control:after {
+  clear:both;
+}
+.media-control {
+  text-align: right;
+  margin-top: 15px;
+}
+.media-control a {
+  margin-top: 5px;
+  margin-left: 5px !important;
+  margin-bottom: 5px;
+}
