@@ -87,6 +87,8 @@ return array(
     => 'Zeitüberschreitung bei der CAPTCHA Übermittlung, bitte versuchen Sie es erneut.',
   'Catalog'
     => 'Katalog',
+  'Changelog'
+    => 'Änderungsprotokoll',
   'Check the email settings and send a email to the webmaster for testing purpose'
     => 'E-Mail Einstellungen kontrollieren und eine Test E-Mail an den Webmaster schicken',
   'Click to sort column ascending'
@@ -119,6 +121,8 @@ return array(
     => 'Ein neues Password anlegen',
   'Create a unassigned translation'
     => 'Eine nicht zugeordnete Übersetzung erstellen',
+  'Currently installed extensions'
+    => 'Aktuell installierte Erweiterungen',
   'Custom'
     => 'Angepasst',
   'Custom translations'
@@ -237,9 +241,9 @@ return array(
     => 'Hallo %name%,<br />Sie möchten Ihr Passwort ändern, bitte geben Sie das neue Passwort ein, wiederholen Sie es zur Sicherheit und schicken Sie das Formular ab.<br />Falls Sie Ihr Passwort nicht ändern möchten, verlassen Sie bitte einfach diesen Dialog.',
   'Hello %name%,<br />you have asked to create a new password for the kitFramework hosted at %server%.'
     => 'Hallo %name%,<br />Sie haben darum gebeten ein neues Passwort für das kitFramework auf %server% zu erhalten.',
-  'Help'
-    => 'Hilfe',
   'help'
+    => 'Hilfe',
+  'Help'
     => 'Hilfe',
   'help_accounts_list_json'
     => '<p>Diese Datei ermöglicht es Ihnen die angezeigten Spalten und die Sortierung der Felder in der <a href="%FRAMEWORK_URL%/admin/accounts/list" target="_blank">Übersicht der Benutzerkonten</a> zu ändern.</p><p>Verfügbare Felder für die Verwendung in <var>columns</var> und <var>list > order > by</var> sind: <var>id, username, email, password, displayname, last_login, roles, guid, guid_timestamp, guid_status, status</var> und <var>timestamp</var>. Mit <var>list > rows_per_page</var> legen Sie fest, wie viele Benutzerkonten pro Seite angezeigt werden.</p>',
@@ -277,14 +281,14 @@ return array(
     => 'Installieren',
   'Install extension'
     => 'Erweiterung installieren',
-  'Install, update or remove kitFramework Extensions'
-    => 'Installieren, aktualisieren oder entfernen Sie kitFramework Erweiterungen',
   'Install, update or remove kitFramework extensions'
     => 'Installieren, Aktualisieren oder Entfernen von kitFramework Erweiterungen',
+  'Install, update or remove kitFramework Extensions'
+    => 'Installieren, aktualisieren oder entfernen Sie kitFramework Erweiterungen',
+  'installed'
+    => 'installiert',
   'Installed'
     => 'Installiert',
-    'installed'
-    => 'installiert',
   'Installed extensions'
     => 'Installierte Erweiterungen',
   'Installed release'
@@ -425,6 +429,8 @@ return array(
     => 'Bitte prüfen Sie den angegebenen Benutzernamen sowie das Passwort und versuchen Sie es erneut!',
   'Please <a href="%link%" target="_blank">comment this help</a> to improve the kitCommand <b>%command%</b>.'
     => 'Bitte <a href="%link%" target="_blank">kommentieren und ergänzen Sie diese Hilfe</a> um das kitCommand <b>%command%</b> zu verbessern.',
+  'Please execute the available updates.'
+    => 'Bitte führen Sie die verfügbaren Aktualisierungen durch!',
   'Please login to the kitFramework with your username or email address and the assigned password. Your can also use your username and password for the CMS.'
     => 'Bitte melden Sie sich am kitFramework mit Ihrem Benutzernamen oder Ihrer E-Mail Adresse und Ihrem Passwort an. Sie können sich auch mit Ihrem Benutzernamen und Passwort für das CMS anmelden.',
   'Please report all issues and help to improve %command%!'
@@ -459,7 +465,7 @@ return array(
     => 'Anmerkung',
   'Remove'
     => 'Entfernen',
-    'removed'
+  'removed'
     => 'entfernt',
   'Repeat by pattern, i.e. at the last tuesday of the month'
     => 'Nach einem Muster, z.B. am letzten Donnerstag im Monat',
@@ -529,12 +535,12 @@ return array(
     => 'Die Übersetzung wurde erfolgreich in die Erweiterung %extension% verschoben.',
   'Successful scanned the kitFramework for *.json configuration files'
     => 'Das kitFramework wurde nach *.json Konfigurationsdateien durchsucht',
+  'Successfull %mode% the extension %extension%.'
+    => 'Die Erweiterung %extension% wurde erfolgreich %mode%.',
   'Successfull created a account for the user %name%.'
     => 'Für den Benutzer %name% wurde ein Konto eingerichtet.',
   'Successfull installed the extension %extension%.'
     => 'Die Erweiterung %extension% wurde erfolgreich installiert.',
-    'Successfull %mode% the extension %extension%.'
-    => 'Die Erweiterung %extension% wurde erfolgreich %mode%.',
   'Successfull put the locale entries to the locale file.'
     => 'Die Übersetzungen wurden erfolgreich in die Übersetzungsdatei geschrieben.',
   'Successfull scanned the kitFramework for installed extensions.'
@@ -593,10 +599,10 @@ return array(
     => 'Die Beschreibungsdatei extension.json für die Erweiterung <b>%name%</b> enthält nicht alle Definitionen, prüfen Sie <i>GUID</i>, <i>Group</i> und <i>Release</i>!',
   'The file %file% does not exists in Gist %gist_id%!'
     => 'Die Datei %file% existiert nicht im Gist %gist_id%',
-  'The file <strong>%file%</strong> does not exists!'
-    => 'Die Datei <strong>%file%</strong> existiert nicht!',
   'The file <i>%file%</i> does not exists!'
     => 'Die Datei <em>%file%</em> existiert nicht!',
+  'The file <strong>%file%</strong> does not exists!'
+    => 'Die Datei <strong>%file%</strong> existiert nicht!',
   'The file <strong>%file%</strong> is not readable!'
     => 'Die Datei <strong>%file%</strong> ist nicht lesbar!',
   'The form is not valid, please check your input and try again!'
@@ -739,7 +745,7 @@ return array(
     => 'Aktualisierung',
   'Update available!'
     => 'Aktualisierung verfügbar!',
-    'updated'
+  'updated'
     => 'aktualisiert',
   'Updated the catalog data for the extension(s) <strong>%extension%</strong>.'
     => 'Die Kataloginformationen für die Erweiterung(en) <strong>%extension%</strong> wurden aktualisiert.',
@@ -807,5 +813,4 @@ return array(
     => 'Ihr Benutzerkonto wurde erfolgreich geändert.',
   'Your are not authenticated, please login!'
     => 'Sie sind nicht angemeldet, bitte authentifizieren Sie sich zunächst!',
-
 );
