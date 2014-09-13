@@ -2,7 +2,7 @@
   i18nEditor
 
   @author Team phpManufaktur <team@phpmanufaktur.de>
-  @link https://kit2.phpmanufaktur.de/dogpaw
+  @link https://kit2.phpmanufaktur.de
   @copyright 2014 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
@@ -29,9 +29,9 @@
   <div class="container{% if usage != 'framework'%}-fluid{% endif %}">
     {% include '@phpManufaktur/Basic/Template/default/framework/i18n/toolbar.twig' %}
     {% include '@phpManufaktur/Basic/Template/default/framework/i18n/toolbar.locale.twig' with {'toolbar': toolbar_locales} %}
-    
+
     <h1>{{ 'Edit translation'|trans }} <small>i18nEditor</small></h1>
-    
+
     {{ alert }}
 
     {% form_theme form '@phpManufaktur/Basic/Template/default/framework/form.fields.horizontal.twig' %}
@@ -62,7 +62,7 @@
         </div>
       </div>
     </form>
-    
+
     {% if references|length > 0 %}
       <h2>{{ 'Referenced files'|trans }}</h2>
       <div class="table-responsive resources">
@@ -92,6 +92,6 @@
         </table>
       </div>
     {% endif %}
-   
+
   </div>
 {% endblock content %}

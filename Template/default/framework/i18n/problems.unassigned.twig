@@ -2,7 +2,7 @@
   i18nEditor
 
   @author Team phpManufaktur <team@phpmanufaktur.de>
-  @link https://kit2.phpmanufaktur.de/dogpaw
+  @link https://kit2.phpmanufaktur.de
   @copyright 2014 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
@@ -29,15 +29,15 @@
   <div class="container{% if usage != 'framework'%}-fluid{% endif %}">
     {% include '@phpManufaktur/Basic/Template/default/framework/i18n/toolbar.twig' %}
     {% include '@phpManufaktur/Basic/Template/default/framework/i18n/toolbar.problems.twig' with {'toolbar': toolbar_problems} %}
-    
+
     <h1>{{ 'Unassigned translations'|trans }} <small>i18nEditor</small></h1>
-    
+
     {% if unassigneds|length > 0 %}
       <div class="well">
         {{ '<p>The i18nEditor has not detected the following sources in any kitFramework file.</p><p>Maybe the source is really not used anywhere, but it is also possible that a source is used in a file and the i18nEditor Parser is not able to assign the source to a translation.</p><p>Search for the sources in the extension files and check the context. This list will be refreshed at the next search run.</p>'|trans }}
       </div>
     {% endif %}
-    
+
     {{ alert }}
 
     {% if unassigneds|length > 0 %}
@@ -65,7 +65,7 @@
         </table>
       </div>
     {% endif %}
-    
+
   </div>
 {% endblock content %}
 {% block footer_jquery %}
@@ -89,13 +89,13 @@
         hover      : '',
         filterRow  : '',
         even       : '',
-        odd        : '' 
+        odd        : ''
       });
 
       $("table").tablesorter({
         theme : "bootstrap",
         widthFixed: true,
-        headerTemplate : '{content} {icon}', 
+        headerTemplate : '{content} {icon}',
         widgets : [ "uitheme", "filter", "zebra" ],
         widgetOptions : {
           zebra : ["even", "odd"],

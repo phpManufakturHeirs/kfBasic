@@ -2,7 +2,7 @@
   i18nEditor
 
   @author Team phpManufaktur <team@phpmanufaktur.de>
-  @link https://kit2.phpmanufaktur.de/dogpaw
+  @link https://kit2.phpmanufaktur.de
   @copyright 2014 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
@@ -28,11 +28,11 @@
   <!-- {{ _self.getTemplateName() }} -->
   <div class="container{% if usage != 'framework'%}-fluid{% endif %}">
     {% include '@phpManufaktur/Basic/Template/default/framework/i18n/toolbar.twig' %}
-    
+
     <h1>{{ 'Locale source'|trans }} <small>i18nEditor</small></h1>
-    
+
     {{ alert }}
-    
+
     {% form_theme form '@phpManufaktur/Basic/Template/default/framework/form.fields.horizontal.twig' %}
     <form class="form-horizontal" action="{{ FRAMEWORK_URL ~ '/admin/i18n/editor/sources/detail/check' ~ usage_param }}" method="post" role="form">
       <div class="form-group">
@@ -55,8 +55,8 @@
         </div>
       </div>
     </form>
-    
-        
+
+
     {% if references|length > 0 %}
       <h2>{{ 'Referenced files'|trans }}</h2>
       <div class="table-responsive resources">
@@ -86,7 +86,7 @@
         </table>
       </div>
     {% endif %}
-    
+
     {% if translations|length > 0 %}
       <h2>{{ 'Translations'|trans }}</h2>
       <div class="table-responsive translations">
@@ -137,13 +137,13 @@
         hover      : '',
         filterRow  : '',
         even       : '',
-        odd        : '' 
+        odd        : ''
       });
 
       $("table").tablesorter({
         theme : "bootstrap",
         widthFixed: true,
-        headerTemplate : '{content} {icon}', 
+        headerTemplate : '{content} {icon}',
         widgets : [ "uitheme", "zebra" ],
         widgetOptions : {
           zebra : ["even", "odd"],

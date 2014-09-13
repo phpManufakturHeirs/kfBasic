@@ -2,7 +2,7 @@
   i18nEditor
 
   @author Team phpManufaktur <team@phpmanufaktur.de>
-  @link https://kit2.phpmanufaktur.de/dogpaw
+  @link https://kit2.phpmanufaktur.de
   @copyright 2014 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
@@ -29,14 +29,14 @@
   <div class="container{% if usage != 'framework'%}-fluid{% endif %}">
     {% include '@phpManufaktur/Basic/Template/default/framework/i18n/toolbar.twig' %}
     {% include '@phpManufaktur/Basic/Template/default/framework/i18n/toolbar.locale.twig' with {'toolbar': toolbar_locale} %}
-    
+
     <h1>{{ 'Create a unassigned translation'|trans }} <small>i18nEditor</small></h1>
-    
+
     <div class="well">
       <p>{{ '<em>Unassigned translations</em> can be used to translate <em>sources</em>, which are representend by a variable and does not physically exists in a program file or a template.'|trans }}</p>
       <p>{{ 'If you have added a source to program file or a template execute a <em>search run</em> instead, the i18nEditor will find it.'|trans }}</p>
     </div>
-    
+
     {{ alert }}
 
     {% form_theme form '@phpManufaktur/Basic/Template/default/framework/form.fields.horizontal.twig' %}
@@ -49,7 +49,7 @@
         </div>
       </div>
     </form>
-    
-   
+
+
   </div>
 {% endblock content %}
