@@ -46,7 +46,7 @@ class ScanExtensions extends Alert
         $this->setAlert('Successfull scanned the kitFramework for installed extensions.',
                 array(), self::ALERT_TYPE_SUCCESS);
 
-        $subRequest = Request::create('/admin/welcome', 'GET', array('usage' => self::$usage));
+        $subRequest = Request::create('/admin/welcome/extensions', 'GET', array('usage' => self::$usage));
         return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
     }
 }
