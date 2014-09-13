@@ -102,6 +102,28 @@ class i18nParser extends Alert
     }
 
     /**
+     * Controller to truncate the tables for the i18n Editor
+     *
+     * @param Application $app
+     * @return \phpManufaktur\Basic\Control\Pattern\rendered
+     */
+    public function ControllerTruncateTable(Application $app)
+    {
+        $this->initialize($app);
+
+        $this->app['db.utils']->truncateTable(FRAMEWORK_TABLE_PREFIX.'basic_i18n_reference');
+        $this->app['db.utils']->truncateTable(FRAMEWORK_TABLE_PREFIX.'basic_i18n_scan_file');
+        $this->app['db.utils']->truncateTable(FRAMEWORK_TABLE_PREFIX.'basic_i18n_source');
+        $this->app['db.utils']->truncateTable(FRAMEWORK_TABLE_PREFIX.'basic_i18n_translation');
+        $this->app['db.utils']->truncateTable(FRAMEWORK_TABLE_PREFIX.'basic_i18n_translation_file');
+        $this->app['db.utils']->truncateTable(FRAMEWORK_TABLE_PREFIX.'basic_i18n_translation_unassigned');
+
+        $this->setAlert('Truncated the tables for the i18nEditor.',
+            array(), self::ALERT_TYPE_SUCCESS);
+        return $this->promptAlertFramework();
+    }
+
+    /**
      * Parse the given PHP file for translation functions and add the detected
      * locale sources to the database
      *
@@ -188,7 +210,8 @@ class i18nParser extends Alert
                         $current_source = trim($token[1], "\x22\x27");
                     }
 
-                    if (in_array($current_source, self::$config['translation']['ignore'])) {
+                    if (in_array($current_source, self::$config['translation']['ignore']) ||
+                        (($current_source[0] === '%') && ($current_source[strlen($current_source)-1] === '%'))) {
                         // ignore this source term
                         $expect_locale = false;
                         continue;

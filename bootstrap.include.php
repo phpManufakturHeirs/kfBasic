@@ -438,11 +438,20 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
             ),
             array(
                 'route' => '/admin/i18n/editor',
-                'name' => $app['translator']->trans('i18n'),
+                'name' => $app['translator']->trans('i18n Editor'),
                 'info' => $app['translator']->trans('Parse the kitFramework for locale strings, add custom translations and administrate the internationalization'),
                 'icon' => array(
                     'path' => '/extension/phpmanufaktur/phpManufaktur/Basic/extension.i18n.editor.jpg',
                     'url' => MANUFAKTUR_URL.'/Basic/extension.i18n.editor.jpg'
+                )
+            ),
+            array(
+                'route' => '/admin/i18n/editor/table/truncate',
+                'name' => $app['translator']->trans('i18n Editor'),
+                'info' => $app['translator']->trans('Truncate all i18n analyze tables and start a fresh translation session, no translations will be lost.'),
+                'icon' => array(
+                    'path' => '/extension/phpmanufaktur/phpManufaktur/Basic/extension.i18n.editor.truncate.jpg',
+                    'url' => MANUFAKTUR_URL.'/Basic/extension.i18n.editor.truncate.jpg'
                 )
             )
         )
@@ -673,6 +682,8 @@ $admin->get('/i18n/editor/table/create',
     'phpManufaktur\Basic\Control\i18nEditor\i18nParser::ControllerCreateTable');
 $admin->get('/i18n/editor/table/drop',
     'phpManufaktur\Basic\Control\i18nEditor\i18nParser::ControllerDropTable');
+$admin->get('/i18n/editor/table/truncate',
+    'phpManufaktur\Basic\Control\i18nEditor\i18nParser::ControllerTruncateTable');
 
 // send a testmail
 $admin->get('/test/mail',
