@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**1.0.11** - 2014-09-13
+
+* rework the CMS Tool - experimental release.
+
 **1.0.10** - 2014-09-05
 
 * add missing default locale definition in `iframe.body.twig`
