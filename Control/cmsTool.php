@@ -18,8 +18,6 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use phpManufaktur\Basic\Data\CMS\SearchSection;
 use phpManufaktur\Basic\Control\CMS\InstallSearch;
 use phpManufaktur\Basic\Control\Pattern\Alert;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Display a welcome to the kitFramework dialog
@@ -242,7 +240,6 @@ class cmsTool extends Alert
         }
 
         $catalog = new ExtensionCatalog($app);
-
         $catalog_release = null;
         $available_release = null;
         if ($catalog->isCatalogUpdateAvailable($catalog_release, $available_release)) {
@@ -351,7 +348,20 @@ class cmsTool extends Alert
                 array('%route%' => FRAMEWORK_URL.'/admin/scan/catalog?usage='.self::$usage), self::ALERT_TYPE_INFO);
         }
 
+        $catalog = new ExtensionCatalog($app);
+        $catalog_release = null;
+        $available_release = null;
+        if ($catalog->isCatalogUpdateAvailable($catalog_release, $available_release)) {
+            $this->setAlert('There are new catalog information available, <strong><a href="%route%">please update the catalog</a></strong>.',
+                array('%route%' => FRAMEWORK_URL.'/admin/scan/catalog?usage='.self::$usage), self::ALERT_TYPE_INFO);
+        }
+
         $register = new ExtensionRegister($this->app);
+        $updates = $register->getAvailableUpdates();
+        if (!empty($updates)) {
+            $this->setAlert('Please execute the available updates.', array(), self::ALERT_TYPE_INFO);
+        }
+
 
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
             '@phpManufaktur/Basic/Template',
@@ -374,7 +384,20 @@ class cmsTool extends Alert
     {
         $this->initialize($app);
 
+        $catalog = new ExtensionCatalog($app);
+        $catalog_release = null;
+        $available_release = null;
+        if ($catalog->isCatalogUpdateAvailable($catalog_release, $available_release)) {
+            $this->setAlert('There are new catalog information available, <strong><a href="%route%">please update the catalog</a></strong>.',
+                array('%route%' => FRAMEWORK_URL.'/admin/scan/catalog?usage='.self::$usage), self::ALERT_TYPE_INFO);
+        }
+
         $register = new ExtensionRegister($this->app);
+        $updates = $register->getAvailableUpdates();
+        if (!empty($updates)) {
+            $this->setAlert('Please execute the available updates.', array(), self::ALERT_TYPE_INFO);
+        }
+
         $register_items = $register->getInstalledExtensions();
 
         if (empty($register_items)) {
@@ -416,6 +439,14 @@ class cmsTool extends Alert
                 $catalog_items[] = $item;
             }
         }
+
+        $register = new ExtensionRegister($this->app);
+        $updates = $register->getAvailableUpdates();
+        if (!empty($updates)) {
+            $this->setAlert('There are updates available, <strong><a href="%route%">please check out your installed extensions</a></strong>!',
+                array('%route%' => FRAMEWORK_URL.'/admin/welcome/extensions?usage='.self::$usage), self::ALERT_TYPE_INFO);
+        }
+
 
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
             '@phpManufaktur/Basic/Template',

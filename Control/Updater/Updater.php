@@ -160,7 +160,7 @@ class Updater extends Alert
 
             if (!$this->copyLastGithubRepository($info['download']['github']['organization'], $info['download']['github']['repository'])) {
                 // Ooops, problem copying the repo into directory - return to the cmsTool
-                $subRequest = Request::create('/admin/welcome', 'GET', array('usage' => self::$usage));
+                $subRequest = Request::create('/admin/welcome/extensions', 'GET', array('usage' => self::$usage));
                 return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
             }
             $app['monolog']->addDebug("All files are copied to {$info['path']}");
@@ -191,7 +191,7 @@ class Updater extends Alert
 
         if ($redirect) {
             // use redirect to enable a application reload and autoload of the new extensions
-            return $app->redirect(FRAMEWORK_URL.'/admin/welcome?usage='.self::$usage);
+            return $app->redirect(FRAMEWORK_URL.'/admin/welcome/extensions?usage='.self::$usage);
         }
         else {
             return true;
@@ -266,14 +266,14 @@ class Updater extends Alert
         if (false === ($extension = $this->DataExtensionRegister->select($extension_id))) {
             $this->setAlert('The extension with the ID %extension_id% does not exists!',
                 array('%extension_id%' => $extension_id), self::ALERT_TYPE_WARNING);
-            $subRequest = Request::create('/admin/welcome', 'GET', array('usage' => self::$usage));
+            $subRequest = Request::create('/admin/welcome/extensions', 'GET', array('usage' => self::$usage));
             return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
         }
 
         if (false === ($catalog_id = $this->ExtensionCatalog->selectIDbyGUID($extension['guid']))) {
             $this->setAlert('There exists no catalog entry for the extension %name% with the GUID %guid%.',
                 array('%name%' => $extension['name'], '%guid%' => $extension['guid']), self::ALERT_TYPE_WARNING);
-            $subRequest = Request::create('/admin/welcome', 'GET', array('usage' => self::$usage));
+            $subRequest = Request::create('/admin/welcome/extensions', 'GET', array('usage' => self::$usage));
             return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
         }
         // ok - we have the catalog number and can execute the update/installation

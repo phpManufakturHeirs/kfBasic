@@ -196,7 +196,11 @@ form.form-inline {
   font-size: small;
   margin-bottom: 5px;
 }
-
+.media.extension .release {
+  font-family: Courier, monospace;
+  margin-top: 5px;
+  font-size: 11px;
+}
 .media-control:before {
   clear: both;
   display: table;
