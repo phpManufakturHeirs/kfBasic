@@ -21,7 +21,8 @@
   "release":{
     "number":"1.0.11",
     "date":"2014-09-13",
-    "status":"release"
+    "status":"release",
+    "changelog":"https:\/\/github.com\/phpManufaktur\/kfBasic\/blob\/master\/CHANGELOG.md"
   },
   "description": {
     "en":{

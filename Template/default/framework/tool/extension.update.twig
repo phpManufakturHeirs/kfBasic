@@ -12,6 +12,9 @@
     
   </div>
   <div class="media-control">
+    {% if item.changelog is not null %}
+      <a href="{{ item.changelog }}" target="_blank" class="btn btn-info" role="button">{{ 'Changelog'|trans }}</a>
+    {% endif %}
     <a href="{{ FRAMEWORK_URL }}/admin/updater/update/{{ item.id }}?usage={{ usage }}" class="btn {% if item.update_available %}btn-success{% else %}btn-default disabled{% endif %}" role="button">{{ 'Update'|trans }}</a>
   </div>
 </div>

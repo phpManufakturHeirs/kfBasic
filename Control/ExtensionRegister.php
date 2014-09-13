@@ -200,6 +200,8 @@ class ExtensionRegister extends Alert
                 'url' => isset($info['description']['en']['url']) ? $info['description']['en']['url'] : ''
             );
         }
+        // check if a changelog is available
+        $data['changelog'] = isset($info['release']['changelog']) ? $info['release']['changelog'] : null;
         $data['description'] = $description;
         $data['logo_blob'] = '';
         $data['release_available'] = (isset($cat['release'])) ? $cat['release'] : $item['release'];
