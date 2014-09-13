@@ -546,7 +546,7 @@ $admin->get('/',
     'phpManufaktur\Basic\Control\Account\RoleEntryPoints::ControllerRoleEntryPoints');
 $admin->get('/welcome',
     // the general welcome dialog
-    'phpManufaktur\Basic\Control\Welcome::controllerFramework');
+    'phpManufaktur\Basic\Control\cmsTool::ControllerFramework');
 $admin->match('/scan/extensions',
     // scan for installed extensions
     'phpManufaktur\Basic\Control\ScanExtensions::exec');
@@ -554,21 +554,21 @@ $admin->get('/scan/catalog',
     // scan for available extensions from Github
     'phpManufaktur\Basic\Control\ScanCatalog::Controller');
 $admin->get('/welcome/about',
-    'phpManufaktur\Basic\Control\Welcome::ControllerAbout');
+    'phpManufaktur\Basic\Control\cmsTool::ControllerAbout');
 $admin->get('/welcome/extensions',
-    'phpManufaktur\Basic\Control\Welcome::ControllerExtensions');
+    'phpManufaktur\Basic\Control\cmsTool::ControllerExtensions');
 $admin->get('/welcome/extensions/installed',
-    'phpManufaktur\Basic\Control\Welcome::ControllerExtensionsInstalled');
+    'phpManufaktur\Basic\Control\cmsTool::ControllerExtensionsInstalled');
 $admin->get('/welcome/extensions/catalog',
-    'phpManufaktur\Basic\Control\Welcome::ControllerExtensionsCatalog');
+    'phpManufaktur\Basic\Control\cmsTool::ControllerExtensionsCatalog');
 
 
 $app->get('/welcome/cms/{cms}',
     // the welcome dialog is called by the CMS backend
-    'phpManufaktur\Basic\Control\Welcome::controllerCMS');
+    'phpManufaktur\Basic\Control\cmsTool::ControllerCMS');
 $app->post('/welcome/login/check',
     // first login check
-    'phpManufaktur\Basic\Control\Welcome::checkFirstLogin');
+    'phpManufaktur\Basic\Control\cmsTool::checkFirstLogin');
 
 
 

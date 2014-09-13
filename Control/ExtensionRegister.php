@@ -15,6 +15,7 @@ use phpManufaktur\Basic\Data\ExtensionRegister as Register;
 use phpManufaktur\Basic\Data\ExtensionCatalog as Catalog;
 use phpManufaktur\Basic\Control\Pattern\Alert;
 use phpManufaktur\Basic\Data\ExtensionCatalog;
+use Silex\Application;
 
 /**
  * Check for installed extensions and read the information from extension.json
@@ -25,10 +26,25 @@ use phpManufaktur\Basic\Data\ExtensionCatalog;
  */
 class ExtensionRegister extends Alert
 {
-    protected $app = null;
-
     const GROUP_PHPMANUFAKTUR = 'phpManufaktur';
     const GROUP_THIRDPARTY = 'thirdParty';
+
+    protected static $usage = null;
+
+    /**
+     * (non-PHPdoc)
+     * @see \phpManufaktur\Basic\Control\Pattern\Alert::initialize()
+     */
+    protected function initialize(Application $app)
+    {
+        parent::initialize($app);
+
+        self::$usage = $this->app['request']->get('usage', 'framework');
+        if (self::$usage != 'framework') {
+            // set the locale from the CMS locale
+            $app['translator']->setLocale($app['session']->get('CMS_LOCALE', 'de'));
+        }
+    }
 
     /**
      * Check the given $path and $group for a installed extension

@@ -16,7 +16,7 @@ use Silex\Application;
 use phpManufaktur\Basic\Control\gitHub\gitHub;
 use phpManufaktur\Basic\Control\cURL\cURL;
 use phpManufaktur\Basic\Control\unZip\unZip;
-use phpManufaktur\Basic\Control\Welcome;
+//use phpManufaktur\Basic\Control\cmsTool;
 use phpManufaktur\Basic\Data\ExtensionCatalog;
 use phpManufaktur\Basic\Data\ExtensionRegister as DataExtensionRegister;
 use phpManufaktur\Basic\Control\Pattern\Alert;
@@ -38,45 +38,29 @@ use phpManufaktur\Basic\Control\ExtensionRegister;
  */
 class Updater extends Alert
 {
-    protected $app = null;
     protected $ExtensionCatalog = null;
     protected $ExtensionRegister = null;
     protected $Github = null;
     protected $cURL = null;
-    protected $Welcome = null;
     protected $unZIP = null;
     protected static $extension_array = array();
     protected static $usage = null;
 
-    /**
-     * Constructor
-     *
-     * @param Application $app
-     */
-    public function __construct(Application $app=null)
+    protected function initialize(Application $app)
     {
-        if (!is_null($app)) {
-            $this->initUpdater($app);
-        }
-    }
-
-    /**
-     * Initialize the update
-     *
-     * @param Application $app
-     */
-    protected function initUpdater(Application $app, $redirect=true)
-    {
-        $this->initialize($app);
+        parent::initialize($app);
 
         $this->ExtensionCatalog = new ExtensionCatalog($app);
         $this->DataExtensionRegister = new DataExtensionRegister($app);
         $this->Github = new gitHub($app);
         $this->cURL = new cURL($app);
         $this->unZIP = new unZip($app);
-        if ($redirect) {
-            $this->Welcome = new Welcome($app);
-            self::$usage = $this->app['request']->get('usage', 'framework');
+
+        self::$usage = $this->app['request']->get('usage', 'framework');
+
+        if (self::$usage != 'framework') {
+            // set the locale from the CMS locale
+            $app['translator']->setLocale($app['session']->get('CMS_LOCALE', 'de'));
         }
     }
 
@@ -155,7 +139,7 @@ class Updater extends Alert
      */
     public function controllerInstallExtension(Application $app, $catalog_id, $redirect=true)
     {
-        $this->initUpdater($app, $redirect);
+        $this->initialize($app);
 
         // check the dependencies for this extension
         $this->checkDependencies($catalog_id);
@@ -175,9 +159,9 @@ class Updater extends Alert
             $app['monolog']->addDebug("Start installation/update of {$info['download']['github']['organization']}//{$info['download']['github']['repository']}");
 
             if (!$this->copyLastGithubRepository($info['download']['github']['organization'], $info['download']['github']['repository'])) {
-                // Ooops, problem copying the repo into directory
-                $this->Welcome->setAlertUnformatted($this->getAlert());
-                return $this->Welcome->controllerFramework($this->app);
+                // Ooops, problem copying the repo into directory - return to the cmsTool
+                $subRequest = Request::create('/admin/welcome', 'GET', array('usage' => self::$usage));
+                return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
             }
             $app['monolog']->addDebug("All files are copied to {$info['path']}");
 
@@ -190,8 +174,9 @@ class Updater extends Alert
                 $execute_route[] = $info['setup']['update'];
             }
             else {
-                $this->setAlert("Successfull $install_mode the extension %extension%.",
-                    array('%extension%' => $info['name']), self::ALERT_TYPE_SUCCESS);
+                $mode = $this->app['translator']->trans($install_mode);
+                $this->setAlert('Successfull %mode% the extension %extension%.',
+                    array('%extension%' => $info['name'], '%mode%' => $mode), self::ALERT_TYPE_SUCCESS);
             }
         }
 
@@ -276,18 +261,20 @@ class Updater extends Alert
      */
     public function controllerUpdateExtension(Application $app, $extension_id)
     {
-        $this->initUpdater($app);
+        $this->initialize($app);
 
         if (false === ($extension = $this->DataExtensionRegister->select($extension_id))) {
-            $this->Welcome->setAlert('The extension with the ID %extension_id% does not exists!',
+            $this->setAlert('The extension with the ID %extension_id% does not exists!',
                 array('%extension_id%' => $extension_id), self::ALERT_TYPE_WARNING);
-            return $this->Welcome->controllerFramework($app);
+            $subRequest = Request::create('/admin/welcome', 'GET', array('usage' => self::$usage));
+            return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
         }
 
         if (false === ($catalog_id = $this->ExtensionCatalog->selectIDbyGUID($extension['guid']))) {
-            $this->Welcome->setAlert('There exists no catalog entry for the extension %name% with the GUID %guid%.',
+            $this->setAlert('There exists no catalog entry for the extension %name% with the GUID %guid%.',
                 array('%name%' => $extension['name'], '%guid%' => $extension['guid']), self::ALERT_TYPE_WARNING);
-            return $this->Welcome->controllerFramework($app);
+            $subRequest = Request::create('/admin/welcome', 'GET', array('usage' => self::$usage));
+            return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
         }
         // ok - we have the catalog number and can execute the update/installation
         return $this->controllerInstallExtension($app, $catalog_id);
@@ -302,7 +289,7 @@ class Updater extends Alert
      */
     public function controllerRemoveExtension(Application $app, $extension_id)
     {
-        $this->initUpdater($app);
+        $this->initialize($app);
 
         if (false === ($extension = $this->DataExtensionRegister->select($extension_id))) {
             $this->setAlert('The extension with the ID %extension_id% does not exists!',
@@ -324,6 +311,8 @@ class Updater extends Alert
             }
             // now remove the extension directory
             $app['filesystem']->remove(FRAMEWORK_PATH.$info['path']);
+            // delete from the extension table
+            $this->DataExtensionRegister->delete($extension_id);
             // alert success
             $this->setAlert('The extension %extension% was successful removed.',
                 array('%extension%' => $info['name']), self::ALERT_TYPE_SUCCESS);

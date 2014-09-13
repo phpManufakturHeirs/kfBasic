@@ -31,7 +31,6 @@ class ScanCatalog extends Alert
         parent::initialize($app);
 
         self::$usage = $this->app['request']->get('usage', 'framework');
-
         if (self::$usage != 'framework') {
             // set the locale from the CMS locale
             $app['translator']->setLocale($app['session']->get('CMS_LOCALE', 'en'));

@@ -13,19 +13,40 @@ namespace phpManufaktur\Basic\Control;
 
 use Silex\Application;
 use phpManufaktur\Basic\Control\Pattern\Alert;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class ScanExtensions extends Alert
 {
+    protected static $usage = null;
+
+    /**
+     * (non-PHPdoc)
+     * @see \phpManufaktur\Basic\Control\Pattern\Alert::initialize()
+     */
+    protected function initialize(Application $app)
+    {
+        parent::initialize($app);
+
+        self::$usage = $this->app['request']->get('usage', 'framework');
+        if (self::$usage != 'framework') {
+            // set the locale from the CMS locale
+            $app['translator']->setLocale($app['session']->get('CMS_LOCALE', 'en'));
+        }
+    }
+
     public function exec(Application $app)
     {
+        $this->initialize($app);
+
         $register = new ExtensionRegister($app);
         $register->scanDirectories(ExtensionRegister::GROUP_PHPMANUFAKTUR);
         $register->scanDirectories(ExtensionRegister::GROUP_THIRDPARTY);
-        $Welcome = new Welcome($app);
-        if (!$register->isAlert()) {
-            $Welcome->setAlert('Successfull scanned the kitFramework for installed extensions.',
+
+        $this->setAlert('Successfull scanned the kitFramework for installed extensions.',
                 array(), self::ALERT_TYPE_SUCCESS);
-        }
-        return $Welcome->controllerFramework($app);
+
+        $subRequest = Request::create('/admin/welcome', 'GET', array('usage' => self::$usage));
+        return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
     }
 }

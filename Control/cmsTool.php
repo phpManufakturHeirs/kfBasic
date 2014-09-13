@@ -18,6 +18,8 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use phpManufaktur\Basic\Data\CMS\SearchSection;
 use phpManufaktur\Basic\Control\CMS\InstallSearch;
 use phpManufaktur\Basic\Control\Pattern\Alert;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Display a welcome to the kitFramework dialog
@@ -25,7 +27,7 @@ use phpManufaktur\Basic\Control\Pattern\Alert;
  * @author Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
  *
  */
-class Welcome extends Alert
+class cmsTool extends Alert
 {
 
     protected static $usage = null;
@@ -42,7 +44,7 @@ class Welcome extends Alert
 
         if (self::$usage != 'framework') {
             // set the locale from the CMS locale
-            $app['translator']->setLocale($app['session']->get('CMS_LOCALE', 'en'));
+            $app['translator']->setLocale($app['session']->get('CMS_LOCALE', 'de'));
         }
     }
 
@@ -211,7 +213,7 @@ class Welcome extends Alert
      * the controllerCMS()
      *
      */
-    public function controllerFramework(Application $app)
+    public function ControllerFramework(Application $app)
     {
         $this->initWelcome($app);
 
@@ -219,10 +221,17 @@ class Welcome extends Alert
             // get the messages from the installation
             $this->setAlertUnformatted($install['message']);
             foreach ($install['execute_route'] as $route) {
-                // execute the install & update routes
-                $subRequest = Request::create($route, 'GET', array('usage' => self::$usage));
-                $response = $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
-                $this->setAlert($response->getContent(), array(), self::ALERT_TYPE_INFO);
+                try {
+                    // execute the install & update routes
+                    $subRequest = Request::create($route, 'GET', array('usage' => self::$usage));
+                    // important: we dont want that app->handle() catch errors, so set the third parameter to false!
+                    $response = $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST, false);
+                    $this->setAlert($response->getContent(), array(), self::ALERT_TYPE_INFO);
+                } catch (\Exception $e) {
+                    // it is possible that a route really not exists just in this moment, so we log but dont prompt the error
+                    $this->setAlert($e->getMessage(), array(), self::ALERT_TYPE_DANGER);
+                    //$app['monolog']->addDebug($e->getMessage(), array($e));
+                }
             }
             // remove the session
             $app['session']->remove('FINISH_INSTALLATION');
@@ -257,7 +266,7 @@ class Welcome extends Alert
      * @param Application $app
      * @param string $cms
      */
-    public function controllerCMS(Application $app, $cms)
+    public function ControllerCMS(Application $app, $cms)
     {
         // get the CMS info parameters
         $cms_string = $cms;

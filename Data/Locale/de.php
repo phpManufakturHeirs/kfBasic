@@ -283,6 +283,8 @@ return array(
     => 'Installieren, Aktualisieren oder Entfernen von kitFramework Erweiterungen',
   'Installed'
     => 'Installiert',
+    'installed'
+    => 'installiert',
   'Installed extensions'
     => 'Installierte Erweiterungen',
   'Installed release'
@@ -457,6 +459,8 @@ return array(
     => 'Anmerkung',
   'Remove'
     => 'Entfernen',
+    'removed'
+    => 'entfernt',
   'Repeat by pattern, i.e. at the last tuesday of the month'
     => 'Nach einem Muster, z.B. am letzten Donnerstag im Monat',
   'Repeat Password'
@@ -529,6 +533,8 @@ return array(
     => 'Für den Benutzer %name% wurde ein Konto eingerichtet.',
   'Successfull installed the extension %extension%.'
     => 'Die Erweiterung %extension% wurde erfolgreich installiert.',
+    'Successfull %mode% the extension %extension%.'
+    => 'Die Erweiterung %extension% wurde erfolgreich %mode%.',
   'Successfull put the locale entries to the locale file.'
     => 'Die Übersetzungen wurden erfolgreich in die Übersetzungsdatei geschrieben.',
   'Successfull scanned the kitFramework for installed extensions.'
@@ -733,6 +739,8 @@ return array(
     => 'Aktualisierung',
   'Update available!'
     => 'Aktualisierung verfügbar!',
+    'updated'
+    => 'aktualisiert',
   'Updated the catalog data for the extension(s) <strong>%extension%</strong>.'
     => 'Die Kataloginformationen für die Erweiterung(en) <strong>%extension%</strong> wurden aktualisiert.',
   'Updated the register data for the extension(s) <strong>%extension%</strong>.'
@@ -799,5 +807,5 @@ return array(
     => 'Ihr Benutzerkonto wurde erfolgreich geändert.',
   'Your are not authenticated, please login!'
     => 'Sie sind nicht angemeldet, bitte authentifizieren Sie sich zunächst!',
-  
+
 );

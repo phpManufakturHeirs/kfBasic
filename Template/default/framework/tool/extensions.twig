@@ -74,8 +74,8 @@
     {% endif %}
     
     <div class="media-control">
-      <a href="#" class="btn btn-primary" role="button"><i class="fa fa-eye"></i> {{ 'Scan for installed extensions'|trans }}</a>
-      <a href="#" class="btn btn-primary" role="button"><i class="fa fa-cloud-download"></i> {{ 'Scan the online catalog for available extensions'|trans }}</a>
+      <a href="{{ FRAMEWORK_URL ~ '/admin/scan/extensions?usage=' ~ usage }}" class="btn btn-primary" role="button"><i class="fa fa-eye"></i> {{ 'Scan for installed extensions'|trans }}</a>
+      <a href="{{ FRAMEWORK_URL ~ '/admin/scan/catalog?usage=' ~ usage }}" class="btn btn-primary" role="button"><i class="fa fa-cloud-download"></i> {{ 'Scan the online catalog for available extensions'|trans }}</a>
     </div>
   </div>
 {% endblock content %}
