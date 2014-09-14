@@ -6,6 +6,11 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**1.0.13** - 2014-09-14
+
+* fixed invalid usage of namespace in register extensions
+* add missing update of register after processing extension files
+
 **1.0.12** - 2014-09-14
 
 * checked and updated all `@link` references
