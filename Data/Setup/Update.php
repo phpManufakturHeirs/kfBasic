@@ -351,6 +351,38 @@ class Update
     }
 
     /**
+     * Release 1.0.12
+     */
+    protected function release_1012()
+    {
+        if (!$this->app['filesystem']->exists(CMS_PATH.'/modules/kit_framework/Update')) {
+            $this->app['filesystem']->mkdir(CMS_PATH.'/modules/kit_framework/Update');
+            $this->app['filesystem']->mirror(
+                MANUFAKTUR_PATH.'/Basic/Data/Setup/Files/Release_1.0.12/Update',
+                CMS_PATH.'/modules/kit_framework/Update');
+            $this->app['monolog']->addDebug('[BASIC Update] Copied /Update folder to CMS /modules/kit_framework/Update');
+        }
+
+        $files = array(
+            '/Basic/Control/Welcome.php',
+            '/Basic/Template/default/framework/welcome.twig',
+            '/Basic/Template/default/framework/welcome.item.available.twig',
+            '/Basic/Template/default/framework/welcome.item.installed.twig',
+        );
+        foreach ($files as $file) {
+            // remove no longer needed directories and files
+            if ($this->app['filesystem']->exists(MANUFAKTUR_PATH.$file)) {
+                try {
+                    $this->app['filesystem']->remove(MANUFAKTUR_PATH.$file);
+                    $this->app['monolog']->addDebug(sprintf('[BASIC Update] Removed file or directory %s', $file));
+                } catch (IOException $e) {
+                    $this->app['monolog']->addDebug($e->getMessage());
+                }
+            }
+        }
+    }
+
+    /**
      * Update the database tables for the BASIC extension of the kitFramework
      *
      * @param Application $app
