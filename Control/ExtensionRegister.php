@@ -14,7 +14,6 @@ namespace phpManufaktur\Basic\Control;
 use phpManufaktur\Basic\Data\ExtensionRegister as Register;
 use phpManufaktur\Basic\Data\ExtensionCatalog as Catalog;
 use phpManufaktur\Basic\Control\Pattern\Alert;
-use phpManufaktur\Basic\Data\ExtensionCatalog;
 use Silex\Application;
 
 /**
@@ -243,7 +242,7 @@ class ExtensionRegister extends Alert
         $register = new Register($this->app);
         $items = $register->selectAll();
 
-        $catalog = new ExtensionCatalog($this->app);
+        $catalog = new Catalog($this->app);
         $result = array();
         foreach ($items as $item) {
             $cat = array();
