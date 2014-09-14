@@ -407,6 +407,7 @@ class Update
         $this->release_105();
         $this->release_109();
         $this->release_1011();
+        $this->release_1012();
 
         // install the search function
         $Search = new InstallSearch($app);
