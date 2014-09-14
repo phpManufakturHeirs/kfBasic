@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**1.0.14** - 2014-09-14
+
+* missing important update execution for the CMS addon ...
+
 **1.0.13** - 2014-09-14
 
 * fixed invalid usage of namespace in register extensions
