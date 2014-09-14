@@ -190,6 +190,11 @@ class Updater extends Alert
         $app['twig']->clearCacheFiles();
         $app['monolog']->addDebug('Finish the installation and update process: clear the Twig Cache Files');
 
+        // cleanup Register
+        $Extension = new ExtensionRegister($app);
+        $Extension->scanDirectories(ExtensionRegister::GROUP_PHPMANUFAKTUR);
+        $Extension->scanDirectories(ExtensionRegister::GROUP_THIRDPARTY);
+
         if ($redirect) {
             // use redirect to enable a application reload and autoload of the new extensions
             return $app->redirect(FRAMEWORK_URL.'/admin/welcome/extensions?usage='.self::$usage);
