@@ -6,6 +6,14 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**1.0.12** - 2014-09-14
+
+* checked and updated all `@link` references
+* added check and view for Changelog in kitFramework CMS Tool
+* added missing hints for available catalog or updates at sub dialogs
+* added route to truncate the i18n tables and add an entry point for it
+* finished updater reworking and prepare updates for the kitFramework itself
+
 **1.0.11** - 2014-09-13
 
 * rework the CMS Tool - experimental release.
