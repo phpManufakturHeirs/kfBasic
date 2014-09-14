@@ -23,6 +23,7 @@ use phpManufaktur\Basic\Control\Pattern\Alert;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use phpManufaktur\Basic\Control\ExtensionRegister;
+use phpManufaktur\Basic\Data\Setting;
 
 
 /**
@@ -198,6 +199,48 @@ class Updater extends Alert
         }
     }
 
+    public function ControllerDownloadFramework(Application $app)
+    {
+        $this->initialize($app);
+
+        $release = null;
+
+        if (false === ($tag_url = $this->Github->getLastRepositoryZipUrl('phpManufaktur', 'kitFramework', $release))) {
+            $this->setAlert("Can't read the the %repository% from %organization% at Github!",
+                array('%repository%' => 'kitFramework', '%organization%' => 'phpManufaktur'), self::ALERT_TYPE_WARNING);
+            $subRequest = Request::create('/admin/welcome/extensions', 'GET', array('usage' => self::$usage));
+            return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+        }
+
+        $target_path = FRAMEWORK_TEMP_PATH.'/framework.zip';
+        $this->cURL->DownloadRedirectedURL($tag_url, $target_path);
+
+        if (!$app['filesystem']->exists($target_path)) {
+            $this->setAlert("Can't open the file <b>%file%</b>!",
+                array('%file%' => substr($target_path, strlen(FRAMEWORK_PATH))), self::ALERT_TYPE_WARNING);
+            $subRequest = Request::create('/admin/welcome/extensions', 'GET', array('usage' => self::$usage));
+            return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+        }
+
+        if ($app['filesystem']->exists(FRAMEWORK_TEMP_PATH.'/framework')) {
+            $this->app['filesystem']->remove(FRAMEWORK_TEMP_PATH.'/framework');
+        }
+        $this->unZIP->setUnZipPath(FRAMEWORK_TEMP_PATH.'/framework');
+        $this->unZIP->checkDirectory($this->unZIP->getUnZipPath());
+        $this->unZIP->extract($target_path);
+
+        $Setting = new Setting($app);
+        if ($Setting->exists('framework_ready')) {
+            $Setting->update('framework_ready', $release);
+        }
+        else {
+            $Setting->insert('framework_ready', $release);
+        }
+
+        $subRequest = Request::create('/admin/welcome/extensions', 'GET', array('usage' => self::$usage));
+        return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+    }
+
     /**
      * Retrieve the the last repository for the extension from Github, unpack
      * and copy it to the target directory. Does not execute the installation!
@@ -327,6 +370,29 @@ class Updater extends Alert
         $Extension = new ExtensionRegister($app);
         $Extension->scanDirectories(ExtensionRegister::GROUP_PHPMANUFAKTUR);
         $Extension->scanDirectories(ExtensionRegister::GROUP_THIRDPARTY);
+
+        // sub request to the extension dialog
+        $subRequest = Request::create('/admin/welcome/extensions', 'GET', array('usage' => self::$usage));
+        return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+    }
+
+    /**
+     * Controller to remove an existing kitFramework restore directory
+     *
+     * @param Application $app
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function ControllerRemoveFrameworkRestore(Application $app)
+    {
+        $this->initialize($app);
+
+        if ($app['filesystem']->exists(FRAMEWORK_PATH.'/framework.bak')) {
+            $app['filesystem']->remove(FRAMEWORK_PATH.'/framework.bak');
+            $this->setAlert('The kitFramework restore directory was successful removed', array(), self::ALERT_TYPE_SUCCESS);
+        }
+        else {
+            $this->setAlert('There exists no kitFramework restore directory!', array(), self::ALERT_TYPE_INFO);
+        }
 
         // sub request to the extension dialog
         $subRequest = Request::create('/admin/welcome/extensions', 'GET', array('usage' => self::$usage));

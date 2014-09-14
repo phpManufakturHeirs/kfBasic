@@ -111,6 +111,59 @@ EOD;
     }
 
     /**
+     * Insert a new name => value pair
+     *
+     * @param string $name
+     * @param string $value
+     * @throws \Exception
+     */
+    public function insert($name, $value)
+    {
+        try {
+            $insert = array(
+                'name' => $name,
+                'value' => $this->app['utils']->sanitizeText($value)
+            );
+            $this->app['db']->insert(self::$table_name, $insert);
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    /**
+     * Delete the record for the given name
+     *
+     * @param string $name
+     * @throws \Exception
+     */
+    public function deleteByName($name)
+    {
+        try {
+            $this->app['db']->delete(self::$table_name, array('name' => $name));
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    /**
+     * Check if the record with the given name exists
+     *
+     * @param string $name
+     * @throws \Exception
+     * @return boolean
+     */
+    public function exists($name)
+    {
+        try {
+            $SQL = "SELECT `id` FROM `".self::$table_name."` WHERE `name`='$name'";
+            $result = $this->app['db']->fetchColumn($SQL);
+            return ($result > 0);
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    /**
      * Select the setting for 'name'
      *
      * @param string $name

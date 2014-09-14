@@ -447,7 +447,7 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
             ),
             array(
                 'route' => '/admin/i18n/editor/table/truncate',
-                'name' => $app['translator']->trans('i18n Editor'),
+                'name' => $app['translator']->trans('i18n truncate'),
                 'info' => $app['translator']->trans('Truncate all i18n analyze tables and start a fresh translation session, no translations will be lost.'),
                 'icon' => array(
                     'path' => '/extension/phpmanufaktur/phpManufaktur/Basic/extension.i18n.editor.truncate.jpg',
@@ -571,15 +571,12 @@ $admin->get('/welcome/extensions/installed',
 $admin->get('/welcome/extensions/catalog',
     'phpManufaktur\Basic\Control\cmsTool::ControllerExtensionsCatalog');
 
-
 $app->get('/welcome/cms/{cms}',
     // the welcome dialog is called by the CMS backend
     'phpManufaktur\Basic\Control\cmsTool::ControllerCMS');
 $app->post('/welcome/login/check',
     // first login check
     'phpManufaktur\Basic\Control\cmsTool::checkFirstLogin');
-
-
 
 $admin->get('/updater/install/{catalog_id}',
     // install a extension
@@ -589,6 +586,11 @@ $admin->get('/updater/update/{extension_id}',
     'phpManufaktur\Updater\Updater::controllerUpdateExtension');
 $admin->get('/updater/remove/{extension_id}',
     'phpManufaktur\Updater\Updater::controllerRemoveExtension');
+
+$admin->get('/updater/download/framework',
+    'phpManufaktur\Updater\Updater::ControllerDownloadFramework');
+$admin->get('/updater/remove/framework/restore',
+    'phpManufaktur\Updater\Updater::ControllerRemoveFrameworkRestore');
 
 $admin->get('/accounts/list/{page}',
     'phpManufaktur\Basic\Control\Account\Dialog\AccountAdminList::ControllerAccountList')

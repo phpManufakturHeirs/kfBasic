@@ -147,6 +147,8 @@ return array(
     => 'Angezeigter Name',
   'Documentation'
     => 'Dokumentation',
+  'Download and prepare the <a href="%url%">kitFramework update</a>'
+    => 'Die verfügbare <a href="%url%">kitFramework Aktualisierung</a> herunterladen und zur Installation vorbereiten.',
   'Dropped the tables for the i18nEditor.'
     => 'Die Tabellen für den i18nEditor wurden gelöscht.',
   'Duplicate translations'
@@ -261,6 +263,10 @@ return array(
     => '<p>Diese Konfigurationsdatei wird benötigt um die E-Mail Einstellungen für das kitFramework festzulegen. Bitte fragen Sie Ihren E-Mail Anbieter nach den benötigten Einstellungen für den SMTP Server, Port, Benutzername und Passwort.</p><p>Sie können die E-Mail Einstellungen überprüfen, in dem Sie eine <a href="%FRAMEWORK_URL%/admin/test/mail" target="_blank">Testmail versenden</a>.</p><p>Das <a href="https://github.com/phpManufaktur/kitFramework/wiki/kitFramework-%23-Configuration#swiftcmsjson" target="_blank">kitFramework WIKI</a> erläutert Ihnen alle Einstellungsmöglichkeiten für die <var>swift.cms.json</var>.</p>',
   'i18n'
     => 'i18n',
+  'i18n Editor'
+    => 'i18n Editor',
+  'i18n truncate'
+    => 'i18n Truncate',
   'Id'
     => 'ID',
   'If you have added a source to program file or a template execute a <em>search run</em> instead, the i18nEditor will find it.'
@@ -281,14 +287,14 @@ return array(
     => 'Installieren',
   'Install extension'
     => 'Erweiterung installieren',
-  'Install, update or remove kitFramework extensions'
-    => 'Installieren, Aktualisieren oder Entfernen von kitFramework Erweiterungen',
   'Install, update or remove kitFramework Extensions'
     => 'Installieren, aktualisieren oder entfernen Sie kitFramework Erweiterungen',
-  'installed'
-    => 'installiert',
+  'Install, update or remove kitFramework extensions'
+    => 'Installieren, Aktualisieren oder Entfernen von kitFramework Erweiterungen',
   'Installed'
     => 'Installiert',
+  'installed'
+    => 'installiert',
   'Installed extensions'
     => 'Installierte Erweiterungen',
   'Installed release'
@@ -611,6 +617,12 @@ return array(
     => 'Das Formular scheint kompromitiert worden zu sein, kann die Daten nicht ändern!',
   '<p>The i18nEditor has not detected the following sources in any kitFramework file.</p><p>Maybe the source is really not used anywhere, but it is also possible that a source is used in a file and the i18nEditor Parser is not able to assign the source to a translation.</p><p>Search for the sources in the extension files and check the context. This list will be refreshed at the next search run.</p>'
     => '<p>Der i18nEditor konnte die folgenden Quelltexte in keiner kitFramework Datei finden.</p><p>Möglicherweise werden die Quelltexte tatsächlich nicht verwendet und können entfernt werden. Es ist jedoch genauso möglich, dass die Quelltexte in den Dateien verwendet werden und der i18nEditor Parser nicht in der Lage dazu ist die Zuordnung zu erkennen.</p><p>Suchen Sie nach den Quelltexten in den Dateien und prüfen Sie den jeweiligen Kontext. Diese Liste wird bei jedem Suchlauf neu erstellt.</p>',
+  'The kitFramework has successfull updated. Because this update has changed elementary functions and methods of the kitFramework core you should check the behaviour of all kitFramework applications in backend and frontend of your website within the next days. There exists a copy of your previous kitFramework core files, so it is possible to roll back if needed.'
+    => '<p>Das kitFramework wurde erfolgreich aktualisiert. Da diese Aktualisierung wesentliche Funktionen und Methoden des kitFramework Kern geändert hat, sollten Sie das Verhalten aller kitFramework Anwendungen in den nächsten Tagen beobachten - bitte melden Sie alle Störungen an das Support Team.</p><p>Es existiert eine Kopie der vorherigen kitFramework Kern Dateien, im Notfall ist es möglich zu der vorherigen kitFramework Version zurückzukehren.',
+  'The kitFramework restore directory was successful removed'
+    => 'Das kitFramework Wiederherstellungsverzeichnis wurde erfolgreich entfernt.',
+  'The kitFramework update is prepared, now you can <a href="%url%">remove the existing one and install the new kitFramework release</a>.'
+    => 'Die kitFramework Aktualisierung ist vorbereitet. Sie können jetzt <a href="%url%">die vorhandenen kitFramework Kern Dateien entfernen und die neue kitFramework Version installieren</a>.',
   'The kitFramework was never checked for the existing locale sources and translations, please start a search run!'
     => 'Das kitFramework wurde noch nicht nach Quelltexten für Übersetzungen durchsucht, bitte starten Sie einen Suchlauf!',
   'The parameter <code>%parameter%[%value%]</code> for the kitCommand <code>~~ %command% ~~</code> is unknown, please check the parameter and the given value!'
@@ -671,6 +683,8 @@ return array(
     => 'Es sind Aktualisierungen verfügbar, <strong><a href="%route%">bitte überprüfen Sie die installierten Erweiterungen</a></strong>!',
   'There exist an duplicate locale key for <strong>%key%</strong> in the file <em>%file%</em>!'
     => 'Es existiert ein doppelter Schlüssel für <strong>%key%</strong> in der Datei <em>%file%</em>!',
+  'There exists a kitFramework restore directory, if your system is working fine you can <a href="%route%">remove this directory</a>.'
+    => 'Es existiert ein kitFramework Wiederherstellungsverzeichnis. Wenn Ihr System einwandfrei mit der neuen kitFramework Version funktioniert können Sie <a href="%route%">dieses Verzeichnis entfernen</a>.',
   'There exists no catalog entry for the extension %name% with the GUID %guid%.'
     => 'Es existiert kein Katalog Eintrag für die Erweiterung %name% mit der GUID %guid%.',
   'There exists no conflicts.'
@@ -679,6 +693,8 @@ return array(
     => 'Es existieren keine angepassten Übersetzungen für diese kitFramework Installation!',
   'There exists no duplicate translations.'
     => 'Es existieren keine doppelten Übersetzungen.',
+  'There exists no kitFramework restore directory!'
+    => 'Es existiert kein kitFramework Wiederherstellungsverzeichnis!',
   'There exists no pending translations for the locale %locale%.'
     => 'Es existieren keine <em>anstehenden</em> Übersetzungen für die Sprache %locale%.',
   'There exists no references for the locale source with the id %locale_id%.'
@@ -691,6 +707,8 @@ return array(
     => 'Es existieren keine <em>nicht zugeordneten</em> Übersetzungen.',
   'There exists no user with the submitted email address.'
     => 'Die übermittelte E-Mail Adresse kann keinem Benutzer zugeordnet werden.',
+  'There is a <a href="%route%">new kitFramework release available</a>!'
+    => 'Es ist eine <a href="%route%">kitFramework Aktualisierung für die Kerndateien verfügbar</a>!',
   'There is no help available for the kitCommand <b>%command%</b>.'
     => 'Für das kitCommand <b>%command%</b> ist keine Hilfe verfügbar.',
   'This link enable you to change your password once within 24 hours.'
@@ -733,6 +751,10 @@ return array(
     => 'Übersetzungen, die keiner Datei zugeordnet sind',
   'Translations which causes a conflict'
     => 'Übersetzungen die einen Konflikt auslösen',
+  'Truncate all i18n analyze tables and start a fresh translation session, no translations will be lost.'
+    => 'Alle i18n Analyse Tabellen zurücksetzen und mit einer neuen Übersetzungssitzung starten, hierbei gehen keine Übersetzung verloren.',
+  'Truncated the tables for the i18nEditor.'
+    => 'Alle Tabellen für den i18n Editor wurden zurückgesetzt.',
   'type'
     => 'Typ',
   'Unassigned'

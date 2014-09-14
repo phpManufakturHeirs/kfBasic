@@ -158,8 +158,17 @@ class ExtensionCatalog extends Alert
                                     $actual_framework = $this->app['utils']->readConfiguration(FRAMEWORK_PATH.'/framework.json');
                                     if (version_compare($framework['release']['number'], $actual_framework['release']['number'], '>')) {
                                         // the framework version has changed!
-                                        $this->setAlert('New kitFramework release available!',
-                                            array(), self::ALERT_TYPE_INFO);
+                                        $Setting = new Setting($this->app);
+                                        if (!$Setting->exists('framework_update')) {
+                                            // insert a new record
+                                            $Setting->insert('framework_update', $framework['release']['number']);
+                                        }
+                                        else {
+                                            $Setting->update('framework_update', $framework['release']['number']);
+                                        }
+                                        $this->setAlert('There is a <a href="%route%">new kitFramework release available</a>!',
+                                            array('%route%' => FRAMEWORK_URL.'/admin/welcome/extensions?usage='.self::$usage),
+                                            self::ALERT_TYPE_INFO);
                                     }
                                 }
                             }

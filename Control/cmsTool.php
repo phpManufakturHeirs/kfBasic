@@ -18,6 +18,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use phpManufaktur\Basic\Data\CMS\SearchSection;
 use phpManufaktur\Basic\Control\CMS\InstallSearch;
 use phpManufaktur\Basic\Control\Pattern\Alert;
+use phpManufaktur\Basic\Data\Setting;
 
 /**
  * Display a welcome to the kitFramework dialog
@@ -343,17 +344,11 @@ class cmsTool extends Alert
         $catalog = new ExtensionCatalog($app);
         $catalog_release = null;
         $available_release = null;
+        $catalog_update = false;
         if ($catalog->isCatalogUpdateAvailable($catalog_release, $available_release)) {
             $this->setAlert('There are new catalog information available, <strong><a href="%route%">please update the catalog</a></strong>.',
                 array('%route%' => FRAMEWORK_URL.'/admin/scan/catalog?usage='.self::$usage), self::ALERT_TYPE_INFO);
-        }
-
-        $catalog = new ExtensionCatalog($app);
-        $catalog_release = null;
-        $available_release = null;
-        if ($catalog->isCatalogUpdateAvailable($catalog_release, $available_release)) {
-            $this->setAlert('There are new catalog information available, <strong><a href="%route%">please update the catalog</a></strong>.',
-                array('%route%' => FRAMEWORK_URL.'/admin/scan/catalog?usage='.self::$usage), self::ALERT_TYPE_INFO);
+            $catalog_update = true;
         }
 
         $register = new ExtensionRegister($this->app);
@@ -362,6 +357,41 @@ class cmsTool extends Alert
             $this->setAlert('Please execute the available updates.', array(), self::ALERT_TYPE_INFO);
         }
 
+        $Setting = new Setting($app);
+        if (!$catalog_update && empty($updates) && $Setting->exists('framework_update')) {
+            if (null !== $app['request']->get('update')) {
+                // the framework seems to be installed
+                if (null !== ($alert = $app['request']->get('alert'))) {
+                    $this->setAlert(base64_decode($alert), array(), $app['request']->get('type', 'alert-info'));
+                }
+                else {
+                    $this->setAlert('The kitFramework has successfull updated. Because this update has changed elementary functions and methods of the kitFramework core you should check the behaviour of all kitFramework applications in backend and frontend of your website within the next days. There exists a copy of your previous kitFramework core files, so it is possible to roll back if needed.',
+                        array(), self::ALERT_TYPE_INFO);
+                }
+                // delete all framework settings
+                $Setting->deleteByName('framework_update');
+                $Setting->deleteByName('framework_ready');
+            }
+            elseif ($Setting->exists('framework_ready')) {
+                // execute the copy process ...
+                $this->setAlert('The kitFramework update is prepared, now you can <a href="%url%">remove the existing one and install the new kitFramework release</a>.',
+                    array('%url%' => CMS_URL.'/modules/kit_framework/Update/kitFramework/Update.php?'.http_build_query(array(
+                        'usage' => self::$usage,
+                        'locale' => $app['translator']->getLocale(),
+                        'cms_url' => CMS_URL,
+                        'cms_path' => CMS_PATH
+                    ))),
+                    self::ALERT_TYPE_INFO);
+            }
+            else {
+                $this->setAlert('Download and prepare the <a href="%url%">kitFramework update</a>',
+                    array('%url%' => FRAMEWORK_URL.'/admin/updater/download/framework?usage='.self::$usage), self::ALERT_TYPE_INFO);
+            }
+        }
+        elseif ($app['filesystem']->exists(FRAMEWORK_PATH.'/framework.bak')) {
+            $this->setAlert('There exists a kitFramework restore directory, if your system is working fine you can <a href="%route%">remove this directory</a>.',
+                array('%route%' => FRAMEWORK_URL.'/admin/updater/remove/framework/restore?usage='.self::$usage));
+        }
 
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
             '@phpManufaktur/Basic/Template',
