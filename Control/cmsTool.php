@@ -56,7 +56,7 @@ class cmsTool extends Alert
     protected function getToolbar($active)
     {
         $toolbar = array();
-        $tabs = array('entrypoints', 'extensions', 'update'); // , 'about');
+        $tabs = array('entrypoints', 'extensions', 'update', 'about');
 
         foreach ($tabs as $tab) {
             switch ($tab) {
@@ -322,14 +322,54 @@ class cmsTool extends Alert
     {
         $this->initialize($app);
 
+        $libraries = array(
+            'Silex' => null,
+            'Symfony' => null,
+            'Monolog' => null,
+            'Doctrine' => null,
+            'Twig' => null,
+            'SwiftMailer' => null
+        );
+
+        // get the /kit2/framework/composer/installed.json
+        $installed = $app['utils']->readJSON(FRAMEWORK_PATH.'/framework/composer/installed.json');
+        foreach ($installed as $item) {
+            switch ($item['name']) {
+                case 'symfony/debug':
+                    $libraries['Symfony'] = trim($item['version'], 'v');
+                    break;
+                case 'silex/silex':
+                    $libraries['Silex'] = trim($item['version'], 'v');
+                    break;
+                case 'monolog/monolog':
+                    $libraries['Monolog'] = trim($item['version'], 'v');
+                    break;
+                case 'doctrine/dbal':
+                    $libraries['Doctrine'] = trim($item['version'], 'v');
+                    break;
+                case 'twig/twig':
+                    $libraries['Twig'] = trim($item['version'], 'v');
+                    break;
+                case 'swiftmailer/swiftmailer':
+                    $libraries['SwiftMailer'] = trim($item['version'], 'v');
+                    break;
+            }
+        }
+
+        // get the kitFramework info
+        $kitframework = $app['utils']->readJSON(FRAMEWORK_PATH.'/framework.json');
+
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
             '@phpManufaktur/Basic/Template',
             'framework/tool/about.twig'),
             array(
                 'usage' => self::$usage,
                 'alert' => $this->getAlert(),
-                'toolbar' => $this->getToolbar('about')
+                'toolbar' => $this->getToolbar('about'),
+                'libraries' => $libraries,
+                'kitframework' => $kitframework
         ));
+
     }
 
     /**
