@@ -61,10 +61,8 @@ try {
     define('FRAMEWORK_URL', $framework_config['FRAMEWORK_URL']);
     // FRAMEWORK_PATH == BOOTSTRAP_PATH !
     define('FRAMEWORK_PATH', $app['utils']->sanitizePath(BOOTSTRAP_PATH));
-    define('FRAMEWORK_TEMP_PATH', isset($framework_config['FRAMEWORK_TEMP_PATH']) ?
-        $framework_config['FRAMEWORK_TEMP_PATH'] : FRAMEWORK_PATH . '/temp');
-    define('FRAMEWORK_TEMP_URL', isset($framework_config['FRAMEWORK_TEMP_URL']) ?
-        $framework_config['FRAMEWORK_TEMP_URL'] : FRAMEWORK_URL . '/temp');
+    define('FRAMEWORK_TEMP_PATH', FRAMEWORK_PATH . '/temp');
+    define('FRAMEWORK_TEMP_URL', FRAMEWORK_URL . '/temp');
     define('FRAMEWORK_TEMPLATES', isset($framework_config['FRAMEWORK_TEMPLATES']) ?
         implode(',', $framework_config['FRAMEWORK_TEMPLATES']) : 'default');
     $templates = explode(',', FRAMEWORK_TEMPLATES);

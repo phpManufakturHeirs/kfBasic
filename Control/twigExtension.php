@@ -51,25 +51,41 @@ class twigExtension extends Twig_Extension
      */
     public function getGlobals ()
     {
-        return array(
-            'CMS_ADMIN_URL' => CMS_ADMIN_URL,
-            'CMS_MEDIA_URL' => CMS_MEDIA_URL,
-            'CMS_TYPE' => CMS_TYPE,
-            'CMS_PATH' => CMS_PATH,
-            'CMS_URL' => CMS_URL,
-            'CMS_VERSION' => CMS_VERSION,
-            'FRAMEWORK_MEDIA_URL' => FRAMEWORK_MEDIA_URL,
-            'FRAMEWORK_MEDIA_PROTECTED_URL' => FRAMEWORK_MEDIA_PROTECTED_URL,
-            'FRAMEWORK_PATH' => FRAMEWORK_PATH,
-            'FRAMEWORK_URL' => FRAMEWORK_URL,
-            'FRAMEWORK_TEMPLATES' => explode(',', FRAMEWORK_TEMPLATES),
-            'LIBRARY_URL' => LIBRARY_URL,
-            'MANUFAKTUR_PATH' => MANUFAKTUR_PATH,
-            'MANUFAKTUR_URL' => MANUFAKTUR_URL,
-            'THIRDPARTY_PATH' => THIRDPARTY_PATH,
-            'THIRDPARTY_URL' => THIRDPARTY_URL
-        );
-    } // getGlobals()
+        if (defined('CMS_PATH')) {
+            return array(
+                'CMS_ADMIN_URL' => CMS_ADMIN_URL,
+                'CMS_MEDIA_URL' => CMS_MEDIA_URL,
+                'CMS_TYPE' => CMS_TYPE,
+                'CMS_PATH' => CMS_PATH,
+                'CMS_URL' => CMS_URL,
+                'CMS_VERSION' => CMS_VERSION,
+                'FRAMEWORK_MEDIA_URL' => FRAMEWORK_MEDIA_URL,
+                'FRAMEWORK_MEDIA_PROTECTED_URL' => FRAMEWORK_MEDIA_PROTECTED_URL,
+                'FRAMEWORK_PATH' => FRAMEWORK_PATH,
+                'FRAMEWORK_URL' => FRAMEWORK_URL,
+                'FRAMEWORK_TEMPLATES' => explode(',', FRAMEWORK_TEMPLATES),
+                'LIBRARY_URL' => LIBRARY_URL,
+                'MANUFAKTUR_PATH' => MANUFAKTUR_PATH,
+                'MANUFAKTUR_URL' => MANUFAKTUR_URL,
+                'THIRDPARTY_PATH' => THIRDPARTY_PATH,
+                'THIRDPARTY_URL' => THIRDPARTY_URL
+            );
+        }
+        else {
+            return array(
+                'FRAMEWORK_MEDIA_URL' => FRAMEWORK_MEDIA_URL,
+                'FRAMEWORK_MEDIA_PROTECTED_URL' => FRAMEWORK_MEDIA_PROTECTED_URL,
+                'FRAMEWORK_PATH' => FRAMEWORK_PATH,
+                'FRAMEWORK_URL' => FRAMEWORK_URL,
+                'FRAMEWORK_TEMPLATES' => explode(',', FRAMEWORK_TEMPLATES),
+                'LIBRARY_URL' => LIBRARY_URL,
+                'MANUFAKTUR_PATH' => MANUFAKTUR_PATH,
+                'MANUFAKTUR_URL' => MANUFAKTUR_URL,
+                'THIRDPARTY_PATH' => THIRDPARTY_PATH,
+                'THIRDPARTY_URL' => THIRDPARTY_URL
+            );
+        }
+    }
 
 
     /**
@@ -115,7 +131,13 @@ class twigExtension extends Twig_Extension
      */
     function isAuthenticated ()
     {
-        return $this->app['account']->isAuthenticated();
+        if (isset($this->app['account'])) {
+            return $this->app['account']->isAuthenticated();
+        }
+        else {
+            // $app['account'] seems not initialized - i.e. using "migrate.php"
+            return false;
+        }
     }
 
     /**
@@ -126,7 +148,12 @@ class twigExtension extends Twig_Extension
      */
     function getUserDisplayName()
     {
-        return $this->app['account']->getDisplayName();
+        if (isset($this->app['account'])) {
+            return $this->app['account']->getDisplayName();
+        }
+        else {
+            return 'ANONYMOUS';
+        }
     }
 
     /**
@@ -136,7 +163,12 @@ class twigExtension extends Twig_Extension
      */
     function getUserRolesEntryPoints()
     {
-        return $this->app['account']->getUserRolesEntryPoints();
+        if (isset($this->app['account'])) {
+            return $this->app['account']->getUserRolesEntryPoints();
+        }
+        else {
+            return array();
+        }
     }
 
     /**
@@ -198,7 +230,12 @@ class twigExtension extends Twig_Extension
      */
     function reCaptcha($theme=null, $widget=null)
     {
-        return $this->app['recaptcha']->getHTML($theme, $widget);
+        if (isset($this->app['recaptcha'])) {
+            return $this->app['recaptcha']->getHTML($theme, $widget);
+        }
+        else {
+            return null;
+        }
     }
 
     /**
@@ -209,7 +246,12 @@ class twigExtension extends Twig_Extension
      */
     function reCaptchaIsActive()
     {
-        return $this->app['recaptcha']->isActive();
+        if (isset($this->app['recaptcha'])) {
+            return $this->app['recaptcha']->isActive();
+        }
+        else {
+            return false;
+        }
     }
 
     /**
@@ -223,7 +265,12 @@ class twigExtension extends Twig_Extension
      */
     public function MailHide($email, $title='', $class='', $mailto=true)
     {
-        return $this->app['recaptcha']->MailHideGetHTML($email, $title, $class, $mailto);
+        if (isset($this->app['recaptcha'])) {
+            return $this->app['recaptcha']->MailHideGetHTML($email, $title, $class, $mailto);
+        }
+        else {
+            return null;
+        }
     }
 
     /**
@@ -232,7 +279,12 @@ class twigExtension extends Twig_Extension
      */
     public function MailHideIsActive()
     {
-        return $this->app['recaptcha']->MailHideIsActive();
+        if (isset($this->app['recaptcha'])) {
+            return $this->app['recaptcha']->MailHideIsActive();
+        }
+        else {
+            return false;
+        }
     }
 
     /**

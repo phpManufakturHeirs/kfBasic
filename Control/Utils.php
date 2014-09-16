@@ -271,8 +271,10 @@ class Utils
         if ($this->app['filesystem']->exists(MANUFAKTUR_PATH.'/TemplateTools/Pattern')) {
             $TEMPLATE_NAMESPACES['Pattern'] = MANUFAKTUR_PATH.'/TemplateTools/Pattern';
             $TEMPLATE_NAMESPACES['pattern'] = MANUFAKTUR_PATH.'/TemplateTools/Pattern';
-            $TEMPLATE_NAMESPACES['Templates'] = CMS_PATH.'/templates';
-            $TEMPLATE_NAMESPACES['templates'] = CMS_PATH.'/templates';
+            if (defined('CMS_PATH')) {
+                $TEMPLATE_NAMESPACES['Templates'] = CMS_PATH.'/templates';
+                $TEMPLATE_NAMESPACES['templates'] = CMS_PATH.'/templates';
+            }
         }
 
         if ($template_namespace[0] != '@') {
