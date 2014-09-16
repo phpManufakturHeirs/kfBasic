@@ -73,6 +73,20 @@ class Setup
     }
 
     /**
+     * Check if migrate.php exists and copy it to /kit2 if needed
+     *
+     * @param Application $app
+     */
+    public function checkMigrateAccessFile(Application $app)
+    {
+        if (!$app['filesystem']->exists(FRAMEWORK_PATH.'/migrate.php')) {
+            // copy the migrate.php to the /kit2 root directory
+            $app['filesystem']->copy(MANUFAKTUR_PATH.'/Basic/Data/Setup/Files/Migrate/migrate.php', FRAMEWORK_PATH.'/migrate.php');
+            $app['monolog']->addDebug('Copy `migrate.php` access file to the `/kit2` directory.');
+        }
+    }
+
+    /**
      * Create the database tables for the BASIC extension of the kitFramework
      *
      * @param Application $app
@@ -174,6 +188,9 @@ class Setup
         $i18nTranslationUnassigned->createTable();
 
         $admin_tool->exec(MANUFAKTUR_PATH.'/Basic/extension.i18n.editor.json', '/basic/cms/i18n/editor');
+
+        // check for the migrate.php
+        $this->checkMigrateAccessFile($app);
 
         return $app['translator']->trans('Successfull installed the extension %extension%.',
             array('%extension%' => 'Basic'));
