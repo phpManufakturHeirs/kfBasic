@@ -41,21 +41,68 @@ class Migrate extends Alert
      *
      * @param array $data
      */
-    protected function formCheckPathAndUrl($data=array())
+    protected function formUrlCheck($data=array())
     {
         return $this->app['form.factory']->createBuilder('form')
-        ->add('cms_path', 'text', array(
-            'data' => isset($data['cms_path']) ? $data['cms_path'] : ''
+        ->add('existing_cms_url', 'hidden', array(
+            'data' => isset($data['existing_cms_url']) ? $data['existing_cms_url'] : ''
         ))
         ->add('cms_url', 'text', array(
-            'data' => isset($data['cms_url']) ? $data['cms_url'] : ''
+            'data' => self::$CMS_URL
         ))
-        ->add('framework_path', 'text', array(
-            'data' => isset($data['framework_path']) ? $data['framework_path'] : ''
+        ->getForm();
+    }
+
+    protected function formMySqlCheck($data=array())
+    {
+        return $this->app['form.factory']->createBuilder('form')
+        ->add('cms_url_changed', 'hidden', array(
+            'data' => isset($data['cms_url_changed']) ? $data['cms_url_changed'] : null
         ))
-        ->add('framework_url', 'text', array(
-            'data' => isset($data['framework_url']) ? $data['framework_url'] : ''
+        ->add('existing_cms_url', 'hidden', array(
+            'data' => isset($data['existing_cms_url']) ? $data['existing_cms_url'] : null
         ))
+        ->add('cms_url', 'hidden', array(
+            'data' => isset($data['cms_url']) ? $data['cms_url'] : null
+        ))
+        ->add('existing_db_host', 'hidden', array(
+            'data' => isset($data['existing_db_host']) ? $data['existing_db_host'] : null
+        ))
+        ->add('db_host', 'text', array(
+            'data' => isset($data['db_host']) ? $data['db_host'] : null
+        ))
+        ->add('existing_db_port', 'hidden', array(
+            'data' => isset($data['existing_db_port']) ? $data['existing_db_port'] : null
+        ))
+        ->add('db_port', 'text', array(
+            'data' => isset($data['db_port']) ? $data['db_port'] : null
+        ))
+        ->add('existing_db_name', 'hidden', array(
+            'data' => isset($data['existing_db_name']) ? $data['existing_db_name'] : null
+        ))
+        ->add('db_name', 'text', array(
+            'data' => isset($data['db_name']) ? $data['db_name'] : null
+        ))
+        ->add('existing_db_username', 'hidden', array(
+            'data' => isset($data['existing_db_username']) ? $data['existing_db_username'] : null
+        ))
+        ->add('db_username', 'text', array(
+            'data' => isset($data['db_username']) ? $data['db_username'] : null
+        ))
+        ->add('existing_db_password', 'hidden', array(
+            'data' => isset($data['existing_db_password']) ? $data['existing_db_password'] : null
+        ))
+        ->add('db_password', 'password', array(
+            'data' => isset($data['db_password']) ? $data['db_password'] : null,
+            'required' => false
+        ))
+        ->add('existing_table_prefix', 'hidden', array(
+            'data' => isset($data['existing_table_prefix']) ? $data['existing_table_prefix'] : null
+        ))
+        ->add('table_prefix', 'text', array(
+            'data' => isset($data['table_prefix']) ? $data['table_prefix'] : null
+        ))
+
         ->getForm();
     }
 
@@ -123,24 +170,8 @@ class Migrate extends Alert
             $token = next($tokens);
         }
 
-foreach ($defines as $k => $v) {
-    echo "'$k' => '$v'\n";
-}
-
-/*
-function dump($state, $token) {
-    if (is_array($token)) {
-        echo "$state: " . token_name($token[0]) . " [$token[1]] on line $token[2]\n";
-    } else {
-        echo "$state: Symbol '$token'\n";
-    }
-}
-*/
-
-/*
-        echo "<pre>";
-        print_r($tokens);
-        echo "</pre>";*/
+        $config = $defines;
+        return true;
     }
 
     /**
@@ -157,19 +188,45 @@ function dump($state, $token) {
             return $this->Authenticate->ControllerAuthenticate($app);
         }
 
-        $this->readCMSconfig();
+        $next_step = true;
 
-        $form = $this->formCheckPathAndUrl();
+        $config = array();
+        if (!$this->readCMSconfig($config)) {
+            $next_step = false;
+        }
+
+        $cms_url = null;
+        if (isset($config['WB_URL'])) {
+            $cms_url = $config['WB_URL'];
+        }
+        elseif (isset($config['CAT_URL'])) {
+            $cms_url = $config['CAT_URL'];
+        }
+        else {
+            $cms_url = null;
+        }
+
+        $data = array(
+            'existing_cms_url' => $cms_url,
+        );
+        $form = $this->formUrlCheck($data);
 
         return $app['twig']->render($app['utils']->getTemplateFile(
-            '@phpManufaktur/Basic/Template', 'framework/migrate/path.and.url.twig'),
+            '@phpManufaktur/Basic/Template', 'framework/migrate/url.twig'),
             array(
                 'alert' => $this->getAlert(),
-                'form' => $form->createView()
+                'form' => $form->createView(),
+                'next_step' => $next_step
         ));
     }
 
-    public function ControllerPathAndUrlCheck(Application $app)
+    /**
+     * Controller to check the CMS URL
+     *
+     * @param Application $app
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function ControllerUrlCheck(Application $app)
     {
         $this->initialize($app);
 
@@ -178,16 +235,30 @@ function dump($state, $token) {
             return $this->Authenticate->ControllerAuthenticate($app);
         }
 
-        $form = $this->formCheckPathAndUrl();
+        $form = $this->formUrlCheck();
         $form->bind($this->app['request']);
 
         if ($form->isValid()) {
             // the form is valid
             $data = $form->getData();
 
-            // perform the checks
+            $checked = true;
+            if (!filter_var($data['cms_url'])) {
+                $this->setAlert('The URL <strong>%url%</strong> is not valid, please check your input!',
+                    array('%url%' => $data['cms_url']), self::ALERT_TYPE_DANGER);
+                $checked = false;
+            }
 
-            $this->setAlert ('uh?');
+            if ($checked) {
+                $changes = array(
+                    'cms_url_changed' => ($data['existing_cms_url'] !== $data['cms_url']),
+                    'existing_cms_url' => $data['existing_cms_url'],
+                    'cms_url' => $data['cms_url']
+                );
+
+                $subRequest = Request::create('/mysql/', 'POST', $changes);
+                return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+            }
         }
         else {
             // general error (timeout, CSFR ...)
@@ -198,5 +269,62 @@ function dump($state, $token) {
 
         $subRequest = Request::create('/start/', 'GET');
         return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+    }
+
+    public function ControllerMySql(Application $app)
+    {
+        $this->initialize($app);
+
+        if ((null === ($cms_url_changed = $app['request']->get('cms_url_changed'))) ||
+            (null === ($existing_cms_url = $app['request']->get('existing_cms_url'))) ||
+            (null === ($cms_url = $app['request']->get('cms_url')))) {
+            // invalid submission
+            throw new \Exception('Missing one or more POST data!');
+        }
+
+        $next_step = true;
+
+        $config = array();
+        if (!$this->readCMSconfig($config)) {
+            $next_step = false;
+        }
+
+        $data = array();
+        if ($next_step) {
+            $data = array(
+                'cms_url_changed' => $cms_url_changed,
+                'existing_cms_url' => $existing_cms_url,
+                'cms_url' => $cms_url,
+                'existing_db_host' => isset($config['CAT_DB_HOST']) ? $config['CAT_DB_HOST'] : $config['DB_HOST'],
+                'db_host' => isset($config['CAT_DB_HOST']) ? $config['CAT_DB_HOST'] : $config['DB_HOST'],
+                'existing_db_port' => isset($config['CAT_DB_PORT']) ? $config['CAT_DB_PORT'] : $config['DB_PORT'],
+                'db_port' => isset($config['CAT_DB_PORT']) ? $config['CAT_DB_PORT'] : $config['DB_PORT'],
+                'existing_db_name' => isset($config['CAT_DB_NAME']) ? $config['CAT_DB_NAME'] : $config['DB_NAME'],
+                'db_name' => isset($config['CAT_DB_NAME']) ? $config['CAT_DB_NAME'] : $config['DB_NAME'],
+                'existing_db_username' => isset($config['CAT_DB_USERNAME']) ? $config['CAT_DB_USERNAME'] : $config['DB_USERNAME'],
+                'db_username' => isset($config['CAT_DB_USERNAME']) ? $config['CAT_DB_USERNAME'] : $config['DB_USERNAME'],
+                'existing_db_password' => isset($config['CAT_DB_PASSWORD']) ? $config['CAT_DB_PASSWORD'] : $config['DB_PASSWORD'],
+                'db_password' => isset($config['CAT_DB_PASSWORD']) ? $config['CAT_DB_PASSWORD'] : $config['DB_PASSWORD'],
+                'existing_table_prefix' => isset($config['CAT_TABLE_PREFIX']) ? $config['CAT_TABLE_PREFIX'] : $config['TABLE_PREFIX'],
+                'table_prefix' => isset($config['CAT_TABLE_PREFIX']) ? $config['CAT_TABLE_PREFIX'] : $config['TABLE_PREFIX']
+            );
+        }
+
+        $form = $this->formMySqlCheck($data);
+
+        return $app['twig']->render($app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template', 'framework/migrate/mysql.twig'),
+            array(
+                'alert' => $this->getAlert(),
+                'form' => $form->createView(),
+                'next_step' => $next_step
+        ));
+    }
+
+    public function ControllerMySqlCheck(Application $app)
+    {
+        $this->initialize($app);
+
+        return __METHOD__;
     }
 }

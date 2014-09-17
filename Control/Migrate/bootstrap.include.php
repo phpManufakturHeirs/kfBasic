@@ -230,8 +230,12 @@ $migrate->get('/authenticate/',
 $migrate->post('/authenticate/check/',
     'phpManufaktur\Basic\Control\Migrate\Authenticate::ControllerAuthenticateCheck');
 
-$migrate->post('/path_and_url/check/',
-    'phpManufaktur\Basic\Control\Migrate\Migrate::ControllerPathAndUrlCheck');
+$migrate->post('/url/check/',
+    'phpManufaktur\Basic\Control\Migrate\Migrate::ControllerUrlCheck');
+$migrate->post('/mysql/',
+    'phpManufaktur\Basic\Control\Migrate\Migrate::ControllerMySql');
+$migrate->post('/mysql/check/',
+    'phpManufaktur\Basic\Control\Migrate\Migrate::ControllerMySqlCheck');
 
 $migrate->before(function(Request $request) use ($migrate)
 {
