@@ -7,12 +7,12 @@
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
 {% extends getTemplateFile('@phpManufaktur/Basic/Template', 'framework/body.twig') %}
-{% block title %}{{ 'Check MySQL settings'|trans }}{% endblock %}
+{% block title %}{{ 'Check email settings'|trans }}{% endblock %}
 {% block content %}
   <!-- {{ _self.getTemplateName() }} -->
   <div class="container">
     <div class="page-header">
-      <h1>{{ 'Check MySQL settings'|trans }}</h1>
+      <h1>{{ 'Check email settings'|trans }}</h1>
     </div>
     
     {{ alert }}
@@ -21,19 +21,19 @@
       <div class="panel-body">
         {% if app.translator.locale == 'de' %}
           {# GERMAN translation #}
-          <p>Bitte überprüfen Sie die Einstellungen für den MySQL Datenbank Zugriff.</p>
-          <p>Die Einstellungen gelten für das CMS und für das kitFramework.</p>
+          <p>Bitte überprüfen Sie die Einstellungen für den E-Mail Versand durch das kitFramework.</p>
+          <p>Diese Einstellungen gelten ausschließlich für das kitFramework.</p>
         {% else %}
           {# ENGLISH translation #}
-          <p>Please check the settings for the MySQL database access.</p>
-          <p>The settings are valid for the CMS and for the kitFramework.</p>
+          <p>Please check the email settings for the email transport with the kitFramework.</p>
+          <p>These settings are only valid for the kitFramework.</p>
         {% endif %}
       </div>
     </div>
     
     {% form_theme form '@phpManufaktur/Basic/Template/default/framework/form.fields.horizontal.twig' %}
 
-    <form class="form-horizontal" action="{{ FRAMEWORK_URL ~ '/migrate.php/mysql/check' }}/" method="post" role="form">
+    <form class="form-horizontal" action="{{ FRAMEWORK_URL ~ '/migrate.php/email/check' }}/" method="post" role="form">
       {{ form_widget(form) }}
       <div class="form-group">
         <div class="col-sm-offset-3 col-sm-6">

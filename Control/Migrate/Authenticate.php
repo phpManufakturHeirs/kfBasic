@@ -43,6 +43,16 @@ class Authenticate extends Alert
     }
 
     /**
+     * Remove the current sessions
+     *
+     */
+    public function removeSession()
+    {
+        $this->app['session']->remove('MIGRATE_GUID');
+        $this->app['session']->remove('AUTHENTICATE_ERRORS');
+    }
+
+    /**
      * @return the $isAuthenticated
      */
     public static function IsAuthenticated ()

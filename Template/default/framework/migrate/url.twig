@@ -7,7 +7,7 @@
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
 {% extends getTemplateFile('@phpManufaktur/Basic/Template', 'framework/body.twig') %}
-{% block title %}{{ 'Please authenticate'|trans }}{% endblock %}
+{% block title %}{{ 'Check the CMS URL'|trans }}{% endblock %}
 {% block content %}
   <!-- {{ _self.getTemplateName() }} -->
   <div class="container">
@@ -21,10 +21,12 @@
       <div class="panel-body">
         {% if app.translator.locale == 'de' %}
           {# GERMAN translation #}
-          
+          <p>Überprüfen Sie die URL, die für das Content Management System verwendet werden soll.</p>
+          <p>Die URL für das kitFramework wird automatisch aus der CMS URL generiert.</p>
         {% else %}
           {# ENGLISH translation #}
-          
+          <p>Please check the URL to use with the Content Management System.</p>
+          <p>The URL for the kitFramework will be generated automatically from the CMS URL.</p>
         {% endif %}
       </div>
     </div>

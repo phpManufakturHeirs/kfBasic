@@ -34,6 +34,8 @@ class Migrate extends Alert
 
         self::$CMS_PATH = substr(FRAMEWORK_PATH, 0, strpos(FRAMEWORK_PATH, '/kit2'));
         self::$CMS_URL = substr(FRAMEWORK_URL, 0, strpos(FRAMEWORK_URL, '/kit2'));
+
+        $app['translator']->setLocale($app['session']->get('LOCALE', 'en'));
     }
 
     /**
@@ -53,6 +55,11 @@ class Migrate extends Alert
         ->getForm();
     }
 
+    /**
+     * Form to check the MySQL settings
+     *
+     * @param array $data
+     */
     protected function formMySqlCheck($data=array())
     {
         return $this->app['form.factory']->createBuilder('form')
@@ -93,8 +100,11 @@ class Migrate extends Alert
             'data' => isset($data['existing_db_password']) ? $data['existing_db_password'] : null
         ))
         ->add('db_password', 'password', array(
-            'data' => isset($data['db_password']) ? $data['db_password'] : null,
-            'required' => false
+            'required' => false,
+            'always_empty' => false,
+            'attr' => array(
+                'value' => isset($data['db_password']) ? $data['db_password'] : null
+            )
         ))
         ->add('existing_table_prefix', 'hidden', array(
             'data' => isset($data['existing_table_prefix']) ? $data['existing_table_prefix'] : null
@@ -106,6 +116,11 @@ class Migrate extends Alert
         ->getForm();
     }
 
+    /**
+     * Form to check the E-Mail settings
+     *
+     * @param array $data
+     */
     protected function formEMailCheck($data=array())
     {
         return $this->app['form.factory']->createBuilder('form')
@@ -136,10 +151,49 @@ class Migrate extends Alert
         ->add('table_prefix', 'hidden', array(
             'data' => isset($data['table_prefix']) ? $data['table_prefix'] : null
         ))
-
+        ->add('mysql_changed', 'hidden', array(
+            'data' => isset($data['mysql_changed']) ? $data['mysql_changed'] : null
+        ))
+        ->add('server_email', 'text', array(
+            'data' => isset($data['server_email']) ? $data['server_email'] : null
+        ))
+        ->add('server_name', 'text', array(
+            'data' => isset($data['server_name']) ? $data['server_name'] : null
+        ))
+        ->add('smtp_host', 'text', array(
+            'data' => isset($data['smtp_host']) ? $data['smtp_host'] : null
+        ))
+        ->add('smtp_port', 'text', array(
+            'data' => isset($data['smtp_port']) ? $data['smtp_port'] : null
+        ))
+        ->add('smtp_username', 'text', array(
+            'data' => isset($data['smtp_username']) ? $data['smtp_username'] : null,
+            'required' => false
+        ))
+        ->add('smtp_password', 'password', array(
+            'required' => false,
+            'always_empty' => false,
+            'attr' => array(
+                'value' => isset($data['smtp_password']) ? $data['smtp_password'] : null
+            )
+        ))
+        ->add('smtp_encryption', 'text', array(
+            'data' => isset($data['smtp_encryption']) ? $data['smtp_encryption'] : null,
+            'required' => false
+        ))
+        ->add('smtp_auth_mode', 'text', array(
+            'data' => isset($data['smtp_auth_mode']) ? $data['smtp_auth_mode'] : null,
+            'required' => false
+        ))
         ->getForm();
     }
 
+    /**
+     * Read the constants from the CMS config.php
+     *
+     * @param array reference $config
+     * @return boolean
+     */
     protected function readCMSconfig(&$config=array())
     {
         // check if token is a constant value
@@ -255,6 +309,22 @@ class Migrate extends Alert
     }
 
     /**
+     * Controller to remove the current session data and start with a new one
+     *
+     * @param Application $app
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function ControllerSessionRemove(Application $app)
+    {
+        $this->initialize($app);
+
+        $this->Authenticate->removeSession();
+
+        $subRequest = Request::create('/start/', 'GET');
+        return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+    }
+
+    /**
      * Controller to check the CMS URL
      *
      * @param Application $app
@@ -305,6 +375,12 @@ class Migrate extends Alert
         return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
     }
 
+    /**
+     * Controller to check the MySQL settings
+     *
+     * @param Application $app
+     * @throws \Exception
+     */
     public function ControllerMySql(Application $app)
     {
         $this->initialize($app);
@@ -360,6 +436,12 @@ class Migrate extends Alert
         ));
     }
 
+    /**
+     * Controller to check the submitted MySQL settings
+     *
+     * @param Application $app
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function ControllerMySqlCheck(Application $app)
     {
         $this->initialize($app);
@@ -402,6 +484,12 @@ class Migrate extends Alert
         return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
     }
 
+    /**
+     * Controller to check the email settings
+     *
+     * @param Application $app
+     * @throws \Exception
+     */
     public function ControllerEMail(Application $app)
     {
         $this->initialize($app);
@@ -413,17 +501,33 @@ class Migrate extends Alert
 
         $data = $app['request']->request->all();
 
-        if (!isset($data['cms_url_changed']) || !isset($data['mysql_changed'])) {
+        if (!isset($data['cms_url']) || !isset($data['db_host'])) {
             // invalid submission
             throw new \Exception('Missing one or more POST data!');
         }
 
+        $swiftmailer = $app['utils']->readJSON(FRAMEWORK_PATH.'/config/swift.cms.json');
 
-        print_r($data);
+        foreach ($swiftmailer as $key => $value) {
+            $data[strtolower($key)] = $value;
+        }
 
-        return __METHOD__;
+        $form = $this->formEMailCheck($data);
+
+        return $app['twig']->render($app['utils']->getTemplateFile(
+            '@phpManufaktur/Basic/Template', 'framework/migrate/email.twig'),
+            array(
+                'alert' => $this->getAlert(),
+                'form' => $form->createView()
+        ));
     }
 
+    /**
+     * Controller to check the submitted email settings
+     *
+     * @param Application $app
+     * @return string
+     */
     public function ControllerEMailCheck(Application $app)
     {
         $this->initialize($app);
@@ -433,6 +537,46 @@ class Migrate extends Alert
             return $this->Authenticate->ControllerAuthenticate($app);
         }
 
-        return __METHOD__;
+        $form = $this->formEMailCheck();
+        $form->bind($this->app['request']);
+
+        if ($form->isValid()) {
+            // the form is valid
+            $data = $form->getData();
+
+            $swiftmailer = $this->app['utils']->readJSON(FRAMEWORK_PATH.'/config/swift.cms.json');
+
+            $data['email_changed'] = false;
+            foreach ($swiftmailer as $key => $value) {
+                // attention: different data types, don't use strict comparison!
+                if ($data[strtolower($key)] != $value) {
+                    $data['email_changed'] = true;
+                    break;
+                }
+            }
+
+            if (!$data['cms_url_changed'] && !$data['mysql_changed'] && !$data['email_changed']) {
+                $this->setAlert('There a no settings changed, nothing to do ...', array(), self::ALERT_TYPE_INFO);
+            }
+            else {
+                // process the changed settings
+                echo 'xxx';
+            }
+
+            return $app['twig']->render($app['utils']->getTemplateFile(
+                '@phpManufaktur/Basic/Template', 'framework/migrate/result.twig'),
+                array(
+                    'alert' => $this->getAlert()
+                ));
+        }
+        else {
+            // general error (timeout, CSFR ...)
+            $this->setAlert('The form is not valid, please check your input and try again!', array(),
+                self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
+                    'method' => __METHOD__, 'line' => __LINE__));
+        }
+
+        $subRequest = Request::create('/email/', 'POST', $app['request']->get('form'));
+        return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
     }
 }

@@ -224,6 +224,8 @@ $migrate->get('/',
     'phpManufaktur\Basic\Control\Migrate\Migrate::ControllerStart');
 $migrate->get('/start/',
     'phpManufaktur\Basic\Control\Migrate\Migrate::ControllerStart');
+$migrate->get('/remove',
+    'phpManufaktur\Basic\Control\Migrate\Migrate::ControllerSessionRemove');
 
 $migrate->get('/authenticate/',
     'phpManufaktur\Basic\Control\Migrate\Authenticate::ControllerAuthenticate');
@@ -268,6 +270,7 @@ $migrate->before(function(Request $request) use ($migrate)
         }
         // set the locale
         $migrate['translator']->setLocale($locale);
+        $migrate['session']->set('LOCALE', $locale);
         $migrate['monolog']->addDebug('Set locale to '.$locale);
     }
 });
