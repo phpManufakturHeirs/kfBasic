@@ -413,6 +413,10 @@ class Update
         $Search = new InstallSearch($app);
         $Search->exec();
 
+        // check for /kit2/migrate.php
+        $Setup = new Setup();
+        $Setup->checkMigrateAccessFile($app);
+
         return $app['translator']->trans('Successfull updated the extension %extension%.',
             array('%extension%' => 'Basic'));
     }

@@ -89,12 +89,22 @@ return array(
     => 'Katalog',
   'Changelog'
     => 'Änderungsprotokoll',
+  'Check email settings'
+    => 'E-Mail Einstellungen überprüfen',
+  'Check MySQL settings'
+    => 'MySQL Einstellungen überprüfen',
+  'Check the CMS URL'
+    => 'URL des Content Management System überprüfen',
   'Check the email settings and send a email to the webmaster for testing purpose'
     => 'E-Mail Einstellungen kontrollieren und eine Test E-Mail an den Webmaster schicken',
   'Click to sort column ascending'
     => 'Anklicken um die Spalte aufsteigend zu sortieren',
   'Click to sort column descending'
     => 'Anklicken um die Spalte absteigend zu sortieren',
+  'Cms url'
+    => 'CMS URL',
+  'Cms url changed'
+    => 'CMS URL',
   'commercial use only'
     => '- nur kommerzielle Verwendung -',
   'Configuration'
@@ -131,6 +141,16 @@ return array(
     => '<em>Angepasste Übersetzungen</em> ermöglichen es Ihnen, die <em>regulären</em> Übersetzungen zu überschreiben und auf Ihre Anforderungen abzustimmen.',
   'Data replication'
     => 'Datenabgleich',
+  'Db host'
+    => 'DB Host',
+  'Db name'
+    => 'DB Name',
+  'Db password'
+    => 'DB Passwort',
+  'Db port'
+    => 'DB Port',
+  'Db username'
+    => 'DB Benutzername',
   'De'
     => 'Deutsch',
   'Delete account'
@@ -201,6 +221,20 @@ return array(
     => 'Aktualisierung durchführen',
   'Executed search run in %seconds% seconds.'
     => 'Der Suchlauf wurde in %seconds% Sekunden durchgeführt.',
+  'Existing cms url'
+    => 'CMS URL',
+  'Existing db host'
+    => 'DB Host',
+  'Existing db name'
+    => 'DB Name',
+  'Existing db password'
+    => 'DB Passwort',
+  'Existing db port'
+    => 'DB Port',
+  'Existing db username'
+    => 'DB Benutzername',
+  'Existing table prefix'
+    => 'Tabellen Prefix',
   'Explore the catalog for kitFramework extensions'
     => 'Durchsuchen Sie den Katalog mit kitFramework Erweiterungen',
   'Extension'
@@ -227,6 +261,8 @@ return array(
     => 'Für die Veranstaltung mit der ID %event_id% ist keine Wiederholung festgelegt.',
   'Forgot your password?'
     => 'Passwort vergessen?',
+  'Framework uid'
+    => 'Framework UID',
   'General alert container for kitCommands'
     => 'Allgemeine Benachrichtigung durch ein kitCommand',
   'General help container for kitCommand help files'
@@ -287,10 +323,10 @@ return array(
     => 'Installieren',
   'Install extension'
     => 'Erweiterung installieren',
-  'Install, update or remove kitFramework Extensions'
-    => 'Installieren, aktualisieren oder entfernen Sie kitFramework Erweiterungen',
   'Install, update or remove kitFramework extensions'
     => 'Installieren, Aktualisieren oder Entfernen von kitFramework Erweiterungen',
+  'Install, update or remove kitFramework Extensions'
+    => 'Installieren, aktualisieren oder entfernen Sie kitFramework Erweiterungen',
   'Installed'
     => 'Installiert',
   'installed'
@@ -429,6 +465,8 @@ return array(
     => 'Passwort wiederholen',
   'Pending translations'
     => 'Anstehende Übersetzungen',
+  'Please authenticate'
+    => 'Bitte authentifizieren Sie sich',
   'Please be aware that <em>translations</em> for the locale <strong>EN</strong> (english) are more often than not identical with the <em>source</em> - for this reason they will be only added to a language file if the <em>translation</em> differ from <em>source</em>.'
     => 'Bitte beachten Sie, dass <em>Übersetzungen</em> für die Sprache <strong>EN</strong> (Englisch) häufig mit den <em>Quelltexten</em> identisch sind - aus diesem Grund werden der Sprachdatei in diesem Fall nur Übersetzungen hinzugefügt, wenn die <em>Übersetzung</em> vom <em>Quelltext</em> abweicht.',
   'Please check the username and password and try again!'
@@ -507,12 +545,28 @@ return array(
     => 'E-Mail senden',
   'Send email (only if the password has changed)'
     => 'Zugangsdaten senden (nur wenn das Passwort geändert wurde)',
+  'Server email'
+    => 'Server E-Mail',
+  'Server name'
+    => 'Server Name',
   'Show a list of all installed kitCommands'
     => 'Eine Liste mit den installierten kitCommands anzeigen',
   'Show the given kitCommand expression but dont execute it'
     => 'Den übergebenen kitCommand Ausdruck anzeigen aber nicht ausführen.',
   'Simulate the given kitCommand expression'
     => 'Den übergebenen kitCommand Ausdruck simulieren',
+  'Smtp auth mode'
+    => 'SMTP Authentifizierung',
+  'Smtp encryption'
+    => 'SMTP Verschlüsselung',
+  'Smtp host'
+    => 'SMTP Host',
+  'Smtp password'
+    => 'SMTP Passwort',
+  'Smtp port'
+    => 'SMTP Port',
+  'Smtp username'
+    => 'SMTP Benutzername',
   'Sorry, but only Administrators are allowed to access this kitFramework extension.'
     => 'Ihre Berechtigung ist nicht ausreichend, nur Administratoren dürfen das kitFramework CMS Tool verwenden.',
   'Sorry, but the configuration file <strong>%filename%</strong> was not found. Please be aware that this controller may fail if you try to open a configuration file of a just installed extension, perhaps the extension must be executed first and you should also do a <key>rescan</key> for the configuration files.'
@@ -567,6 +621,8 @@ return array(
     => 'Zu den kitFramework Zugangspunkten wechseln',
   'Switch to this user to see the real active roles'
     => 'Zu diesem Anwender umschalten um die aktiven Rechte zu sehen',
+  'Table prefix'
+    => 'Taellen Prefix',
   'Template'
     => 'Vorlage',
   'Test email'
@@ -615,6 +671,8 @@ return array(
     => 'Das Formular ist nicht gültig, bitte überprüfen Sie Ihre Eingabe und übermitteln Sie das Formular erneut!',
   'The form seems to be compromitted, can not check the data!'
     => 'Das Formular scheint kompromitiert worden zu sein, kann die Daten nicht ändern!',
+  'The <var>FRAMEWORK_UID</var> you typed in was invalid.'
+    => 'Die <var>FRAMEWORK_UID</var> die Sie angegeben haben ist ungültig.',
   '<p>The i18nEditor has not detected the following sources in any kitFramework file.</p><p>Maybe the source is really not used anywhere, but it is also possible that a source is used in a file and the i18nEditor Parser is not able to assign the source to a translation.</p><p>Search for the sources in the extension files and check the context. This list will be refreshed at the next search run.</p>'
     => '<p>Der i18nEditor konnte die folgenden Quelltexte in keiner kitFramework Datei finden.</p><p>Möglicherweise werden die Quelltexte tatsächlich nicht verwendet und können entfernt werden. Es ist jedoch genauso möglich, dass die Quelltexte in den Dateien verwendet werden und der i18nEditor Parser nicht in der Lage dazu ist die Zuordnung zu erkennen.</p><p>Suchen Sie nach den Quelltexten in den Dateien und prüfen Sie den jeweiligen Kontext. Diese Liste wird bei jedem Suchlauf neu erstellt.</p>',
   'The kitFramework has successfull updated. Because this update has changed elementary functions and methods of the kitFramework core you should check the behaviour of all kitFramework applications in backend and frontend of your website within the next days. There exists a copy of your previous kitFramework core files, so it is possible to roll back if needed.'
@@ -671,6 +729,8 @@ return array(
     => 'Der Übersetzungskonflikt für den Quelltext <strong>%source%</strong> ist aufgelöst!',
   'The translation has not changed.'
     => 'Die Übersetzung wurde nicht geändert.',
+  'The URL <strong>%url%</strong> is not valid, please check your input!'
+    => 'Die URL <strong>%url%</strong> is nicht gültig, bitte prüfen Sie Ihre Eingabe!',
   'The username %username% is already in use, please select another one!'
     => 'Der Benutzername %username% wird bereits verwendet, bitte wählen Sie einen anderen Benutzernamen.',
   'There a no translated sources available'
@@ -727,6 +787,8 @@ return array(
     => 'Diesem Benutzer sind insgesamt <b>%count%</b> Rechte zugewiesen.',
   'This value is not a valid email address.'
     => 'Es wurde keine gültige E-Mail Adresse übergeben!',
+  'Too many invalid inputs - you are locked for this session!'
+    => 'Zu viele ungültige Eingaben - Sie sind für diese Sitzung gesperrt!',
   'Translated'
     => 'Übersetzt',
   'Translation'
