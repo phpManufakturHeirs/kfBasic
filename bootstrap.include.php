@@ -323,7 +323,9 @@ try {
         'port' => isset($swift_config['SMTP_PORT']) ? $swift_config['SMTP_PORT'] : '25',
         'username' => $swift_config['SMTP_USERNAME'],
         'password' => $swift_config['SMTP_PASSWORD'],
+        // possible values are ssl, tls or null
         'encryption' => isset($swift_config['SMTP_ENCRYPTION']) ? $swift_config['SMTP_ENCRYPTION'] : null,
+        // possible values are plain, login, cram-md5, or null
         'auth_mode' => isset($swift_config['SMTP_AUTH_MODE']) ? $swift_config['SMTP_AUTH_MODE'] : null
     );
     define('SERVER_EMAIL_ADDRESS', $swift_config['SERVER_EMAIL']);
