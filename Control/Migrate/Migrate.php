@@ -106,6 +106,40 @@ class Migrate extends Alert
         ->getForm();
     }
 
+    protected function formEMailCheck($data=array())
+    {
+        return $this->app['form.factory']->createBuilder('form')
+        ->add('cms_url_changed', 'hidden', array(
+            'data' => isset($data['cms_url_changed']) ? $data['cms_url_changed'] : null
+        ))
+        ->add('existing_cms_url', 'hidden', array(
+            'data' => isset($data['existing_cms_url']) ? $data['existing_cms_url'] : null
+        ))
+        ->add('cms_url', 'hidden', array(
+            'data' => isset($data['cms_url']) ? $data['cms_url'] : null
+        ))
+        ->add('db_host', 'hidden', array(
+            'data' => isset($data['db_host']) ? $data['db_host'] : null
+        ))
+        ->add('db_port', 'hidden', array(
+            'data' => isset($data['db_port']) ? $data['db_port'] : null
+        ))
+        ->add('db_name', 'hidden', array(
+            'data' => isset($data['db_name']) ? $data['db_name'] : null
+        ))
+        ->add('db_username', 'hidden', array(
+            'data' => isset($data['db_username']) ? $data['db_username'] : null
+        ))
+        ->add('db_password', 'hidden', array(
+            'data' => isset($data['db_password']) ? $data['db_password'] : null
+        ))
+        ->add('table_prefix', 'hidden', array(
+            'data' => isset($data['table_prefix']) ? $data['table_prefix'] : null
+        ))
+
+        ->getForm();
+    }
+
     protected function readCMSconfig(&$config=array())
     {
         // check if token is a constant value
@@ -275,6 +309,11 @@ class Migrate extends Alert
     {
         $this->initialize($app);
 
+        if (!$this->Authenticate->IsAuthenticated()) {
+            // the user must first authenticate
+            return $this->Authenticate->ControllerAuthenticate($app);
+        }
+
         if ((null === ($cms_url_changed = $app['request']->get('cms_url_changed'))) ||
             (null === ($existing_cms_url = $app['request']->get('existing_cms_url'))) ||
             (null === ($cms_url = $app['request']->get('cms_url')))) {
@@ -324,6 +363,75 @@ class Migrate extends Alert
     public function ControllerMySqlCheck(Application $app)
     {
         $this->initialize($app);
+
+        if (!$this->Authenticate->IsAuthenticated()) {
+            // the user must first authenticate
+            return $this->Authenticate->ControllerAuthenticate($app);
+        }
+
+        $form = $this->formMySqlCheck();
+        $form->bind($this->app['request']);
+
+        if ($form->isValid()) {
+            // the form is valid
+            $data = $form->getData();
+
+            if (($data['existing_db_host'] !== $data['db_host']) ||
+                ($data['existing_db_name'] !== $data['db_name']) ||
+                ($data['existing_db_password'] !== $data['db_password']) ||
+                ($data['existing_db_port'] !== $data['db_port']) ||
+                ($data['existing_db_username'] !== $data['db_username']) ||
+                ($data['existing_table_prefix'] !== $data['table_prefix'])) {
+                $data['mysql_changed'] = true;
+            }
+            else {
+                $data['mysql_changed'] = false;
+            }
+
+            $subRequest = Request::create('/email/', 'POST', $data);
+            return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+        }
+        else {
+            // general error (timeout, CSFR ...)
+            $this->setAlert('The form is not valid, please check your input and try again!', array(),
+                self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
+                    'method' => __METHOD__, 'line' => __LINE__));
+        }
+
+        $subRequest = Request::create('/mysql/', 'POST', $app['request']->get('form'));
+        return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+    }
+
+    public function ControllerEMail(Application $app)
+    {
+        $this->initialize($app);
+
+        if (!$this->Authenticate->IsAuthenticated()) {
+            // the user must first authenticate
+            return $this->Authenticate->ControllerAuthenticate($app);
+        }
+
+        $data = $app['request']->request->all();
+
+        if (!isset($data['cms_url_changed']) || !isset($data['mysql_changed'])) {
+            // invalid submission
+            throw new \Exception('Missing one or more POST data!');
+        }
+
+
+        print_r($data);
+
+        return __METHOD__;
+    }
+
+    public function ControllerEMailCheck(Application $app)
+    {
+        $this->initialize($app);
+
+        if (!$this->Authenticate->IsAuthenticated()) {
+            // the user must first authenticate
+            return $this->Authenticate->ControllerAuthenticate($app);
+        }
 
         return __METHOD__;
     }

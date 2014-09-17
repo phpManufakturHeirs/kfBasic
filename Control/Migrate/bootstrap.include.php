@@ -232,10 +232,17 @@ $migrate->post('/authenticate/check/',
 
 $migrate->post('/url/check/',
     'phpManufaktur\Basic\Control\Migrate\Migrate::ControllerUrlCheck');
+
 $migrate->post('/mysql/',
     'phpManufaktur\Basic\Control\Migrate\Migrate::ControllerMySql');
 $migrate->post('/mysql/check/',
     'phpManufaktur\Basic\Control\Migrate\Migrate::ControllerMySqlCheck');
+
+$migrate->post('/email/',
+    'phpManufaktur\Basic\Control\Migrate\Migrate::ControllerEMail');
+$migrate->post('/email/check/',
+    'phpManufaktur\Basic\Control\Migrate\Migrate::ControllerEMailCheck');
+
 
 $migrate->before(function(Request $request) use ($migrate)
 {
