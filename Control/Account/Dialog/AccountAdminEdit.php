@@ -68,7 +68,7 @@ class AccountAdminEdit extends Alert
             'data' => isset($data['id']) ? $data['id'] : -1
         ))
         ->add('status', 'choice', array(
-            'choices' => array('ACTIVE' => 'ACTIVE', 'LOCKED' => 'LOCKED'),
+            'choices' => array('ACTIVE' => 'Active', 'LOCKED' => 'Locked'),
             'empty_value' => '- please select -',
             'expanded' => false,
             'data' => isset($data['status']) ? $data['status'] : null

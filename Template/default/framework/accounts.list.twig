@@ -18,7 +18,10 @@
     
     {{ alert }}
     
-    <div><a class="btn btn-default pull-right" role="button" href="{{ FRAMEWORK_URL ~ '/admin/accounts/edit?usage=' ~ usage }}">{{ 'Create a new account'|trans }}</a></div>
+    <div class="create-button">
+      <a class="btn btn-default pull-right" role="button" href="{{ FRAMEWORK_URL ~ '/admin/accounts/edit?usage=' ~ usage }}">{{ 'Create a new account'|trans }}</a>
+    </div>
+    
     {#  
       The pagination serve a automatic 1 2 3 ... 17 18 19 pagination and 
       navigation for the table if it contain more rows than specified in: 
@@ -61,7 +64,7 @@
                   {% elseif 'active desc' in head_class %}
                     <i class="fa fa-sort-alpha-desc"></i>&nbsp;
                   {% endif %}
-                  <a href="{{ FRAMEWORK_URL ~ route.pagination|replace({'{page}':current_page, '{order}':head, '{direction}':head_order}) }}" title="{% if head_order == 'asc' %}{{ 'Click to sort column ascending'|trans }}{% else %}{{ 'Click to sort column descending'|trans }}{% endif %}">{{ head|capitalize|trans }}</a>
+                  <a href="{{ FRAMEWORK_URL ~ route.pagination|replace({'{page}':current_page, '{order}':head, '{direction}':head_order}) }}" title="{% if head_order == 'asc' %}{{ 'Click to sort column ascending'|trans }}{% else %}{{ 'Click to sort column descending'|trans }}{% endif %}">{{ head|humanize|trans }}</a>
                 </th>  
               {% endif %}
             {% endfor %}
@@ -85,7 +88,7 @@
                   {% elseif column == 'last_login' %}
                     <td class="{{ column }}">{{ value|date('DATETIME_FORMAT'|trans) }}</td>
                   {% elseif column == 'status' %}
-                    <td class="{{ column }}">{{ value|trans }}</td>
+                    <td class="{{ column }}">{{ value|lower|humanize|trans }}</td>
                   {% else %}
                     <td class="{{ column }}">{{ value }}</td>
                   {% endif %}

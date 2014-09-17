@@ -405,8 +405,8 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
                 'name' => $app['translator']->trans('Extensions'),
                 'info' => $app['translator']->trans('Install, update or remove kitFramework Extensions'),
                 'icon' => array(
-                    'path' => '/framework.jpg',
-                    'url' => FRAMEWORK_URL.'/framework.jpg'
+                    'path' => '/extension/phpmanufaktur/phpManufaktur/Basic/framework.jpg',
+                    'url' => MANUFAKTUR_URL.'/Basic/framework.jpg'
                 )
             ),
             array(
@@ -423,8 +423,8 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
                 'name' => $app['translator']->trans('Configuration'),
                 'info' => $app['translator']->trans('View and edit the kitFramework configuration files'),
                 'icon' => array(
-                    'path' => '/framework.jpg',
-                    'url' => FRAMEWORK_URL.'/framework.jpg'
+                    'path' => '/extension/phpmanufaktur/phpManufaktur/Basic/framework.jpg',
+                    'url' => MANUFAKTUR_URL.'/Basic/framework.jpg'
                 )
             ),
             array(
@@ -432,8 +432,8 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
                 'name' => $app['translator']->trans('Test email'),
                 'info' => $app['translator']->trans('Check the email settings and send a email to the webmaster for testing purpose'),
                 'icon' => array(
-                    'path' => '/framework.jpg',
-                    'url' => FRAMEWORK_URL.'/framework.jpg'
+                    'path' => '/extension/phpmanufaktur/phpManufaktur/Basic/framework.jpg',
+                    'url' => MANUFAKTUR_URL.'/Basic/framework.jpg'
                 )
             ),
             array(
