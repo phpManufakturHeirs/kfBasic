@@ -53,7 +53,6 @@ class twigExtension extends Twig_Extension
     {
         if (defined('CMS_PATH')) {
             return array(
-                'CMS_ADMIN_URL' => CMS_ADMIN_URL,
                 'CMS_MEDIA_URL' => CMS_MEDIA_URL,
                 'CMS_TYPE' => CMS_TYPE,
                 'CMS_PATH' => CMS_PATH,
