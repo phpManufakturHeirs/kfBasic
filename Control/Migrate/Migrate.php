@@ -583,6 +583,11 @@ class Migrate extends Alert
         return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
     }
 
+    /**
+     * Process all changes which affect the CMS
+     *
+     * @param array $data
+     */
     protected function processCmsChanges($data)
     {
         // read the CMS /config.php into an array
@@ -671,6 +676,11 @@ class Migrate extends Alert
         }
     }
 
+    /**
+     * Process all changes which affect the kitFramework
+     *
+     * @param array $data
+     */
     protected function processFrameworkChanges($data)
     {
         if ($data['cms_url_changed']) {
