@@ -68,10 +68,10 @@ define('FRAMEWORK_MEDIA_PATH', FRAMEWORK_PATH.'/media/public');
 define('FRAMEWORK_MEDIA_URL', FRAMEWORK_URL.'/media/public');
 define('FRAMEWORK_MEDIA_PROTECTED_PATH', FRAMEWORK_PATH.'/media/protected');
 define('FRAMEWORK_MEDIA_PROTECTED_URL', FRAMEWORK_URL.'/media/protected');
-define('FRAMEWORK_DEBUG', (isset($framework_config['DEBUG'])) ?
-    $framework_config['DEBUG'] : false);
-define('FRAMEWORK_CACHE', (isset($framework_config['CACHE'])) ?
-    $framework_config['CACHE'] : true);
+
+// set DEBUG always to TRUE and CACHE always to FALSE
+define('FRAMEWORK_DEBUG', true);
+define('FRAMEWORK_CACHE', false);
 
 define('LIBRARY_PATH', MANUFAKTUR_PATH.'/Library/Library');
 define('LIBRARY_URL', MANUFAKTUR_URL.'/Library/Library');
