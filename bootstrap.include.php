@@ -259,6 +259,47 @@ $app['markdown'] = $app->share(function($app) {
 });
 $app['monolog']->addDebug('Share the Markdown Functions');
 
+try {
+    // register the SwiftMailer
+    $swift_config = $app['utils']->readConfiguration(FRAMEWORK_PATH . '/config/swift.cms.json');
+    $app->register(new Silex\Provider\SwiftmailerServiceProvider());
+    $app['swiftmailer.options'] = array(
+        'host' => isset($swift_config['SMTP_HOST']) ? $swift_config['SMTP_HOST'] : 'localhost',
+        'port' => isset($swift_config['SMTP_PORT']) ? $swift_config['SMTP_PORT'] : '25',
+        'username' => $swift_config['SMTP_USERNAME'],
+        'password' => $swift_config['SMTP_PASSWORD'],
+        // possible values are ssl, tls or null
+        'encryption' => isset($swift_config['SMTP_ENCRYPTION']) ? $swift_config['SMTP_ENCRYPTION'] : null,
+        // possible values are plain, login, cram-md5, or null
+        'auth_mode' => isset($swift_config['SMTP_AUTH_MODE']) ? $swift_config['SMTP_AUTH_MODE'] : null
+    );
+    define('SERVER_EMAIL_ADDRESS', $swift_config['SERVER_EMAIL']);
+    define('SERVER_EMAIL_NAME', $swift_config['SERVER_NAME']);
+    $app['monolog']->addDebug('SwiftMailer Service registered');
+
+    // check the auto mailing
+    if (!isset($framework_config['LOGFILE_EMAIL_ACTIVE'])) {
+        $framework_config['LOGFILE_EMAIL_ACTIVE'] = true;
+        $framework_config['LOGFILE_EMAIL_LEVEL'] = 400; // 400 = ERROR
+        $framework_config['LOGFILE_EMAIL_SUBJECT'] = 'kitFramework error at: '.FRAMEWORK_URL;
+        $framework_config['LOGFILE_EMAIL_TO'] = SERVER_EMAIL_ADDRESS;
+    }
+    define('LOGFILE_EMAIL_ACTIVE', $framework_config['LOGFILE_EMAIL_ACTIVE']);
+    define('LOGFILE_EMAIL_LEVEL', $framework_config['LOGFILE_EMAIL_LEVEL']);
+
+    if (LOGFILE_EMAIL_ACTIVE) {
+        // push handler for SwiftMail to Monolog to prompt errors
+        $message = \Swift_Message::newInstance($framework_config['LOGFILE_EMAIL_SUBJECT'])
+        ->setFrom(SERVER_EMAIL_ADDRESS, SERVER_EMAIL_NAME)
+        ->setTo($framework_config['LOGFILE_EMAIL_TO'])
+        ->setBody('kitFramework errror report');
+        $app['monolog']->pushHandler(new SwiftMailerHandler($app['mailer'], $message, LOGFILE_EMAIL_LEVEL));
+        $app['monolog']->addDebug('Monolog handler for SwiftMailer initialized');
+    }
+} catch (\Exception $e) {
+    throw new \Exception('Problem initializing the SwiftMailer!');
+}
+
 // register Twig
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.options' => array(
@@ -310,46 +351,6 @@ $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
 ));
 $app['monolog']->addDebug('HTTP Cache Service registered.');
 
-try {
-    // register the SwiftMailer
-    $swift_config = $app['utils']->readConfiguration(FRAMEWORK_PATH . '/config/swift.cms.json');
-    $app->register(new Silex\Provider\SwiftmailerServiceProvider());
-    $app['swiftmailer.options'] = array(
-        'host' => isset($swift_config['SMTP_HOST']) ? $swift_config['SMTP_HOST'] : 'localhost',
-        'port' => isset($swift_config['SMTP_PORT']) ? $swift_config['SMTP_PORT'] : '25',
-        'username' => $swift_config['SMTP_USERNAME'],
-        'password' => $swift_config['SMTP_PASSWORD'],
-        // possible values are ssl, tls or null
-        'encryption' => isset($swift_config['SMTP_ENCRYPTION']) ? $swift_config['SMTP_ENCRYPTION'] : null,
-        // possible values are plain, login, cram-md5, or null
-        'auth_mode' => isset($swift_config['SMTP_AUTH_MODE']) ? $swift_config['SMTP_AUTH_MODE'] : null
-    );
-    define('SERVER_EMAIL_ADDRESS', $swift_config['SERVER_EMAIL']);
-    define('SERVER_EMAIL_NAME', $swift_config['SERVER_NAME']);
-    $app['monolog']->addDebug('SwiftMailer Service registered');
-
-    // check the auto mailing
-    if (!isset($framework_config['LOGFILE_EMAIL_ACTIVE'])) {
-        $framework_config['LOGFILE_EMAIL_ACTIVE'] = true;
-        $framework_config['LOGFILE_EMAIL_LEVEL'] = 400; // 400 = ERROR
-        $framework_config['LOGFILE_EMAIL_SUBJECT'] = 'kitFramework error at: '.FRAMEWORK_URL;
-        $framework_config['LOGFILE_EMAIL_TO'] = SERVER_EMAIL_ADDRESS;
-    }
-    define('LOGFILE_EMAIL_ACTIVE', $framework_config['LOGFILE_EMAIL_ACTIVE']);
-    define('LOGFILE_EMAIL_LEVEL', $framework_config['LOGFILE_EMAIL_LEVEL']);
-
-    if (LOGFILE_EMAIL_ACTIVE) {
-        // push handler for SwiftMail to Monolog to prompt errors
-        $message = \Swift_Message::newInstance($framework_config['LOGFILE_EMAIL_SUBJECT'])
-        ->setFrom(SERVER_EMAIL_ADDRESS, SERVER_EMAIL_NAME)
-        ->setTo($framework_config['LOGFILE_EMAIL_TO'])
-        ->setBody('kitFramework errror report');
-        $app['monolog']->pushHandler(new SwiftMailerHandler($app['mailer'], $message, LOGFILE_EMAIL_LEVEL));
-        $app['monolog']->addDebug('Monolog handler for SwiftMailer initialized');
-    }
-} catch (\Exception $e) {
-    throw new \Exception('Problem initializing the SwiftMailer!');
-}
 
 
 if (FRAMEWORK_SETUP) {
