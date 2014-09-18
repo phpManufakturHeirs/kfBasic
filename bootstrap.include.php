@@ -147,8 +147,6 @@ try {
     define('CMS_MEDIA_URL', $cms_config['CMS_MEDIA_URL']);
     define('CMS_TEMP_PATH', $app['utils']->sanitizePath($cms_config['CMS_TEMP_PATH']));
     define('CMS_TEMP_URL', $cms_config['CMS_TEMP_URL']);
-    define('CMS_ADMIN_PATH', $app['utils']->sanitizePath($cms_config['CMS_ADMIN_PATH']));
-    define('CMS_ADMIN_URL', $cms_config['CMS_ADMIN_URL']);
     define('CMS_TYPE', $cms_config['CMS_TYPE']);
     define('CMS_VERSION', $cms_config['CMS_VERSION']);
 } catch (\Exception $e) {
