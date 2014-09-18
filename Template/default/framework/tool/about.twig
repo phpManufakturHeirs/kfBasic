@@ -50,6 +50,12 @@
           <div class="small text-muted">
             {{ 'published at'|trans }} <strong>{{ kitframework.release.date|date('DATE_FORMAT'|trans) }}</strong>, {{ 'License'|trans }}: <a href="https://github.com/phpManufaktur/kitFramework/blob/master/LICENSE.md" target="_blank">MIT License</a>
           </div>
+          
+          <div class="row">
+            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-4 text-right small"><var>FRAMEWORK_UID</var></div>
+            <div class="col-lg-10 col-md-10 col-sm-9 col-xs-8 text-left small">{{ framework_config.FRAMEWORK_UID }}&nbsp;&nbsp;<a href="mailto:{{ SERVER_EMAIL_ADDRESS }}?subject=FRAMEWORK_UID&body={{ framework_config.FRAMEWORK_UID }}" title="{{ 'Send a email with the FRAMEWORK_UID'|trans }}"><i class="fa fa-envelope-o"></i></a></div>            
+          </div>
+          
           <div class="libraries">            
             <div class="small text-muted">
               {% if app.translator.locale == 'de' %}
