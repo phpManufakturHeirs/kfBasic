@@ -383,6 +383,30 @@ class Update
     }
 
     /**
+     * Release 1.0.15
+     */
+    protected function release_1015()
+    {
+        $cms_json = $this->app['utils']->readJSON(FRAMEWORK_PATH.'/config/cms.json');
+        if (isset($cms_json['CMS_ADMIN_PATH'])) {
+            unset($cms_json['CMS_ADMIN_PATH']);
+            unset($cms_json['CMS_ADMIN_URL']);
+            unset($cms_json['CMS_TEMP_PATH']);
+            unset($cms_json['CMS_TEMP_URL']);
+            file_put_contents(FRAMEWORK_PATH.'/config/cms.json', $this->app['utils']->JSONFormat($cms_json));
+            $this->app['monolog']->addDebug('[BASIC Update] Removed `CMS_ADMIN_PATH`, `CMS_ADMIN_URL`, `CMS_TEMP_PATH` and `CMS_TEMP_URL` from `/config/cms.json`.');
+        }
+
+        $swift_json = $this->app['utils']->readJSON(FRAMEWORK_PATH.'/config/swift.cms.json');
+        if (!isset($swift_json['SMTP_ENCRYPTION'])) {
+            $swift_json['SMTP_ENCRYPTION'] = null;
+            $swift_json['SMTP_AUTH_MODE'] = null;
+            file_put_contents(FRAMEWORK_PATH.'/config/swift.cms.json', $this->app['utils']->JSONFormat($swift_json));
+            $this->app['monolog']->addDebug('[BASIC Update] Added optional parameter `SMTP_ENCRYPTION` and `SMTP_AUTH_MODE` to `/config/swift.cms.json`.');
+        }
+    }
+
+    /**
      * Update the database tables for the BASIC extension of the kitFramework
      *
      * @param Application $app
@@ -408,6 +432,7 @@ class Update
         $this->release_109();
         $this->release_1011();
         $this->release_1012();
+        $this->release_1015();
 
         // install the search function
         $Search = new InstallSearch($app);
