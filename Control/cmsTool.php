@@ -358,6 +358,7 @@ class cmsTool extends Alert
 
         // get the kitFramework info
         $kitframework = $app['utils']->readJSON(FRAMEWORK_PATH.'/framework.json');
+        $framework_config = $app['utils']->readJSON(FRAMEWORK_PATH.'/config/framework.json');
 
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
             '@phpManufaktur/Basic/Template',
@@ -367,9 +368,9 @@ class cmsTool extends Alert
                 'alert' => $this->getAlert(),
                 'toolbar' => $this->getToolbar('about'),
                 'libraries' => $libraries,
-                'kitframework' => $kitframework
-        ));
-
+                'kitframework' => $kitframework,
+                'framework_config' => $framework_config
+            ));
     }
 
     /**
