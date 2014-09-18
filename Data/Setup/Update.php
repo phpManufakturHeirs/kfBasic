@@ -393,6 +393,7 @@ class Update
             unset($cms_json['CMS_ADMIN_URL']);
             unset($cms_json['CMS_TEMP_PATH']);
             unset($cms_json['CMS_TEMP_URL']);
+            unset($cms_json['CMS_PATH']);
             file_put_contents(FRAMEWORK_PATH.'/config/cms.json', $this->app['utils']->JSONFormat($cms_json));
             $this->app['monolog']->addDebug('[BASIC Update] Removed `CMS_ADMIN_PATH`, `CMS_ADMIN_URL`, `CMS_TEMP_PATH` and `CMS_TEMP_URL` from `/config/cms.json`.');
         }
