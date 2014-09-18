@@ -783,8 +783,6 @@ class Migrate extends Alert
         $cms_json['CMS_URL'] = $data['cms_url'];
         $cms_json['CMS_MEDIA_PATH'] = self::$CMS_PATH.'/media';
         $cms_json['CMS_MEDIA_URL'] = $data['cms_url'].'/media';
-        $cms_json['CMS_TEMP_PATH'] = self::$CMS_PATH.'/temp';
-        $cms_json['CMS_TEMP_URL'] = $data['cms_url'].'/temp';
         file_put_contents(FRAMEWORK_PATH.'/config/cms.json', $this->app['utils']->JSONFormat($cms_json));
         $this->setAlert('Updated the kitFramework CMS settings.', array(), self::ALERT_TYPE_SUCCESS, true);
 
