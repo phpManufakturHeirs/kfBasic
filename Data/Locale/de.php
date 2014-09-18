@@ -87,6 +87,8 @@ return array(
     => 'Zeitüberschreitung bei der CAPTCHA Übermittlung, bitte versuchen Sie es erneut.',
   'Catalog'
     => 'Katalog',
+  'Changed the CMS URL from %old_url% to %new_url%.'
+    => 'Die CMS URL wurde von %old_url% zu %new_url% geändert.',
   'Changelog'
     => 'Änderungsprotokoll',
   'Check email settings'
@@ -97,6 +99,8 @@ return array(
     => 'URL des Content Management System überprüfen',
   'Check the email settings and send a email to the webmaster for testing purpose'
     => 'E-Mail Einstellungen kontrollieren und eine Test E-Mail an den Webmaster schicken',
+  'Cleanup the kitFramework cache directory.'
+    => 'Das kitFramework Cache Verzeichnis wurde geleert.',
   'Click to sort column ascending'
     => 'Anklicken um die Spalte aufsteigend zu sortieren',
   'Click to sort column descending'
@@ -125,12 +129,20 @@ return array(
     => 'Die GUID in die Zwischenablage kopieren',
   'Copy this kitCommand to the clipboard'
     => 'Dieses kitCommand in die Zwischenablage kopieren',
+  'Create a new .htaccess file for the kitFramework root directory.'
+    => 'Es wurde eine neue .htaccess Datei für das kitFramework Wurzelverzeichnis angelegt.',
   'Create a new account'
     => 'Ein neues Benutzerkonto anlegen',
   'Create a new password'
     => 'Ein neues Password anlegen',
   'Create a unassigned translation'
     => 'Eine nicht zugeordnete Übersetzung erstellen',
+  'Create CMS /config.bak and write new /config.php'
+    => 'Sicherte die CMS Konfiguration in <var>/config.bak</var> und legte eine neue <var>/config.php</var> an.',
+  'Create the physical directories needed by the flexContent permanent links.'
+    => 'Legte die physikalischen Verzeichnisse an, die von den flexContent Permanent Links benötigt werden.',
+  'Create the physical directories needed by the miniShop permanent links.'
+    => 'Legte die physikalischen Verzeichnisse an die von den miniShop Permanent Links benötigt werden.',
   'Currently installed extensions'
     => 'Aktuell installierte Erweiterungen',
   'Custom'
@@ -279,9 +291,9 @@ return array(
     => 'Hallo %name%,<br />Sie möchten Ihr Passwort ändern, bitte geben Sie das neue Passwort ein, wiederholen Sie es zur Sicherheit und schicken Sie das Formular ab.<br />Falls Sie Ihr Passwort nicht ändern möchten, verlassen Sie bitte einfach diesen Dialog.',
   'Hello %name%,<br />you have asked to create a new password for the kitFramework hosted at %server%.'
     => 'Hallo %name%,<br />Sie haben darum gebeten ein neues Passwort für das kitFramework auf %server% zu erhalten.',
-  'help'
-    => 'Hilfe',
   'Help'
+    => 'Hilfe',
+  'help'
     => 'Hilfe',
   'help_accounts_list_json'
     => '<p>Diese Datei ermöglicht es Ihnen die angezeigten Spalten und die Sortierung der Felder in der <a href="%FRAMEWORK_URL%/admin/accounts/list" target="_blank">Übersicht der Benutzerkonten</a> zu ändern.</p><p>Verfügbare Felder für die Verwendung in <var>columns</var> und <var>list > order > by</var> sind: <var>id, username, email, password, displayname, last_login, roles, guid, guid_timestamp, guid_status, status</var> und <var>timestamp</var>. Mit <var>list > rows_per_page</var> legen Sie fest, wie viele Benutzerkonten pro Seite angezeigt werden.</p>',
@@ -327,10 +339,10 @@ return array(
     => 'Installieren, Aktualisieren oder Entfernen von kitFramework Erweiterungen',
   'Install, update or remove kitFramework Extensions'
     => 'Installieren, aktualisieren oder entfernen Sie kitFramework Erweiterungen',
-  'Installed'
-    => 'Installiert',
   'installed'
     => 'installiert',
+  'Installed'
+    => 'Installiert',
   'Installed extensions'
     => 'Installierte Erweiterungen',
   'Installed release'
@@ -417,6 +429,8 @@ return array(
     => 'Abmelden',
   'Message'
     => 'Mitteilung',
+  'Migration result'
+    => 'Migrations Ergebnis',
   'Missing the parameter "expression"!'
     => 'Vermisse den Parameter <em>expression</em>!',
   'Missing the parameter: %parameter%'
@@ -427,6 +441,8 @@ return array(
     => 'Geändert',
   'More information ...'
     => 'Weitere Informationen ...',
+  'Mysql changed'
+    => 'MySQL wurde geändert',
   'Name'
     => 'Bezeichner',
   'Need help? Please visit the <a href="%url%" target="_blank">phpManufaktur Support Group</a>.'
@@ -661,10 +677,10 @@ return array(
     => 'Die Beschreibungsdatei extension.json für die Erweiterung <b>%name%</b> enthält nicht alle Definitionen, prüfen Sie <i>GUID</i>, <i>Group</i> und <i>Release</i>!',
   'The file %file% does not exists in Gist %gist_id%!'
     => 'Die Datei %file% existiert nicht im Gist %gist_id%',
-  'The file <i>%file%</i> does not exists!'
-    => 'Die Datei <em>%file%</em> existiert nicht!',
   'The file <strong>%file%</strong> does not exists!'
     => 'Die Datei <strong>%file%</strong> existiert nicht!',
+  'The file <i>%file%</i> does not exists!'
+    => 'Die Datei <em>%file%</em> existiert nicht!',
   'The file <strong>%file%</strong> is not readable!'
     => 'Die Datei <strong>%file%</strong> ist nicht lesbar!',
   'The form is not valid, please check your input and try again!'
@@ -733,6 +749,8 @@ return array(
     => 'Die URL <strong>%url%</strong> is nicht gültig, bitte prüfen Sie Ihre Eingabe!',
   'The username %username% is already in use, please select another one!'
     => 'Der Benutzername %username% wird bereits verwendet, bitte wählen Sie einen anderen Benutzernamen.',
+  'There a no settings changed, nothing to do ...'
+    => 'Es wurden keine Einstellungen geändert, es gibt nichts zu tun ...',
   'There a no translated sources available'
     => 'Es sind keine übersetzten Quelltexte verfügbar.',
   'There are new catalog information available, <strong><a href="%route%">please update the catalog</a></strong>.'
@@ -833,8 +851,26 @@ return array(
     => 'aktualisiert',
   'Updated the catalog data for the extension(s) <strong>%extension%</strong>.'
     => 'Die Kataloginformationen für die Erweiterung(en) <strong>%extension%</strong> wurden aktualisiert.',
+  'Updated the database settings for the CMS.'
+    => 'Die Datenbank Einstellungen für das CMS wurden aktualisiert.',
+  'Updated the flexContent bootstrap.include.inc for the permanent links.'
+    => 'Die flexContent <var>bootstrap.include.inc</var> für die permanenten Links wurde aktualisiert.',
+  'Updated the kitFramework CMS settings.'
+    => 'Die kitFramework CMS Einstellungen wurden aktualisiert.',
+  'Updated the kitFramework database settings.'
+    => 'Die kitFramework Datenbankeinstellungen wurden aktualisiert.',
+  'Updated the kitFramework email settings.'
+    => 'Die kitFramework E-Mail Einstellungen wurden aktualisiert.',
+  'Updated the kitFramework URL to %url%.'
+    => 'Aktualisierte die kitFramework URL zu <var>%url%</var>.',
+  'Updated the miniShop bootstrap.include.inc for the permanent links.'
+    => 'Aktualisierte die miniShop <var>bootstrap.include.inc</var> für die permanenten Links.',
+  'Updated the permalink URL for Event'
+    => 'Aktualisierte die URL für permanente Links in Event.',
   'Updated the register data for the extension(s) <strong>%extension%</strong>.'
     => 'Die Registerinformationen für die Erweiterung(en) <strong>%extension%</strong> wurden aktualisiert.',
+  'Updated the terms & conditions URL for Event'
+    => 'Aktualisierte die URL für die allgemeinen Geschäftsbedingungen in Event',
   'Updated Translation ID %id%'
     => 'Übersetzung mit der ID %id% aktualisiert.',
   'Updates'
@@ -885,6 +921,8 @@ return array(
     => 'Sie führen den i18nEditor im <strong>Entwickler Modus</strong> aus.',
   'You have already an account? <a href="%login_url%">Please login</a>!'
     => 'Sie haben bereits ein Benutzerkonto? <a href="%login_url%">Melden Sie sich an</a>!',
+  'You have configured flexContent as Remote Client. Please check the specified remote URLs in <var>config.flexcontent.json</var>.'
+    => 'Sie haben flexContent als Remote Client eingerichtet. Bitte überprüfen Sie die in der <var>config.flexcontent.json</var> angegebenen Remote URLs.',
   'You must login as user \'%username%\'!'
     => 'Sie müssen sich als Benutzer \'%username%\' anmelden!',
   'You must solve the <strong>CONFLICT</strong> before you can change this translation record.'
