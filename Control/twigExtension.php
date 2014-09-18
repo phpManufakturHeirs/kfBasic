@@ -66,6 +66,8 @@ class twigExtension extends Twig_Extension
                 'LIBRARY_URL' => LIBRARY_URL,
                 'MANUFAKTUR_PATH' => MANUFAKTUR_PATH,
                 'MANUFAKTUR_URL' => MANUFAKTUR_URL,
+                'SERVER_EMAIL_ADDRESS' => SERVER_EMAIL_ADDRESS,
+                'SERVER_EMAIL_NAME' => SERVER_EMAIL_NAME,
                 'THIRDPARTY_PATH' => THIRDPARTY_PATH,
                 'THIRDPARTY_URL' => THIRDPARTY_URL
             );
