@@ -27,6 +27,9 @@ class Mail extends Alert
         $settings = $app['utils']->readJSON(FRAMEWORK_PATH.'/config/swift.cms.json');
         $settings['SMTP_PASSWORD'] = '******';
 
+        // get the FRAMEWORK_UID
+        $framework_config = $this->app['utils']->readJSON(FRAMEWORK_PATH.'/config/framework.json');
+
         // create the email body
         $body = $app['twig']->render($app['utils']->getTemplateFile(
             '@phpManufaktur/Basic/Template', 'framework/mail/test.twig'),
@@ -37,7 +40,8 @@ class Mail extends Alert
                         'name' => SERVER_EMAIL_NAME,
                         'address' => SERVER_EMAIL_ADDRESS
                     )
-                )
+                ),
+                'framework_uid' => $framework_config['FRAMEWORK_UID']
             ));
 
         // create the message
