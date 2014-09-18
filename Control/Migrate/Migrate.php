@@ -559,8 +559,11 @@ class Migrate extends Alert
                 $this->setAlert('There a no settings changed, nothing to do ...', array(), self::ALERT_TYPE_INFO);
             }
             else {
-                // process the changed settings
-                echo 'xxx';
+                // process the changed settings for the CMS
+                $this->processCmsChanges($data);
+
+                // process the changed settings for the kitFramework
+                $this->processFrameworkChanges($data);
             }
 
             return $app['twig']->render($app['utils']->getTemplateFile(
@@ -578,5 +581,217 @@ class Migrate extends Alert
 
         $subRequest = Request::create('/email/', 'POST', $app['request']->get('form'));
         return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+    }
+
+    protected function processCmsChanges($data)
+    {
+        // read the CMS /config.php into an array
+        $config_lines = file(self::$CMS_PATH.'/config.php');
+
+        if ($data['cms_url_changed']) {
+            // the CMS URL has changed
+            $new_lines = array();
+            foreach ($config_lines as $line) {
+                if (((strpos($line, 'CAT_URL') !== false) || (strpos($line, 'WB_URL') !== false)) &&
+                    (strpos($line, $data['existing_cms_url']) !== false)) {
+                    $new_lines[] = str_replace($data['existing_cms_url'], $data['cms_url'], $line);
+                    $this->setAlert('Changed the CMS URL from %old_url% to %new_url%.',
+                        array('%old_url%' => $data['existing_cms_url'], '%new_url%' => $data['cms_url']), self::ALERT_TYPE_SUCCESS, true);
+                }
+                else {
+                    $new_lines[] = $line;
+                }
+            }
+            $config_lines = $new_lines;
+        }
+
+        if ($data['mysql_changed']) {
+            // the MySQL settings has changed
+            $new_lines = array();
+            $old_mysql = $this->app['utils']->readJSON(FRAMEWORK_PATH.'/config/doctrine.cms.json');
+            $modified = false;
+            foreach ($config_lines as $line) {
+                if ((strpos($line, 'DB_HOST') !== false) && (strpos($line, $old_mysql['DB_HOST']))) {
+                    $new_lines[] = str_replace($old_mysql['DB_HOST'], $data['db_host'], $line);
+                    $modified = true;
+                }
+                elseif ((strpos($line, 'DB_PORT') !== false) && (strpos($line, $old_mysql['DB_PORT']))) {
+                    $new_lines[] = str_replace($old_mysql['DB_PORT'], $data['db_port'], $line);
+                    $modified = true;
+                }
+                elseif ((strpos($line, 'DB_NAME') !== false) && (strpos($line, $old_mysql['DB_NAME']))) {
+                    $new_lines[] = str_replace($old_mysql['DB_NAME'], $data['db_name'], $line);
+                    $modified = true;
+                }
+                elseif ((strpos($line, 'DB_USERNAME') !== false) && (strpos($line, $old_mysql['DB_USERNAME']))) {
+                    $new_lines[] = str_replace($old_mysql['DB_USERNAME'], $data['db_username'], $line);
+                    $modified = true;
+                }
+                elseif (strpos($line, 'DB_PASSWORD') !== false) {
+                    if (empty($old_mysql['DB_PASSWORD']) && empty($data['db_password']))  {
+                        // both passwords are empty - nothing to do ...
+                        $new_lines[] = $line;
+                    }
+                    elseif (empty($old_mysql['DB_PASSWORD']) && !empty($data['db_password'])) {
+                        // that's a bit tricky, we must replace the whole line
+                        if (strpos($line, 'CAT_DB_PASSWORD')) {
+                            // BlackCat
+                            $new_lines[] = "define('CAT_DB_PASSWORD', '{$data['db_password']}');\n";
+                        }
+                        else {
+                            // WebsiteBaker or LEPTON
+                            $new_lines[] = "define('DB_PASSWORD', '{$data['db_password']}');\n";
+                        }
+                        $modified = true;
+                    }
+                    else {
+                        $new_lines[] = str_replace($old_mysql['DB_PASSWORD'], $data['db_password'], $line);
+                        $modified = true;
+                    }
+                }
+                elseif ((strpos($line, 'TABLE_PREFIX') !== false) && (strpos($line, $old_mysql['TABLE_PREFIX']))) {
+                    $new_lines[] = str_replace($old_mysql['TABLE_PREFIX'], $data['table_prefix'], $line);
+                    $modified = true;
+                }
+                else {
+                    $new_lines[] = $line;
+                }
+            }
+            if ($modified) {
+                $config_lines = $new_lines;
+                $this->setAlert('Updated the database settings for the CMS.', array(), self::ALERT_TYPE_SUCCESS, true);
+            }
+        }
+
+        if ($data['cms_url_changed'] || $data['mysql_changed']) {
+            $this->app['filesystem']->copy(self::$CMS_PATH.'/config.php', self::$CMS_PATH.'/config.bak', true);
+            $config = implode('', $config_lines);
+            file_put_contents(self::$CMS_PATH.'/config.php', $config);
+            $this->setAlert('Create CMS /config.bak and write new /config.php', array(), self::ALERT_TYPE_SUCCESS, true);
+        }
+    }
+
+    protected function processFrameworkChanges($data)
+    {
+        if ($data['cms_url_changed']) {
+            // update the framework.json
+            $framework_json = $this->app['utils']->readJSON(FRAMEWORK_PATH.'/config/framework.json');
+            $framework_json['FRAMEWORK_URL'] = $data['cms_url'].'/kit2';
+            file_put_contents(FRAMEWORK_PATH.'/config/framework.json', $this->app['utils']->JSONFormat($framework_json));
+            $this->setAlert('Updated the kitFramework URL to %url%.',
+                array('%url%' => $framework_json['FRAMEWORK_URL']), self::ALERT_TYPE_SUCCESS, true);
+
+            if ($this->app['filesystem']->exists(MANUFAKTUR_PATH.'/Event/config.event.json')) {
+                // update the Event configuration
+                $event = $this->app['utils']->readJSON(MANUFAKTUR_PATH.'/Event/config.event.json');
+
+                if (!empty($event['event']['subscription']['terms']['url'])) {
+                    $event['event']['subscription']['terms']['url'] = str_replace($data['existing_cms_url'], $data['cms_url'], $event['event']['subscription']['terms']['url']);
+                    $this->setAlert('Updated the terms & conditions URL for Event', array(), self::ALERT_TYPE_SUCCESS, true);
+                }
+
+                if (!empty($event['permalink']['cms']['url'])) {
+                    $event['permalink']['cms']['url'] = str_replace($data['existing_cms_url'], $data['cms_url'], $event['permalink']['cms']['url']);
+                    $this->setAlert('Updated the permalink URL for Event', array(), self::ALERT_TYPE_SUCCESS, true);
+                }
+            }
+
+            if ($this->app['filesystem']->exists(MANUFAKTUR_PATH.'/flexContent/config.flexcontent.json')) {
+                // update flexContent configuration
+                $flexContent = $this->app['utils']->readJSON(MANUFAKTUR_PATH.'/flexContent/config.flexcontent.json');
+
+                if (isset($flexContent['remote']['client'])) {
+                    $this->setAlert('You have configured flexContent as Remote Client. Please check the specified remote URLs in <var>config.flexcontent.json</var>.',
+                        array(), self::ALERT_TYPE_INFO, true);
+                }
+
+                // update the flexContent bootstrap.include.inc for the permanent links
+                $Setup = new \phpManufaktur\flexContent\Data\Setup\Setup();
+                $subdirectory = parse_url(self::$CMS_URL, PHP_URL_PATH);
+                $Setup->createPermalinkRoutes($this->app, $flexContent, $subdirectory);
+                $this->setAlert('Updated the flexContent bootstrap.include.inc for the permanent links.',
+                    array(), self::ALERT_TYPE_SUCCESS, true);
+
+                // create the physical directories needed by the permanent links
+                $Setup->createPermalinkDirectories($this->app, $flexContent, $subdirectory, self::$CMS_PATH);
+                $this->setAlert('Create the physical directories needed by the flexContent permanent links.',
+                    array(), self::ALERT_TYPE_SUCCESS, true);
+            }
+
+            if ($this->app['filesystem']->exists(MANUFAKTUR_PATH.'/miniShop/config.minishop.json')) {
+                // update the miniShop configuration
+                $miniShop = $this->app['utils']->readJSON(MANUFAKTUR_PATH.'/miniShop/config.minishop.json');
+
+                // update the miniShop bootstrap.include.inc for the permanent links
+                $Setup = new \phpManufaktur\miniShop\Data\Setup\Setup();
+                $subdirectory = parse_url(self::$CMS_URL, PHP_URL_PATH);
+                $Setup->createPermalinkRoutes($this->app, $miniShop, $subdirectory);
+                $this->setAlert('Updated the miniShop bootstrap.include.inc for the permanent links.',
+                    array(), self::ALERT_TYPE_SUCCESS, true);
+
+                // create the physical directories needed by the permanent links
+                $Setup->createPermalinkDirectories($this->app, $miniShop, $subdirectory, self::$CMS_PATH);
+                $this->setAlert('Create the physical directories needed by the miniShop permanent links.',
+                    array(), self::ALERT_TYPE_SUCCESS, true);
+            }
+
+        }
+
+        if ($data['mysql_changed']) {
+            // update the doctrine.cms.json
+            $doctrine = array(
+                'DB_TYPE' => 'mysqli',
+                'DB_HOST' => $data['db_host'],
+                'DB_PORT' => $data['db_port'],
+                'DB_NAME' => $data['db_name'],
+                'DB_USERNAME' => $data['db_username'],
+                'DB_PASSWORD' => $data['db_password'],
+                'TABLE_PREFIX' =>$data['table_prefix']
+            );
+            file_put_contents(FRAMEWORK_PATH.'/config/doctrine.cms.json', $this->app['utils']->JSONFormat($doctrine));
+            $this->setAlert('Updated the kitFramework database settings.', array(), self::ALERT_TYPE_SUCCESS, true);
+        }
+
+        if ($data['email_changed']) {
+            $email = array(
+                'SERVER_EMAIL' => $data['server_email'],
+                'SERVER_NAME' => $data['server_name'],
+                'SMTP_HOST' => $data['smtp_host'],
+                'SMTP_PORT' => intval($data['smtp_port']),
+                'SMTP_USERNAME' => $data['smtp_username'],
+                'SMTP_PASSWORD' => $data['smtp_password'],
+                'SMTP_ENCRYPTION' => $data['smtp_encryption'],
+                'SMTP_AUTH_MODE' => $data['smtp_auth_mode']
+            );
+            file_put_contents(FRAMEWORK_PATH.'/config/swift.cms.json', $this->app['utils']->JSONFormat($email));
+            $this->setAlert('Updated the kitFramework email settings.', array(), self::ALERT_TYPE_SUCCESS, true);
+        }
+
+        // check the /config/cms.json in any case!
+        $cms_json = $this->app['utils']->readJSON(FRAMEWORK_PATH.'/config/cms.json');
+        $cms_json['CMS_PATH'] = self::$CMS_PATH;
+        $cms_json['CMS_URL'] = $data['cms_url'];
+        $cms_json['CMS_MEDIA_PATH'] = self::$CMS_PATH.'/media';
+        $cms_json['CMS_MEDIA_URL'] = $data['cms_url'].'/media';
+        $cms_json['CMS_TEMP_PATH'] = self::$CMS_PATH.'/temp';
+        $cms_json['CMS_TEMP_URL'] = $data['cms_url'].'/temp';
+        file_put_contents(FRAMEWORK_PATH.'/config/cms.json', $this->app['utils']->JSONFormat($cms_json));
+        $this->setAlert('Updated the kitFramework CMS settings.', array(), self::ALERT_TYPE_SUCCESS, true);
+
+        // create the kitFramework .htaccess file in any case!
+        $htaccess = file_get_contents(self::$CMS_PATH.'/modules/kit_framework/Setup/htaccess.htt');
+        $subdirectory = parse_url(self::$CMS_URL, PHP_URL_PATH);
+        if (!empty($subdirectory)) {
+            $subdirectory = '/'.$subdirectory;
+        }
+        $replace = $subdirectory.'/kit2';
+        $htaccess = str_replace('{RELATIVE_PATH}', $replace, $htaccess);
+        file_put_contents(FRAMEWORK_PATH.'/.htaccess', $htaccess);
+        $this->setAlert('Create a new .htaccess file for the kitFramework root directory.',
+            array(), self::ALERT_TYPE_SUCCESS, true);
+
+        // cleanup the /kit2/temp/cache directory
+        $this->app['filesystem']->remove(FRAMEWORK_TEMP_PATH.'/cache');
+        $this->setAlert('Cleanup the kitFramework cache directory.', array(), self::ALERT_TYPE_SUCCESS, true);
     }
 }
