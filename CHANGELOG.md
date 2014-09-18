@@ -6,6 +6,17 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**1.0.15** - 2014-09-18
+
+* added CMS Tool `About` dialog
+* fixed setting the iFrame height for the CMS Tool
+* introduce a migration tool
+* `CMS_ADMIN_PATH` and `CMS_ADMIN_URL` are no longer supported
+* removed `CMS_TEMP_PATH` and `CMS_TEMP_URL` (will be created dynamically)
+* `CMS_PATH` is no longer needed in `/config/cms.json`
+* added `FRAMEWORK_UID` to the test mail and to the about dialog in CMS Tool
+* added `SERVER_EMAIL_ADDRESS` and `SERVER_EMAIL_NAME` to the Twig constants
+
 **1.0.14** - 2014-09-14
 
 * missing important update execution for the CMS addon ...
