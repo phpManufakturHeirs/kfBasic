@@ -779,7 +779,6 @@ class Migrate extends Alert
 
         // check the /config/cms.json in any case!
         $cms_json = $this->app['utils']->readJSON(FRAMEWORK_PATH.'/config/cms.json');
-        $cms_json['CMS_PATH'] = self::$CMS_PATH;
         $cms_json['CMS_URL'] = $data['cms_url'];
         $cms_json['CMS_MEDIA_PATH'] = self::$CMS_PATH.'/media';
         $cms_json['CMS_MEDIA_URL'] = $data['cms_url'].'/media';
