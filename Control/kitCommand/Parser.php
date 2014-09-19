@@ -714,45 +714,57 @@ class Parser
         foreach (self::$header_keys as $header_key) {
             switch ($header_key) {
                 case 'css':
-                    $templates = explode(',', FRAMEWORK_TEMPLATES);
-                    $css = MANUFAKTUR_URL.'/Basic/Template/default/kitcommand/css/kitcommand.min.css';
-                    foreach ($templates as $template) {
-                        if ($this->app['filesystem']->exists(MANUFAKTUR_PATH.'/Basic/Template/'.$template.'/kitcommand/css/kitcommand.min.css')) {
-                            $css = MANUFAKTUR_URL.'/Basic/Template/'.$template.'/kitcommand/css/kitcommand.min.css';
-                        }
-                        elseif ($this->app['filesystem']->exists(MANUFAKTUR_PATH.'/Basic/Template/'.$template.'/kitcommand/css/kitcommand.css')) {
-                            $css = MANUFAKTUR_URL.'/Basic/Template/'.$template.'/kitcommand/css/kitcommand.css';
+                    $load_css = true;
+                    foreach (self::$command as $command) {
+                        if (isset($command['parameter']['load_css']) &&
+                            (($command['parameter']['load_css'] == 0) || (strtolower($command['parameter']['load_css']) == 'false'))) {
+                            $load_css = false;
                         }
                     }
-                    $css_files[] = $css;
 
-                    foreach (self::$command as $command) {
-                        if (isset($command['parameter']['css'])) {
-                            if (strpos($command['parameter']['css'], '|')) {
-                                $items = explode('|', $command['parameter']['css']);
+                    if ($load_css) {
+                        $templates = explode(',', FRAMEWORK_TEMPLATES);
+                        $css = MANUFAKTUR_URL.'/Basic/Template/default/kitcommand/css/kitcommand.min.css';
+                        foreach ($templates as $template) {
+                            if ($this->app['filesystem']->exists(MANUFAKTUR_PATH.'/Basic/Template/'.$template.'/kitcommand/css/kitcommand.min.css')) {
+                                $css = MANUFAKTUR_URL.'/Basic/Template/'.$template.'/kitcommand/css/kitcommand.min.css';
+                                break;
                             }
-                            else {
-                                $items = array($command['parameter']['css']);
+                            elseif ($this->app['filesystem']->exists(MANUFAKTUR_PATH.'/Basic/Template/'.$template.'/kitcommand/css/kitcommand.css')) {
+                                $css = MANUFAKTUR_URL.'/Basic/Template/'.$template.'/kitcommand/css/kitcommand.css';
+                                break;
                             }
-                            foreach ($items as $item) {
-                                if (empty($item) && $this->app['filesystem']->exists(MANUFAKTUR_PATH.'/'.$command['command'].'/Template/default/screen.css')) {
-                                    $css_files[] = MANUFAKTUR_URL.'/'.$command['command'].'/Template/default/screen.css';
-                                    continue;
+                        }
+                        $css_files[] = $css;
+
+                        foreach (self::$command as $command) {
+                            if (isset($command['parameter']['css'])) {
+                                if (strpos($command['parameter']['css'], '|')) {
+                                    $items = explode('|', $command['parameter']['css']);
                                 }
-                                $count = substr_count($item, ',');
-                                if (($count == 0) && ($this->app['filesystem']->exists(MANUFAKTUR_PATH.'/'.$item.'/Template/default/screen.css'))) {
-                                    $css_files[] = MANUFAKTUR_URL.'/'.$item.'/Template/default/screen.css';
+                                else {
+                                    $items = array($command['parameter']['css']);
                                 }
-                                elseif ($count == 1) {
-                                    list($extension, $file) = explode(',', $item);
-                                    if ($this->app['filesystem']->exists(MANUFAKTUR_PATH.'/'.trim($extension).'/Template/default/'.trim($file))) {
-                                        $css_files[] = MANUFAKTUR_URL.'/'.trim($extension).'/Template/default/'.trim($file);
+                                foreach ($items as $item) {
+                                    if (empty($item) && $this->app['filesystem']->exists(MANUFAKTUR_PATH.'/'.$command['command'].'/Template/default/screen.css')) {
+                                        $css_files[] = MANUFAKTUR_URL.'/'.$command['command'].'/Template/default/screen.css';
+                                        continue;
                                     }
-                                }
-                                elseif ($count == 2) {
-                                    list($extension, $file, $directory) = explode(',', $item);
-                                    if ($this->app['filesystem']->exists(MANUFAKTUR_PATH.'/'.trim($extension).'/Template/'.trim($directory).'/'.trim($file))) {
-                                        $css_files[] = MANUFAKTUR_URL.'/'.trim($extension).'/Template/'.trim($directory).'/'.trim($file);
+                                    $count = substr_count($item, ',');
+                                    if (($count == 0) && ($this->app['filesystem']->exists(MANUFAKTUR_PATH.'/'.$item.'/Template/default/screen.css'))) {
+                                        $css_files[] = MANUFAKTUR_URL.'/'.$item.'/Template/default/screen.css';
+                                    }
+                                    elseif ($count == 1) {
+                                        list($extension, $file) = explode(',', $item);
+                                        if ($this->app['filesystem']->exists(MANUFAKTUR_PATH.'/'.trim($extension).'/Template/default/'.trim($file))) {
+                                            $css_files[] = MANUFAKTUR_URL.'/'.trim($extension).'/Template/default/'.trim($file);
+                                        }
+                                    }
+                                    elseif ($count == 2) {
+                                        list($extension, $file, $directory) = explode(',', $item);
+                                        if ($this->app['filesystem']->exists(MANUFAKTUR_PATH.'/'.trim($extension).'/Template/'.trim($directory).'/'.trim($file))) {
+                                            $css_files[] = MANUFAKTUR_URL.'/'.trim($extension).'/Template/'.trim($directory).'/'.trim($file);
+                                        }
                                     }
                                 }
                             }
