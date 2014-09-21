@@ -87,6 +87,8 @@ return array(
     => 'Zeitüberschreitung bei der CAPTCHA Übermittlung, bitte versuchen Sie es erneut.',
   'Catalog'
     => 'Katalog',
+  'Change'
+    => 'Ändern',
   'Changed the CMS URL from %old_url% to %new_url%.'
     => 'Die CMS URL wurde von %old_url% zu %new_url% geändert.',
   'Changelog'
@@ -291,9 +293,9 @@ return array(
     => 'Hallo %name%,<br />Sie möchten Ihr Passwort ändern, bitte geben Sie das neue Passwort ein, wiederholen Sie es zur Sicherheit und schicken Sie das Formular ab.<br />Falls Sie Ihr Passwort nicht ändern möchten, verlassen Sie bitte einfach diesen Dialog.',
   'Hello %name%,<br />you have asked to create a new password for the kitFramework hosted at %server%.'
     => 'Hallo %name%,<br />Sie haben darum gebeten ein neues Passwort für das kitFramework auf %server% zu erhalten.',
-  'help'
-    => 'Hilfe',
   'Help'
+    => 'Hilfe',
+  'help'
     => 'Hilfe',
   'help_accounts_list_json'
     => '<p>Diese Datei ermöglicht es Ihnen die angezeigten Spalten und die Sortierung der Felder in der <a href="%FRAMEWORK_URL%/admin/accounts/list" target="_blank">Übersicht der Benutzerkonten</a> zu ändern.</p><p>Verfügbare Felder für die Verwendung in <var>columns</var> und <var>list > order > by</var> sind: <var>id, username, email, password, displayname, last_login, roles, guid, guid_timestamp, guid_status, status</var> und <var>timestamp</var>. Mit <var>list > rows_per_page</var> legen Sie fest, wie viele Benutzerkonten pro Seite angezeigt werden.</p>',
@@ -553,6 +555,8 @@ return array(
     => 'Geschützter Bereich',
   'Select'
     => 'Auswählen',
+  'Select file'
+    => 'Datei auswählen',
   'Send a account information to the user %name%'
     => 'Dem Benutzer %name% wurde eine Kontoinformation zugesendet.',
   'Send a email with the FRAMEWORK_UID'
@@ -679,10 +683,10 @@ return array(
     => 'Die Beschreibungsdatei extension.json für die Erweiterung <b>%name%</b> enthält nicht alle Definitionen, prüfen Sie <i>GUID</i>, <i>Group</i> und <i>Release</i>!',
   'The file %file% does not exists in Gist %gist_id%!'
     => 'Die Datei %file% existiert nicht im Gist %gist_id%',
-  'The file <i>%file%</i> does not exists!'
-    => 'Die Datei <em>%file%</em> existiert nicht!',
   'The file <strong>%file%</strong> does not exists!'
     => 'Die Datei <strong>%file%</strong> existiert nicht!',
+  'The file <i>%file%</i> does not exists!'
+    => 'Die Datei <em>%file%</em> existiert nicht!',
   'The file <strong>%file%</strong> is not readable!'
     => 'Die Datei <strong>%file%</strong> ist nicht lesbar!',
   'The form is not valid, please check your input and try again!'
