@@ -131,7 +131,7 @@ class Setup
         $Search->exec();
 
         // We need the online catalog for further actions
-        $ExtensionCatalogControl = new ExtensionCatalogControl($app);
+        $ExtensionCatalogControl = new ExtensionCatalogControl($app, true);
         $ExtensionCatalogControl->getOnlineCatalog();
         $app['monolog']->addDebug('[BASIC Setup] Got the online catalog from Github');
 

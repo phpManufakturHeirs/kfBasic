@@ -30,6 +30,15 @@ class ExtensionCatalog extends Alert
 {
 
     protected static $usage = null;
+    private static $ignore_locale = false;
+
+    public function __construct(Application $app=null, $ignore_locale=false)
+    {
+        if (!is_null($app)) {
+            self::$ignore_locale = $ignore_locale;
+            $this->initialize($app);
+        }
+    }
 
     /**
      * (non-PHPdoc)
@@ -39,10 +48,12 @@ class ExtensionCatalog extends Alert
     {
         parent::initialize($app);
 
-        self::$usage = $this->app['request']->get('usage', 'framework');
-        if (self::$usage != 'framework') {
-            // set the locale from the CMS locale
-            $app['translator']->setLocale($app['session']->get('CMS_LOCALE', 'de'));
+        if (!self::$ignore_locale) {
+            self::$usage = $this->app['request']->get('usage', 'framework');
+            if (self::$usage != 'framework') {
+                // set the locale from the CMS locale
+                $app['translator']->setLocale($app['session']->get('CMS_LOCALE', 'de'));
+            }
         }
     }
 

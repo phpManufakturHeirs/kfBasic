@@ -57,11 +57,13 @@ class Updater extends Alert
         $this->cURL = new cURL($app);
         $this->unZIP = new unZip($app);
 
-        self::$usage = $this->app['request']->get('usage', 'framework');
+        if (false === FRAMEWORK_SETUP) {
+            self::$usage = $this->app['request']->get('usage', 'framework');
 
-        if (self::$usage != 'framework') {
-            // set the locale from the CMS locale
-            $app['translator']->setLocale($app['session']->get('CMS_LOCALE', 'de'));
+            if (self::$usage != 'framework') {
+                // set the locale from the CMS locale
+                $app['translator']->setLocale($app['session']->get('CMS_LOCALE', 'de'));
+            }
         }
     }
 

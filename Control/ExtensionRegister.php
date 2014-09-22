@@ -38,10 +38,12 @@ class ExtensionRegister extends Alert
     {
         parent::initialize($app);
 
-        self::$usage = $this->app['request']->get('usage', 'framework');
-        if (self::$usage != 'framework') {
-            // set the locale from the CMS locale
-            $app['translator']->setLocale($app['session']->get('CMS_LOCALE', 'de'));
+        if (false === FRAMEWORK_SETUP) {
+            self::$usage = $this->app['request']->get('usage', 'framework');
+            if (self::$usage != 'framework') {
+                // set the locale from the CMS locale
+                $app['translator']->setLocale($app['session']->get('CMS_LOCALE', 'de'));
+            }
         }
     }
 
