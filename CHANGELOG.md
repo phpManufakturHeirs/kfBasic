@@ -6,6 +6,12 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**1.0.16** - 2014-09-22
+
+* bugfix: get attribute to calculate the iframe height use the wrong identifier
+* the kitCommand parser is now checking for parameter `load_css[]`
+* fixed problems during first setup of BASIC
+
 **1.0.15** - 2014-09-18
 
 * added CMS Tool `About` dialog
