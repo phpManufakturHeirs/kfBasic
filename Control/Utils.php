@@ -552,7 +552,8 @@ class Utils
      */
     public function setCURLproxy($curl_resource)
     {
-        if (!is_null(self::$proxy)) {
+        if (!is_null(self::$proxy) && self::$proxy != "") {
+            $this->app['monolog']->addDebug('setting proxy config', array(__METHOD__, __LINE__));
             curl_setopt($curl_resource, CURLOPT_PROXYAUTH, self::$proxy_auth);
             curl_setopt($curl_resource, CURLOPT_PROXY, self::$proxy);
             curl_setopt($curl_resource, CURLOPT_PROXYPORT, self::$proxy_port);
@@ -942,6 +943,44 @@ class Utils
             $string = html_entity_decode(preg_replace('~&([a-z]{1,2})(?:acute|cedil|circ|grave|lig|orn|ring|slash|tilde|uml);~i', '$1', $string), ENT_QUOTES, 'UTF-8');
         }
         return ($lowercase) ? strtolower($string) : $string;
+    }
+
+    /**
+     * Get the toolbar for all backend dialogs
+     *
+     * @param  string $active dialog
+     * @param  array  $config toolbar configuration
+     * @return array
+     */
+    public function getToolbar($active,$extension,$config) {
+        $toolbar = array();
+        foreach ($config['nav_tabs']['order'] as $tab) {
+            if(isset($config['nav_tabs']['options']) && is_array($config['nav_tabs']['options']) && isset($config['nav_tabs']['options'][$tab])) {
+                $toolbar[$tab] = array(
+                    'name'   => $tab,
+                    'text'   => ( isset($config['nav_tabs']['options'][$tab]['text'])
+                             ?  $this->app['translator']->trans($config['nav_tabs']['options'][$tab]['text'])
+                             :  $this->app['translator']->trans($tab) ),
+                    'hint'   => ( isset($config['nav_tabs']['options'][$tab]['hint'])
+                             ?  $this->app['translator']->trans($config['nav_tabs']['options'][$tab]['hint'])
+                             :  $this->app['translator']->trans('No hint available') ),
+                    'link'   => ( isset($config['nav_tabs']['options'][$tab]['link'])
+                             ?  FRAMEWORK_URL.$config['nav_tabs']['options'][$tab]['link']
+                             :  FRAMEWORK_URL.'/admin/'.$extension.'/'.$tab ),
+                    'active' => ($active == $tab)
+                );
+            }
+            else {
+                $toolbar[$tab] = array(
+                    'name'   => $tab,
+                    'text'   => $this->app['translator']->trans($tab),
+                    'hint'   => $this->app['translator']->trans('No hint available'),
+                    'link'   => FRAMEWORK_URL.'/admin/'.$extension.'/'.$tab,
+                    'active' => ($active == $tab)
+                );
+            }
+        }
+        return $toolbar;
     }
 
 }
