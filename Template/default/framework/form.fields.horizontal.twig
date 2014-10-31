@@ -32,7 +32,7 @@
     {% set translate = 0 %}
     {% set columns = 2 %}
   {% endif %}
-  <div class="form-group">
+  <div class="form-group {{ errors|length > 0 ? 'has-error' : '' }}">
     {{ block('form_label') }}
     <div class="col-sm-6">
       {{ block('choice_widget') }}
@@ -41,7 +41,7 @@
 {% endblock %}
 
 {% block checkbox_row %}
-  <div class="form-group">
+  <div class="form-group {{ errors|length > 0 ? 'has-error' : '' }}">
     <div class="col-sm-6 col-sm-offset-3">
       {{ block('checkbox_widget') }}&nbsp;&nbsp;{% if label is empty %}{{ name|humanize|trans }}{% else %}{{ label|trans }}{% endif %}
     </div>
@@ -49,7 +49,7 @@
 {% endblock %}
 
 {% block form_row_simple %}
-  <div class="form-group">
+  <div class="form-group {{ errors|length > 0 ? 'has-error' : '' }}">
     {{ block('form_label') }}
     <div class="col-sm-6">
       <input type="{{ type }}" class="form-control" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
@@ -148,7 +148,7 @@
 {% endblock form_label %}
 
 {% block form_row_textarea %}
-  <div class="form-group">
+  <div class="form-group {{ errors|length > 0 ? 'has-error' : '' }}">
     {{ block('form_label') }}
     <div class="col-sm-9">
       {% if attr.prefix is defined %}
@@ -161,3 +161,13 @@
     </div>
   </div>
 {% endblock %}
+
+{% block form_errors %}
+    {% spaceless %}
+        {% if errors|length > 0 %}
+            {% for error in errors %}
+                <span>{{ error.message }}</span>
+            {% endfor %}
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_errors %}
