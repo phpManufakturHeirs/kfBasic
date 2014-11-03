@@ -6,6 +6,12 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**1.0.17** - 2014-11-03 - first release by webbird
+
+* new utility method `getToolbar()`
+* new helper for populating and validating forms
+* some form tweaking
+
 **1.0.16** - 2014-09-22
 
 * bugfix: get attribute to calculate the iframe height use the wrong identifier

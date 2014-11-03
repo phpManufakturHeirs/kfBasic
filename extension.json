@@ -19,10 +19,10 @@
   "path":"\/extension\/phpmanufaktur\/phpManufaktur\/Basic",
   "namespace":"phpManufaktur\\Basic",
   "release":{
-    "number":"1.0.16",
-    "date":"2014-09-22",
+    "number":"1.0.17",
+    "date":"2014-11-03",
     "status":"release",
-    "changelog":"https:\/\/github.com\/phpManufaktur\/kfBasic\/blob\/master\/CHANGELOG.md"
+    "changelog":"https:\/\/github.com\/webbird\/kfBasic\/blob\/master\/CHANGELOG.md"
   },
   "description": {
     "en":{
@@ -53,15 +53,15 @@
   },
   "license": {
     "name":"MIT License",
-    "url":"https:\/\/github.com\/phpManufaktur\/kfBasic\/raw\/master\/LICENSE.md"
+    "url":"https:\/\/github.com\/webbird\/kfBasic\/raw\/master\/LICENSE.md"
   },
   "download": {
     "availability":"public",
     "agreement":"free",
     "github":{
-      "organization":"phpManufaktur",
+      "organization":"webbird",
       "repository":"kfBasic"
     },
-    "url":"https:\/\/github.com\/phpManufaktur\/kfBasic"
+    "url":"https:\/\/github.com\/webbird\/kfBasic"
   }
 }
