@@ -60,7 +60,8 @@ class AccountAdminEdit extends Alert
     {
         $roles = array();
         foreach ($this->app['account']->getAvailableRoles() as $role) {
-            $roles[$role] = $role;
+            $role_name = $this->app['utils']->humanize($role);
+            $roles[$role] = $this->app['translator']->trans($role_name);
         }
 
         $form = $this->app['form.factory']->createBuilder('form')

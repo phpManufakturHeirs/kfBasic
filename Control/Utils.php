@@ -967,6 +967,9 @@ class Utils
                     'link'   => ( isset($config['nav_tabs']['options'][$tab]['link'])
                              ?  FRAMEWORK_URL.$config['nav_tabs']['options'][$tab]['link']
                              :  FRAMEWORK_URL.'/admin/'.$extension.'/'.$tab ),
+                    'class'  => ( isset($config['nav_tabs']['options'][$tab]['class'])
+                             ?  $config['nav_tabs']['options'][$tab]['class']
+                             :  false ),
                     'active' => ($active == $tab)
                 );
             }

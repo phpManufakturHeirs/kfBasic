@@ -543,6 +543,26 @@ return array(
     => 'Anklicken um die vollständige E-Mail Adresse anzuzeigen',
   'Roles'
     => 'Benutzerrechte, Rollen',
+  'Role admin'
+    => '(Voll-)Administrator',
+  'Role contact admin'
+    => 'Kontakt Administrator',
+  'Role contact edit'
+    => 'Kontakte bearbeiten',
+  'Role contact edit own'
+    => 'Eigene Kontakte bearbeiten',
+  'Role flexcontent admin'
+    => 'flexContent Administrator',
+  'Role flexcontent editor'
+    => 'flexContent Editor',
+  'Role mediabrowser admin'
+    => 'Mediabrowser Administrator',
+  'Role mediabrowser user'
+    => 'Mediabrowser Benutzer',
+  'Role minishop admin'
+    => 'miniShop Administrator',
+  'Role user'
+    => 'Benutzer',
   'Save file'
     => 'Datei sichern',
   'Scan for installed extensions'

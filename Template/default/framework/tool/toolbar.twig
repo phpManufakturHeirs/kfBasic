@@ -10,9 +10,13 @@
             <i class="fa fa-puzzle-piece"></i>
           {% elseif item.name == 'extensions' %}
             <i class="fa fa-gift"></i>
+          {% elseif item.class is defined and item.class != false %}
+            <i class="{{ item.class }}"></i>
+          {% else %}
+            <i class="fa fa-square-o"></i>
           {% endif %}
           {% if item.name != 'about' %}  
-            <span class="visible-lg pull-right">&nbsp;{{ item.text }}</span>  
+            <span class="visible-lg pull-right">&nbsp;{{ item.text|trans }}</span>
           {% endif %}
         </a>
       </li>

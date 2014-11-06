@@ -12,11 +12,8 @@ class Helper
      * @access private
      * @return
      **/
-    public static function build(Application $app, $config)
+    public static function build(Application $app, $fields)
     {
-        // just shorter
-        $fields = $config["pattern"]["form"]["create"]["fields"];
-
         // get form builder
         $form = $app['form.factory']->createBuilder('form');
 
