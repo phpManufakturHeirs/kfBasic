@@ -36,6 +36,7 @@ class Utils
     protected static $proxy_auth = 'NONE';
     protected static $proxy_port = null;
     protected static $proxy_usrpwd = null;
+    protected static $proxy_bypass_local = null;
 
     /**
      * Constructor for the Utils
@@ -58,6 +59,9 @@ class Utils
                     self::$proxy_auth = CURLAUTH_BASIC;
                 }
                 self::$proxy_usrpwd = $proxy['PROXYUSERPWD'];
+            }
+            if(isset($proxy['USEPROXYFORLOCALHOST']) && $proxy['USEPROXYFORLOCALHOST'] !== true) {
+                self::$proxy_bypass_local = true;
             }
             self::$proxy = $proxy['PROXY'];
             self::$proxy_port = $proxy['PROXYPORT'];
@@ -553,6 +557,24 @@ class Utils
     public function setCURLproxy($curl_resource)
     {
         if (!is_null(self::$proxy) && self::$proxy != "") {
+            if(self::$proxy_bypass_local) {
+                $url   = curl_getinfo($curl_resource,CURLINFO_EFFECTIVE_URL);
+                $this->app['monolog']->addDebug('USEPROXYFORLOCALHOST is set to false, so check the url ['.$url.']', array(__METHOD__, __LINE__));
+                $parts = parse_url($url);
+                if(isset($parts['host'])) {
+                    $host  = $parts['host']
+                           . (
+                               ( isset($parts['port']) && $parts['port'] != '' )
+                               ? ':'.$parts['port']
+                               : ''
+                             )
+                           ;
+                    if(strtolower($_SERVER['HTTP_HOST']) == strtolower($host)) {
+                        $this->app['monolog']->addDebug('['.strtolower($_SERVER['HTTP_HOST']).'] == ['.strtolower($host).'], no proxy settings', array(__METHOD__, __LINE__));
+                        return; // no proxy settings
+                    }
+                }
+            }
             $this->app['monolog']->addDebug('setting proxy config', array(__METHOD__, __LINE__));
             curl_setopt($curl_resource, CURLOPT_PROXYAUTH, self::$proxy_auth);
             curl_setopt($curl_resource, CURLOPT_PROXY, self::$proxy);
