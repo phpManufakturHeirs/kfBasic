@@ -11,7 +11,7 @@
 
 define('BOOTSTRAP_PATH', __DIR__);
 
-$url = "http".(!empty($_SERVER['HTTPS'])?"s":"")."://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
+$url = "http".(!empty($_SERVER['HTTPS'])?"s":"")."://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 $url = substr($url, 0, strpos($url, '/kit2/')+strlen('/kit2'));
 define('BOOTSTRAP_URL', $url);
 
