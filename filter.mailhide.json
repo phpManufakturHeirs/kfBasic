@@ -2,7 +2,7 @@
   "command":"filter:MailHide",
   "vendor": {
     "name":"phpManufaktur",
-    "url":"https://phpmanufaktur.de"
+    "url":"https://phpmanufaktur.info"
     },
   "name": {
     "en":"ReCaptcha MailHide Filter",
@@ -23,7 +23,7 @@
   },
   "info": {
     "en": {
-      "link":"https://kit2.phpmanufaktur.de"
+      "link":"https://kit2.phpmanufaktur.info"
     }
   }
 }

@@ -5,15 +5,15 @@
   "group":"phpManufaktur",
   "vendor":{
       "name":"phpManufaktur",
-      "url":"https:\/\/kit2.phpmanufaktur.de",
-      "mail":"team@phpmanufaktur.de",
+      "url":"http:\/\/kit2.phpmanufaktur.info",
+      "mail":"team@phpmanufaktur.info",
       "address":{
-          "street":"Stockholmer Straße 31",
-          "zip":"13359",
+          "street":"Reginhardstraße 34",
+          "zip":"13409",
           "city":"Berlin",
           "country":"Germany"
       },
-      "phone":"+49 30 68813647"
+      "phone":"+49 30 499070-84"
   },
   "type":"framework",
   "path":"\/extension\/phpmanufaktur\/phpManufaktur\/Basic",
@@ -31,12 +31,12 @@
     "en":{
       "title":"i18nEditor for the kitFramework",
       "short":"Special editor to edit kitFramework locale files (Internationalization)",
-      "url":"https:\/\/kit2.phpmanufaktur.de"
+      "url":"http:\/\/kit2.phpmanufaktur.info"
     },
     "de":{
       "title":"i18nEditor für das kitFramework",
       "short":"Spezieller Editor zum Bearbeiten von kitFramework Sprachdateien (Internationalisierung)",
-      "url":"https:\/\/kit2.phpmanufaktur.de"
+      "url":"http:\/\/kit2.phpmanufaktur.info"
     }
   },
   "setup": {
@@ -47,6 +47,6 @@
   },
   "license": {
     "name":"MIT License",
-    "url":"https:\/\/github.com\/phpManufaktur\/kfBasic\/raw\/master\/LICENSE.md"
+    "url":"https:\/\/github.com\/phpManufakturHeirs\/kfBasic\/raw\/master\/LICENSE.md"
   }
 }

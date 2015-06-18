@@ -4,38 +4,38 @@
   "category":"extension",
   "group":"phpManufaktur",
   "vendor":{
-      "name":"phpManufaktur",
-      "url":"https:\/\/phpmanufaktur.de",
-      "mail":"team@phpmanufaktur.de",
+      "name":"phpManufakturHeirs",
+      "url":"http:\/\/phpmanufaktur.info",
+      "mail":"team@phpmanufaktur.info",
       "address":{
-          "street":"Stockholmer Straße 31",
-          "zip":"13359",
+          "street":"Reginhardstraße 34",
+          "zip":"13409",
           "city":"Berlin",
           "country":"Germany"
       },
-      "phone":"+49 30 68813647"
+      "phone":"+49 30 499070-84"
   },
   "type":"framework",
   "path":"\/extension\/phpmanufaktur\/phpManufaktur\/Basic",
   "namespace":"phpManufaktur\\Basic",
   "release":{
-    "number":"1.0.17",
-    "date":"2014-11-03",
+    "number":"1.0.18",
+    "date":"2015-06-18",
     "status":"release",
-    "changelog":"https:\/\/github.com\/webbird\/kfBasic\/blob\/master\/CHANGELOG.md"
+    "changelog":"https:\/\/github.com\/phpManufakturHeirs\/kfBasic\/blob\/master\/CHANGELOG.md"
   },
   "description": {
     "en":{
       "title":"Basic functions and configuration of the kitFramework",
       "short":"Basic function and configuration for the kitFramework",
       "long":"Basic function and configuration for the kitFramework",
-      "url":"https:\/\/kit2.phpmanufaktur.de"
+      "url":"http:\/\/kit2.phpmanufaktur.info"
     },
     "de":{
       "title":"Basis Funktionen für das kitFramework",
       "short":"Essentielle Basis Funktionen und Einstellungen für das kitFramework - fester Bestandteil des Framework, muss installiert sein.",
       "long":"Diese Erweiterung bildet das Herzstück des kitFramework und wird zwingend benötigt. BASIC ist u.a. für die Interaktion mit dem übergeordneten CMS verantwortlich, initialisiert alle Erweiterungen und kümmert sich um die Installation sowie Aktualisierung von Anwendungen.",
-      "url":"https:\/\/kit2.phpmanufaktur.de"
+      "url":"http:\/\/kit2.phpmanufaktur.info"
     }
   },
   "require":{
@@ -53,15 +53,15 @@
   },
   "license": {
     "name":"MIT License",
-    "url":"https:\/\/github.com\/webbird\/kfBasic\/raw\/master\/LICENSE.md"
+    "url":"https:\/\/github.com\/phpManufakturHeirs\/kfBasic\/raw\/master\/LICENSE.md"
   },
   "download": {
     "availability":"public",
     "agreement":"free",
     "github":{
-      "organization":"webbird",
+      "organization":"phpManufakturHeirs",
       "repository":"kfBasic"
     },
-    "url":"https:\/\/github.com\/webbird\/kfBasic"
+    "url":"https:\/\/github.com\/phpManufakturHeirs\/kfBasic"
   }
 }

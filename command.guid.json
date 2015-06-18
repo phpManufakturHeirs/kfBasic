@@ -2,7 +2,7 @@
   "command":"GUID",
   "vendor": {
     "name":"phpManufaktur",
-    "url":"https://kit2.phpmanufaktur.de"
+    "url":"http://kit2.phpmanufaktur.info"
     },
   "name": {
     "en":"Create a globally unique identifier (GUID)",
@@ -23,7 +23,7 @@
   },
   "info": {
     "en": {
-      "link":"https://kit2.phpmanufaktur.de"
+      "link":"http://kit2.phpmanufaktur.info"
     }
   }
 }

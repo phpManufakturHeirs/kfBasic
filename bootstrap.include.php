@@ -3,8 +3,8 @@
 /**
  * kitFramework::kfBasic
  *
- * @author Team phpManufaktur <team@phpmanufaktur.de>
- * @link https://kit2.phpmanufaktur.de
+ * @author Team phpManufaktur <team@phpmanufaktur.info>
+ * @link https://kit2.phpmanufaktur.info
  * @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
  */

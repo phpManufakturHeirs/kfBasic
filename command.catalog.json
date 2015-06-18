@@ -2,7 +2,7 @@
   "command":"Catalog",
   "vendor": {
     "name":"phpManufaktur",
-    "url":"https://phpmanufaktur.de"
+    "url":"http://phpmanufaktur.info"
     },
   "name": {
     "en":"Extensions for the kitFramework",
@@ -14,7 +14,7 @@
   },
   "info": {
     "en": {
-      "link":"https://kit2.phpmanufaktur.de"
+      "link":"http://kit2.phpmanufaktur.info"
     }
   }
 }

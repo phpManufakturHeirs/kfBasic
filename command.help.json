@@ -2,7 +2,7 @@
   "command":"Help",
   "vendor": {
     "name":"phpManufaktur",
-    "url":"https://phpmanufaktur.de"
+    "url":"http://phpmanufaktur.info"
     },
   "name": {
     "en":"Help for kitCommands",
@@ -23,7 +23,7 @@
   },
   "info": {
     "en": {
-      "link":"https://kit2.phpmanufaktur.de"
+      "link":"http://kit2.phpmanufaktur.info"
     }
   }
 }
