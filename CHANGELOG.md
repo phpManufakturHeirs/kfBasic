@@ -1,10 +1,15 @@
 ## kitFramework::kfBasic ##
 
 (c) 2013 phpManufaktur by Ralf Hertsch
+(c) 2015 phpManufakturHeirs
 
 MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
+
+**1.0.18** - 2015-06-18
+
+* some fixes
 
 **1.0.17** - 2014-11-03 - first release by webbird
 

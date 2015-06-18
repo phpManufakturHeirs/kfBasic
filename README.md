@@ -1,7 +1,9 @@
-![kitFramework::Basic](https://raw.github.com/phpManufaktur/kfBasic/master/extension.png)
+![kitFramework::Basic](https://raw.github.com/phpManufakturHeirs/kfBasic/master/extension.png)
 
-The **Basic** extension for the [kitFramework](https://kit2.phpmanufaktur.de) is always needed and will be installed automatically.
+The **Basic** extension for the [kitFramework](http://kit2.phpmanufaktur.info) is always needed and will be installed automatically.
 
-The **kitFramework** is in BETA state, to get started please visit the [KIT2 Project Home](https://kit2.phpmanufaktur.de) and join the [Add-on Support Group](https://support.phpmanufaktur.de) to get further information and support.
+The **kitFramework** is in BETA state, to get started please visit the [KIT2 Project Home](http://kit2.phpmanufaktur.info).
 
-![kitFramework::Basic](https://piwik.phpmanufaktur.de/piwik.php?idsite=14&rec=1)
+**Important note:**
+
+The originator of this project deceased in September 2014. This is the 'official' fork for future support and development.
