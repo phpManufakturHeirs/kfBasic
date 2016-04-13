@@ -92,9 +92,9 @@ class ExtensionCatalog extends Alert
         // init GitHub
         $github = new gitHub($this->app);
         $available_release = null;
-        if (false === ($catalog_url = $github->getLastRepositoryZipUrl('phpManufaktur', 'kitFramework_Catalog', $available_release))) {
+        if (false === ($catalog_url = $github->getLastRepositoryZipUrl('phpManufakturHeirs', 'kitFramework_Catalog', $available_release))) {
             throw new \Exception($this->app['translator']->trans("Can't read the the %repository% from %organization% at Github!",
-                array('%repository%' => 'kitFramework_Catalog', '%organization%' => 'phpManufaktur')));
+                array('%repository%' => 'kitFramework_Catalog', '%organization%' => 'phpManufakturHeirs')));
         }
 
         $Setting = new Setting($this->app);
