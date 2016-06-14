@@ -20,7 +20,7 @@ use Silex\Application;
 class gitHub
 {
 
-    const USERAGENT = 'kitFramework::Basic';
+    const USERAGENT = 'kitFramework_Catalog';
 
     protected $app = null;
 
@@ -58,6 +58,26 @@ class gitHub
         }
         if (! curl_errno($ch)) {
             $info = curl_getinfo($ch);
+            $this->app['monolog']->addDebug(print_r($info,1), array(__METHOD__, __LINE__));
+            // check rate limit
+            $check = curl_init('https://api.github.com/rate_limit');
+            curl_setopt($check, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($check, CURLOPT_USERAGENT, self::USERAGENT);
+            curl_setopt($check, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($check, CURLOPT_SSL_VERIFYPEER, false);
+            $check_result = curl_exec($check);
+            $check_result = json_decode($check_result, true);
+            if($check_result['resources']['core']['remaining'] == 0)
+            {
+                $result = $check_result;
+                $result['message'] = sprintf(
+                    'GitHub API rate limit (%s) exceeded. Please wait until %s and try again.',
+                    $check_result['resources']['core']['limit'],
+                    strftime('%c', $check_result['resources']['core']['reset'])
+                );
+            }
+            curl_close($check);
+            return false;
         }
         curl_close($ch);
         $result = json_decode($result, true);
