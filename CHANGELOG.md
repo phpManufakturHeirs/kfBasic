@@ -5,7 +5,17 @@
 
 MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
-kitFramework - <https://kit2.phpmanufaktur.info>
+kitFramework - <http://phpmanufaktur.info>
+
+**1.0.20** - 2016-06-14
+
+* fix for no longer working GitHub authentication
+* catch "rate limit" GitHub error
+* fix for BlackCat CMS 1.2 database configuration (moved from config.php)
+
+**1.0.19** - 2016-04-13
+
+* changed catalog location to phpManufakturHeirs
 
 **1.0.18** - 2015-06-18
 
