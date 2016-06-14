@@ -7,6 +7,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <http://phpmanufaktur.info>
 
+**1.0.21** - 2016-06-14
+
+* another fix for gitHub.php
+
 **1.0.20** - 2016-06-14
 
 * fix for no longer working GitHub authentication
