@@ -120,7 +120,11 @@ function utf8_fast_entities_to_umlauts($str) {
     } else {
         global $named_entities;global $numbered_entities;
         $str = str_replace($named_entities, $numbered_entities, $str);
-        $str = preg_replace("/&#([0-9]+);/e", "code_to_utf8($1)", $str);
+        $str = preg_replace_callback(
+            "/&#([0-9]+);/",
+            function($m) { return code_to_utf8($m[1]); },
+            $str
+        );
     }
     return($str);
 }
@@ -372,7 +376,14 @@ function entities_to_7bit($str) {
     // convert to HTML-entities, and replace entites by hex-numbers
     $str = utf8_fast_umlauts_to_entities($str, false);
     $str = str_replace('&#039;', '&apos;', $str);
-    $str = preg_replace('/&#([0-9]+);/e', "dechex('$1')",  $str);
+    //$str = preg_replace('/&#([0-9]+);/e', "dechex('$1')",  $str);
+
+    $str = preg_replace_callback(
+        "/&#([0-9]+);/",
+        function($m) { return dechex($m[1]); },
+        $str
+    );
+
     // maybe there are some &gt; &lt; &apos; &quot; &amp; &nbsp; left, replace them too
     $str = str_replace(array('&gt;', '&lt;', '&apos;', '\'', '&quot;', '&amp;'), '', $str);
     $str = str_replace('&amp;', '', $str);
