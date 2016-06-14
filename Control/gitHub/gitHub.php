@@ -65,7 +65,12 @@ class gitHub
             curl_setopt($check, CURLOPT_USERAGENT, self::USERAGENT);
             curl_setopt($check, CURLOPT_SSL_VERIFYHOST, false);
             curl_setopt($check, CURLOPT_SSL_VERIFYPEER, false);
+            // set proxy if needed
+            $this->app['utils']->setCURLproxy($check);
             $check_result = curl_exec($check);
+            curl_close($check);
+            if($check_result)
+            {
             $check_result = json_decode($check_result, true);
             if($check_result['resources']['core']['remaining'] == 0)
             {
@@ -75,9 +80,10 @@ class gitHub
                     $check_result['resources']['core']['limit'],
                     strftime('%c', $check_result['resources']['core']['reset'])
                 );
-            }
-            curl_close($check);
             return false;
+        }
+            }
+
         }
         curl_close($ch);
         $result = json_decode($result, true);
@@ -102,7 +108,7 @@ class gitHub
         $result = array();
         $info = array();
 
-        if (! $this->get($command, $result, $info)) {
+        if ($this->get($command, $result, $info)===false) {
             if (isset($info['http_code']) && isset($result['message']))
                 $error_message = sprintf('[GitHub Error] HTTP Code: %s - %s', $info['http_code'], $result['message']);
             elseif (isset($info['http_code']))
