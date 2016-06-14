@@ -57,7 +57,7 @@ class cURL {
             curl_setopt($ch, CURLOPT_USERAGENT, self::USERAGENT);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($ch, CURLOPT_USERPWD, "fd881e98b9f76fcd9f4d80e8c1cfca68ee9e35b4:x-oauth-basic");
+            // curl_setopt($ch, CURLOPT_USERPWD, "fd881e98b9f76fcd9f4d80e8c1cfca68ee9e35b4:x-oauth-basic");
 
             // set proxy if needed
             $this->app['utils']->setCURLproxy($ch);
@@ -80,7 +80,7 @@ class cURL {
             curl_setopt($ch, CURLOPT_TIMEOUT, 1000);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($ch, CURLOPT_USERPWD, "fd881e98b9f76fcd9f4d80e8c1cfca68ee9e35b4:x-oauth-basic");
+            // curl_setopt($ch, CURLOPT_USERPWD, "fd881e98b9f76fcd9f4d80e8c1cfca68ee9e35b4:x-oauth-basic");
 
             // set proxy if needed
             $this->app['utils']->setCURLproxy($ch);
