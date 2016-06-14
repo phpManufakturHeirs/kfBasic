@@ -7,6 +7,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <http://phpmanufaktur.info>
 
+**1.0.22** - 2016-06-14
+
+* updated extension.json to correct version number
+
 **1.0.21** - 2016-06-14
 
 * another fix for gitHub.php
