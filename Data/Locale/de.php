@@ -732,7 +732,7 @@ return array(
   'The password you have typed in is not strength enough. Please choose a password at minimun 8 characters long, containing lower and uppercase characters, numbers and special chars. Spaces are not allowed.'
     => 'Das übermittelte Passwort ist nicht stark genug. Bitte wählen Sie ein Passwort mit mindestens 8 Zeichen Länge, mit einem Mix aus Groß- und Kleinbuchstaben, Zahlen und Sonderzeichen. Leerzeichen sind nicht gestattet.',
   'The password you typed in is not correct, please try again.'
-    => 'Das angegebene Passwort is nicht korrekt, bitte geben Sie es erneut ein',
+    => 'Das angegebene Passwort ist nicht korrekt, bitte geben Sie es erneut ein',
   'The received extension.json does not specifiy the path of the extension!'
     => 'Die empfangene extension.json enthält nicht den Installationspfand für die Extension!',
   'The received repository has an unexpected directory structure!'
